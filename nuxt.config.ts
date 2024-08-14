@@ -25,5 +25,18 @@ export default defineNuxtConfig({
     defaultLocale: 'pl',
     vueI18n: './i18n.config.ts',
   },
+  runtimeConfig: {
+    public: {
+      NODE_ENV: process.env.NODE_ENV,
+      APP_VERSION: process.env.npm_package_version,
+      apiKey: process.env.apiKey,
+      authDomain: process.env.authDomain,
+      projectId: process.env.projectId,
+      storageBucket: process.env.storageBucket,
+      messagingSenderId: process.env.messagingSenderId,
+      appId: process.env.appId,
+      measurementId: process.env.measurementId,
+    },
+  },
   devtools: { enabled: true },
 })
