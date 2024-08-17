@@ -25,6 +25,13 @@ export default defineNuxtConfig({
     defaultLocale: 'pl',
     vueI18n: './i18n.config.ts',
   },
+  nitro: {
+    firebase: {
+      nodeVersion: "16",
+      gen: 2,
+    },
+    preset: "firebase"
+  },
   runtimeConfig: {
     public: {
       NODE_ENV: process.env.NODE_ENV,
