@@ -1,3 +1,31 @@
 {
-
+  "landing": {
+    "first": {
+      "title": "Welcome to your mechanic",
+      "text": "Find the perfect place for your car in a few simple steps",
+      "button": "Start now"
+    },
+    "second": {
+      "title": "It's just a few simple steps",
+      "timeline": {
+        "first": {
+          "title": "Make an appointment",
+          "subtitle": "Find the best mechanic and make an appointment with him."
+        },
+        "second": {
+          "title": "Car repair",
+          "subtitle": "Get your car repaired and follow notifications."
+        },
+        "third": {
+          "title": "Pick up your car",
+          "subtitle": "Collect your repaired car and share your opinion with others"
+        }
+      }
+    },
+    "third": {
+      "title": "Want to learn more?",
+      "text": "See the next page where everything is explained",
+      "button": "See more"
+    }
+  }
 }

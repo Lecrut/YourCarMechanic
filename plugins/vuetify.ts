@@ -17,6 +17,7 @@ export default defineNuxtPlugin((app) => {
                     dark: false,
                     colors: {
                         primary: '#0054db',
+                        secondary: '#2196f3',
                         error: '#FF0110',
                     },
                 },
@@ -24,6 +25,7 @@ export default defineNuxtPlugin((app) => {
                     dark: true,
                     colors: {
                         primary: '#0054db',
+                        secondary: '#2196f3',
                         error: '#FF0110',
                     },
                 },

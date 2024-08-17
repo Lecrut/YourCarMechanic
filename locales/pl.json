@@ -1,3 +1,31 @@
 {
-
+  "landing": {
+    "first": {
+      "title": "Witamy u twojego mechanika",
+      "text": "Znajdź idealne miejsce dla twojego samochodu w kilku prostych krokach",
+      "button": "Zacznij już teraz"
+    },
+    "second": {
+      "title": "To tylko kilka prostych kroków",
+      "timeline": {
+        "first": {
+          "title": "Umów wizytę",
+          "subtitle": "Znajdź najlepszego mechanika i umów u niego wizytę."
+        },
+        "second": {
+          "title": "Naprawa samochodu",
+          "subtitle": "Oddaj samochód do naprawy i śledź powiadomienia."
+        },
+        "third": {
+          "title": "Odbierz samochód",
+          "subtitle": "Odbierz swój naprawiony samochód i podziel się swoją opinią z innymi"
+        }
+      }
+    },
+    "third": {
+      "title": "Chcesz dowiedzieć się więcej?",
+      "text": "Zajrzyj na kolejną stronę, gdzie wszystko jest wyjaśnione",
+      "button": "Zobacz więcej"
+    }
+  }
 }
