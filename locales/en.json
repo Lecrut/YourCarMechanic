@@ -56,5 +56,11 @@
     "repeatPassword": "Repeat Password",
     "acceptStatute": "I accept the regulations",
     "button": "Register"
+  },
+  "resetPassword": {
+    "title": "Password Reset",
+    "text": "If you forgot your password, enter your email address.",
+    "email": "Email Address",
+    "button": "Reset"
   }
 }

@@ -56,5 +56,11 @@
     "repeatPassword": "Powtórz hasło",
     "acceptStatute": "Akceptuję regulamin",
     "button": "Zarejestruj się"
+  },
+  "resetPassword": {
+    "title": "Restowanie hasła",
+    "text": "Jeżeli zapomniałeś hasła wpisz swój mail.",
+    "email": "Adres Email",
+    "button": "Zresetuj"
   }
 }
