@@ -70,7 +70,12 @@
     "about": "About",
     "english": "English",
     "polish": "Polish",
-    "changeTheme": "Change theme"
+    "changeTheme": "Change theme",
+    "user": {
+      "profile": "Profile",
+      "bookedFix": "Order repair",
+      "history": "History"
+    }
   },
   "about": {
     "first": {

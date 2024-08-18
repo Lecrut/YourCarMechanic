@@ -70,7 +70,12 @@
     "about": "O stronie",
     "english": "Angielski",
     "polish": "Polski",
-    "changeTheme": "Zmień motyw"
+    "changeTheme": "Zmień motyw",
+    "user": {
+      "profile": "Profil",
+      "bookedFix": "Zamów naprawę",
+      "history": "Historia"
+    }
   },
   "about": {
     "first": {
