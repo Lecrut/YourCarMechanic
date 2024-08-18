@@ -3,7 +3,8 @@
 </script>
 
 <template>
-  <v-sheet
+  <v-container class="h-auto mt-15">
+    <v-sheet
       class="d-flex align-center justify-center flex-wrap text-center mx-auto my-10 px-4"
       elevation="4"
       max-width="1100"
@@ -45,6 +46,7 @@
       </v-col>
     </v-row>
   </v-sheet>
+  </v-container>
 </template>
 
 

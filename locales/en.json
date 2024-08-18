@@ -62,5 +62,11 @@
     "text": "If you forgot your password, enter your email address.",
     "email": "Email Address",
     "button": "Reset"
+  },
+  "navBar": {
+    "title": "Your mechanic",
+    "login": "Login",
+    "about": "About the site",
+    "changeTheme": "Change theme"
   }
 }

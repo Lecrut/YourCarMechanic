@@ -62,5 +62,11 @@
     "text": "Jeżeli zapomniałeś hasła wpisz swój mail.",
     "email": "Adres Email",
     "button": "Zresetuj"
+  },
+  "navBar": {
+    "title": "Twój mechanik",
+    "login": "Logowanie",
+    "about": "O stronie",
+    "changeTheme": "Zmień motyw"
   }
 }
