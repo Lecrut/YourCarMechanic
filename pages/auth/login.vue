@@ -31,7 +31,7 @@ async function logIn() {
     >
       <v-row justify="center">
         <v-col cols="12" sm="12" md="6">
-          <div class="d-flex flex-column align-center justify-center h-100 mx-2 mb-5 py-5">
+          <div class="d-flex flex-column align-center justify-center h-100 mb-5 py-5">
             <div class="text-h4 my-2">
               {{ t('login.title') }}
             </div>
@@ -92,14 +92,15 @@ async function logIn() {
           </div>
         </v-col>
         <v-col cols="12" sm="12" md="6">
-          <div class="d-flex flex-column align-center justify-center h-100 mx-2 pa-6">
+          <div class="d-flex flex-column align-center justify-center h-100 pa-6">
             <v-img
                 class="mx-auto my-5 elevation-5"
                 rounded="xl"
-                :width="400"
+                :max-width="400"
+                :min-width="300"
                 aspect-ratio="9/16"
                 cover
-                src="/login.jpg"
+                src="public/login.jpg"
             />
           </div>
         </v-col>

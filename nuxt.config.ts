@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+
   modules: [
     '@nuxtjs/i18n',
     (_options, nuxt) => {
@@ -13,6 +14,7 @@ export default defineNuxtConfig({
       })
     },
   ],
+
   vite: {
     vue: {
       template: {
@@ -20,11 +22,13 @@ export default defineNuxtConfig({
       },
     },
   },
+
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'pl',
     vueI18n: './i18n.config.ts',
   },
+
   nitro: {
     firebase: {
       nodeVersion: "16",
@@ -32,6 +36,7 @@ export default defineNuxtConfig({
     },
     preset: "firebase"
   },
+
   runtimeConfig: {
     public: {
       NODE_ENV: process.env.NODE_ENV,
@@ -45,5 +50,7 @@ export default defineNuxtConfig({
       measurementId: process.env.measurementId,
     },
   },
+
   devtools: { enabled: true },
+  compatibilityDate: '2024-08-18',
 })

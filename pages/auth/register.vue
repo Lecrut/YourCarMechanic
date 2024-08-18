@@ -33,7 +33,12 @@ async function registerUser() {
     >
       <v-row justify="center">
         <v-col cols="12" sm="12" md="6">
-          <div class="d-flex flex-column align-center justify-center h-100 mx-2 pa-6">
+          <div class="d-flex flex-column align-center justify-center h-100 pa-6">
+
+            <div class="text-h5 my-2 hidden-md-and-up">
+              {{ t('register.title') }}
+            </div>
+
             <v-img
                 class="mx-auto my-5 elevation-5"
                 rounded="xl"
@@ -45,8 +50,8 @@ async function registerUser() {
           </div>
         </v-col>
         <v-col cols="12" sm="12" md="6">
-          <div class="d-flex flex-column align-center justify-center h-100 mx-2 py-4">
-            <div class="text-h5 my-2">
+          <div class="d-flex flex-column align-center justify-center h-100 py-4">
+            <div class="text-h5 my-2 hidden-sm-and-down">
               {{ t('register.title') }}
             </div>
 
