@@ -47,5 +47,14 @@
     "lengthRule": "Nazwa jest za długa",
     "firstSignRule": "Rejestracja niepoprawna",
     "registerLengthRule": "Niepoprawna długość rejestracji"
+  },
+  "register": {
+    "title": "Rejestracja",
+    "email": "Adres Email",
+    "userName": "Nazwa użytkownika",
+    "password": "Hasło",
+    "repeatPassword": "Powtórz hasło",
+    "acceptStatute": "Akceptuję regulamin",
+    "button": "Zarejestruj się"
   }
 }

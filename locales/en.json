@@ -47,5 +47,14 @@
     "lengthRule": "The name is too long",
     "firstSignRule": "Registration invalid",
     "registerLengthRule": "Invalid registration length"
+  },
+  "register": {
+    "title": "Registration",
+    "email": "Email Address",
+    "userName": "Username",
+    "password": "Password",
+    "repeatPassword": "Repeat Password",
+    "acceptStatute": "I accept the regulations",
+    "button": "Register"
   }
 }
