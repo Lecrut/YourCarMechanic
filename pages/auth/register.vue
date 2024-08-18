@@ -32,13 +32,8 @@ async function registerUser() {
         rounded
     >
       <v-row justify="center">
-        <v-col cols="12" sm="12" md="6">
+        <v-col cols="12" sm="12" md="6" class="hidden-sm-and-down">
           <div class="d-flex flex-column align-center justify-center h-100 pa-6">
-
-            <div class="text-h5 my-2 hidden-md-and-up">
-              {{ t('register.title') }}
-            </div>
-
             <v-img
                 class="mx-auto my-5 elevation-5"
                 rounded="xl"
@@ -51,7 +46,7 @@ async function registerUser() {
         </v-col>
         <v-col cols="12" sm="12" md="6">
           <div class="d-flex flex-column align-center justify-center h-100 py-4">
-            <div class="text-h5 my-2 hidden-sm-and-down">
+            <div class="text-h5 my-2">
               {{ t('register.title') }}
             </div>
 

@@ -91,7 +91,7 @@ async function logIn() {
   <!--          </v-alert>-->
           </div>
         </v-col>
-        <v-col cols="12" sm="12" md="6">
+        <v-col cols="12" sm="12" md="6" class="hidden-sm-and-down">
           <div class="d-flex flex-column align-center justify-center h-100 pa-6">
             <v-img
                 class="mx-auto my-5 elevation-5"
@@ -108,7 +108,3 @@ async function logIn() {
     </v-sheet>
   </v-container>
 </template>
-
-<style scoped>
-
-</style>
