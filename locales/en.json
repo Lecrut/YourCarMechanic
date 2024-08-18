@@ -27,5 +27,25 @@
       "text": "See the next page where everything is explained",
       "button": "See more"
     }
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email Address",
+    "password": "Password",
+    "noAccount": "Don't have an account yet?",
+    "button": {
+      "login": "Log in",
+      "resetPassword": "Forgot your password?",
+      "register": "Register"
+    }
+  },
+  "rules": {
+    "requiredRule": "The field is required",
+    "emailRule": "Invalid email format",
+    "passwordRule": "Incorrect password",
+    "lengthRuleShort": "The name is too short.",
+    "lengthRule": "The name is too long",
+    "firstSignRule": "Registration invalid",
+    "registerLengthRule": "Invalid registration length"
   }
 }

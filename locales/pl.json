@@ -27,5 +27,25 @@
       "text": "Zajrzyj na kolejną stronę, gdzie wszystko jest wyjaśnione",
       "button": "Zobacz więcej"
     }
+  },
+  "login": {
+    "title": "Logowanie",
+    "email": "Adres Email",
+    "password": "Hasło",
+    "noAccount": "Nie masz jeszcze konta?",
+    "button": {
+      "login": "Zaloguj",
+      "resetPassword": "Zapomniałeś hasła?",
+      "register": "Zarejestruj się"
+    }
+  },
+  "rules": {
+    "requiredRule": "Pole jest wymagane",
+    "emailRule": "Niepoprawny format email",
+    "passwordRule": "Niepoprawne haslo",
+    "lengthRuleShort": "Nazwa jest za krótka.",
+    "lengthRule": "Nazwa jest za długa",
+    "firstSignRule": "Rejestracja niepoprawna",
+    "registerLengthRule": "Niepoprawna długość rejestracji"
   }
 }

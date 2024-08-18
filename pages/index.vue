@@ -90,7 +90,7 @@
         {{ t('landing.third.text') }}
       </p>
 
-      <v-btn class="mt-4" to="/events" variant="elevated" color="primary">
+      <v-btn class="mt-4" to="/about" variant="elevated" color="primary">
         {{ t('landing.third.button') }}
       </v-btn>
 
