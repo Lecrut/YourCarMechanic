@@ -1,7 +1,7 @@
 {
   "landing": {
     "first": {
-      "title": "Witamy u twojego mechanika",
+      "title": "Witamy u Twojego mechanika",
       "text": "Znajdź idealne miejsce dla twojego samochodu w kilku prostych krokach",
       "button": "Zacznij już teraz"
     },
@@ -66,7 +66,29 @@
   "navBar": {
     "title": "Twój mechanik",
     "login": "Logowanie",
+    "home": "Strona główna",
     "about": "O stronie",
+    "english": "Angielski",
+    "polish": "Polski",
     "changeTheme": "Zmień motyw"
+  },
+  "about": {
+    "first": {
+      "title": "Nowoczesny system do rezerwacji napraw",
+      "text": "Wyogdny, szybki i bezproblemowy."
+    },
+    "second": {
+      "title": "Wygodna rezerwacja z domu",
+      "text": "Wygodnie i bez wychodzenia z domu zarezerwuj naprawę w wybranym przez Ciebie warsztacie."
+    },
+    "third": {
+      "title": "Jesteś cały czas informowany",
+      "text": "Warsztat poinformuje cię o wszystkim. Przyjęto samochód, zaczęto naprawę, skończono i wydano samochód. Wiesz wszystko."
+    },
+    "fourth": {
+      "title": "Sprawdź",
+      "text": "Zarejestruj się aby zacząć przygodę",
+      "button": "Zarejestruj się"
+    }
   }
 }

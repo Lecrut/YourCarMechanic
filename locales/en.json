@@ -1,7 +1,7 @@
 {
   "landing": {
     "first": {
-      "title": "Welcome to your mechanic",
+      "title": "Welcome to Your mechanic",
       "text": "Find the perfect place for your car in a few simple steps",
       "button": "Start now"
     },
@@ -66,7 +66,10 @@
   "navBar": {
     "title": "Your mechanic",
     "login": "Login",
-    "about": "About the site",
+    "home": "Home",
+    "about": "About",
+    "english": "English",
+    "polish": "Polish",
     "changeTheme": "Change theme"
   }
 }

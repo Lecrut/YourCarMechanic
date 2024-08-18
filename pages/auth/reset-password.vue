@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <v-container class="h-auto mt-15">
+  <v-container class="h-auto my-15">
     <v-sheet
       class="d-flex align-center justify-center flex-wrap text-center mx-auto my-10 px-4"
       elevation="4"

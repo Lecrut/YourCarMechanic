@@ -36,7 +36,7 @@
       rounded="xl"
       color="transparent"
   >
-    <div class="d-flex flex-column align-center justify-center h-100 mx-2 mt-15 text-center">
+    <div class="d-flex flex-column align-center justify-center h-100 mx-2 mt-10 text-center">
       <span class="text-h4 font-weight-bold mb-4 hidden-sm-and-down">
         {{ t('landing.second.title') }}
       </span>
@@ -122,7 +122,6 @@
         </v-timeline-item>
       </v-timeline>
 
-
     </div>
   </v-card>
 
@@ -151,4 +150,6 @@
 
     </div>
   </v-img>
+
+  <div class="my-14 hidden-md-and-up" />
 </template>
