@@ -95,5 +95,12 @@
       "text": "Zarejestruj się aby zacząć przygodę",
       "button": "Zarejestruj się"
     }
+  },
+  "userProfile": {
+    "title": "Profil",
+    "userName": "Nazwa użytkownika",
+    "email": "Adres Email",
+    "yourCars": "Twoje samochody",
+    "addCar": "Dodaj samochód"
   }
 }

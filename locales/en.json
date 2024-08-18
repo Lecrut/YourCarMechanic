@@ -95,5 +95,12 @@
       "text": "Register to start your adventure",
       "button": "Register"
     }
+  },
+  "userProfile": {
+    "title": "Profile",
+    "userName": "Username",
+    "email": "Email Address",
+    "yourCars": "Your cars",
+    "addCar": "Add car"
   }
 }
