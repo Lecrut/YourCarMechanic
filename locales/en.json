@@ -71,5 +71,24 @@
     "english": "English",
     "polish": "Polish",
     "changeTheme": "Change theme"
+  },
+  "about": {
+    "first": {
+      "title": "A modern system for booking repairs",
+      "text": "Convenient, fast and hassle-free."
+    },
+    "second": {
+      "title": "Convenient booking from home",
+      "text": "Book a repair conveniently and without leaving your home at the workshop of your choice."
+    },
+    "third": {
+      "title": "You are constantly informed",
+      "text": "The workshop will inform you about everything. The car was accepted, the repair was started, the car was completed and delivered. You know everything."
+    },
+    "fourth": {
+      "title": "Check",
+      "text": "Register to start your adventure",
+      "button": "Register"
+    }
   }
 }
