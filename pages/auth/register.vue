@@ -21,6 +21,8 @@ async function registerUser() {
   }
 }
 
+//todo: jeżeli zalogowany to od razu przenosi do index
+
 </script>
 
 <template>

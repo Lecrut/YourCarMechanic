@@ -17,7 +17,7 @@ async function logIn() {
 
   }
 }
-
+//todo: jeżeli zalogowany to od razu przenosi do index
 
 </script>
 

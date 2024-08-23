@@ -13,7 +13,7 @@
     </div>
 
     <div class="hidden-sm-and-down">
-      <v-btn variant="text" color="default" to="/user">
+      <v-btn variant="text" color="default" to="/">
         {{ t('navBar.title') }}
       </v-btn>
     </div>
@@ -21,6 +21,10 @@
     <v-spacer />
 
     <div class="hidden-sm-and-down">
+      <v-btn variant="text" color="default" to="/user">
+        {{ t('navBar.user.bookedFix') }}
+      </v-btn>
+
       <v-btn variant="text" color="default" to="/user/profile">
         {{ t('navBar.user.profile') }}
       </v-btn>

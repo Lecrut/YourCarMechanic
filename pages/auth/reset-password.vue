@@ -1,5 +1,8 @@
 <script setup lang="ts">
   const { t } = useI18n()
+
+  //todo: jeżeli zalogowany to od razu przenosi do index
+
 </script>
 
 <template>

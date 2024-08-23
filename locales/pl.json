@@ -102,5 +102,14 @@
     "email": "Adres Email",
     "yourCars": "Twoje samochody",
     "addCar": "Dodaj samochód"
+  },
+  "userBookFix": {
+    "stepper": {
+      "chooseRepair": "Usługa",
+      "chooseCar": "Pojazd",
+      "chooseMechanic": "Warsztat",
+      "nextStep": "Dalej",
+      "prevStep": "Cofnij"
+    }
   }
 }
