@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import formValidation from "~/composable/formValidation";
-import {emailRule, passwordRule, requiredRule} from "~/composable/rules";
+import formValidation from "~/helpers/formValidation";
+import {emailRule, passwordRule, requiredRule} from "~/helpers/rules";
 
-const { t } = useI18n()
+const {t} = useI18n()
 
-const { form, valid, isValid } = formValidation()
+const {form, valid, isValid} = formValidation()
 
 const email = ref('')
 const password = ref('')
@@ -17,6 +17,7 @@ async function logIn() {
 
   }
 }
+
 //todo: jeżeli zalogowany to od razu przenosi do index
 
 </script>
@@ -81,14 +82,14 @@ async function logIn() {
               {{ t('login.button.register') }}
             </v-btn>
 
-  <!--          <v-alert-->
-  <!--              v-if="loginError"-->
-  <!--              color="error"-->
-  <!--              variant="tonal"-->
-  <!--              class="my-4"-->
-  <!--          >-->
-  <!--            Niepoprawne dane logowania-->
-  <!--          </v-alert>-->
+            <!--          <v-alert-->
+            <!--              v-if="loginError"-->
+            <!--              color="error"-->
+            <!--              variant="tonal"-->
+            <!--              class="my-4"-->
+            <!--          >-->
+            <!--            Niepoprawne dane logowania-->
+            <!--          </v-alert>-->
           </div>
         </v-col>
         <v-col cols="12" sm="12" md="6" class="hidden-sm-and-down">

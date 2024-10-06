@@ -46,7 +46,8 @@
     "lengthRuleShort": "Nazwa jest za krótka.",
     "lengthRule": "Nazwa jest za długa",
     "firstSignRule": "Rejestracja niepoprawna",
-    "registerLengthRule": "Niepoprawna długość rejestracji"
+    "registerLengthRule": "Niepoprawna długość rejestracji",
+    "productionYearRule": "Rok produkcji musi być pomiędzy 1800 a bieżącym"
   },
   "register": {
     "title": "Rejestracja",
@@ -109,7 +110,15 @@
       "chooseCar": "Pojazd",
       "chooseMechanic": "Warsztat",
       "nextStep": "Dalej",
-      "prevStep": "Cofnij"
+      "prevStep": "Cofnij",
+      "first": {
+      },
+      "second": {
+        "carBrand": "Marka pojazdu",
+        "carModel": "Model pojazdu",
+        "productionYear": "Rok produkcji",
+        "mileage": "Przebieg"
+      }
     }
   }
 }

@@ -1,11 +1,28 @@
 <script setup lang="ts">
+import json from '../../public/cars.json'
+import type {Ref} from "vue";
+import {productionYearRule, requiredRule} from "~/helpers/rules";
 
 definePageMeta({
   layout: 'user',
 })
-const { t } = useI18n()
+const {t} = useI18n()
 
 const currentStep = ref('1')
+const selectedCarBrand = ref(null)
+const selectedCarModel = ref(null)
+const carYear = ref(null)
+const carMileage = ref(null)
+
+const cars: Ref<{ brand: string; models: string[]; }[]> = ref([])
+
+const carBrands = computed(() => cars.value.map(car => car.brand))
+
+const carModels = computed(() => selectedCarBrand.value ? cars.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+
+onMounted(() => {
+  cars.value = json
+})
 
 </script>
 
@@ -26,14 +43,14 @@ const currentStep = ref('1')
                 color="secondary"
             />
 
-            <v-divider />
+            <v-divider/>
 
             <v-stepper-item
                 :title="t('userBookFix.stepper.chooseCar')"
                 value="2" color="secondary"
             />
 
-            <v-divider />
+            <v-divider/>
 
             <v-stepper-item
                 :title="t('userBookFix.stepper.chooseMechanic')"
@@ -45,7 +62,7 @@ const currentStep = ref('1')
           <v-stepper-window>
             <v-stepper-window-item value="1">
               <v-form ref="credentialsForm">
-                <div class="py-4">
+                <div class="py-4" align="center">
 
                 </div>
               </v-form>
@@ -54,7 +71,36 @@ const currentStep = ref('1')
             <v-stepper-window-item value="2">
               <v-form ref="infoForm">
                 <div class="py-4">
+                  <v-form>
+                    <v-select
+                        v-model="selectedCarBrand"
+                        :label="t('userBookFix.stepper.second.carBrand')"
+                        :items="carBrands"
+                        :rules="[requiredRule(t)]"
+                    />
 
+                    <v-select
+                        v-model="selectedCarModel"
+                        :label="t('userBookFix.stepper.second.carModel')"
+                        :items="carModels"
+                        :rules="[requiredRule(t)]"
+                    />
+                    <v-text-field
+                        v-model.number="carYear"
+                        type="number"
+                        min="1800"
+                        :max="new Date().getFullYear()"
+                        :label="t('userBookFix.stepper.second.productionYear')"
+                        :rules="[requiredRule(t), productionYearRule(t)]"
+                    />
+                    <v-text-field
+                        v-model.number="carMileage"
+                        min="1"
+                        type="number"
+                        :label="t('userBookFix.stepper.second.mileage')"
+                        :rules="[requiredRule(t)]"
+                    />
+                  </v-form>
                 </div>
               </v-form>
             </v-stepper-window-item>

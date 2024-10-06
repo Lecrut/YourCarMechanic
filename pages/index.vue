@@ -7,7 +7,7 @@
       src="/landingOne.jpg"
       cover
       gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7)"
-      class="mt-15 text-center"
+      class="mt-15 text-center h-screen"
   >
     <div class="d-flex flex-column align-center justify-center h-100 mx-4 d-md">
       <span class="text-h3 font-weight-bold text-white hidden-sm-and-down">
@@ -129,7 +129,7 @@
       src="/landingTwo.jpg"
       cover
       gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7)"
-      class="text-center"
+      class="text-center h-screen"
   >
     <div class="d-flex flex-column align-center justify-center h-100 mx-2">
       <span class="text-h4 font-weight-bold text-white hidden-sm-and-down">

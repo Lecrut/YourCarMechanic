@@ -16,6 +16,7 @@
     "firebase": "^10.12.5",
     "firebase-admin": "^12.3.1",
     "firebase-functions": "^5.0.1",
+    "maska": "^3.0.3",
     "nuxt": "^3.12.3",
     "nuxt-vuefire": "^1.0.3",
     "vite-plugin-vuetify": "^2.0.4",

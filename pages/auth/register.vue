@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import formValidation from "~/composable/formValidation";
-import {emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule} from "~/composable/rules";
+import formValidation from "~/helpers/formValidation";
+import {emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule} from "~/helpers/rules";
 
-const { t } = useI18n()
+const {t} = useI18n()
 
-const { form, valid, isValid } = formValidation()
+const {form, valid, isValid} = formValidation()
 
 const email = ref('')
 const name = ref('')
@@ -106,14 +106,14 @@ async function registerUser() {
               </v-btn>
             </v-form>
 
-  <!--          <v-alert-->
-  <!--              v-if="registerError"-->
-  <!--              color="error"-->
-  <!--              variant="tonal"-->
-  <!--              class="my-4"-->
-  <!--          >-->
-  <!--            Niepoprawne dane rejestracji-->
-  <!--          </v-alert>-->
+            <!--          <v-alert-->
+            <!--              v-if="registerError"-->
+            <!--              color="error"-->
+            <!--              variant="tonal"-->
+            <!--              class="my-4"-->
+            <!--          >-->
+            <!--            Niepoprawne dane rejestracji-->
+            <!--          </v-alert>-->
           </div>
         </v-col>
       </v-row>

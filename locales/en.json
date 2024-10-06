@@ -1,7 +1,7 @@
 {
   "landing": {
     "first": {
-      "title": "Welcome to Your mechanic",
+      "title": "Welcome to your mechanic",
       "text": "Find the perfect place for your car in a few simple steps",
       "button": "Start now"
     },
@@ -46,7 +46,8 @@
     "lengthRuleShort": "The name is too short.",
     "lengthRule": "The name is too long",
     "firstSignRule": "Registration invalid",
-    "registerLengthRule": "Invalid registration length"
+    "registerLengthRule": "Invalid registration length",
+    "productionYearRule": "Production year must be between 1800 and current year"
   },
   "register": {
     "title": "Registration",
@@ -109,7 +110,15 @@
       "chooseCar": "Vehicle",
       "chooseMechanic": "Workshop",
       "nextStep": "Next",
-      "prevStep": "Back"
+      "prevStep": "Back",
+      "first": {
+      },
+      "second": {
+        "carBrand": "Vehicle Brand",
+        "carModel": "Vehicle Model",
+        "productionYear": "Production Year",
+        "mileage": "Mileage"
+      }
     }
   }
 }
