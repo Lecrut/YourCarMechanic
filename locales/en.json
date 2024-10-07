@@ -102,7 +102,13 @@
     "userName": "Username",
     "email": "Email Address",
     "yourCars": "Your cars",
-    "addCar": "Add car"
+    "addCar": "Add car",
+    "form": {
+      "title": "Add your car",
+      "carBrand": "Vehicle Brand",
+      "carModel": "Vehicle Model",
+      "productionYear": "Production year"
+    }
   },
   "userBookFix": {
     "stepper": {
@@ -116,9 +122,13 @@
       "second": {
         "carBrand": "Vehicle Brand",
         "carModel": "Vehicle Model",
-        "productionYear": "Production Year",
+        "productionYear": "Production year",
         "mileage": "Mileage"
       }
     }
+  },
+  "universal": {
+    "save": "Save",
+    "close": "Close"
   }
 }

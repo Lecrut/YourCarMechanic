@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import AddCarForm from "~/components/user/addCarForm.vue";
+
 definePageMeta({
   layout: 'user',
 })
-  const { t } = useI18n()
+const {t} = useI18n()
 
-  const isShowCarForm = ref(false)
+const isShowCarForm = ref(false)
 
 </script>
 
@@ -32,7 +34,7 @@ definePageMeta({
         <v-col cols="12" sm="12" md="6">
           <div class="d-flex flex-column align-center justify-center h-100 py-3">
             <div class="text-h5 my-2">
-              {{  t('userProfile.title') }}
+              {{ t('userProfile.title') }}
             </div>
 
             <form class="w-75 my-2">
@@ -64,7 +66,7 @@ definePageMeta({
       <v-row justify="center">
         <v-col cols="12" sm="12" md="6" class="pa-3">
           <div class="text-h5 ma-3 mt-6">
-            {{  t('userProfile.yourCars') }}
+            {{ t('userProfile.yourCars') }}
           </div>
 
           <v-img
@@ -77,29 +79,33 @@ definePageMeta({
           />
 
           <v-btn class="my-5" @click="isShowCarForm = true">
-            {{  t('userProfile.addCar') }}
+            {{ t('userProfile.addCar') }}
           </v-btn>
 
-<!--          <div v-if="!cars.length" class="text-h5 my-5">-->
-<!--            Brak samochodów do wyświetlenia.-->
-<!--          </div>-->
+          <!--          <div v-if="!cars.length" class="text-h5 my-5">-->
+          <!--            Brak samochodów do wyświetlenia.-->
+          <!--          </div>-->
 
-<!--          <div v-else v-for="(car, index) in cars" :item="car" :key="index">-->
-<!--            <v-card-->
-<!--                class="my-5"-->
-<!--                elevation="10"-->
-<!--            >-->
-<!--              <v-card-title>-->
-<!--                {{car.brand}} {{car.model}}-->
-<!--              </v-card-title>-->
-<!--              <v-card-text>-->
-<!--                {{car.registrationNum}}-->
-<!--              </v-card-text>-->
-<!--            </v-card>-->
-<!--          </div>-->
+          <!--          <div v-else v-for="(car, index) in cars" :item="car" :key="index">-->
+          <!--            <v-card-->
+          <!--                class="my-5"-->
+          <!--                elevation="10"-->
+          <!--            >-->
+          <!--              <v-card-title>-->
+          <!--                {{car.brand}} {{car.model}}-->
+          <!--              </v-card-title>-->
+          <!--              <v-card-text>-->
+          <!--                {{car.registrationNum}}-->
+          <!--              </v-card-text>-->
+          <!--            </v-card>-->
+          <!--          </div>-->
         </v-col>
       </v-row>
     </v-sheet>
 
   </v-container>
+
+  <add-car-form
+      v-model="isShowCarForm"
+  />
 </template>

@@ -102,7 +102,13 @@
     "userName": "Nazwa użytkownika",
     "email": "Adres Email",
     "yourCars": "Twoje samochody",
-    "addCar": "Dodaj samochód"
+    "addCar": "Dodaj samochód",
+    "form": {
+      "title": "Dodaj swój samochód",
+      "carBrand": "Marka pojazdu",
+      "carModel": "Model pojazdu",
+      "productionYear": "Rok produkcji"
+    }
   },
   "userBookFix": {
     "stepper": {
@@ -120,5 +126,9 @@
         "mileage": "Przebieg"
       }
     }
+  },
+  "universal": {
+    "save": "Zapisz",
+    "close": "Zamknij"
   }
 }
