@@ -13,8 +13,7 @@ export default function formValidation() {
             valid.value = tmp
 
             return tmp
-        }
-        catch (e) {
+        } catch (e) {
             valid.value = false
 
             return false
@@ -27,3 +26,12 @@ export default function formValidation() {
         isValid,
     }
 }
+
+export async function validateForm(form: {
+    resetValidation: () => void
+    reset: () => void
+    validate: () => Promise<{ valid: boolean }>
+}) {
+    return (await form.validate())?.valid || false
+}
+

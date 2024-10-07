@@ -2,6 +2,7 @@
 import json from '../../public/cars.json'
 import type {Ref} from "vue";
 import {productionYearRule, requiredRule} from "~/helpers/rules";
+import {validateForm} from "~/helpers/formValidation";
 
 definePageMeta({
   layout: 'user',
@@ -13,17 +14,42 @@ const selectedCarBrand = ref(null)
 const selectedCarModel = ref(null)
 const carYear = ref(null)
 const carMileage = ref(null)
+const isAddCar = ref(null)
+
+const infoForm: Ref<null | {
+  resetValidation: () => void
+  reset: () => void
+  validate: () => Promise<{ valid: boolean }>
+}> = ref(null)
 
 const cars: Ref<{ brand: string; models: string[]; }[]> = ref([])
 
 const carBrands = computed(() => cars.value.map(car => car.brand))
-
 const carModels = computed(() => selectedCarBrand.value ? cars.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+
+async function checkStepConditions(next: () => void) {
+  let canProceedToNextStep = true
+
+  if (currentStep.value === '2' && (!infoForm.value || !await validateForm(infoForm.value)))
+    canProceedToNextStep = false
+
+  if (canProceedToNextStep)
+    next()
+}
+
+function resetState() {
+  currentStep.value = '1'
+  selectedCarModel.value = null
+  selectedCarBrand.value = null
+  carYear.value = null
+  carMileage.value = null
+  isAddCar.value = null
+}
 
 onMounted(() => {
   cars.value = json
+  resetState()
 })
-
 </script>
 
 <template>
@@ -71,7 +97,25 @@ onMounted(() => {
             <v-stepper-window-item value="2">
               <v-form ref="infoForm">
                 <div class="py-4">
-                  <v-form>
+                  <div class="text-h6 my-4">
+                    {{ t('userBookFix.stepper.second.carData') }}
+                  </div>
+
+                  <v-radio-group color="primary" v-model="isAddCar" :rules="requiredRule(t)">
+                    <v-radio
+                        :label="t('userBookFix.stepper.second.chooseFromYourCars')"
+                        value="my"
+                    ></v-radio>
+                    <v-radio
+                        :label="t('userBookFix.stepper.second.chooseOtherCar')"
+                        value="add"
+                    ></v-radio>
+                  </v-radio-group>
+
+                  <v-divider class="mb-4"/>
+                  <div
+                      v-if="isAddCar === 'add'"
+                  >
                     <v-select
                         v-model="selectedCarBrand"
                         :label="t('userBookFix.stepper.second.carBrand')"
@@ -99,8 +143,22 @@ onMounted(() => {
                         type="number"
                         :label="t('userBookFix.stepper.second.mileage')"
                         :rules="[requiredRule(t)]"
+                        suffix="km"
                     />
-                  </v-form>
+                  </div>
+
+                  <div
+                      v-if="isAddCar === 'my'"
+                  >
+                    <v-text-field
+                        v-model.number="carMileage"
+                        min="1"
+                        type="number"
+                        :label="t('userBookFix.stepper.second.mileage')"
+                        :rules="[requiredRule(t)]"
+                        suffix="km"
+                    />
+                  </div>
                 </div>
               </v-form>
             </v-stepper-window-item>
@@ -116,7 +174,7 @@ onMounted(() => {
               :next-text="t('userBookFix.stepper.nextStep')"
               :prev-text="t('userBookFix.stepper.prevStep')"
               @click:prev="prev"
-              @click:next="next"
+              @click:next="checkStepConditions(next)"
           />
         </template>
       </v-stepper>

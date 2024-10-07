@@ -120,6 +120,9 @@
       "first": {
       },
       "second": {
+        "carData": "Vehicle data",
+        "chooseFromYourCars": "Choose a car from your list",
+        "chooseOtherCar": "Choose a car outside your cars",
         "carBrand": "Vehicle Brand",
         "carModel": "Vehicle Model",
         "productionYear": "Production year",
