@@ -114,10 +114,13 @@
     "stepper": {
       "chooseRepair": "Service",
       "chooseCar": "Vehicle",
+      "summary": "Summary",
       "chooseMechanic": "Workshop",
       "nextStep": "Next",
       "prevStep": "Back",
       "first": {
+        "title": "Select repair type",
+        "description": "Problem description"
       },
       "second": {
         "carData": "Vehicle data",
@@ -127,8 +130,29 @@
         "carModel": "Vehicle Model",
         "productionYear": "Production year",
         "mileage": "Mileage"
+      },
+      "third": {
+        "title": "Choose workshop"
+      },
+      "fourth": {
+        "title": "Summary",
+        "car": "Car",
+        "repair": "Repair",
+        "description": "Repair description",
+        "workshop": "Workshop"
       }
     }
+  },
+  "services": {
+    "bodyWork": "Body work",
+    "paint": "Paint",
+    "electrician": "Electrician",
+    "oil": "Oils and filters",
+    "engine": "Engine",
+    "tires": "Tires",
+    "windows": "Windows",
+    "airConditioning": "Air Conditioning",
+    "other": "Other"
   },
   "universal": {
     "save": "Save",

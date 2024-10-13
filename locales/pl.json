@@ -114,10 +114,13 @@
     "stepper": {
       "chooseRepair": "Usługa",
       "chooseCar": "Pojazd",
+      "summary": "Naprawa",
       "chooseMechanic": "Warsztat",
       "nextStep": "Dalej",
       "prevStep": "Cofnij",
       "first": {
+        "title": "Wybierz typ naprawy",
+        "description": "Opis problemu"
       },
       "second": {
         "carData": "Dane pojazdu",
@@ -127,8 +130,29 @@
         "carModel": "Model pojazdu",
         "productionYear": "Rok produkcji",
         "mileage": "Przebieg"
+      },
+      "third": {
+        "title": "Wybierz warsztat"
+      },
+      "fourth": {
+        "title": "Podsumowanie",
+        "car": "Samochdód",
+        "repair": "Naprawa",
+        "description": "Opis naprawy",
+        "workshop": "Warsztat"
       }
     }
+  },
+  "services": {
+    "bodyWork": "Blacharz",
+    "paint": "Lakiernik",
+    "electrician": "Elektryk",
+    "oil": "Oleje i filtry",
+    "engine": "Silnik",
+    "tires": "Opony",
+    "windows": "Szyby",
+    "airConditioning": "Klimatyzacja",
+    "other": "Inne"
   },
   "universal": {
     "save": "Zapisz",

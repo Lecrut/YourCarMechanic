@@ -15,6 +15,8 @@ const selectedCarModel = ref(null)
 const carYear = ref(null)
 const carMileage = ref(null)
 const isAddCar = ref(null)
+const selectedService = ref(null)
+const serviceDescription = ref(null)
 
 const infoForm: Ref<null | {
   resetValidation: () => void
@@ -26,6 +28,17 @@ const cars: Ref<{ brand: string; models: string[]; }[]> = ref([])
 
 const carBrands = computed(() => cars.value.map(car => car.brand))
 const carModels = computed(() => selectedCarBrand.value ? cars.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+const services = computed(() => [
+  {name: t('services.bodyWork'), value: 'bodyWork'},
+  {name: t('services.paint'), value: 'paint'},
+  {name: t('services.electrician'), value: 'electrician'},
+  {name: t('services.oil'), value: 'oil'},
+  {name: t('services.engine'), value: 'engine'},
+  {name: t('services.tires'), value: 'tires'},
+  {name: t('services.windows'), value: 'windows'},
+  {name: t('services.airConditioning'), value: 'airConditioning'},
+  {name: t('services.other'), value: 'other'}
+])
 
 async function checkStepConditions(next: () => void) {
   let canProceedToNextStep = true
@@ -67,13 +80,16 @@ onMounted(() => {
                 :title="t('userBookFix.stepper.chooseRepair')"
                 value="1"
                 color="secondary"
+                :complete="currentStep > 1"
             />
 
             <v-divider/>
 
             <v-stepper-item
                 :title="t('userBookFix.stepper.chooseCar')"
-                value="2" color="secondary"
+                value="2"
+                color="secondary"
+                :complete="currentStep > 2"
             />
 
             <v-divider/>
@@ -82,13 +98,60 @@ onMounted(() => {
                 :title="t('userBookFix.stepper.chooseMechanic')"
                 value="3"
                 color="secondary"
+                :complete="currentStep > 3"
+            />
+
+            <v-divider/>
+
+            <v-stepper-item
+                :title="t('userBookFix.stepper.summary')"
+                value="4"
+                color="secondary"
+                :complete="currentStep > 4"
             />
           </v-stepper-header>
 
           <v-stepper-window>
             <v-stepper-window-item value="1">
               <v-form ref="credentialsForm">
-                <div class="py-4" align="center">
+                <div class="py-4">
+                  <div class="text-h5 font-weight-bold text-center">
+                    {{ t('userBookFix.stepper.first.title') }}
+                  </div>
+
+                  <v-divider class="my-2"/>
+
+                  <v-radio-group
+                      v-model="selectedService"
+                      class="my-5"
+                      color="primary"
+                      :rules="requiredRule(t)"
+                  >
+                    <v-row>
+                      <v-col
+                          cols="12"
+                          md="6"
+                          lg="4"
+                          sm="12"
+                          v-for="(service, index) in services"
+                          :key="index"
+                      >
+                        <v-card variant="tonal" rounded="xl">
+                          <v-card-title>
+                            <v-radio :label="service.name" :value="service.value"></v-radio>
+                          </v-card-title>
+                        </v-card>
+
+                      </v-col>
+                    </v-row>
+                  </v-radio-group>
+
+                  <v-textarea
+                      v-model="serviceDescription"
+                      clearable
+                      :label="t('userBookFix.stepper.first.description')"
+                      variant="solo-filled"
+                  />
 
                 </div>
               </v-form>
@@ -97,19 +160,21 @@ onMounted(() => {
             <v-stepper-window-item value="2">
               <v-form ref="infoForm">
                 <div class="py-4">
-                  <div class="text-h6 my-4">
+                  <div class="text-h5 font-weight-bold text-center">
                     {{ t('userBookFix.stepper.second.carData') }}
                   </div>
+
+                  <v-divider class="my-2"/>
 
                   <v-radio-group color="primary" v-model="isAddCar" :rules="requiredRule(t)">
                     <v-radio
                         :label="t('userBookFix.stepper.second.chooseFromYourCars')"
                         value="my"
-                    ></v-radio>
+                    />
                     <v-radio
                         :label="t('userBookFix.stepper.second.chooseOtherCar')"
                         value="add"
-                    ></v-radio>
+                    />
                   </v-radio-group>
 
                   <v-divider class="mb-4"/>
@@ -165,6 +230,49 @@ onMounted(() => {
 
             <v-stepper-window-item value="3">
               <div class="py-4">
+                <div class="text-h5 font-weight-bold text-center">
+                  {{ t('userBookFix.stepper.third.title') }}
+                </div>
+
+                <v-divider class="my-2"/>
+              </div>
+            </v-stepper-window-item>
+
+            <v-stepper-window-item value="4">
+              <div class="py-4">
+                <div class="text-h5 font-weight-bold text-center">
+                  {{ t('userBookFix.stepper.fourth.title') }}
+                </div>
+
+                <v-divider class="my-2"/>
+
+                <div class="font-weight-bold my-1">
+                  {{ t('userBookFix.stepper.fourth.repair') }}
+                </div>
+
+                {{ services.find(item => item.value === selectedService)?.name }}
+
+                <br>
+
+                {{ t('userBookFix.stepper.fourth.description') }}: {{ serviceDescription }}
+
+                <v-divider class="my-2"/>
+
+                <div class="font-weight-bold my-1">
+                  {{ t('userBookFix.stepper.fourth.car') }}
+                </div>
+
+                {{ selectedCarBrand }} {{ selectedCarModel }} - {{ carYear }}
+
+                <br>
+
+                {{ t('userBookFix.stepper.second.mileage') }} - {{ carMileage }} km
+
+                <v-divider class="my-2"/>
+
+                <div class="font-weight-bold my-1">
+                  {{ t('userBookFix.stepper.fourth.workshop') }}
+                </div>
 
               </div>
             </v-stepper-window-item>
@@ -174,7 +282,7 @@ onMounted(() => {
               :next-text="t('userBookFix.stepper.nextStep')"
               :prev-text="t('userBookFix.stepper.prevStep')"
               @click:prev="prev"
-              @click:next="checkStepConditions(next)"
+              @click:next="next"
           />
         </template>
       </v-stepper>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  const { t } = useI18n()
+const {t} = useI18n()
 </script>
 
 <template>
@@ -18,7 +18,7 @@
       </v-btn>
     </div>
 
-    <v-spacer />
+    <v-spacer/>
 
     <div class="hidden-sm-and-down">
       <v-btn variant="text" color="default" to="/user">
@@ -33,6 +33,8 @@
         {{ t('navBar.user.history') }}
       </v-btn>
     </div>
+
+    <v-btn variant="text" color="default" to="/user/notifications" icon="mdi-bell"/>
   </v-app-bar>
 
 
