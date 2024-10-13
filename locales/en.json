@@ -112,6 +112,17 @@
       "productionYear": "Production year"
     }
   },
+  "companyProfile": {
+    "title": "Company profile",
+    "name": "Company name",
+    "nip": "VAT number",
+    "address": "Address",
+    "openingTime": "Opening time",
+    "closingTime": "Closing time",
+    "phone": "Phone",
+    "email": "Email address",
+    "services": "Services performed"
+  },
   "userBookFix": {
     "stepper": {
       "chooseRepair": "Service",
@@ -158,6 +169,8 @@
   },
   "universal": {
     "save": "Save",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "edit": "Edit"
   }
 }
