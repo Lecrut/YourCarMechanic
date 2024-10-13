@@ -72,6 +72,8 @@
     "english": "English",
     "polish": "Polish",
     "changeTheme": "Change theme",
+    "logOut": "Log out",
+    "notifications": "Notifications",
     "user": {
       "profile": "Profile",
       "bookedFix": "Order repair",
