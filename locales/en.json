@@ -42,6 +42,7 @@
   "rules": {
     "requiredRule": "The field is required",
     "emailRule": "Invalid email format",
+    "phoneRule": "Invalid phone format",
     "passwordRule": "Incorrect password",
     "lengthRuleShort": "The name is too short.",
     "lengthRule": "The name is too long",

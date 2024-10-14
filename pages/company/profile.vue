@@ -1,14 +1,23 @@
 <script setup lang="ts">
+import {services} from "~/composable/services";
+import formValidation from "~/helpers/formValidation";
+import {emailRule, lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+
 definePageMeta({
   layout: 'company',
 })
 
 const {t} = useI18n()
+const {form, valid, isValid} = formValidation()
 
 const isEditing = ref(false)
 
-function saveForm() {
-  isEditing.value = false
+async function saveForm() {
+  if (await isValid()) {
+
+
+    isEditing.value = false
+  }
 }
 </script>
 
@@ -27,99 +36,120 @@ function saveForm() {
         </div>
       </v-row>
 
-      <v-row justify="center">
-        <v-col cols="12" sm="12" md="6">
-          <v-text-field
-              :label="t('companyProfile.name')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <v-text-field
-              :label="t('companyProfile.nip')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <v-text-field
-              :label="t('companyProfile.phone')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <v-text-field
-              :label="t('companyProfile.email')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="12" md="6">
-          <v-text-field
-              :label="t('companyProfile.address')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="6" md="3">
-          <v-text-field
-              :label="t('companyProfile.openingTime')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="6" md="3">
-          <v-text-field
-              :label="t('companyProfile.closingTime')"
-              :readonly="!isEditing"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="12">
-          <v-select
-              :label="t('companyProfile.services')"
-              chips
-              multiple
-              :readonly="!isEditing"
-          ></v-select>
-        </v-col>
-      </v-row>
-
-      <v-row
-          v-if="!isEditing"
-          justify="center"
-          class="mb-5">
-        <v-btn
-            prepend-icon="mdi-pencil"
-            @click="isEditing=true"
-        >
-          {{ t('universal.edit') }}
-        </v-btn>
-      </v-row>
-
-      <v-row
-          v-else
-          justify="center"
-          class="mb-5"
+      <v-form
+          v-model="valid"
+          ref="form"
+          @submit.prevent="saveForm"
       >
-        <v-btn
-            class="mx-2"
-            color="default"
-            variant="outlined"
-            @click="isEditing=false"
-        >
-          {{ t('universal.cancel') }}
-        </v-btn>
+        <v-row justify="center">
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                :label="t('companyProfile.name')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t)]"
+            />
+          </v-col>
 
-        <v-btn
-            class="mx-2"
-            @click="saveForm"
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                :label="t('companyProfile.nip')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t), lengthRuleShort(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                :label="t('companyProfile.phone')"
+                :readonly="!isEditing"
+                type="number"
+                :rules="[requiredRule(t), phoneRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                :label="t('companyProfile.email')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t), emailRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                :label="t('companyProfile.address')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="6" md="3">
+            <v-text-field
+                :label="t('companyProfile.openingTime')"
+                :readonly="!isEditing"
+                type="number"
+                :rules="[requiredRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="6" md="3">
+            <v-text-field
+                :label="t('companyProfile.closingTime')"
+                :readonly="!isEditing"
+                type="number"
+                :rules="[requiredRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12">
+            <v-select
+                :label="t('companyProfile.services')"
+                :items="services(t)"
+                chips
+                multiple
+                :readonly="!isEditing"
+                :rules="[
+                    requiredRule(t),
+                    requiredArrayRule(t)
+                ]"
+            ></v-select>
+          </v-col>
+        </v-row>
+
+        <v-row
+            v-if="!isEditing"
+            justify="center"
+            class="mb-5">
+          <v-btn
+              prepend-icon="mdi-pencil"
+              @click="isEditing=true"
+          >
+            {{ t('universal.edit') }}
+          </v-btn>
+        </v-row>
+
+        <v-row
+            v-else
+            justify="center"
+            class="mb-5"
         >
-          {{ t('universal.save') }}
-        </v-btn>
-      </v-row>
+          <v-btn
+              class="mx-2"
+              color="default"
+              variant="outlined"
+              @click="isEditing=false"
+          >
+            {{ t('universal.cancel') }}
+          </v-btn>
+
+          <v-btn
+              class="mx-2"
+              @click="saveForm"
+          >
+            {{ t('universal.save') }}
+          </v-btn>
+        </v-row>
+      </v-form>
     </v-sheet>
   </v-container>
 

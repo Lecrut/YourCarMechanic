@@ -42,6 +42,7 @@
   "rules": {
     "requiredRule": "Pole jest wymagane",
     "emailRule": "Niepoprawny format email",
+    "phoneRule": "Niepoprawny format nr. telefonu",
     "passwordRule": "Niepoprawne haslo",
     "lengthRuleShort": "Nazwa jest za krótka.",
     "lengthRule": "Nazwa jest za długa",

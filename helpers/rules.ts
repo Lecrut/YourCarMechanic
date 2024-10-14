@@ -2,6 +2,7 @@ const emailPattern
     = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 const registerPattern = /^[A-Za-z]$/
+const phonePattern = /^\d{9}$/
 
 export function requiredRule(t: (arg0: string) => string) {
     return (value: string | number | null, textError = t('rules.requiredRule')) => {
@@ -9,9 +10,21 @@ export function requiredRule(t: (arg0: string) => string) {
     }
 }
 
+export function requiredArrayRule(t: (arg0: string) => string) {
+    return (value: string | any[] | null, textError = t('rules.requiredRule')) => {
+        return Boolean(value?.length) || textError
+    }
+}
+
 export function emailRule(t: (arg0: string) => string) {
     return (value: string, textError = t('rules.emailRule')) => {
         return emailPattern.test(value) || textError
+    }
+}
+
+export function phoneRule(t: (arg0: string) => string) {
+    return (value: string, textError = t('rules.phoneRule')) => {
+        return phonePattern.test(value) || textError
     }
 }
 

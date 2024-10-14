@@ -3,6 +3,7 @@ import json from '../../public/cars.json'
 import type {Ref} from "vue";
 import {productionYearRule, requiredRule} from "~/helpers/rules";
 import {validateForm} from "~/helpers/formValidation";
+import {services} from "~/composable/services";
 
 definePageMeta({
   layout: 'user',
@@ -28,17 +29,6 @@ const cars: Ref<{ brand: string; models: string[]; }[]> = ref([])
 
 const carBrands = computed(() => cars.value.map(car => car.brand))
 const carModels = computed(() => selectedCarBrand.value ? cars.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
-const services = computed(() => [
-  {name: t('services.bodyWork'), value: 'bodyWork'},
-  {name: t('services.paint'), value: 'paint'},
-  {name: t('services.electrician'), value: 'electrician'},
-  {name: t('services.oil'), value: 'oil'},
-  {name: t('services.engine'), value: 'engine'},
-  {name: t('services.tires'), value: 'tires'},
-  {name: t('services.windows'), value: 'windows'},
-  {name: t('services.airConditioning'), value: 'airConditioning'},
-  {name: t('services.other'), value: 'other'}
-])
 
 async function checkStepConditions(next: () => void) {
   let canProceedToNextStep = true
@@ -133,12 +123,12 @@ onMounted(() => {
                           md="6"
                           lg="4"
                           sm="12"
-                          v-for="(service, index) in services"
+                          v-for="(service, index) in services(t)"
                           :key="index"
                       >
                         <v-card variant="tonal" rounded="xl">
                           <v-card-title>
-                            <v-radio :label="service.name" :value="service.value"></v-radio>
+                            <v-radio :label="service.title" :value="service.value"></v-radio>
                           </v-card-title>
                         </v-card>
 
@@ -250,7 +240,7 @@ onMounted(() => {
                   {{ t('userBookFix.stepper.fourth.repair') }}
                 </div>
 
-                {{ services.find(item => item.value === selectedService)?.name }}
+                {{ services(t).find(item => item.value === selectedService)?.title }}
 
                 <br>
 
