@@ -116,6 +116,7 @@
   "companyProfile": {
     "title": "Profil firmy",
     "name": "Nazwa firmy",
+    "city": "Miasto",
     "nip": "NIP",
     "address": "Adres",
     "openingTime": "Godzina otwarcia",

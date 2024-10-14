@@ -116,6 +116,7 @@
   "companyProfile": {
     "title": "Company profile",
     "name": "Company name",
+    "city": "City",
     "nip": "VAT number",
     "address": "Address",
     "openingTime": "Opening time",

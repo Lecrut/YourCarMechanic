@@ -12,6 +12,16 @@ const {form, valid, isValid} = formValidation()
 
 const isEditing = ref(false)
 
+const companyName = ref(null)
+const companyNip = ref(null)
+const companyEmail = ref(null)
+const companyCity = ref(null)
+const companyAddress = ref(null)
+const companyPhone = ref(null)
+const companyOpeningTime = ref(null)
+const companyClosingTime = ref(null)
+const companyServices = ref(null)
+
 async function saveForm() {
   if (await isValid()) {
 
@@ -42,8 +52,9 @@ async function saveForm() {
           @submit.prevent="saveForm"
       >
         <v-row justify="center">
-          <v-col cols="12" sm="12" md="6">
+          <v-col cols="12" sm="12" md="12">
             <v-text-field
+                v-model="companyName"
                 :label="t('companyProfile.name')"
                 :readonly="!isEditing"
                 :rules="[requiredRule(t)]"
@@ -52,6 +63,7 @@ async function saveForm() {
 
           <v-col cols="12" sm="12" md="6">
             <v-text-field
+                v-model="companyNip"
                 :label="t('companyProfile.nip')"
                 :readonly="!isEditing"
                 :rules="[requiredRule(t), lengthRuleShort(t)]"
@@ -60,6 +72,35 @@ async function saveForm() {
 
           <v-col cols="12" sm="12" md="6">
             <v-text-field
+                v-model="companyEmail"
+                :label="t('companyProfile.email')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t), emailRule(t)]"
+                placeholder="example@mail.com"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <v-select
+                v-model="companyCity"
+                :label="t('companyProfile.city')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t), requiredArrayRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                v-model="companyAddress"
+                :label="t('companyProfile.address')"
+                :readonly="!isEditing"
+                :rules="[requiredRule(t)]"
+            />
+          </v-col>
+
+          <v-col cols="12" sm="12" md="6">
+            <v-text-field
+                v-model="companyPhone"
                 :label="t('companyProfile.phone')"
                 :readonly="!isEditing"
                 type="number"
@@ -67,24 +108,9 @@ async function saveForm() {
             />
           </v-col>
 
-          <v-col cols="12" sm="12" md="6">
-            <v-text-field
-                :label="t('companyProfile.email')"
-                :readonly="!isEditing"
-                :rules="[requiredRule(t), emailRule(t)]"
-            />
-          </v-col>
-
-          <v-col cols="12" sm="12" md="6">
-            <v-text-field
-                :label="t('companyProfile.address')"
-                :readonly="!isEditing"
-                :rules="[requiredRule(t)]"
-            />
-          </v-col>
-
           <v-col cols="12" sm="6" md="3">
             <v-text-field
+                v-model="companyOpeningTime"
                 :label="t('companyProfile.openingTime')"
                 :readonly="!isEditing"
                 type="number"
@@ -94,6 +120,7 @@ async function saveForm() {
 
           <v-col cols="12" sm="6" md="3">
             <v-text-field
+                v-model="companyClosingTime"
                 :label="t('companyProfile.closingTime')"
                 :readonly="!isEditing"
                 type="number"
@@ -103,6 +130,7 @@ async function saveForm() {
 
           <v-col cols="12" sm="12">
             <v-select
+                v-model="companyServices"
                 :label="t('companyProfile.services')"
                 :items="services(t)"
                 chips
