@@ -169,6 +169,14 @@
     "airConditioning": "Klimatyzacja",
     "other": "Inne"
   },
+  "noRole": {
+    "chooseRole": "Kim jesteś?",
+    "select": "Wybierz role"
+  },
+  "roles": {
+    "workshop": "Warsztat",
+    "user": "Użytkownik"
+  },
   "universal": {
     "save": "Zapisz",
     "close": "Zamknij",

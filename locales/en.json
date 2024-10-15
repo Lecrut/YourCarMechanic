@@ -169,6 +169,14 @@
     "airConditioning": "Air Conditioning",
     "other": "Other"
   },
+  "noRole": {
+    "chooseRole": "Who are you?",
+    "select": "Choose role"
+  },
+  "roles": {
+    "workshop": "Workshop",
+    "user": "User"
+  },
   "universal": {
     "save": "Save",
     "close": "Close",

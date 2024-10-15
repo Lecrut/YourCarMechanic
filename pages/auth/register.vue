@@ -17,7 +17,7 @@ const showPasswordTwo = ref(false)
 
 async function registerUser() {
   if (await isValid()) {
-
+    navigateTo('/auth/role-choice')
   }
 }
 
