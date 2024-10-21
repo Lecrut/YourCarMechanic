@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import {useAuthStore} from "~/stores/authStore";
+
 const {t} = useI18n()
 
+const authStore = useAuthStore()
+
 function logOut() {
+  authStore.logOut()
+  navigateTo('/')
 }
+
 </script>
 
 <template>
@@ -11,7 +18,7 @@ function logOut() {
       position-fixed
       class="px-2"
   >
-    <v-btn variant="text" color="default" to="/company">
+    <v-btn variant="text" color="default" to="/">
       {{ t('navBar.title') }}
     </v-btn>
 

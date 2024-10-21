@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import {useAuthStore} from "~/stores/authStore";
+
 const {t} = useI18n()
 
+const authStore = useAuthStore()
+
 function logOut() {
+  authStore.logOut()
+  navigateTo('/')
 }
 </script>
 
@@ -27,7 +33,7 @@ function logOut() {
               {{ t('navBar.user.profile') }}
             </v-list-item-title>
           </v-list-item>
-          
+
           <v-divider/>
 
           <v-list-item prepend-icon="mdi-logout" @click="logOut">

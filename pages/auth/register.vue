@@ -21,8 +21,6 @@ async function registerUser() {
   }
 }
 
-//todo: jeżeli zalogowany to od razu przenosi do index
-
 </script>
 
 <template>
@@ -65,14 +63,6 @@ async function registerUser() {
                   type="email"
                   @keyup.enter="registerUser"
                   :rules="[requiredRule(t), emailRule(t)]"
-              />
-
-              <v-text-field
-                  v-model="name"
-                  :label="t('register.userName')"
-                  type="text"
-                  @keyup.enter="registerUser"
-                  :rules="[requiredRule(t), lengthRuleShort(t), lengthRule(t)]"
               />
 
               <v-text-field

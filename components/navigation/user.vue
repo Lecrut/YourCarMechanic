@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import {useAuthStore} from "~/stores/authStore";
+
 const {t} = useI18n()
 
+const authStore = useAuthStore()
+
 function logOut() {
+  authStore.logOut()
+  navigateTo('/')
 }
 </script>
 

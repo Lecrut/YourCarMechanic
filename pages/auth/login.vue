@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import formValidation from "~/helpers/formValidation";
 import {emailRule, passwordRule, requiredRule} from "~/helpers/rules";
+import {useAuthStore} from "~/stores/authStore";
+import {storeToRefs} from "pinia";
 
 const {t} = useI18n()
 
 const {form, valid, isValid} = formValidation()
+
+const authStore = useAuthStore()
+const {user} = storeToRefs(authStore)
 
 const email = ref('')
 const password = ref('')
@@ -14,11 +19,15 @@ const showPassword = ref(false)
 
 async function logIn() {
   if (await isValid()) {
-
+    authStore.logIn(email.value, password.value)
   }
 }
 
-//todo: jeżeli zalogowany to od razu przenosi do index
+onMounted(() => {
+  if (user.value) {
+    user.value.role === "company" ? navigateTo('/company') : navigateTo('/user')
+  }
+})
 
 </script>
 
