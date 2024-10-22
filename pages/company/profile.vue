@@ -40,16 +40,19 @@ async function saveForm() {
         max-width="1100"
         rounded
     >
-      <v-row justify="center">
-        <div class="text-h5 my-5">
+      <v-row justify="center" class="mt-5 mb-4 ">
+        <div class="text-h5">
           {{ t('companyProfile.title') }}
         </div>
       </v-row>
+
+      <v-divider/>
 
       <v-form
           v-model="valid"
           ref="form"
           @submit.prevent="saveForm"
+          class="my-6 mx-4"
       >
         <v-row justify="center">
           <v-col cols="12" sm="12" md="12">

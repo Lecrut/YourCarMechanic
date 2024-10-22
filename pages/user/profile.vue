@@ -45,6 +45,16 @@ const isShowCarForm = ref(false)
                 />
 
                 <v-text-field
+                    :label="t('userProfile.userSurname')"
+                    readonly
+                />
+
+                <v-text-field
+                    :label="t('userProfile.userPhone')"
+                    readonly
+                />
+
+                <v-text-field
                     :label="t('userProfile.email')"
                     placeholder="example@mail.com"
                     type="email"

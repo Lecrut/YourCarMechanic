@@ -102,7 +102,9 @@
   },
   "userProfile": {
     "title": "Profile",
-    "userName": "Username",
+    "userName": "Name",
+    "userSurname": "Surname",
+    "userPhone": "Phone number",
     "email": "Email Address",
     "yourCars": "Your cars",
     "addCar": "Add car",
@@ -171,7 +173,9 @@
   },
   "noRole": {
     "chooseRole": "Who are you?",
-    "select": "Choose role"
+    "select": "Choose role",
+    "userProfile": "User profile",
+    "companyProfile": "Company profile"
   },
   "roles": {
     "workshop": "Workshop",

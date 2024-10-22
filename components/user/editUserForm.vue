@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {productionYearRule, requiredRule} from "~/helpers/rules"
-import json from '../../public/cars.json'
 import formValidation from "~/helpers/formValidation";
+import {phoneRule, requiredRule} from "~/helpers/rules";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -9,17 +8,14 @@ const {t} = useI18n()
 
 const {form, valid, isValid} = formValidation()
 
-const selectedCarBrand = ref(null)
-const selectedCarModel = ref(null)
-const carYear = ref(null)
-
-const carBrands = computed(() => json.map(car => car.brand))
-const carModels = computed(() => selectedCarBrand.value ? json.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+const userName = ref(null)
+const userSurname = ref(null)
+const userPhone = ref(null)
 
 function resetState() {
-  selectedCarBrand.value = null
-  selectedCarModel.value = null
-  carYear.value = null
+  userName.value = null
+  userSurname.value = null
+  userPhone.value = null
 }
 
 function close() {
@@ -32,7 +28,9 @@ async function saveForm() {
 
   }
 }
+
 </script>
+
 
 <template>
   <v-dialog
@@ -52,26 +50,28 @@ async function saveForm() {
             v-model="valid"
             @submit.prevent="saveForm"
         >
-          <v-select
-              v-model="selectedCarBrand"
-              :label="t('userBookFix.stepper.second.carBrand')"
-              :items="carBrands"
+          <v-text-field
+              v-model="userName"
+              :label="t('userProfile.userName')"
+              type="text"
+              @keyup.enter="saveForm"
               :rules="[requiredRule(t)]"
           />
 
-          <v-select
-              v-model="selectedCarModel"
-              :label="t('userBookFix.stepper.second.carModel')"
-              :items="carModels"
+          <v-text-field
+              v-model="userSurname"
+              :label="t('userProfile.userSurname')"
+              type="text"
+              @keyup.enter="saveForm"
               :rules="[requiredRule(t)]"
           />
+
           <v-text-field
-              v-model.number="carYear"
+              v-model="userPhone"
+              :label="t('userProfile.userPhone')"
+              @keyup.enter="saveForm"
               type="number"
-              min="1800"
-              :max="new Date().getFullYear()"
-              :label="t('userBookFix.stepper.second.productionYear')"
-              :rules="[requiredRule(t), productionYearRule(t)]"
+              :rules="[requiredRule(t), phoneRule(t)]"
           />
         </v-form>
       </v-card-text>
