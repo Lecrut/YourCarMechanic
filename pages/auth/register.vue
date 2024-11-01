@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import formValidation from "~/helpers/formValidation";
-import {emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule} from "~/helpers/rules";
+import {emailRule, passwordRule, requiredRule} from "~/helpers/rules";
+import {useAuthStore} from "~/stores/authStore";
+import {storeToRefs} from "pinia";
 
 const {t} = useI18n()
 
 const {form, valid, isValid} = formValidation()
 
+const authStore = useAuthStore()
+const {user, registerError} = storeToRefs(authStore)
+
 const email = ref('')
-const name = ref('')
 const password1 = ref('')
 const password2 = ref('')
 const rules = ref(false)
@@ -17,10 +21,16 @@ const showPasswordTwo = ref(false)
 
 async function registerUser() {
   if (await isValid()) {
-    navigateTo('/auth/role-choice')
+    if (password1.value !== password2.value) {
+      registerError.value = true
+      return
+    }
+    await authStore.signUp(email.value, password1.value)
+
+    if (!registerError.value)
+      navigateTo('/auth/role-choice')
   }
 }
-
 </script>
 
 <template>
@@ -96,21 +106,15 @@ async function registerUser() {
               </v-btn>
             </v-form>
 
-            <!--          <v-alert-->
-            <!--              v-if="registerError"-->
-            <!--              color="error"-->
-            <!--              variant="tonal"-->
-            <!--              class="my-4"-->
-            <!--          >-->
-            <!--            Niepoprawne dane rejestracji-->
-            <!--          </v-alert>-->
+            <my-snackbar
+                v-model="registerError"
+                :text="t('register.error')"
+                :is-error="true"
+            />
+           
           </div>
         </v-col>
       </v-row>
     </v-sheet>
   </v-container>
 </template>
-
-<style scoped>
-
-</style>

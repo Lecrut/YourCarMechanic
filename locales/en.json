@@ -33,6 +33,7 @@
     "email": "Email Address",
     "password": "Password",
     "noAccount": "Don't have an account yet?",
+    "error": "Invalid user credentials",
     "button": {
       "login": "Log in",
       "resetPassword": "Forgot your password?",
@@ -57,7 +58,8 @@
     "password": "Password",
     "repeatPassword": "Repeat Password",
     "acceptStatute": "I accept the regulations",
-    "button": "Register"
+    "button": "Register",
+    "error": "Invalid register data"
   },
   "resetPassword": {
     "title": "Password Reset",

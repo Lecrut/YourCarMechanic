@@ -33,6 +33,7 @@
     "email": "Adres Email",
     "password": "Hasło",
     "noAccount": "Nie masz jeszcze konta?",
+    "error": "Niepoprawne dane logowania",
     "button": {
       "login": "Zaloguj",
       "resetPassword": "Zapomniałeś hasła?",
@@ -57,7 +58,8 @@
     "password": "Hasło",
     "repeatPassword": "Powtórz hasło",
     "acceptStatute": "Akceptuję regulamin",
-    "button": "Zarejestruj się"
+    "button": "Zarejestruj się",
+    "error": "Niepoprawne dane rejestracji"
   },
   "resetPassword": {
     "title": "Restowanie hasła",
