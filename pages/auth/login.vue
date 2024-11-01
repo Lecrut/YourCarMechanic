@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import formValidation from "~/helpers/formValidation";
-import {emailRule, passwordRule, requiredRule} from "~/helpers/rules";
+import {emailRule, requiredRule} from "~/helpers/rules";
 import {useAuthStore} from "~/stores/authStore";
 import {storeToRefs} from "pinia";
 
@@ -9,7 +9,7 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
-const {user} = storeToRefs(authStore)
+const {user, loginError} = storeToRefs(authStore)
 
 const email = ref('')
 const password = ref('')
@@ -19,7 +19,15 @@ const showPassword = ref(false)
 
 async function logIn() {
   if (await isValid()) {
-    authStore.logIn(email.value, password.value)
+    await authStore.logIn(email.value, password.value)
+
+    if (user.value?.role === 'user')
+      navigateTo('/user')
+    else if (user.value?.role === 'admin')
+      navigateTo('/company')
+    else if (user.value) {
+      navigateTo('/auth/role-choice')
+    }
   }
 }
 
@@ -69,7 +77,7 @@ onMounted(() => {
                   :type="showPassword ? 'text' : 'password'"
                   @click:append-inner="showPassword = !showPassword"
                   @keyup.enter="logIn"
-                  :rules="[requiredRule(t), passwordRule(t)]"
+                  :rules="[requiredRule(t)]"
               />
 
               <v-row class="justify-center mt-2">
@@ -91,14 +99,11 @@ onMounted(() => {
               {{ t('login.button.register') }}
             </v-btn>
 
-            <!--          <v-alert-->
-            <!--              v-if="loginError"-->
-            <!--              color="error"-->
-            <!--              variant="tonal"-->
-            <!--              class="my-4"-->
-            <!--          >-->
-            <!--            Niepoprawne dane logowania-->
-            <!--          </v-alert>-->
+            <my-snackbar
+                v-model="loginError"
+                :text="t('login.error')"
+                :is-error="true"
+            />
           </div>
         </v-col>
         <v-col cols="12" sm="12" md="6" class="hidden-sm-and-down">

@@ -3,6 +3,7 @@ import {roles} from "~/composable/roles";
 import {emailRule, lengthRule, lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import formValidation from "~/helpers/formValidation";
 import {services} from "~/composable/services";
+import {useAuthStore} from "~/stores/authStore";
 
 definePageMeta({
   layout: 'no-role',
@@ -10,6 +11,8 @@ definePageMeta({
 
 const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
+
+const authStore = useAuthStore()
 
 const selectedRole = ref(null)
 const isRoleSelected = ref(false)
@@ -36,7 +39,12 @@ function chooseRole() {
 async function savePersonalData() {
   if (await isValid()) {
     if (selectedRole.value === 'user') {
-
+      const userProfile = {
+        name: userName.value,
+        surname: userSurname.value,
+        phone: userPhone.value,
+      }
+      await authStore.updateUserProfile(userProfile)
       navigateTo('/user')
     } else {
 

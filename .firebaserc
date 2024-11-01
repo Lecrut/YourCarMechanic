@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "yourcarmechanic-624a4"
-  }
+    "default": "yourcarmechanic-624a4",
+    "staging": "yourcarmechanic-624a4"
+  },
+  "targets": {},
+  "etags": {}
 }

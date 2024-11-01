@@ -1,4 +1,4 @@
-export interface Workshop {
+export interface IWorkshop {
     name: string
     nip: string
     closingTime: number,
@@ -7,39 +7,21 @@ export interface Workshop {
     services: string[],
     phone: string,
     address: string
+
+    reference: string
 }
 
-export class WorkshopModel {
-    name: string
-    nip: string
-    closingTime: number
-    openingTime: number
-    city: string
-    services: string[]
-    phone: string
-    address: string
+export function mapIWorkshop(data: IWorkshop): IWorkshop {
+    return {
+        name: data.name || "",
+        nip: data.nip || "",
+        closingTime: Number(data.closingTime),
+        openingTime: Number(data.openingTime),
+        city: data.city || "",
+        services: data.services,
+        phone: data.phone,
+        address: data.address,
 
-    constructor(data: Workshop) {
-        this.name = data.name || ""
-        this.nip = data.nip || ""
-        this.closingTime = Number(data.closingTime)
-        this.openingTime = Number(data.openingTime)
-        this.city = data.city || ""
-        this.services = data.services
-        this.phone = data.phone
-        this.address = data.address
-    }
-
-    toMap() {
-        return {
-            name: this.name,
-            nip: this.nip,
-            closingTime: this.closingTime,
-            openingTime: this.openingTime,
-            city: this.city,
-            services: this.services,
-            phone: this.phone,
-            address: this.address,
-        }
+        reference: data.reference,
     }
 }

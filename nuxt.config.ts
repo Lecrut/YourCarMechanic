@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
+import wasm from 'vite-plugin-wasm';
 
 export default defineNuxtConfig({
     build: {
@@ -18,6 +19,9 @@ export default defineNuxtConfig({
     ],
 
     vite: {
+        plugins: [
+            wasm()
+        ],
         vue: {
             template: {
                 transformAssetUrls,
@@ -33,7 +37,7 @@ export default defineNuxtConfig({
 
     nitro: {
         firebase: {
-            nodeVersion: "16",
+            nodeVersion: "20",
             gen: 2,
         },
         preset: "firebase"
@@ -53,6 +57,8 @@ export default defineNuxtConfig({
         },
     },
 
-    devtools: {enabled: true},
+    devtools: {
+        enabled: true
+    },
     compatibilityDate: '2024-08-18',
 })

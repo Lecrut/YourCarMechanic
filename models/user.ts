@@ -1,33 +1,23 @@
-import type {userProfile} from "~/models/userProfile";
+import {type IUserProfile, mapIUserProfile} from "~/models/userProfile";
 import {firestore} from "firebase-admin";
 import DocumentReference = firestore.DocumentReference;
 
-export interface User {
+export interface IUser {
     email: string
     role: string
-    profile: userProfile | null
+    profile: IUserProfile | null
     company: DocumentReference | null
+
+    reference: string | null
 }
 
-export class UserModel {
-    email: string
-    role: string
-    profile: userProfile | null
-    company: DocumentReference | null
+export function mapIUser(data: IUser): IUser {
+    return {
+        email: data.email || "",
+        role: data.role || "",
+        profile: mapIUserProfile({...data.profile} as IUserProfile),
+        company: data.company || null,
 
-    constructor(data: User) {
-        this.email = data.email || ""
-        this.role = data.role || ""
-        this.profile = data.profile || null
-        this.company = data.company || null
-    }
-
-    toMap() {
-        return {
-            email: this.email,
-            role: this.role,
-            profile: this.profile || null,
-            company: this.company || null,
-        }
+        reference: data.reference || ""
     }
 }
