@@ -30,6 +30,10 @@ async function registerUser() {
       navigateTo('/auth/role-choice')
   }
 }
+
+function isPasswordsEqual(v: string) {
+  return password1.value.length && password2.value.length ? password2.value === password1.value && v === password1.value && v === password2.value : true
+}
 </script>
 
 <template>
@@ -81,7 +85,11 @@ async function registerUser() {
                   :append-inner-icon="showPasswordOne ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="showPasswordOne ? 'text' : 'password'"
                   @click:append-inner="showPasswordOne = !showPasswordOne"
-                  :rules="[requiredRule(t), passwordRule(t)]"
+                  :rules="[
+                      requiredRule(t),
+                      passwordRule(t),
+                      (v) => isPasswordsEqual(v) || 'Hasła muszą być identyczne',
+                      ]"
               />
 
               <v-text-field
@@ -91,7 +99,11 @@ async function registerUser() {
                   :append-inner-icon="showPasswordTwo ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="showPasswordTwo ? 'text' : 'password'"
                   @click:append-inner="showPasswordTwo = !showPasswordTwo"
-                  :rules="[requiredRule(t), passwordRule(t)]"
+                  :rules="[
+                      requiredRule(t),
+                      passwordRule(t),
+                      (v) => isPasswordsEqual(v) || 'Hasła muszą być identyczne',
+                      ]"
               />
 
               <v-checkbox
