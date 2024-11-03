@@ -20,6 +20,11 @@ export const useSharedStore = defineStore('shared', () => {
         loading.value = false
     }
 
+    const resetState = () => {
+        error.value = false
+        loading.value = false
+    }
+
     return {
         loading,
         error,
@@ -27,5 +32,7 @@ export const useSharedStore = defineStore('shared', () => {
         init,
         success,
         failure,
+
+        resetState,
     }
 })

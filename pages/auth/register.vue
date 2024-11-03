@@ -9,7 +9,7 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
-const {user} = storeToRefs(authStore)
+const {user, company} = storeToRefs(authStore)
 
 const sharedStore = useSharedStore()
 const {loading, error} = storeToRefs(sharedStore)
@@ -26,7 +26,7 @@ async function registerUser() {
   if (await isValid()) {
     await authStore.signUp(email.value, password1.value, password2.value)
 
-    if (user.value && !error.value)
+    if (user.value)
       navigateTo('/auth/role-choice')
   }
 }
@@ -34,6 +34,14 @@ async function registerUser() {
 function isPasswordsEqual(v: string) {
   return password1.value.length && password2.value.length ? password2.value === password1.value && v === password1.value && v === password2.value : true
 }
+
+onMounted(() => {
+  if (user.value) {
+    user.value.role === "company" && company.value
+        ? navigateTo('/company')
+        : navigateTo('/user')
+  }
+})
 </script>
 
 <template>

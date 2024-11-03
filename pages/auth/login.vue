@@ -9,7 +9,7 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
-const {user} = storeToRefs(authStore)
+const {user, company} = storeToRefs(authStore)
 
 const sharedStore = useSharedStore()
 const {loading, error} = storeToRefs(sharedStore)
@@ -35,7 +35,9 @@ async function logIn() {
 
 onMounted(() => {
   if (user.value) {
-    user.value.role === "company" ? navigateTo('/company') : navigateTo('/user')
+    user.value.role === "company" && company.value
+        ? navigateTo('/company')
+        : navigateTo('/user')
   }
 })
 

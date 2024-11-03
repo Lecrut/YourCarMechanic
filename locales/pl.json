@@ -65,7 +65,8 @@
     "title": "Restowanie hasła",
     "text": "Jeżeli zapomniałeś hasła wpisz swój mail.",
     "email": "Adres Email",
-    "button": "Zresetuj"
+    "button": "Zresetuj",
+    "sendSuccessfully": "Proszę sprawdź swoją skrzynke email."
   },
   "navBar": {
     "title": "Twój mechanik",
@@ -187,6 +188,7 @@
     "save": "Zapisz",
     "close": "Zamknij",
     "cancel": "Anuluj",
-    "edit": "Edytuj"
+    "edit": "Edytuj",
+    "error": "Wystąpił błąd"
   }
 }

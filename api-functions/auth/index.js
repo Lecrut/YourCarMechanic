@@ -8,6 +8,8 @@ const {logIn} = require("./handlers/logIn");
 const cors = require("cors");
 const {addCompany} = require("./handlers/addCompany");
 const {updateProfile} = require("./handlers/updateProfile");
+const {resetPassword} = require("./handlers/sendResetPassword");
+
 const corsOptions = {
     origin: '*',
     credentials: true,
@@ -21,6 +23,7 @@ app.post('/sign-up', signUp);
 app.post('/log-in', logIn);
 app.post('/add-company', addCompany);
 app.post('/update-user', updateProfile);
+app.post('/reset-password', resetPassword);
 app.get('/', (req, res) => {
     res.send('This is my demo project')
 })

@@ -65,7 +65,8 @@
     "title": "Password Reset",
     "text": "If you forgot your password, enter your email address.",
     "email": "Email Address",
-    "button": "Reset"
+    "button": "Reset",
+    "sendSuccessfully": "Please check your inbox."
   },
   "navBar": {
     "title": "Your mechanic",
@@ -187,6 +188,7 @@
     "save": "Save",
     "close": "Close",
     "cancel": "Cancel",
-    "edit": "Edit"
+    "edit": "Edit",
+    "error": "Error occurred"
   }
 }

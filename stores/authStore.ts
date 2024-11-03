@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
     const sharedStore = useSharedStore()
 
     const resetState = () => {
+        company.value = null
         user.value = null
     }
 
@@ -49,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
                 sharedStore.failure()
                 return
             }
-            
+
             // @ts-ignore
             const {data} = await useFetch(authApiUrl + 'sign-up', {
                 query: {email: userEmail, password: userPassword1},
@@ -67,22 +68,42 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const logOut = () => {
+        sharedStore.resetState()
         resetState()
     }
 
-    const updateUserProfile = async (userData: IUserProfile) => {
+    const resetPassword = async (userEmail: string) => {
+        sharedStore.init()
         try {
             // @ts-ignore
-            const {data} = await useFetch(authApiUrl + 'update-user', {
+            const {data} = await useFetch(authApiUrl + 'reset-password', {
+                query: {email: userEmail},
+                method: 'POST',
+            })
+
+            data.value ? sharedStore.success() : sharedStore.failure()
+
+        } catch (e) {
+            sharedStore.failure()
+        }
+    }
+
+    const updateUserProfile = async (userData: IUserProfile) => {
+        sharedStore.init()
+        try {
+            // @ts-ignore
+            const {data} = await useFetch(authApiUrl + 'sign-up', {
                 query: {...userData, reference: user.value?.reference || ''},
                 method: 'POST',
             }) as unknown as IUser
-            console.log('aaa', data.value)
+
             if (data.value)
                 setUser(data.value)
+            else
+                sharedStore.failure()
 
         } catch (e) {
-            console.log(e)
+            sharedStore.failure()
         }
     }
 
@@ -100,6 +121,7 @@ export const useAuthStore = defineStore('auth', () => {
         logIn,
         signUp,
         logOut,
+        resetPassword,
         resetState,
         updateUserProfile,
         createCompany,
