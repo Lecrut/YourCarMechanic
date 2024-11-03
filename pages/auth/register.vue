@@ -9,7 +9,10 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
-const {user, registerError} = storeToRefs(authStore)
+const {user} = storeToRefs(authStore)
+
+const sharedStore = useSharedStore()
+const {loading, error} = storeToRefs(sharedStore)
 
 const email = ref('')
 const password1 = ref('')
@@ -21,13 +24,9 @@ const showPasswordTwo = ref(false)
 
 async function registerUser() {
   if (await isValid()) {
-    if (password1.value !== password2.value) {
-      registerError.value = true
-      return
-    }
-    await authStore.signUp(email.value, password1.value)
+    await authStore.signUp(email.value, password1.value, password2.value)
 
-    if (!registerError.value)
+    if (user.value && !error.value)
       navigateTo('/auth/role-choice')
   }
 }
@@ -101,17 +100,20 @@ async function registerUser() {
                   :rules="[requiredRule(t)]"
               />
 
-              <v-btn @click="registerUser">
+              <v-btn
+                  @click="registerUser"
+                  :loading="loading"
+              >
                 {{ t('register.button') }}
               </v-btn>
             </v-form>
 
             <my-snackbar
-                v-model="registerError"
+                v-model="error"
                 :text="t('register.error')"
                 :is-error="true"
             />
-           
+
           </div>
         </v-col>
       </v-row>

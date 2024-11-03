@@ -9,13 +9,15 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
-const {user, loginError} = storeToRefs(authStore)
+const {user} = storeToRefs(authStore)
+
+const sharedStore = useSharedStore()
+const {loading, error} = storeToRefs(sharedStore)
 
 const email = ref('')
 const password = ref('')
 
 const showPassword = ref(false)
-
 
 async function logIn() {
   if (await isValid()) {
@@ -67,6 +69,7 @@ onMounted(() => {
                   type="email"
                   @keyup.enter="logIn"
                   :rules="[requiredRule(t), emailRule(t)]"
+                  :disabled="loading"
               />
 
               <v-text-field
@@ -78,14 +81,23 @@ onMounted(() => {
                   @click:append-inner="showPassword = !showPassword"
                   @keyup.enter="logIn"
                   :rules="[requiredRule(t)]"
+                  :disabled="loading"
               />
 
               <v-row class="justify-center mt-2">
-                <v-btn class="mx-2 mb-2" @click="logIn">
+                <v-btn
+                    class="mx-2 mb-2"
+                    @click="logIn"
+                    :loading="loading"
+                >
                   {{ t('login.button.login') }}
                 </v-btn>
 
-                <v-btn to="/auth/reset-password" class="mx-2 mb-2">
+                <v-btn
+                    to="/auth/reset-password"
+                    :disabled="loading"
+                    class="mx-2 mb-2"
+                >
                   {{ t('login.button.resetPassword') }}
                 </v-btn>
               </v-row>
@@ -95,12 +107,15 @@ onMounted(() => {
               {{ t('login.noAccount') }}
             </p>
 
-            <v-btn to="/auth/register">
+            <v-btn
+                to="/auth/register"
+                :disabled="loading"
+            >
               {{ t('login.button.register') }}
             </v-btn>
 
             <my-snackbar
-                v-model="loginError"
+                v-model="error"
                 :text="t('login.error')"
                 :is-error="true"
             />

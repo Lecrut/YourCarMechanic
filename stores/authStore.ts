@@ -3,6 +3,7 @@ import {type IUser, mapIUser} from "~/models/user";
 import type {Ref} from "vue";
 import type {IUserProfile} from "~/models/userProfile";
 import type {IWorkshop} from "~/models/workshop";
+import {useSharedStore} from "~/stores/sharedStore";
 
 const authApiUrl = "http://localhost:5050/"
 
@@ -10,13 +11,11 @@ const authApiUrl = "http://localhost:5050/"
 export const useAuthStore = defineStore('auth', () => {
     const user: Ref<IUser | null> = ref(null)
     const company: Ref<IWorkshop | null> = ref(null)
-    const loginError: Ref<Boolean> = ref(false)
-    const registerError: Ref<Boolean> = ref(false)
+
+    const sharedStore = useSharedStore()
 
     const resetState = () => {
         user.value = null
-        loginError.value = false
-        registerError.value = false
     }
 
     function setUser(newUser: IUser) {
@@ -24,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const logIn = async (userEmail: string, userPassword: string) => {
-        loginError.value = false
+        sharedStore.init()
         try {
             // @ts-ignore
             const {data} = await useFetch(authApiUrl + 'log-in', {
@@ -32,25 +31,38 @@ export const useAuthStore = defineStore('auth', () => {
                 method: 'POST',
             }) as unknown as IUser
 
-            data.value ? setUser({...data.value}) : loginError.value = true
+            if (data.value) {
+                setUser({...data.value})
+                sharedStore.success()
+            } else
+                sharedStore.failure()
         } catch (e) {
-            loginError.value = true
+            sharedStore.failure()
         }
     }
 
-    const signUp = async (userEmail: string, userPassword: string) => {
-        registerError.value = false
+    const signUp = async (userEmail: string, userPassword1: string, userPassword2: string) => {
+        sharedStore.init()
+
         try {
+            if (userPassword1 !== userPassword2) {
+                sharedStore.failure()
+                return
+            }
+            
             // @ts-ignore
             const {data} = await useFetch(authApiUrl + 'sign-up', {
-                query: {email: userEmail, password: userPassword},
+                query: {email: userEmail, password: userPassword1},
                 method: 'POST',
             }) as unknown as IUser
 
-            data.value ? setUser({...data.value}) : registerError.value = true
+            if (data.value) {
+                setUser({...data.value})
+                sharedStore.success()
+            } else
+                sharedStore.failure()
         } catch (e) {
-            console.log(e)
-            registerError.value = true
+            sharedStore.failure()
         }
     }
 
@@ -84,8 +96,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         user,
-        loginError,
-        registerError,
         company,
         logIn,
         signUp,
