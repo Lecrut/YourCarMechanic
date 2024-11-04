@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {type IUser, mapIUser} from "~/models/user";
 import type {Ref} from "vue";
 import type {IUserProfile} from "~/models/userProfile";
-import type {IWorkshop} from "~/models/workshop";
+import {type IWorkshop, mapIWorkshop} from "~/models/workshop";
 import {useSharedStore} from "~/stores/sharedStore";
 
 const authApiUrl = "http://localhost:5050/"
@@ -20,7 +20,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function setUser(newUser: IUser) {
-        user.value = newUser
+        user.value = mapIUser(newUser)
+    }
+
+    function setCompany(newCompany: IWorkshop) {
+        company.value = mapIWorkshop(newCompany)
     }
 
     const logIn = async (userEmail: string, userPassword: string) => {
@@ -107,8 +111,22 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    const createCompany = (data: IWorkshop) => {
+    const createCompany = async (workshopData: IWorkshop) => {
+        sharedStore.init()
+        try {
+            // @ts-ignore
+            const {data} = await useFetch(authApiUrl + 'add-company', {
+                query: {...workshopData},
+                method: 'POST',
+            }) as unknown as IWorkshop
 
+            if (data.value)
+                setCompany(data.value)
+            else
+                sharedStore.failure()
+        } catch (e) {
+            sharedStore.failure()
+        }
     }
 
     const updateCompany = (data: IWorkshop) => {

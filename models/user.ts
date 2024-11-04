@@ -1,14 +1,12 @@
 import {type IUserProfile, mapIUserProfile} from "~/models/userProfile";
-import {firestore} from "firebase-admin";
-import DocumentReference = firestore.DocumentReference;
 
 export interface IUser {
     email: string
     role: string
     profile: IUserProfile | null
-    company: DocumentReference | null
+    company: string
 
-    reference: string | null
+    reference: string
 }
 
 export function mapIUser(data: IUser): IUser {
@@ -16,8 +14,17 @@ export function mapIUser(data: IUser): IUser {
         email: data.email || "",
         role: data.role || "",
         profile: mapIUserProfile({...data.profile} as IUserProfile),
-        company: data.company || null,
+        company: data.company || "",
 
         reference: data.reference || ""
+    }
+}
+
+export function mapIUserToFirebase(data: IUser) {
+    return {
+        email: data.email || "",
+        role: data.role || "",
+        profile: mapIUserProfile({...data.profile} as IUserProfile),
+        company: data.company || "",
     }
 }

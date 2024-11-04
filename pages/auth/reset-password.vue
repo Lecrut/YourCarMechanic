@@ -31,6 +31,7 @@ onMounted(() => {
         : navigateTo('/user')
   }
   emailSend.value = false
+  sharedStore.resetState()
 })
 
 watch(loading, (newLoading, oldLoading) => {

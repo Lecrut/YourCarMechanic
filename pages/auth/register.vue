@@ -41,6 +41,7 @@ onMounted(() => {
         ? navigateTo('/company')
         : navigateTo('/user')
   }
+  sharedStore.resetState()
 })
 </script>
 

@@ -13,6 +13,8 @@ exports.addCompany = onRequest(async (req, res, next) => {
     const phone = req.query.phone
     const address = req.query.address
 
+    const userRef = req.query.reference;
+
     const companiesRef = db.collection('companies');
 
     const isCompanyExists = await companiesRef.where("nip", '==', nip).get();
@@ -30,6 +32,12 @@ exports.addCompany = onRequest(async (req, res, next) => {
                 address: address,
                 createTime: Timestamp.now(),
             });
+
+            const userDocument = await db.doc(userRef);
+            userDocument.update({
+                company: docRef.path
+            })
+
             return res
                 .status(200)
                 .json({

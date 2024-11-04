@@ -2,16 +2,30 @@
 import {productionYearRule, requiredRule} from "~/helpers/rules"
 import json from '../../public/cars.json'
 import formValidation from "~/helpers/formValidation";
+import {type ICar, mapICar} from "~/models/car";
 
 const isDialogShown = defineModel<boolean>()
 
+const props = defineProps<{ car: ICar | null }>()
+const {car} = toRefs(props)
+
 const {t} = useI18n()
+
+const carsStore = useCarsStore()
+
+const sharedStore = useSharedStore()
+const {error} = storeToRefs(sharedStore)
+
+const authStore = useAuthStore()
+const {user} = storeToRefs(authStore)
 
 const {form, valid, isValid} = formValidation()
 
 const selectedCarBrand = ref(null)
 const selectedCarModel = ref(null)
 const carYear = ref(null)
+const carVin = ref(null)
+const iKnowVin = ref(false)
 
 const carBrands = computed(() => json.map(car => car.brand))
 const carModels = computed(() => selectedCarBrand.value ? json.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
@@ -20,6 +34,7 @@ function resetState() {
   selectedCarBrand.value = null
   selectedCarModel.value = null
   carYear.value = null
+  carVin.value = null
 }
 
 function close() {
@@ -29,7 +44,27 @@ function close() {
 
 async function saveForm() {
   if (await isValid()) {
+    if (car.value) {
+      await carsStore.updateCar(mapICar({
+        manufacturer: selectedCarBrand.value || "",
+        model: selectedCarModel.value || "",
+        productionYear: carYear.value || 1900,
+        vin: "",
+        user: user.value?.reference || "",
 
+        reference: car.value?.reference || "",
+      }))
+    } else {
+      await carsStore.addCar(mapICar({
+        manufacturer: selectedCarBrand.value || "",
+        model: selectedCarModel.value || "",
+        productionYear: carYear.value || 1900,
+        vin: "",
+        user: user.value?.reference || "",
+
+        reference: "",
+      }))
+    }
   }
 }
 </script>
@@ -73,6 +108,19 @@ async function saveForm() {
               :label="t('userBookFix.stepper.second.productionYear')"
               :rules="[requiredRule(t), productionYearRule(t)]"
           />
+
+          <v-switch
+              v-model="iKnowVin"
+              :label="t('userBookFix.stepper.second.iKnowVin')"
+              color="primary"
+          />
+
+          <v-text-field
+              v-if="iKnowVin"
+              :label="t('userBookFix.stepper.second.vin')"
+              v-model="carVin"
+              :rules="[requiredRule(t)]"
+          />
         </v-form>
       </v-card-text>
 
@@ -94,4 +142,10 @@ async function saveForm() {
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <my-snackbar
+      v-model="error"
+      :text="t('universal.error')"
+      :is-error="true"
+  />
 </template>

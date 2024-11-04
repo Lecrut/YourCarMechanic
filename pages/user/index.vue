@@ -18,6 +18,8 @@ const carMileage = ref(null)
 const isAddCar = ref(null)
 const selectedService = ref(null)
 const serviceDescription = ref(null)
+const carVin = ref(null)
+const iKnowVin = ref(false)
 
 const infoForm: Ref<null | {
   resetValidation: () => void
@@ -47,6 +49,8 @@ function resetState() {
   carYear.value = null
   carMileage.value = null
   isAddCar.value = null
+  iKnowVin.value = false
+  carVin.value = null
 }
 
 onMounted(() => {
@@ -199,6 +203,19 @@ onMounted(() => {
                         :label="t('userBookFix.stepper.second.mileage')"
                         :rules="[requiredRule(t)]"
                         suffix="km"
+                    />
+
+                    <v-switch
+                        v-model="iKnowVin"
+                        :label="t('userBookFix.stepper.second.iKnowVin')"
+                        color="primary"
+                    />
+
+                    <v-text-field
+                        v-if="iKnowVin"
+                        :label="t('userBookFix.stepper.second.vin')"
+                        v-model="carVin"
+                        :rules="[requiredRule(t)]"
                     />
                   </div>
 

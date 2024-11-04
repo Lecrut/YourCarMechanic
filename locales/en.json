@@ -149,6 +149,8 @@
         "carBrand": "Vehicle Brand",
         "carModel": "Vehicle Model",
         "productionYear": "Production year",
+        "vin": "Vin number",
+        "iKnowVin": "I know Vin",
         "mileage": "Mileage"
       },
       "third": {
