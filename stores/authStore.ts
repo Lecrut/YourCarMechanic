@@ -8,7 +8,7 @@ import {useCarsStore} from "~/stores/carsStore";
 
 const authApiUrl = "http://localhost:5050/"
 
-
+// todo: https://dev.to/zichis/persist-data-with-vue-pinia-4458
 export const useAuthStore = defineStore('auth', () => {
     const user: Ref<IUser | null> = ref(null)
     const company: Ref<IWorkshop | null> = ref(null)

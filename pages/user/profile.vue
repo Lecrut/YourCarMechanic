@@ -9,6 +9,9 @@ const {t} = useI18n()
 const carsStore = useCarsStore()
 const {cars} = storeToRefs(carsStore)
 
+const authStore = useAuthStore()
+const {user} = storeToRefs(authStore)
+
 const isShowCarForm = ref(false)
 const showSuccessAddCar = ref(false)
 const showSuccessUpdateCar = ref(false)
@@ -19,6 +22,11 @@ watch(cars, (newCars, oldCars) => {
   else
     showSuccessUpdateCar.value = true
 
+})
+
+onMounted(async () => {
+  if (!cars.value.length && user.value)
+    await carsStore.getUserCars(user.value)
 })
 </script>
 
