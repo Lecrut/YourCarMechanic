@@ -111,8 +111,11 @@
     "email": "Email Address",
     "yourCars": "Your cars",
     "addCar": "Add car",
+    "addCarSuccess": "Car added successfully",
+    "updateCarSuccess": "Car data changed",
     "form": {
       "title": "Add your car",
+      "editTitle": "Edit your car",
       "carBrand": "Vehicle Brand",
       "carModel": "Vehicle Model",
       "productionYear": "Production year"

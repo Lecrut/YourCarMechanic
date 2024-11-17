@@ -3,6 +3,7 @@ import {productionYearRule, requiredRule} from "~/helpers/rules"
 import json from '../../public/cars.json'
 import formValidation from "~/helpers/formValidation";
 import {type ICar, mapICar} from "~/models/car";
+import type {Ref} from "vue";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -21,11 +22,11 @@ const {user} = storeToRefs(authStore)
 
 const {form, valid, isValid} = formValidation()
 
-const selectedCarBrand = ref(null)
-const selectedCarModel = ref(null)
-const carYear = ref(null)
-const carVin = ref(null)
-const iKnowVin = ref(false)
+const selectedCarBrand: Ref<string | null> = ref(null)
+const selectedCarModel: Ref<string | null> = ref(null)
+const carYear: Ref<number | null> = ref(null)
+const carVin: Ref<string | null> = ref(null)
+const iKnowVin: Ref<boolean> = ref(false)
 
 const carBrands = computed(() => json.map(car => car.brand))
 const carModels = computed(() => selectedCarBrand.value ? json.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
@@ -49,8 +50,8 @@ async function saveForm() {
         manufacturer: selectedCarBrand.value || "",
         model: selectedCarModel.value || "",
         productionYear: carYear.value || 1900,
-        vin: "",
-        user: user.value?.reference || "",
+        vin: iKnowVin.value ? carVin.value : "",
+        userRef: user.value?.reference || "",
 
         reference: car.value?.reference || "",
       }))
@@ -59,14 +60,27 @@ async function saveForm() {
         manufacturer: selectedCarBrand.value || "",
         model: selectedCarModel.value || "",
         productionYear: carYear.value || 1900,
-        vin: "",
-        user: user.value?.reference || "",
+        vin: iKnowVin.value ? carVin.value : "",
+        userRef: user.value?.reference || "",
 
         reference: "",
       }))
     }
+
+    if (!error.value)
+      close()
   }
 }
+
+watch(isDialogShown, () => {
+  if (isDialogShown.value && car.value) {
+    selectedCarModel.value = car.value.model
+    selectedCarBrand.value = car.value.manufacturer
+    carYear.value = car.value.productionYear
+    iKnowVin.value = Boolean(car.value.vin)
+    carVin.value = car.value.vin
+  }
+})
 </script>
 
 <template>
@@ -77,7 +91,7 @@ async function saveForm() {
       @update:model-value="close">
     <v-card>
       <v-card-title>
-        {{ t('userProfile.form.title') }}
+        {{ car ? t('userProfile.form.editTitle') : t('userProfile.form.title') }}
       </v-card-title>
 
       <v-card-text>
@@ -100,6 +114,7 @@ async function saveForm() {
               :items="carModels"
               :rules="[requiredRule(t)]"
           />
+
           <v-text-field
               v-model.number="carYear"
               type="number"

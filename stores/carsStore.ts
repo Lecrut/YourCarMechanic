@@ -1,6 +1,8 @@
-import type {ICar} from "~/models/car";
+import {type ICar, mapICar, mapICarToFirebase} from "~/models/car";
 import type {Ref} from "vue";
 import type {IUser} from "~/models/user";
+
+const authApiUrl = "http://localhost:5050/"
 
 export const useCarsStore = defineStore("cars", () => {
     const cars: Ref<ICar[]> = ref([])
@@ -14,8 +16,18 @@ export const useCarsStore = defineStore("cars", () => {
         sharedStore.init()
 
         try {
+            // @ts-ignore
+            const {data} = await useFetch(authApiUrl + 'add-car', {
+                query: {...mapICarToFirebase(car)},
+                method: 'POST',
+            }) as unknown as ICar
 
-            sharedStore.success()
+            if (data.value) {
+                cars.value = [...cars.value, mapICar(data.value)]
+                sharedStore.success()
+            } else {
+                sharedStore.failure()
+            }
         } catch (e) {
             sharedStore.failure()
         }

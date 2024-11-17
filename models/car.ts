@@ -3,7 +3,7 @@ export interface ICar {
     model: string
     productionYear: number
     vin: string | null
-    user: string | null
+    userRef: string | null
 
     reference: string
 }
@@ -14,7 +14,7 @@ export function mapICar(data: ICar): ICar {
         model: data.model || "",
         productionYear: data.productionYear || 1900,
         vin: data.vin || "",
-        user: data.user || "",
+        userRef: data.userRef || "",
 
         reference: data.reference || ""
     }
@@ -26,6 +26,6 @@ export function mapICarToFirebase(data: ICar) {
         model: data.model || "",
         productionYear: data.productionYear || 1900,
         vin: data.vin || "",
-        user: data.user || ""
+        userRef: data.userRef || ""
     }
 }

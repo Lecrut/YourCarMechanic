@@ -6,8 +6,20 @@ definePageMeta({
 })
 const {t} = useI18n()
 
-const isShowCarForm = ref(false)
+const carsStore = useCarsStore()
+const {cars} = storeToRefs(carsStore)
 
+const isShowCarForm = ref(false)
+const showSuccessAddCar = ref(false)
+const showSuccessUpdateCar = ref(false)
+
+watch(cars, (newCars, oldCars) => {
+  if (newCars.length === oldCars.length + 1)
+    showSuccessAddCar.value = true
+  else
+    showSuccessUpdateCar.value = true
+
+})
 </script>
 
 <template>
@@ -92,30 +104,27 @@ const isShowCarForm = ref(false)
             {{ t('userProfile.addCar') }}
           </v-btn>
 
-          <!--          <div v-if="!cars.length" class="text-h5 my-5">-->
-          <!--            Brak samochodów do wyświetlenia.-->
-          <!--          </div>-->
-
-          <!--          <div v-else v-for="(car, index) in cars" :item="car" :key="index">-->
-          <!--            <v-card-->
-          <!--                class="my-5"-->
-          <!--                elevation="10"-->
-          <!--            >-->
-          <!--              <v-card-title>-->
-          <!--                {{car.brand}} {{car.model}}-->
-          <!--              </v-card-title>-->
-          <!--              <v-card-text>-->
-          <!--                {{car.registrationNum}}-->
-          <!--              </v-card-text>-->
-          <!--            </v-card>-->
-          <!--          </div>-->
         </v-col>
       </v-row>
     </v-sheet>
+    {{ cars.length }}
 
   </v-container>
 
+  <my-snackbar
+      v-model="showSuccessAddCar"
+      :is-error="false"
+      :text="t('userProfile.addCarSuccess')"
+  />
+
+  <my-snackbar
+      v-model="showSuccessUpdateCar"
+      :is-error="false"
+      :text="t('userProfile.updateCarSuccess')"
+  />
+
   <add-car-form
       v-model="isShowCarForm"
+      :car="null"
   />
 </template>

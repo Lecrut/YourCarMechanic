@@ -111,8 +111,11 @@
     "email": "Adres Email",
     "yourCars": "Twoje samochody",
     "addCar": "Dodaj samochód",
+    "addCarSuccess": "Samochód dodany pomyślnie",
+    "updateCarSuccess": "Dane samochodu zmienione",
     "form": {
       "title": "Dodaj swój samochód",
+      "editTitle": "Edit your car",
       "carBrand": "Marka pojazdu",
       "carModel": "Model pojazdu",
       "productionYear": "Rok produkcji"

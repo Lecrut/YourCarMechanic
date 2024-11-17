@@ -1,14 +1,14 @@
 var express = require('express');
 var app = express();
 const PORT = process.env.PORT || 5050
-const {books} = require('./handlers/books')
+const {books} = require('./handlers/books');
+const cors = require("cors");
 const {signUp} = require('./handlers/signUp');
 const {logIn} = require("./handlers/logIn");
-
-const cors = require("cors");
 const {addCompany} = require("./handlers/addCompany");
 const {updateProfile} = require("./handlers/updateProfile");
 const {resetPassword} = require("./handlers/sendResetPassword");
+const {addCar} = require("./handlers/addCar");
 
 const corsOptions = {
     origin: '*',
@@ -24,6 +24,7 @@ app.post('/log-in', logIn);
 app.post('/add-company', addCompany);
 app.post('/update-user', updateProfile);
 app.post('/reset-password', resetPassword);
+app.post('/add-car', addCar);
 app.get('/', (req, res) => {
     res.send('This is my demo project')
 })
