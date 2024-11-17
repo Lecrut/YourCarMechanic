@@ -2,8 +2,9 @@ import {defineStore} from "pinia";
 import {type IUser, mapIUser} from "~/models/user";
 import type {Ref} from "vue";
 import type {IUserProfile} from "~/models/userProfile";
-import {type IWorkshop, mapIWorkshop} from "~/models/workshop";
+import {type IWorkshop, mapIWorkshop, mapIWorkshopToFirebase} from "~/models/workshop";
 import {useSharedStore} from "~/stores/sharedStore";
+import {useCarsStore} from "~/stores/carsStore";
 
 const authApiUrl = "http://localhost:5050/"
 
@@ -13,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
     const company: Ref<IWorkshop | null> = ref(null)
 
     const sharedStore = useSharedStore()
+    const carsStore = useCarsStore()
 
     const resetState = () => {
         company.value = null
@@ -73,6 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const logOut = () => {
         sharedStore.resetState()
+        carsStore.resetState()
         resetState()
     }
 
@@ -116,7 +119,7 @@ export const useAuthStore = defineStore('auth', () => {
         try {
             // @ts-ignore
             const {data} = await useFetch(authApiUrl + 'add-company', {
-                query: {...workshopData},
+                query: {...mapIWorkshopToFirebase(workshopData)},
                 method: 'POST',
             }) as unknown as IWorkshop
 
@@ -129,8 +132,15 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    const updateCompany = (data: IWorkshop) => {
+    const updateCompany = async (data: IWorkshop) => {
+        sharedStore.init()
 
+        try {
+
+            sharedStore.success()
+        } catch (e) {
+            sharedStore.failure()
+        }
     }
 
     return {

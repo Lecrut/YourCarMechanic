@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {roles} from "~/composable/roles";
-import {emailRule, lengthRule, lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+import {emailRule, lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import formValidation from "~/helpers/formValidation";
 import {services} from "~/composable/services";
 import {useAuthStore} from "~/stores/authStore";
+import {mapIUserProfile} from "~/models/userProfile";
+import {mapIWorkshop} from "~/models/workshop";
 
 definePageMeta({
   layout: 'no-role',
@@ -13,6 +15,10 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
+const {user} = storeToRefs(authStore)
+
+const sharedStore = useSharedStore()
+const {error} = storeToRefs(sharedStore)
 
 const selectedRole = ref(null)
 const isRoleSelected = ref(false)
@@ -23,7 +29,6 @@ const userPhone = ref(null)
 
 const companyName = ref(null)
 const companyNip = ref(null)
-const companyEmail = ref(null)
 const companyCity = ref(null)
 const companyAddress = ref(null)
 const companyPhone = ref(null)
@@ -39,16 +44,28 @@ function chooseRole() {
 async function savePersonalData() {
   if (await isValid()) {
     if (selectedRole.value === 'user') {
-      const userProfile = {
+      const userProfile = mapIUserProfile({
         name: userName.value,
         surname: userSurname.value,
         phone: userPhone.value,
-      }
+      })
       await authStore.updateUserProfile(userProfile)
-      navigateTo('/user')
+      if (!error.value)
+        navigateTo('/user')
     } else {
-
-      navigateTo('/company')
+      await authStore.createCompany(mapIWorkshop({
+        address: companyAddress.value || "",
+        city: companyCity.value || "",
+        closingTime: companyClosingTime.value || 0,
+        name: companyName.value || "",
+        nip: companyNip.value || "",
+        openingTime: companyClosingTime.value || 0,
+        phone: companyPhone.value || "",
+        reference: "",
+        services: companyServices.value || []
+      }))
+      if (!error.value)
+        navigateTo('/company')
     }
   }
 }
@@ -193,9 +210,9 @@ async function savePersonalData() {
 
             <v-col cols="12" sm="12" md="6">
               <v-text-field
-                  v-model="companyEmail"
+                  :value="user.email || ''"
                   :label="t('companyProfile.email')"
-                  :rules="[requiredRule(t), emailRule(t)]"
+                  readonly
                   placeholder="example@mail.com"
               />
             </v-col>
@@ -282,4 +299,11 @@ async function savePersonalData() {
       </div>
     </v-sheet>
   </v-container>
+
+  <my-snackbar
+      v-model="error"
+      :text="t('universal.error')"
+      :is-error="true"
+  />
+  
 </template>
