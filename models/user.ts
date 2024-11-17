@@ -4,7 +4,7 @@ export interface IUser {
     email: string
     role: string
     profile: IUserProfile | null
-    company: string
+    companyRef: string | null
 
     reference: string
 }
@@ -14,7 +14,7 @@ export function mapIUser(data: IUser): IUser {
         email: data.email || "",
         role: data.role || "",
         profile: mapIUserProfile({...data.profile} as IUserProfile),
-        company: data.company || "",
+        companyRef: data.companyRef || null,
 
         reference: data.reference || ""
     }
@@ -25,6 +25,6 @@ export function mapIUserToFirebase(data: IUser) {
         email: data.email || "",
         role: data.role || "",
         profile: mapIUserProfile({...data.profile} as IUserProfile),
-        company: data.company || "",
+        company: data.companyRef || null,
     }
 }
