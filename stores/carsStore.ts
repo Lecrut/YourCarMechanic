@@ -37,8 +37,17 @@ export const useCarsStore = defineStore("cars", () => {
         sharedStore.init()
 
         try {
-
-            sharedStore.success()
+            // @ts-ignore
+            const {data} = await useFetch(authApiUrl + 'get-user-cars', {
+                query: {userRef: user.reference},
+                method: 'POST',
+            }) as unknown as ICar[]
+            if (data.value) {
+                cars.value = data.value.map(mapICar)
+                sharedStore.success()
+            } else {
+                sharedStore.failure()
+            }
         } catch (e) {
             sharedStore.failure()
         }
