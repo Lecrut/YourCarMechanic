@@ -113,9 +113,10 @@
     "addCar": "Dodaj samochód",
     "addCarSuccess": "Samochód dodany pomyślnie",
     "updateCarSuccess": "Dane samochodu zmienione",
+    "vinNotDefined": "Nie podano numeru Vin",
     "form": {
       "title": "Dodaj swój samochód",
-      "editTitle": "Edit your car",
+      "editTitle": "Edytuj samochód",
       "carBrand": "Marka pojazdu",
       "carModel": "Model pojazdu",
       "productionYear": "Rok produkcji"
@@ -194,6 +195,7 @@
     "close": "Zamknij",
     "cancel": "Anuluj",
     "edit": "Edytuj",
+    "history": "Historia",
     "error": "Wystąpił błąd"
   }
 }

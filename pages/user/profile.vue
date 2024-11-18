@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AddCarForm from "~/components/user/addCarForm.vue";
+import CarCard from "~/components/user/carCard.vue";
 
 definePageMeta({
   layout: 'user',
@@ -60,21 +61,25 @@ onMounted(async () => {
             <form class="w-75 my-2">
               <div>
                 <v-text-field
+                    v-model="user.profile.name"
                     :label="t('userProfile.userName')"
                     readonly
                 />
 
                 <v-text-field
+                    v-model="user.profile.surname"
                     :label="t('userProfile.userSurname')"
                     readonly
                 />
 
                 <v-text-field
+                    v-model="user.profile.phone"
                     :label="t('userProfile.userPhone')"
                     readonly
                 />
 
                 <v-text-field
+                    v-model="user.email"
                     :label="t('userProfile.email')"
                     placeholder="example@mail.com"
                     type="email"
@@ -88,13 +93,13 @@ onMounted(async () => {
     </v-sheet>
 
     <v-sheet
-        class="d-flex align-center justify-center flex-wrap text-center mx-auto my-10 px-4"
+        class="align-center justify-center text-center mx-auto my-10 px-4"
         elevation="4"
         max-width="1100"
         rounded
     >
       <v-row justify="center">
-        <v-col cols="12" sm="12" md="6" class="pa-3">
+        <v-col cols="12" class="pa-3" justify="center">
           <div class="text-h5 ma-3 mt-6">
             {{ t('userProfile.yourCars') }}
           </div>
@@ -107,15 +112,23 @@ onMounted(async () => {
               cover
               src="/addCar.jpg"
           />
-
-          <v-btn class="my-5" @click="isShowCarForm = true">
-            {{ t('userProfile.addCar') }}
-          </v-btn>
-
         </v-col>
       </v-row>
+
+      <v-row cols="12" justify="center">
+        <v-col v-for="(car, index) in cars" cols="12" md="4">
+          <car-card :key="index" :car="car"/>
+        </v-col>
+      </v-row>
+
+      <div align="center" class="my-4">
+        <v-btn class="my-5" @click="isShowCarForm = true">
+          {{ t('userProfile.addCar') }}
+        </v-btn>
+      </div>
+
+
     </v-sheet>
-    {{ cars.length }}
 
   </v-container>
 

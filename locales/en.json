@@ -113,6 +113,7 @@
     "addCar": "Add car",
     "addCarSuccess": "Car added successfully",
     "updateCarSuccess": "Car data changed",
+    "vinNotDefined": "Number Vin not given",
     "form": {
       "title": "Add your car",
       "editTitle": "Edit your car",
@@ -194,6 +195,7 @@
     "close": "Close",
     "cancel": "Cancel",
     "edit": "Edit",
+    "history": "History",
     "error": "Error occurred"
   }
 }
