@@ -46,15 +46,22 @@ function close() {
 async function saveForm() {
   if (await isValid()) {
     if (car.value) {
-      await carsStore.updateCar(mapICar({
-        manufacturer: selectedCarBrand.value || "",
-        model: selectedCarModel.value || "",
-        productionYear: carYear.value || 1900,
-        vin: iKnowVin.value ? carVin.value : "",
-        userRef: user.value?.reference || "",
+      if (selectedCarModel.value !== car.value.model
+          || selectedCarBrand.value !== car.value.manufacturer
+          || carYear.value !== car.value.productionYear
+          || iKnowVin.value !== Boolean(car.value.vin)
+          || carVin.value !== car.value.vin) {
+        await carsStore.updateCar(mapICar({
+          manufacturer: selectedCarBrand.value || "",
+          model: selectedCarModel.value || "",
+          productionYear: carYear.value || 1900,
+          vin: iKnowVin.value ? carVin.value : "",
+          userRef: user.value?.reference || "",
 
-        reference: car.value?.reference || "",
-      }))
+          reference: car.value?.reference || "",
+        }))
+      }
+
     } else {
       await carsStore.addCar(mapICar({
         manufacturer: selectedCarBrand.value || "",

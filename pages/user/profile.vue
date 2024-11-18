@@ -18,7 +18,7 @@ const showSuccessAddCar = ref(false)
 const showSuccessUpdateCar = ref(false)
 
 watch(cars, async (newCars, oldCars) => {
-  if (newCars.length === oldCars.length + 1)
+  if (Number(newCars.length) === Number(oldCars.length) + 1)
     showSuccessAddCar.value = true
   if (newCars.length === oldCars.length && newCars.length)
     showSuccessUpdateCar.value = true
