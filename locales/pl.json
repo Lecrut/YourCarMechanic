@@ -147,6 +147,7 @@
         "description": "Opis problemu"
       },
       "second": {
+        "chooseCar": "Wybierz samochód",
         "carData": "Dane pojazdu",
         "chooseFromYourCars": "Wybierz samochód ze swojej listy",
         "chooseOtherCar": "Wybierz samochód spoza swoich samochodów",

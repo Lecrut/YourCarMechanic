@@ -4,13 +4,21 @@ import type {Ref} from "vue";
 import {productionYearRule, requiredRule} from "~/helpers/rules";
 import {validateForm} from "~/helpers/formValidation";
 import {services} from "~/composable/services";
+import type {ICar} from "~/models/car";
 
 definePageMeta({
   layout: 'user',
 })
 const {t} = useI18n()
 
+const carsStore = useCarsStore()
+const {cars} = storeToRefs(carsStore)
+
+const authStore = useAuthStore()
+const {user} = storeToRefs(authStore)
+
 const currentStep = ref('1')
+const selectedCar: Ref<ICar | null> = ref(null)
 const selectedCarBrand = ref(null)
 const selectedCarModel = ref(null)
 const carYear = ref(null)
@@ -27,10 +35,15 @@ const infoForm: Ref<null | {
   validate: () => Promise<{ valid: boolean }>
 }> = ref(null)
 
-const cars: Ref<{ brand: string; models: string[]; }[]> = ref([])
+const carsFromJson: Ref<{ brand: string; models: string[]; }[]> = ref([])
 
-const carBrands = computed(() => cars.value.map(car => car.brand))
-const carModels = computed(() => selectedCarBrand.value ? cars.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+const carBrands = computed(() => carsFromJson.value.map(car => car.brand))
+const carModels = computed(() => selectedCarBrand.value ? carsFromJson.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+const myCars = computed(() => {
+  return cars.value.map(item => {
+    return {value: item, title: item.manufacturer + " " + item.model + " " + item.productionYear.toString()}
+  })
+})
 
 async function checkStepConditions(next: () => void) {
   let canProceedToNextStep = true
@@ -53,9 +66,12 @@ function resetState() {
   carVin.value = null
 }
 
-onMounted(() => {
-  cars.value = json
+onMounted(async () => {
+  carsFromJson.value = json
   resetState()
+
+  if (!cars.value.length && user.value)
+    await carsStore.getUserCars(user.value)
 })
 </script>
 
@@ -222,6 +238,12 @@ onMounted(() => {
                   <div
                       v-if="isAddCar === 'my'"
                   >
+                    <v-select
+                        v-model="selectedCar"
+                        :label="t('userBookFix.stepper.second.chooseCar')"
+                        :items="myCars"
+                    />
+
                     <v-text-field
                         v-model.number="carMileage"
                         min="1"
@@ -269,11 +291,16 @@ onMounted(() => {
                   {{ t('userBookFix.stepper.fourth.car') }}
                 </div>
 
-                {{ selectedCarBrand }} {{ selectedCarModel }} - {{ carYear }}
+                <div v-if="selectedCar">
+                  {{ selectedCar?.manufacturer }} {{ selectedCar?.model }} - {{ selectedCar?.productionYear }}
+                </div>
 
-                <br>
+                <div v-else>
+                  {{ selectedCarBrand }} {{ selectedCarModel }} - {{ carYear }}
+                </div>
 
-                {{ t('userBookFix.stepper.second.mileage') }} - {{ carMileage }} km
+
+                {{ t('userBookFix.stepper.second.mileage') }}: {{ carMileage }} km
 
                 <v-divider class="my-2"/>
 

@@ -147,6 +147,7 @@
         "description": "Problem description"
       },
       "second": {
+        "chooseCar": "Choose car",
         "carData": "Vehicle data",
         "chooseFromYourCars": "Choose a car from your list",
         "chooseOtherCar": "Choose a car outside your cars",
