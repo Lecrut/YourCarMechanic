@@ -17,12 +17,14 @@ const isShowCarForm = ref(false)
 const showSuccessAddCar = ref(false)
 const showSuccessUpdateCar = ref(false)
 
-watch(cars, (newCars, oldCars) => {
+watch(cars, async (newCars, oldCars) => {
   if (newCars.length === oldCars.length + 1)
     showSuccessAddCar.value = true
-  else
+  if (newCars.length === oldCars.length && newCars.length)
     showSuccessUpdateCar.value = true
 
+  if (!newCars.length && user.value)
+    await carsStore.getUserCars(user.value)
 })
 
 onMounted(async () => {
@@ -61,25 +63,25 @@ onMounted(async () => {
             <form class="w-75 my-2">
               <div>
                 <v-text-field
-                    v-model="user.profile.name"
+                    :model-value="user?.profile?.name"
                     :label="t('userProfile.userName')"
                     readonly
                 />
 
                 <v-text-field
-                    v-model="user.profile.surname"
+                    :model-value="user?.profile?.surname"
                     :label="t('userProfile.userSurname')"
                     readonly
                 />
 
                 <v-text-field
-                    v-model="user.profile.phone"
+                    :model-value="user?.profile?.phone"
                     :label="t('userProfile.userPhone')"
                     readonly
                 />
 
                 <v-text-field
-                    v-model="user.email"
+                    :model-value="user?.email"
                     :label="t('userProfile.email')"
                     placeholder="example@mail.com"
                     type="email"
