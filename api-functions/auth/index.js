@@ -10,6 +10,7 @@ const {updateProfile} = require("./handlers/updateProfile");
 const {resetPassword} = require("./handlers/sendResetPassword");
 const {addCar} = require("./handlers/addCar");
 const {getUserCars} = require("./handlers/getUserCars");
+const {updateCar} = require("./handlers/updateCar");
 
 const corsOptions = {
     origin: '*',
@@ -27,6 +28,7 @@ app.post('/update-user', updateProfile);
 app.post('/reset-password', resetPassword);
 app.post('/add-car', addCar);
 app.post('/get-user-cars', getUserCars);
+app.post('/update-car', updateCar)
 app.get('/', (req, res) => {
     res.send('This is my demo project')
 })

@@ -55,10 +55,20 @@ export const useCarsStore = defineStore("cars", () => {
 
         const updateCar = async (car: ICar) => {
             sharedStore.init()
-
+            
             try {
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'update-car', {
+                    query: {...mapICar(car)},
+                    method: 'POST',
+                }) as unknown as ICar
 
-                sharedStore.success()
+                if (data.value) {
+                    cars.value = cars.value.map(newCar => car.reference === newCar.reference ? car : newCar);
+                    sharedStore.success()
+                } else {
+                    sharedStore.failure()
+                }
             } catch (e) {
                 sharedStore.failure()
             }

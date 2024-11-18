@@ -9,7 +9,7 @@ exports.getUserCars = onRequest(async (req, res) => {
     try {
         carsRef.where("userRef", "==", userRef).get().then((snapshot) => {
             const data = snapshot.docs.map((doc) => ({
-                reference: doc.path,
+                reference: doc.ref.path,
                 ...doc.data(),
             }));
             console.log(data);
