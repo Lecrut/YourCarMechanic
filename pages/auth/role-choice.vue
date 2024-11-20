@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {roles} from "~/composable/roles";
-import {emailRule, lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+import {lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import formValidation from "~/helpers/formValidation";
 import {services} from "~/composable/services";
 import {useAuthStore} from "~/stores/authStore";
 import {mapIUserProfile} from "~/models/userProfile";
 import {mapIWorkshop} from "~/models/workshop";
+import {useCitiesJsonStore} from "~/stores/citiesJsonStore";
+import type {Ref} from "vue";
 
 definePageMeta({
   layout: 'no-role',
@@ -20,7 +22,10 @@ const {user} = storeToRefs(authStore)
 const sharedStore = useSharedStore()
 const {error} = storeToRefs(sharedStore)
 
-const selectedRole = ref(null)
+const citiesFromJsonStore = useCitiesJsonStore()
+const {citiesFromJson} = storeToRefs(citiesFromJsonStore)
+
+const selectedRole: Ref<string | null> = ref(null)
 const isRoleSelected = ref(false)
 
 const userName = ref(null)
@@ -39,6 +44,8 @@ const companyServices = ref(null)
 
 function chooseRole() {
   isRoleSelected.value = true
+  if (selectedRole.value === 'workshop' && !citiesFromJson.value.length)
+    citiesFromJsonStore.getCitiesFromJson()
 }
 
 async function savePersonalData() {
@@ -88,6 +95,7 @@ async function savePersonalData() {
               : t('noRole.chooseRole')
         }}
       </div>
+      
       <v-divider/>
 
       <div v-if="!isRoleSelected">
@@ -125,7 +133,6 @@ async function savePersonalData() {
           </v-btn>
         </div>
       </div>
-
 
       <v-row v-if="isRoleSelected && selectedRole === 'user'" justify="center">
         <v-col cols="12" md="6" sm="12">
@@ -210,7 +217,7 @@ async function savePersonalData() {
 
             <v-col cols="12" sm="12" md="6">
               <v-text-field
-                  :value="user.email || ''"
+                  :model-value="user?.email || ''"
                   :label="t('companyProfile.email')"
                   readonly
                   placeholder="example@mail.com"
@@ -220,6 +227,7 @@ async function savePersonalData() {
             <v-col cols="12" sm="12" md="6">
               <v-select
                   v-model="companyCity"
+                  :items="citiesFromJson"
                   :label="t('companyProfile.city')"
                   :rules="[requiredRule(t), requiredArrayRule(t)]"
               />
@@ -268,9 +276,9 @@ async function savePersonalData() {
                   chips
                   multiple
                   :rules="[
-                    requiredRule(t),
-                    requiredArrayRule(t)
-                ]"
+                                requiredRule(t),
+                                requiredArrayRule(t)
+                            ]"
               ></v-select>
             </v-col>
           </v-row>
@@ -305,5 +313,5 @@ async function savePersonalData() {
       :text="t('universal.error')"
       :is-error="true"
   />
-  
+
 </template>

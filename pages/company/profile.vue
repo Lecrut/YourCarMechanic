@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {services} from "~/composable/services";
 import formValidation from "~/helpers/formValidation";
-import {emailRule, lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+import {lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+import {mapIWorkshop} from "~/models/workshop";
+import {useCitiesJsonStore} from "~/stores/citiesJsonStore";
 
 definePageMeta({
   layout: 'company',
@@ -10,11 +12,19 @@ definePageMeta({
 const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
+const sharedStore = useSharedStore()
+const {error} = storeToRefs(sharedStore)
+
+const authStore = useAuthStore()
+const {user, company} = storeToRefs(authStore)
+
+const citiesJsonStore = useCitiesJsonStore()
+const {citiesFromJson} = storeToRefs(citiesJsonStore)
+
 const isEditing = ref(false)
 
 const companyName = ref(null)
 const companyNip = ref(null)
-const companyEmail = ref(null)
 const companyCity = ref(null)
 const companyAddress = ref(null)
 const companyPhone = ref(null)
@@ -24,11 +34,30 @@ const companyServices = ref(null)
 
 async function saveForm() {
   if (await isValid()) {
-
-
+    await authStore.updateCompany(mapIWorkshop({
+      address: companyAddress.value || "",
+      city: companyCity.value || "",
+      closingTime: companyClosingTime.value || 0,
+      name: companyName.value || "",
+      nip: companyNip.value || "",
+      openingTime: companyClosingTime.value || 0,
+      phone: companyPhone.value || "",
+      reference: company.value?.reference || "",
+      services: companyServices.value || []
+    }))
     isEditing.value = false
   }
 }
+
+onMounted(() => {
+  if (!citiesFromJson.value.length)
+    citiesJsonStore.getCitiesFromJson()
+})
+
+watch(company, (newValue) => {
+  if (newValue && !citiesFromJson.value.length)
+    citiesJsonStore.getCitiesFromJson()
+})
 </script>
 
 <template>
@@ -75,10 +104,9 @@ async function saveForm() {
 
           <v-col cols="12" sm="12" md="6">
             <v-text-field
-                v-model="companyEmail"
+                :value="user?.email || ''"
                 :label="t('companyProfile.email')"
-                :readonly="!isEditing"
-                :rules="[requiredRule(t), emailRule(t)]"
+                readonly
                 placeholder="example@mail.com"
             />
           </v-col>
@@ -87,6 +115,7 @@ async function saveForm() {
             <v-select
                 v-model="companyCity"
                 :label="t('companyProfile.city')"
+                :items="citiesFromJson"
                 :readonly="!isEditing"
                 :rules="[requiredRule(t), requiredArrayRule(t)]"
             />
@@ -183,5 +212,11 @@ async function saveForm() {
       </v-form>
     </v-sheet>
   </v-container>
+
+  <my-snackbar
+      v-model="error"
+      :text="t('universal.error')"
+      :is-error="true"
+  />
 
 </template>

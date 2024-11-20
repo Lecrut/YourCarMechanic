@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {productionYearRule, requiredRule} from "~/helpers/rules"
-import json from '../../public/cars.json'
 import formValidation from "~/helpers/formValidation";
 import {type ICar, mapICar} from "~/models/car";
 import type {Ref} from "vue";
@@ -20,6 +19,9 @@ const {error} = storeToRefs(sharedStore)
 const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
 
+const carsJsonStore = useCarsJsonStore()
+const {carsFromJson} = storeToRefs(carsJsonStore)
+
 const {form, valid, isValid} = formValidation()
 
 const selectedCarBrand: Ref<string | null> = ref(null)
@@ -28,8 +30,8 @@ const carYear: Ref<number | null> = ref(null)
 const carVin: Ref<string | null> = ref(null)
 const iKnowVin: Ref<boolean> = ref(false)
 
-const carBrands = computed(() => json.map(car => car.brand))
-const carModels = computed(() => selectedCarBrand.value ? json.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
+const carBrands = computed(() => carsFromJson.value.map(car => car.brand))
+const carModels = computed(() => selectedCarBrand.value ? carsFromJson.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
 
 function resetState() {
   selectedCarBrand.value = null
@@ -87,6 +89,9 @@ watch(isDialogShown, () => {
     iKnowVin.value = Boolean(car.value.vin)
     carVin.value = car.value.vin
   }
+
+  if (isDialogShown.value && !carsFromJson.value.length)
+    carsJsonStore.getCarsFromJson()
 })
 </script>
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import json from '../../public/cars.json'
 import type {Ref} from "vue";
 import {productionYearRule, requiredRule} from "~/helpers/rules";
 import {validateForm} from "~/helpers/formValidation";
@@ -16,6 +15,9 @@ const {cars} = storeToRefs(carsStore)
 
 const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
+
+const carsJsonStore = useCarsJsonStore()
+const {carsFromJson} = storeToRefs(carsJsonStore)
 
 const currentStep = ref('1')
 const selectedCar: Ref<ICar | null> = ref(null)
@@ -35,7 +37,6 @@ const infoForm: Ref<null | {
   validate: () => Promise<{ valid: boolean }>
 }> = ref(null)
 
-const carsFromJson: Ref<{ brand: string; models: string[]; }[]> = ref([])
 
 const carBrands = computed(() => carsFromJson.value.map(car => car.brand))
 const carModels = computed(() => selectedCarBrand.value ? carsFromJson.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
@@ -67,11 +68,13 @@ function resetState() {
 }
 
 onMounted(async () => {
-  carsFromJson.value = json
   resetState()
 
   if (!cars.value.length && user.value)
     await carsStore.getUserCars(user.value)
+
+  if (!carsFromJson.value.length)
+    carsJsonStore.getCarsFromJson()
 })
 </script>
 
