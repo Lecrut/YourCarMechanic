@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type {Ref} from "vue";
-import {productionYearRule, requiredRule} from "~/helpers/rules";
+import {productionYearRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import {validateForm} from "~/helpers/formValidation";
 import {services} from "~/composable/services";
-import type {ICar} from "~/models/car";
+import {type ICar, mapICar} from "~/models/car";
+import {type IFix, mapIFix} from "~/models/fix";
 
 definePageMeta({
   layout: 'user',
@@ -19,6 +20,11 @@ const {user} = storeToRefs(authStore)
 const carsJsonStore = useCarsJsonStore()
 const {carsFromJson} = storeToRefs(carsJsonStore)
 
+const citiesFromJsonStore = useCitiesJsonStore()
+const {citiesFromJson} = storeToRefs(citiesFromJsonStore)
+
+const fixStore = useFixesStore()
+
 const currentStep = ref('1')
 const selectedCar: Ref<ICar | null> = ref(null)
 const selectedCarBrand = ref(null)
@@ -30,6 +36,7 @@ const selectedService = ref(null)
 const serviceDescription = ref(null)
 const carVin = ref(null)
 const iKnowVin = ref(false)
+const companyCity = ref(null)
 
 const infoForm: Ref<null | {
   resetValidation: () => void
@@ -58,13 +65,44 @@ async function checkStepConditions(next: () => void) {
 
 function resetState() {
   currentStep.value = '1'
+  selectedCar.value = null
   selectedCarModel.value = null
   selectedCarBrand.value = null
   carYear.value = null
   carMileage.value = null
   isAddCar.value = null
+  selectedService.value = null
+  serviceDescription.value = null
   iKnowVin.value = false
   carVin.value = null
+  companyCity.value = null
+}
+
+async function bookFix() {
+  const newObject: IFix = mapIFix({
+    date: new Date(),
+    bookDate: new Date(),
+    car:
+        isAddCar.value === 'my' && selectedCar.value
+            ? mapICar({...selectedCar.value})
+            : mapICar({
+              manufacturer: selectedCarBrand.value || "",
+              model: selectedCarModel.value || "",
+              productionYear: Number(carYear.value),
+              vin: iKnowVin.value ? carVin.value : "",
+              userRef: "",
+              reference: ""
+            }),
+    carMillage: Number(carMileage.value),
+    companyRef: "",
+    description: serviceDescription.value || "",
+    notifications: [],
+    reference: "",
+    services: selectedService.value || [],
+    userRef: user.value?.reference || ""
+  })
+
+  await fixStore.addFix(newObject)
 }
 
 onMounted(async () => {
@@ -75,6 +113,9 @@ onMounted(async () => {
 
   if (!carsFromJson.value.length)
     carsJsonStore.getCarsFromJson()
+
+  if (!citiesFromJson.value.length)
+    citiesFromJsonStore.getCitiesFromJson()
 })
 </script>
 
@@ -267,6 +308,13 @@ onMounted(async () => {
                 </div>
 
                 <v-divider class="my-2"/>
+
+                <v-select
+                    v-model="companyCity"
+                    :label="t('companyProfile.city')"
+                    :items="citiesFromJson"
+                    :rules="[requiredRule(t), requiredArrayRule(t)]"
+                />
               </div>
             </v-stepper-window-item>
 
@@ -311,6 +359,15 @@ onMounted(async () => {
                   {{ t('userBookFix.stepper.fourth.workshop') }}
                 </div>
 
+                <v-divider class="my-2"/>
+
+                <div class="my-4 text-center">
+                  <v-btn
+                      @click="bookFix"
+                  >
+                    {{ t('userBookFix.stepper.fourth.book') }}
+                  </v-btn>
+                </div>
               </div>
             </v-stepper-window-item>
           </v-stepper-window>

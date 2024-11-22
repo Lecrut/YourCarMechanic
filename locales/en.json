@@ -166,7 +166,8 @@
         "car": "Car",
         "repair": "Repair",
         "description": "Repair description",
-        "workshop": "Workshop"
+        "workshop": "Workshop",
+        "book": "Book repair"
       }
     }
   },

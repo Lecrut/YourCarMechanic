@@ -166,7 +166,8 @@
         "car": "Samochdód",
         "repair": "Naprawa",
         "description": "Opis naprawy",
-        "workshop": "Warsztat"
+        "workshop": "Warsztat",
+        "book": "Zamów naprawę"
       }
     }
   },

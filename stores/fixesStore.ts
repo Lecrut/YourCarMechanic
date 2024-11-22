@@ -51,7 +51,7 @@ export const useFixesStore = defineStore('fixes', () => {
         }
     }
 
-    const addFix = (fix: IFix) => {
+    const addFix = async (fix: IFix) => {
 
     }
 
