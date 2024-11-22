@@ -3,7 +3,6 @@ import {services} from "~/composable/services";
 import formValidation from "~/helpers/formValidation";
 import {lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import {mapIWorkshop} from "~/models/workshop";
-import {useCitiesJsonStore} from "~/stores/citiesJsonStore";
 
 definePageMeta({
   layout: 'company',

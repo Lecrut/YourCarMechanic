@@ -3,10 +3,8 @@ import {roles} from "~/composable/roles";
 import {lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import formValidation from "~/helpers/formValidation";
 import {services} from "~/composable/services";
-import {useAuthStore} from "~/stores/authStore";
 import {mapIUserProfile} from "~/models/userProfile";
 import {mapIWorkshop} from "~/models/workshop";
-import {useCitiesJsonStore} from "~/stores/citiesJsonStore";
 import type {Ref} from "vue";
 
 definePageMeta({
@@ -95,7 +93,7 @@ async function savePersonalData() {
               : t('noRole.chooseRole')
         }}
       </div>
-      
+
       <v-divider/>
 
       <div v-if="!isRoleSelected">

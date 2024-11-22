@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {useAuthStore} from "~/stores/authStore";
 import {storeToRefs} from "pinia";
 import {emailRule, requiredRule} from "~/helpers/rules";
 import formValidation from "~/helpers/formValidation";

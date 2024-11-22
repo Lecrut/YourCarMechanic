@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import formValidation from "~/helpers/formValidation";
 import {emailRule, requiredRule} from "~/helpers/rules";
-import {useAuthStore} from "~/stores/authStore";
 import {storeToRefs} from "pinia";
 
 const {t} = useI18n()
