@@ -3,8 +3,6 @@ import {type IUser, mapIUser} from "~/models/user";
 import type {Ref} from "vue";
 import type {IUserProfile} from "~/models/userProfile";
 import {type IWorkshop, mapIWorkshop, mapIWorkshopToFirebase} from "~/models/workshop";
-import {useSharedStore} from "~/stores/sharedStore";
-import {useCarsStore} from "~/stores/carsStore";
 
 const authApiUrl = "http://localhost:5050/"
 
@@ -14,6 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const sharedStore = useSharedStore()
     const carsStore = useCarsStore()
+    const fixesStore = useFixesStore()
 
     const resetState = () => {
         company.value = null
@@ -75,6 +74,7 @@ export const useAuthStore = defineStore('auth', () => {
     const logOut = () => {
         sharedStore.resetState()
         carsStore.resetState()
+        fixesStore.resetState()
         resetState()
     }
 
