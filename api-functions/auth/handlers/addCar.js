@@ -3,45 +3,69 @@ const {db} = require("../util/admin");
 const {Timestamp} = require("firebase-admin/firestore");
 
 exports.addCar = onRequest(async (req, res, next) => {
-    const brand = req.query.manufacturer
-    const model = req.query.model
-    const productionYear = req.query.productionYear
-    const vin = req.query.vin
-    const userRef = req.query.userRef
+    const car = req.query.car
 
-    const isUserExists = await db.doc(userRef)
-    if (isUserExists) {
-        try {
-            const carsRef = db.collection('cars');
+    if (!car) {
+        return res
+            .status(400)
+            .json({general: "Missing car parameter"});
+    }
 
-            const docRef = await carsRef.add({
-                manufacturer: brand,
-                model: model,
-                productionYear: productionYear,
-                vin: vin,
-                userRef: userRef,
+    try {
+        const carData = JSON.parse(decodeURIComponent(car));
 
-                createTime: Timestamp.now(),
-            });
-
+        const {
+            manufacturer,
+            model,
+            productionYear,
+            vin,
+            userRef
+        } = carData;
+        if (!userRef) {
             return res
-                .status(200)
-                .json({
-                    manufacturer: brand,
+                .status(400)
+                .json({general: "User reference is required"});
+        }
+
+        const isUserExists = await db.doc(userRef)
+        if (isUserExists) {
+            try {
+                const carsRef = db.collection('cars');
+
+                const docRef = await carsRef.add({
+                    manufacturer: manufacturer,
                     model: model,
                     productionYear: productionYear,
                     vin: vin,
                     userRef: userRef,
-                    reference: docRef.path
+
+                    createTime: Timestamp.now(),
                 });
-        } catch (error) {
+
+                return res
+                    .status(200)
+                    .json({
+                        manufacturer: manufacturer,
+                        model: model,
+                        productionYear: productionYear,
+                        vin: vin,
+                        userRef: userRef,
+                        reference: docRef.path
+                    });
+            } catch (error) {
+                return res
+                    .status(500)
+                    .json({general: "Something went wrong, please try again", message: error.message});
+            }
+        } else {
             return res
                 .status(500)
-                .json({general: "Something went wrong, please try again", message: error.message});
+                .json({general: "Something went wrong, please try again"});
         }
-    } else {
+
+    } catch (e) {
         return res
             .status(500)
-            .json({general: "Something went wrong, please try again"});
+            .json({general: "Something went wrong, please try again", message: e.message});
     }
 });

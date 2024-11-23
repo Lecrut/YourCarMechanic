@@ -16,9 +16,10 @@ export const useCarsStore = defineStore("cars", () => {
             sharedStore.init()
 
             try {
+                const queryParam = encodeURIComponent(JSON.stringify(mapICarToFirebase(car)))
                 // @ts-ignore
                 const {data} = await useFetch(authApiUrl + 'add-car', {
-                    query: {...mapICarToFirebase(car)},
+                    query: {car: queryParam},
                     method: 'POST',
                 }) as unknown as ICar
 
@@ -55,11 +56,12 @@ export const useCarsStore = defineStore("cars", () => {
 
         const updateCar = async (car: ICar) => {
             sharedStore.init()
-            
+
             try {
+                const queryParam = encodeURIComponent(JSON.stringify(mapICar(car)))
                 // @ts-ignore
                 const {data} = await useFetch(authApiUrl + 'update-car', {
-                    query: {...mapICar(car)},
+                    query: {car: queryParam},
                     method: 'POST',
                 }) as unknown as ICar
 

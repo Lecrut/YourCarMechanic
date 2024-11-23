@@ -2,35 +2,60 @@ const {onRequest} = require("firebase-functions/v1/https");
 const {db} = require("../util/admin");
 
 exports.updateCar = onRequest(async (req, res, next) => {
-    const brand = req.query.manufacturer
-    const model = req.query.model
-    const productionYear = req.query.productionYear
-    const vin = req.query.vin
-    const reference = req.query.reference
+    const car = req.query.car
+
+    if (!car) {
+        return res
+            .status(400)
+            .json({general: "Missing car parameter"});
+    }
 
     try {
-        const carRef = db.doc(reference);
+        const carData = JSON.parse(decodeURIComponent(car));
 
-        const newCar = await carRef.update({
-            manufacturer: brand,
-            model: model,
-            productionYear: productionYear,
-            vin: vin,
-        })
-        return res
-            .status(200)
-            .json({
-                manufacturer: brand,
+        const {
+            manufacturer,
+            model,
+            productionYear,
+            vin,
+            userRef,
+            reference
+        } = carData;
+        if (!userRef) {
+            return res
+                .status(400)
+                .json({general: "User reference is required"});
+        }
+
+        try {
+            const carRef = db.doc(reference);
+
+            const newCar = await carRef.update({
+                manufacturer: manufacturer,
                 model: model,
                 productionYear: productionYear,
                 vin: vin,
-                reference: newCar.path
-            });
+            })
+            return res
+                .status(200)
+                .json({
+                    manufacturer: manufacturer,
+                    model: model,
+                    productionYear: productionYear,
+                    vin: vin,
+                    reference: newCar.path
+                });
 
 
-    } catch (error) {
+        } catch (error) {
+            return res
+                .status(500)
+                .json({general: "Something went wrong, please try again", message: error.message});
+        }
+
+    } catch (e) {
         return res
             .status(500)
-            .json({general: "Something went wrong, please try again", message: error.message});
+            .json({general: "Something went wrong, please try again", message: e.message});
     }
 })
