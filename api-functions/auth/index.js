@@ -13,6 +13,7 @@ const {getUserCars} = require("./handlers/getUserCars");
 const {updateCar} = require("./handlers/updateCar");
 const {getUserFixes} = require("./handlers/getUserFixes");
 const {getWorkshopFixes} = require("./handlers/getWorkshopFixes");
+const {updateOwner} = require("./handlers/updateOwner");
 
 const corsOptions = {
     origin: '*',
@@ -27,6 +28,7 @@ app.post('/sign-up', signUp);
 app.post('/log-in', logIn);
 app.post('/add-company', addCompany);
 app.post('/update-user', updateProfile);
+app.post('/update-owner', updateOwner);
 app.post('/reset-password', resetPassword);
 app.post('/add-car', addCar);
 app.post('/get-user-cars', getUserCars);

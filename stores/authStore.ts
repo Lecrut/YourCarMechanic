@@ -3,6 +3,7 @@ import {type IUser, mapIUser} from "~/models/user";
 import type {Ref} from "vue";
 import type {IUserProfile} from "~/models/userProfile";
 import {type IWorkshop, mapIWorkshop, mapIWorkshopToFirebase} from "~/models/workshop";
+import {mapICar} from "~/models/car";
 
 const authApiUrl = "http://localhost:5050/"
 
@@ -103,9 +104,10 @@ export const useAuthStore = defineStore('auth', () => {
                 method: 'POST',
             }) as unknown as IUser
 
-            if (data.value)
+            if (data.value) {
                 setUser(data.value)
-            else
+                sharedStore.success()
+            } else
                 sharedStore.failure()
 
         } catch (e) {
@@ -116,9 +118,11 @@ export const useAuthStore = defineStore('auth', () => {
     const createCompany = async (workshopData: IWorkshop) => {
         sharedStore.init()
         try {
+            const queryParam = encodeURIComponent(JSON.stringify(mapIWorkshopToFirebase(workshopData)))
+
             // @ts-ignore
             const {data} = await useFetch(authApiUrl + 'add-company', {
-                query: {...mapIWorkshopToFirebase(workshopData)},
+                query: {company: queryParam},
                 method: 'POST',
             }) as unknown as IWorkshop
 
@@ -126,6 +130,22 @@ export const useAuthStore = defineStore('auth', () => {
                 setCompany(data.value)
             else
                 sharedStore.failure()
+
+            // @ts-ignore
+            const {userData} = await useFetch(authApiUrl + 'update-owner', {
+                query: {
+                    user: user.value?.reference || '',
+                    company: company.value?.reference || '',
+                },
+                method: 'POST',
+            }) as unknown as IUser
+
+            if (userData.value) {
+                setUser(userData.value)
+                sharedStore.success()
+            } else
+                sharedStore.failure()
+
         } catch (e) {
             sharedStore.failure()
         }
