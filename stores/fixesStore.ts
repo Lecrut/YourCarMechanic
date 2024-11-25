@@ -1,4 +1,4 @@
-import {type IFix, mapIFix} from "~/models/fix";
+import {type IFix, mapIFix, mapIFixToFirebase} from "~/models/fix";
 import type {Ref} from "vue";
 import type {IUser} from "~/models/user";
 import type {IWorkshop} from "~/models/workshop";
@@ -52,7 +52,25 @@ export const useFixesStore = defineStore('fixes', () => {
     }
 
     const addFix = async (fix: IFix) => {
+        sharedStore.init()
 
+        try {
+            const queryParam = encodeURIComponent(JSON.stringify(mapIFixToFirebase(fix)))
+            // @ts-ignore
+            const {data} = await useFetch(authApiUrl + 'add-car', {
+                query: {car: queryParam},
+                method: 'POST',
+            }) as unknown as IFix
+
+            if (data.value) {
+                fixes.value = [...fixes.value, mapIFix(data.value)]
+                sharedStore.success()
+            } else {
+                sharedStore.failure()
+            }
+        } catch (e) {
+            sharedStore.failure()
+        }
     }
 
     return {
