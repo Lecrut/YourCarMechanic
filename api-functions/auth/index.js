@@ -15,6 +15,7 @@ const {getUserFixes} = require("./handlers/getUserFixes");
 const {getWorkshopFixes} = require("./handlers/getWorkshopFixes");
 const {updateOwner} = require("./handlers/updateOwner");
 const {addFix} = require("./handlers/addFix");
+const {addNotification} = require("./handlers/addNotification");
 
 const corsOptions = {
     origin: '*',
@@ -37,6 +38,7 @@ app.post('/update-car', updateCar);
 app.post('/get-user-fixes', getUserFixes);
 app.post('/get-workshop-fixes', getWorkshopFixes);
 app.post('/add-fix', addFix);
+app.post('/add-notification', addNotification);
 app.get('/', (req, res) => {
     res.send('This is my demo project')
 })

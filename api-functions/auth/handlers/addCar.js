@@ -27,7 +27,7 @@ exports.addCar = onRequest(async (req, res, next) => {
                 .json({general: "User reference is required"});
         }
 
-        const isUserExists = await db.doc(userRef)
+        const isUserExists = await db.doc(userRef).get();
         if (isUserExists) {
             try {
                 const carsRef = db.collection('cars');
