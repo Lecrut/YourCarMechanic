@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type {Ref} from "vue";
-import {productionYearRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
-import {validateForm} from "~/helpers/formValidation";
+import {lengthRule, productionYearRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import {services} from "~/composable/services";
 import {type ICar, mapICar} from "~/models/car";
 import {type IFix, mapIFix} from "~/models/fix";
@@ -32,11 +31,13 @@ const selectedCarModel = ref(null)
 const carYear = ref(null)
 const carMileage = ref(null)
 const isAddCar = ref(null)
-const selectedService = ref(null)
+const selectedServices = ref([])
 const serviceDescription = ref(null)
 const carVin = ref(null)
 const iKnowVin = ref(false)
 const companyCity = ref(null)
+const canProceedToNextStep = ref(true)
+const unselectedServices = ref(false)
 
 const infoForm: Ref<null | {
   resetValidation: () => void
@@ -44,6 +45,17 @@ const infoForm: Ref<null | {
   validate: () => Promise<{ valid: boolean }>
 }> = ref(null)
 
+const credentialsForm: Ref<null | {
+  resetValidation: () => void
+  reset: () => void
+  validate: () => Promise<{ valid: boolean }>
+}> = ref(null)
+
+const workshopForm: Ref<null | {
+  resetValidation: () => void
+  reset: () => void
+  validate: () => Promise<{ valid: boolean }>
+}> = ref(null)
 
 const carBrands = computed(() => carsFromJson.value.map(car => car.brand))
 const carModels = computed(() => selectedCarBrand.value ? carsFromJson.value.find(car => car.brand === selectedCarBrand.value)?.models || [] : [])
@@ -54,14 +66,34 @@ const myCars = computed(() => {
 })
 
 async function checkStepConditions(next: () => void) {
-  let canProceedToNextStep = true
+  canProceedToNextStep.value = true
+  unselectedServices.value = false
 
-  if (currentStep.value === '2' && (!infoForm.value || !await validateForm(infoForm.value)))
-    canProceedToNextStep = false
+  switch (currentStep.value) {
+    case '1':
+      if (!await credentialsForm.value?.validate() || !selectedServices.value.length) {
+        canProceedToNextStep.value = false
+        if (!selectedServices.value.length)
+          unselectedServices.value = true
+      }
+      break;
+    case '2':
+      if (!await infoForm.value?.validate()) {
+        canProceedToNextStep.value = false
+      }
+      break
+    case '3':
+      if (!await workshopForm.value?.validate()) {
+        canProceedToNextStep.value = false
+      }
+      break
+  }
 
-  if (canProceedToNextStep)
+  if (canProceedToNextStep.value) {
     next()
+  }
 }
+
 
 function resetState() {
   currentStep.value = '1'
@@ -71,11 +103,13 @@ function resetState() {
   carYear.value = null
   carMileage.value = null
   isAddCar.value = null
-  selectedService.value = null
+  selectedServices.value = []
   serviceDescription.value = null
   iKnowVin.value = false
   carVin.value = null
   companyCity.value = null
+  canProceedToNextStep.value = true
+  unselectedServices.value = false
 }
 
 async function bookFix() {
@@ -98,7 +132,7 @@ async function bookFix() {
     description: serviceDescription.value || "",
     notifications: [],
     reference: "",
-    services: selectedService.value || [],
+    services: selectedServices.value || [],
     userRef: user.value?.reference || ""
   })
 
@@ -167,7 +201,10 @@ onMounted(async () => {
 
           <v-stepper-window>
             <v-stepper-window-item value="1">
-              <v-form ref="credentialsForm">
+              <v-form
+                  v-model="canProceedToNextStep"
+                  ref="credentialsForm"
+              >
                 <div class="py-4">
                   <div class="text-h5 font-weight-bold text-center">
                     {{ t('userBookFix.stepper.first.title') }}
@@ -175,36 +212,36 @@ onMounted(async () => {
 
                   <v-divider class="my-2"/>
 
-                  <v-radio-group
-                      v-model="selectedService"
-                      class="my-5"
-                      color="primary"
-                      :rules="requiredRule(t)"
-                  >
-                    <v-row>
-                      <v-col
-                          cols="12"
-                          md="6"
-                          lg="4"
-                          sm="12"
-                          v-for="(service, index) in services(t)"
-                          :key="index"
-                      >
-                        <v-card variant="tonal" rounded="xl">
-                          <v-card-title>
-                            <v-radio :label="service.title" :value="service.value"></v-radio>
-                          </v-card-title>
-                        </v-card>
-
-                      </v-col>
-                    </v-row>
-                  </v-radio-group>
+                  <v-row class="my-3">
+                    <v-col
+                        cols="12"
+                        md="6"
+                        lg="4"
+                        sm="12"
+                        v-for="(service, index) in services(t)"
+                        :key="index"
+                    >
+                      <v-card variant="tonal" rounded="xl">
+                        <v-card-title>
+                          <v-checkbox
+                              v-model="selectedServices"
+                              :label="service.title"
+                              :value="service.value"
+                              color="primary"
+                              class="hidden-checkbox"
+                              hide-details
+                          />
+                        </v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
 
                   <v-textarea
                       v-model="serviceDescription"
                       clearable
                       :label="t('userBookFix.stepper.first.description')"
                       variant="solo-filled"
+                      :rules="[requiredRule(t)]"
                   />
 
                 </div>
@@ -212,7 +249,10 @@ onMounted(async () => {
             </v-stepper-window-item>
 
             <v-stepper-window-item value="2">
-              <v-form ref="infoForm">
+              <v-form
+                  ref="infoForm"
+                  v-model="canProceedToNextStep"
+              >
                 <div class="py-4">
                   <div class="text-h5 font-weight-bold text-center">
                     {{ t('userBookFix.stepper.second.carData') }}
@@ -220,7 +260,7 @@ onMounted(async () => {
 
                   <v-divider class="my-2"/>
 
-                  <v-radio-group color="primary" v-model="isAddCar" :rules="requiredRule(t)">
+                  <v-radio-group color="primary" v-model="isAddCar" :rules="[requiredRule(t)]">
                     <v-radio
                         :label="t('userBookFix.stepper.second.chooseFromYourCars')"
                         value="my"
@@ -286,6 +326,7 @@ onMounted(async () => {
                         v-model="selectedCar"
                         :label="t('userBookFix.stepper.second.chooseCar')"
                         :items="myCars"
+                        :rules="[requiredRule(t)]"
                     />
 
                     <v-text-field
@@ -308,13 +349,18 @@ onMounted(async () => {
                 </div>
 
                 <v-divider class="my-2"/>
+                <v-form
+                    ref="workshopForm"
+                    v-model="canProceedToNextStep"
+                >
+                  <v-select
+                      v-model="companyCity"
+                      :label="t('companyProfile.city')"
+                      :items="citiesFromJson"
+                      :rules="[requiredRule(t), requiredArrayRule(t)]"
+                  />
+                </v-form>
 
-                <v-select
-                    v-model="companyCity"
-                    :label="t('companyProfile.city')"
-                    :items="citiesFromJson"
-                    :rules="[requiredRule(t), requiredArrayRule(t)]"
-                />
               </div>
             </v-stepper-window-item>
 
@@ -330,7 +376,7 @@ onMounted(async () => {
                   {{ t('userBookFix.stepper.fourth.repair') }}
                 </div>
 
-                {{ services(t).find(item => item.value === selectedService)?.title }}
+                {{ services(t).find(item => item.value === selectedServices)?.title }}
 
                 <br>
 
@@ -376,11 +422,17 @@ onMounted(async () => {
               :next-text="t('userBookFix.stepper.nextStep')"
               :prev-text="t('userBookFix.stepper.prevStep')"
               @click:prev="prev"
-              @click:next="next"
+              @click:next="checkStepConditions(next)"
           />
         </template>
       </v-stepper>
     </v-row>
-
   </v-container>
+
+
+  <my-snackbar
+      v-model="unselectedServices"
+      :text="t('userBookFix.stepper.first.error')"
+      :is-error="true"
+  />
 </template>

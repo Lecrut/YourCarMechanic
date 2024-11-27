@@ -144,7 +144,8 @@
       "prevStep": "Back",
       "first": {
         "title": "Select repair type",
-        "description": "Problem description"
+        "description": "Problem description",
+        "error": "Select repair type!"
       },
       "second": {
         "chooseCar": "Choose car",

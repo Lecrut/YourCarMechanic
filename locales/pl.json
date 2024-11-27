@@ -144,7 +144,8 @@
       "prevStep": "Cofnij",
       "first": {
         "title": "Wybierz typ naprawy",
-        "description": "Opis problemu"
+        "description": "Opis problemu",
+        "error": "Wybierz tym naprawy!"
       },
       "second": {
         "chooseCar": "Wybierz samochód",
