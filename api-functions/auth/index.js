@@ -16,6 +16,7 @@ const {getWorkshopFixes} = require("./handlers/getWorkshopFixes");
 const {updateOwner} = require("./handlers/updateOwner");
 const {addFix} = require("./handlers/addFix");
 const {addNotification} = require("./handlers/addNotification");
+const {getWorkshopInCity} = require("./handlers/getWorkshopInCity");
 
 const corsOptions = {
     origin: '*',
@@ -39,8 +40,9 @@ app.post('/get-user-fixes', getUserFixes);
 app.post('/get-workshop-fixes', getWorkshopFixes);
 app.post('/add-fix', addFix);
 app.post('/add-notification', addNotification);
+app.post('/get-workshop-in-city', getWorkshopInCity);
 app.get('/', (req, res) => {
-    res.send('This is my demo project')
+    res.send('This is my project')
 })
 app.listen(PORT, function () {
     console.log(`Demo project at: ${PORT}!`);
