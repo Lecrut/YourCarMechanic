@@ -160,7 +160,8 @@
         "mileage": "Mileage"
       },
       "third": {
-        "title": "Choose workshop"
+        "title": "Choose workshop",
+        "noWorkshops": "No workshops in selected city. Chose other location."
       },
       "fourth": {
         "title": "Summary",

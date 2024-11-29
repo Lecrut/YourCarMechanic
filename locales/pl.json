@@ -160,7 +160,8 @@
         "mileage": "Przebieg"
       },
       "third": {
-        "title": "Wybierz warsztat"
+        "title": "Wybierz warsztat",
+        "noWorkshops": "Brak warsztatów w wybranym mieście. Wybierz inne miasto."
       },
       "fourth": {
         "title": "Podsumowanie",

@@ -19,6 +19,14 @@ export const useWorkshopStore = defineStore('workshops', () => {
         workshopsInCity.value = []
     }
 
+    const getWorkshopsByCityAndServices = async (city: string, services: string[]) => {
+        await getWorkshopsByCity(city).then((_) =>
+            workshops.value = workshops.value.filter((item) => {
+                services.every(service => item.services.includes(service))
+            })
+        )
+    }
+
     const getWorkshopsByCity = async (city: string) => {
         sharedStore.init()
 
@@ -60,5 +68,6 @@ export const useWorkshopStore = defineStore('workshops', () => {
         workshops,
         resetState,
         getWorkshopsByCity,
+        getWorkshopsByCityAndServices,
     }
 })

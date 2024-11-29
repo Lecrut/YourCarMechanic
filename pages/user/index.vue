@@ -22,6 +22,12 @@ const {carsFromJson} = storeToRefs(carsJsonStore)
 const citiesFromJsonStore = useCitiesJsonStore()
 const {citiesFromJson} = storeToRefs(citiesFromJsonStore)
 
+const workshopStore = useWorkshopStore()
+const {workshops} = storeToRefs(workshopStore)
+
+const sharedStore = useSharedStore()
+const {loading} = storeToRefs(sharedStore)
+
 const fixStore = useFixesStore()
 
 const currentStep = ref('1')
@@ -150,6 +156,12 @@ onMounted(async () => {
 
   if (!citiesFromJson.value.length)
     citiesFromJsonStore.getCitiesFromJson()
+})
+
+watch(companyCity, async (newCity) => {
+  if (newCity) {
+    await workshopStore.getWorkshopsByCityAndServices(newCity, selectedServices.value)
+  }
 })
 </script>
 
@@ -359,6 +371,23 @@ onMounted(async () => {
                       :items="citiesFromJson"
                       :rules="[requiredRule(t), requiredArrayRule(t)]"
                   />
+
+                  <div v-if="!workshops.length">
+                    <v-progress-circular
+                        v-if="loading"
+                        :size="50"
+                        color="primary"
+                        indeterminate
+                    />
+
+                    <div v-else>
+                      {{ t('userBookFix.stepper.third.noWorkshops') }}
+                    </div>
+                  </div>
+
+                  <div v-else>
+
+                  </div>
                 </v-form>
 
               </div>
