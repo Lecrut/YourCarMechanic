@@ -2,7 +2,8 @@
 import {services} from "~/composable/services";
 import formValidation from "~/helpers/formValidation";
 import {lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
-import {mapIWorkshop} from "~/models/workshop";
+import {type IWorkshop, mapIWorkshop} from "~/models/workshop";
+import type {Ref} from "vue";
 
 definePageMeta({
   layout: 'company',
@@ -22,14 +23,14 @@ const {citiesFromJson} = storeToRefs(citiesJsonStore)
 
 const isEditing = ref(false)
 
-const companyName = ref(null)
-const companyNip = ref(null)
-const companyCity = ref(null)
-const companyAddress = ref(null)
-const companyPhone = ref(null)
-const companyOpeningTime = ref(null)
-const companyClosingTime = ref(null)
-const companyServices = ref(null)
+const companyName = ref('')
+const companyNip = ref('')
+const companyCity = ref('')
+const companyAddress = ref('')
+const companyPhone = ref('')
+const companyOpeningTime = ref(0)
+const companyClosingTime = ref(0)
+const companyServices: Ref<string[]> = ref([])
 
 async function saveForm() {
   if (await isValid()) {
@@ -48,14 +49,29 @@ async function saveForm() {
   }
 }
 
+function assignCompany(company: IWorkshop) {
+  companyName.value = company.name
+  companyPhone.value = company.phone
+  companyAddress.value = company.address
+  companyCity.value = company.city
+  companyNip.value = company.nip
+  companyServices.value = company.services
+  companyClosingTime.value = company.closingTime
+  companyOpeningTime.value = company.openingTime
+}
+
 onMounted(() => {
   if (!citiesFromJson.value.length)
     citiesJsonStore.getCitiesFromJson()
+  if (company.value)
+    assignCompany(company.value)
 })
 
 watch(company, (newValue) => {
   if (newValue && !citiesFromJson.value.length)
     citiesJsonStore.getCitiesFromJson()
+  if (newValue)
+    assignCompany(newValue)
 })
 </script>
 
@@ -103,7 +119,7 @@ watch(company, (newValue) => {
 
           <v-col cols="12" sm="12" md="6">
             <v-text-field
-                :value="user?.email || ''"
+                :model-value="user?.email || ''"
                 :label="t('companyProfile.email')"
                 readonly
                 placeholder="example@mail.com"

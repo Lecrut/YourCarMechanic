@@ -127,13 +127,20 @@ export const useAuthStore = defineStore('auth', () => {
                 method: 'POST',
             }) as unknown as IWorkshop
 
-            if (data.value)
+            if (data.value) {
                 setCompany(data.value)
-            else
+                sharedStore.success()
+            } else
                 sharedStore.failure()
 
+        } catch (e) {
+            sharedStore.failure()
+        }
+
+        try {
+            sharedStore.init()
             // @ts-ignore
-            const {userData} = await useFetch(authApiUrl + 'update-owner', {
+            const {data} = await useFetch(authApiUrl + 'update-owner', {
                 query: {
                     user: user.value?.reference || '',
                     company: company.value?.reference || '',
@@ -141,8 +148,8 @@ export const useAuthStore = defineStore('auth', () => {
                 method: 'POST',
             }) as unknown as IUser
 
-            if (userData.value) {
-                setUser(userData.value)
+            if (data.value) {
+                setUser(data.value)
                 sharedStore.success()
             } else
                 sharedStore.failure()

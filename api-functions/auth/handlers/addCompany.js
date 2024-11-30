@@ -11,6 +11,8 @@ exports.addCompany = onRequest(async (req, res, next) => {
             .json({general: "Missing company parameter"});
     }
     try {
+        const companyData = JSON.parse(decodeURIComponent(newCompany));
+
         const {
             name,
             nip,
@@ -20,7 +22,7 @@ exports.addCompany = onRequest(async (req, res, next) => {
             services,
             phone,
             address,
-        } = newCompany;
+        } = companyData;
 
 
         const companiesRef = db.collection('companies');

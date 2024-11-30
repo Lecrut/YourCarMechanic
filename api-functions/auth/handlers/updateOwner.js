@@ -11,11 +11,11 @@ exports.updateOwner = onRequest(async (req, res, next) => {
         const companyDocument = await db.doc(companyRef).get();
 
         if (userDocument.exists && companyDocument.exists) {
-            db.doc(userRef).set({
+            await db.doc(userRef).set({
                 ...userDocument.data(),
                 role: 'workshop',
                 company: companyRef,
-            })
+            });
             return res
                 .status(200)
                 .json({

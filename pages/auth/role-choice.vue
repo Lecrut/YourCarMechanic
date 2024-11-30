@@ -15,7 +15,7 @@ const {t} = useI18n()
 const {form, valid, isValid} = formValidation()
 
 const authStore = useAuthStore()
-const {user} = storeToRefs(authStore)
+const {user, company} = storeToRefs(authStore)
 
 const sharedStore = useSharedStore()
 const {error} = storeToRefs(sharedStore)
@@ -101,7 +101,7 @@ async function savePersonalData() {
             v-model="selectedRole"
             class="my-5"
             color="primary"
-            :rules="requiredRule(t)"
+            :rules="[requiredRule(t)]"
         >
           <v-row justify="center">
             <v-col
