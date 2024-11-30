@@ -32,6 +32,14 @@ exports.addNotification = onRequest(async (req, res, next) => {
                 })
             })
 
+            await db.doc(fixRef).get().then((snapshot) => {
+                const data = snapshot.docs.map((doc) => ({
+                    reference: doc.ref.path,
+                    ...doc.data(),
+                }));
+                return res.status(201).json(data);
+            })
+
         } else {
             return res
                 .status(500)

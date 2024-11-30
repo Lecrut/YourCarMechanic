@@ -17,5 +17,5 @@ onMounted(async () => {
 </script>
 
 <template>
-
+  <!--todo: inbox view - scroll view on the left side and fix details on right-->
 </template>

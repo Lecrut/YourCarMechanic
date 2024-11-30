@@ -17,6 +17,7 @@ export function mapINotification(data: INotification): INotification {
 
 export function mapINotificationToFirebase(data: INotification) {
     return {
+        sendDate: new Date(),
         notificationType: data.notificationType || "",
         cost: Number(data.cost || 0),
         date: data.date ? data.date.toISOString() : null,
