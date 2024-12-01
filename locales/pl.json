@@ -161,7 +161,8 @@
       },
       "third": {
         "title": "Wybierz warsztat",
-        "noWorkshops": "Brak warsztatów w wybranym mieście. Wybierz inne miasto."
+        "noWorkshops": "Brak warsztatów w wybranym mieście. Wybierz inne miasto.",
+        "availableDates": "Dosteępne terminy"
       },
       "fourth": {
         "title": "Podsumowanie",

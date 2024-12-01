@@ -22,7 +22,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
     const getWorkshopsByCityAndServices = async (city: string, services: string[]) => {
         await getWorkshopsByCity(city).then((_) =>
             workshops.value = workshops.value.filter((item) => {
-                services.every(service => item.services.includes(service))
+                return services.every(service => item.services.includes(service))
             })
         )
     }
@@ -32,9 +32,10 @@ export const useWorkshopStore = defineStore('workshops', () => {
 
 
         const findWorkshops = workshopsInCity.value.find(item => item.city === city)
-        if (findWorkshops)
+        if (findWorkshops) {
             workshops.value = findWorkshops.workshops
-        else {
+            sharedStore.success()
+        } else {
             try {
                 // @ts-ignore
                 const {data} = await useFetch(apiUrl + 'get-workshop-in-city', {

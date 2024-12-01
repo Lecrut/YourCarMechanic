@@ -161,7 +161,8 @@
       },
       "third": {
         "title": "Choose workshop",
-        "noWorkshops": "No workshops in selected city. Chose other location."
+        "noWorkshops": "No workshops in selected city. Chose other location.",
+        "availableDates": "Available dates"
       },
       "fourth": {
         "title": "Summary",

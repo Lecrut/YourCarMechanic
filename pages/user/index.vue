@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type {Ref} from "vue";
-import {lengthRule, productionYearRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+import {productionYearRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import {services} from "~/composable/services";
 import {type ICar, mapICar} from "~/models/car";
 import {type IFix, mapIFix} from "~/models/fix";
+import WorkshopCard from "~/components/user/workshopCard.vue";
 
 definePageMeta({
   layout: 'user',
@@ -372,7 +373,7 @@ watch(companyCity, async (newCity) => {
                       :rules="[requiredRule(t), requiredArrayRule(t)]"
                   />
 
-                  <div v-if="!workshops.length">
+                  <div v-if="!workshops.length" align="center" class="my-5">
                     <v-progress-circular
                         v-if="loading"
                         :size="50"
@@ -385,9 +386,19 @@ watch(companyCity, async (newCity) => {
                     </div>
                   </div>
 
-                  <div v-else>
-
-                  </div>
+                  <v-row v-else justify="center" align="center">
+                    <v-col
+                        v-for="(item) in workshops"
+                        cols="12"
+                        md="6"
+                        xs="12"
+                    >
+                      <workshop-card
+                          :workshop="item"
+                          :is-presentation="false"
+                      />
+                    </v-col>
+                  </v-row>
                 </v-form>
 
               </div>

@@ -13,12 +13,15 @@ export const useCitiesJsonStore = defineStore('cities-json', () => {
         citiesFromJson.value = json.map((item: any) => {
             return {value: item.value, title: item.city}
         })
+    }
 
-        console.log('aaa', citiesFromJson.value)
+    const getCityName = (city: string): string => {
+        return citiesFromJson.value.find(item => item.value === city)?.title || ""
     }
 
     return {
         citiesFromJson,
         getCitiesFromJson,
+        getCityName
     }
 })
