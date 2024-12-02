@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type {IWorkshop} from "~/models/workshop";
 import {services} from "~/composable/services";
+import FreeDates from "~/components/user/freeDates.vue";
 
 const props = defineProps<{
   workshop: IWorkshop
@@ -11,6 +12,8 @@ const {workshop} = toRefs(props)
 const citiesFromJsonStore = useCitiesJsonStore()
 
 const {t} = useI18n()
+
+const showDialog = ref(false)
 
 const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.value?.city || ''))
 </script>
@@ -61,7 +64,11 @@ const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.valu
       </div>
 
       <div v-if="!isPresentation" align="center" class="my-2">
-        <v-btn prepend-icon="mdi-calendar" density="comfortable">
+        <v-btn
+            prepend-icon="mdi-calendar"
+            density="comfortable"
+            @click="showDialog = true"
+        >
           {{ t('userBookFix.stepper.third.availableDates') }}
         </v-btn>
       </div>
@@ -69,5 +76,8 @@ const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.valu
     </v-card-text>
   </v-card>
 
-  <!--  todo: dialog free times-->
+  <free-dates
+      v-model="showDialog"
+      :workshop="workshop"
+  />
 </template>

@@ -11,6 +11,7 @@ export interface IWorkshop {
     reference: string
 }
 
+// todo: add working days
 export function mapIWorkshop(data: IWorkshop): IWorkshop {
     return {
         name: data.name || "",

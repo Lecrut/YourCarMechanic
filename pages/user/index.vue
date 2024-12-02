@@ -157,6 +157,9 @@ onMounted(async () => {
 
   if (!citiesFromJson.value.length)
     citiesFromJsonStore.getCitiesFromJson()
+
+  if (workshops.value.length)
+    workshopStore.deleteFindResult()
 })
 
 watch(companyCity, async (newCity) => {
