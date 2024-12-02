@@ -40,7 +40,7 @@ async function saveForm() {
       closingTime: companyClosingTime.value || 0,
       name: companyName.value || "",
       nip: companyNip.value || "",
-      openingTime: companyClosingTime.value || 0,
+      openingTime: companyOpeningTime.value || 0,
       phone: companyPhone.value || "",
       reference: company.value?.reference || "",
       services: companyServices.value || []
