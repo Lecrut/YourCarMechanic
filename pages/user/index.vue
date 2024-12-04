@@ -5,6 +5,7 @@ import {services} from "~/composable/services";
 import {type ICar, mapICar} from "~/models/car";
 import {type IFix, mapIFix} from "~/models/fix";
 import WorkshopCard from "~/components/user/workshopCard.vue";
+import type {IWorkshop} from "~/models/workshop";
 
 definePageMeta({
   layout: 'user',
@@ -45,6 +46,8 @@ const iKnowVin = ref(false)
 const companyCity = ref(null)
 const canProceedToNextStep = ref(true)
 const unselectedServices = ref(false)
+const selectedWorkshop: Ref<IWorkshop | null> = ref(null)
+const selectedDate: Ref<Date | null> = ref(null)
 
 const infoForm: Ref<null | {
   resetValidation: () => void
@@ -72,6 +75,23 @@ const myCars = computed(() => {
   })
 })
 
+function bookFixTime(workshop: IWorkshop, date: Date) {
+  selectedDate.value = date
+  selectedWorkshop.value = workshop
+}
+
+function formatDateToString(date: Date) {
+  const padToTwoDigits = (num: number) => num.toString().padStart(2, '0')
+
+  const day = padToTwoDigits(date.getDate())
+  const month = padToTwoDigits(date.getMonth() + 1)
+  const year = date.getFullYear()
+  const hours = padToTwoDigits(date.getHours())
+  const minutes = padToTwoDigits(date.getMinutes())
+
+  return `${day}.${month}.${year} ${hours}:${minutes}`
+}
+
 async function checkStepConditions(next: () => void) {
   canProceedToNextStep.value = true
   unselectedServices.value = false
@@ -90,7 +110,7 @@ async function checkStepConditions(next: () => void) {
       }
       break
     case '3':
-      if (!await workshopForm.value?.validate()) {
+      if (!await workshopForm.value?.validate() || !selectedDate.value || !selectedWorkshop.value) {
         canProceedToNextStep.value = false
       }
       break
@@ -117,11 +137,13 @@ function resetState() {
   companyCity.value = null
   canProceedToNextStep.value = true
   unselectedServices.value = false
+  selectedWorkshop.value = null
+  selectedDate.value = null
 }
 
 async function bookFix() {
   const newObject: IFix = mapIFix({
-    date: new Date(),
+    date: selectedDate.value || new Date(),
     bookDate: new Date(),
     car:
         isAddCar.value === 'my' && selectedCar.value
@@ -135,7 +157,7 @@ async function bookFix() {
               reference: ""
             }),
     carMillage: Number(carMileage.value),
-    companyRef: "",
+    companyRef: selectedWorkshop.value?.reference || "",
     description: serviceDescription.value || "",
     notifications: [],
     reference: "",
@@ -144,6 +166,8 @@ async function bookFix() {
   })
 
   await fixStore.addFix(newObject)
+  
+//   todo: on success push to notifications
 }
 
 onMounted(async () => {
@@ -399,9 +423,31 @@ watch(companyCity, async (newCity) => {
                       <workshop-card
                           :workshop="item"
                           :is-presentation="false"
+                          :book-fix="bookFixTime"
                       />
                     </v-col>
                   </v-row>
+
+                  <div
+                      v-if="selectedWorkshop && selectedDate"
+                      class="my-5"
+                  >
+                    <div align="center" class="text-h6 my-2">{{ t('userBookFix.stepper.third.workshopSelected') }}</div>
+                    <v-divider class="mb-3"/>
+
+                    <workshop-card
+                        :workshop="selectedWorkshop"
+                        :is-presentation="true"
+                        :book-fix="bookFixTime"
+                    />
+
+                    <div align="center" class="text-h6 my-2">
+                      {{ t('userBookFix.stepper.third.dateSelected') }}: {{ formatDateToString(selectedDate) }}
+                    </div>
+
+                  </div>
+
+
                 </v-form>
 
               </div>
@@ -419,9 +465,18 @@ watch(companyCity, async (newCity) => {
                   {{ t('userBookFix.stepper.fourth.repair') }}
                 </div>
 
-                {{ services(t).find(item => item.value === selectedServices)?.title }}
+                <div class="mb-1">
+                  <v-chip-group>
+                    <v-chip
+                        v-for="(item) in selectedServices"
+                        density="comfortable"
+                        class="mr-1 my-2"
+                    >
+                      {{ services(t).find(x => x.value === item)?.title || '' }}
+                    </v-chip>
+                  </v-chip-group>
+                </div>
 
-                <br>
 
                 {{ t('userBookFix.stepper.fourth.description') }}: {{ serviceDescription }}
 
@@ -446,6 +501,14 @@ watch(companyCity, async (newCity) => {
 
                 <div class="font-weight-bold my-1">
                   {{ t('userBookFix.stepper.fourth.workshop') }}
+                </div>
+
+                <div>
+                  {{ citiesFromJsonStore.getCityName(selectedWorkshop?.city || '') }} {{ selectedWorkshop?.name }}
+                </div>
+
+                <div>
+                  {{ formatDateToString(selectedDate) }}
                 </div>
 
                 <v-divider class="my-2"/>

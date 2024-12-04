@@ -61,7 +61,7 @@ export const useFixesStore = defineStore('fixes', () => {
             const queryParam = encodeURIComponent(JSON.stringify(mapIFixToFirebase(fix)))
             // @ts-ignore
             const {data} = await useFetch(authApiUrl + 'add-fix', {
-                query: {car: queryParam},
+                query: {fix: queryParam},
                 method: 'POST',
             }) as unknown as IFix
 

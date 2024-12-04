@@ -6,6 +6,7 @@ import FreeDates from "~/components/user/freeDates.vue";
 const props = defineProps<{
   workshop: IWorkshop
   isPresentation: boolean
+  bookFix(workshop: IWorkshop, date: Date): void
 }>()
 const {workshop} = toRefs(props)
 
@@ -79,5 +80,6 @@ const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.valu
   <free-dates
       v-model="showDialog"
       :workshop="workshop"
+      :bookFix="bookFix"
   />
 </template>

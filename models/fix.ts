@@ -40,6 +40,7 @@ export function mapIFix(data: IFix): IFix {
 export function mapIFixToFirebase(data: IFix) {
     return {
         date: data.date.toISOString(),
+        bookDate: data.bookDate.toISOString(),
 
         companyRef: data.companyRef || "",
         car: mapICar({...data.car}),

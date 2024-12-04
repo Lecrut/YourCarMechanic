@@ -74,7 +74,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
         }
     }
 
-    function getDays(numDays: number): string[] {
+    const getDays = (numDays: number): string[] => {
         const today = new Date()
         return Array.from({length: numDays}, (_, i) => {
             const day = new Date(today)
@@ -83,33 +83,36 @@ export const useWorkshopStore = defineStore('workshops', () => {
         });
     }
 
-    function getHoursList(openingHour: number, closingHour: number): number[] {
+    const getHoursList = (openingHour: number, closingHour: number): number[] => {
         return Array.from({length: closingHour - openingHour}, (_, i) => openingHour + i)
     }
 
-    async function checkReservation(day: string, hour: number): Promise<boolean> {
-        // Zastąp przykładowym kodem, który sprawdza rezerwację z Firestore
-        // Na przykładzie poniżej tylko dla ilustracji
-        return false // lub true, jeśli godzina jest zarezerwowana
+    const checkReservation = async (day: string, hour: number, workshop: IWorkshop): Promise<boolean> => {
+        // todo: check if hour is reserved => return true
+
+        return false
     }
 
 
-    async function getWorkshopFreeHours(workshop: IWorkshop) {
+    const getWorkshopFreeHours = async (workshop: IWorkshop) => {
+        sharedStore.init()
+
         const findWorkshop = workshopsFreeTimes.value.find(x => x.workshop.reference === workshop.reference)
         if (findWorkshop) {
             console.log(findWorkshop)
             freeHoursTable.value = findWorkshop.data
+            sharedStore.success()
             return
         }
 
         freeHoursTable.value = []
+        const daysNumber = 6
 
-        const days = getDays(6)
-        const hoursList = getHoursList(workshop.openingTime, workshop.closingTime)
+        const days = getDays(daysNumber)
 
         const data = await Promise.all(days.map(async (day) => {
-            const hours = await Promise.all(hoursList.map(async (hour) => {
-                const isBooked = await checkReservation(day, hour)
+            const hours = await Promise.all(getHoursList(workshop.openingTime, workshop.closingTime).map(async (hour) => {
+                const isBooked = await checkReservation(day, hour, workshop)
                 return {hour, isBooked}
             }))
             return {day, hours}
@@ -117,6 +120,37 @@ export const useWorkshopStore = defineStore('workshops', () => {
 
         workshopsFreeTimes.value.push({workshop: workshop, data: [...data]})
         freeHoursTable.value = [...data]
+        sharedStore.success()
+    }
+
+    const getNextFreeDays = async (workshop: IWorkshop) => {
+        sharedStore.init()
+
+        const daysNumber = 3
+        const getFreeDays = workshopsFreeTimes.value.find(x => x.workshop.reference === workshop.reference)?.data
+
+        const days = getDays(daysNumber + (getFreeDays?.length || 0))
+
+        const data = await Promise.all(days.map(async (day) => {
+            const findDay = getFreeDays?.find(x => x.day === day)
+            if (findDay)
+                return findDay
+            const hours = await Promise.all(getHoursList(workshop.openingTime, workshop.closingTime).map(async (hour) => {
+                const isBooked = await checkReservation(day, hour, workshop)
+                return {hour, isBooked}
+            }))
+            return {day, hours}
+        }))
+
+        workshopsFreeTimes.value.map(x => x.workshop.reference === workshop.reference
+            ? {
+                workshop: workshop,
+                data: [...data]
+            }
+            : x
+        )
+        freeHoursTable.value = [...data]
+        sharedStore.success()
     }
 
     return {
@@ -127,5 +161,6 @@ export const useWorkshopStore = defineStore('workshops', () => {
         getWorkshopFreeHours,
         getWorkshopsByCity,
         getWorkshopsByCityAndServices,
+        getNextFreeDays
     }
 })

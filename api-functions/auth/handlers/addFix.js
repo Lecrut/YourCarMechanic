@@ -24,7 +24,6 @@ exports.addFix = onRequest(async (req, res, next) => {
             services,
             description,
             notifications,
-            reference
         } = fixData;
 
         if (!userRef) {
@@ -49,7 +48,6 @@ exports.addFix = onRequest(async (req, res, next) => {
                     services: services,
                     description: description,
                     notifications: notifications,
-                    reference: reference,
                     createTime: Timestamp.now()
                 });
 
