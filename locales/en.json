@@ -164,7 +164,8 @@
         "noWorkshops": "No workshops in selected city. Chose other location.",
         "workshopSelected": "Selected workshop",
         "dateSelected": "Selected date",
-        "availableDates": "Available dates"
+        "availableDates": "Available dates",
+        "noAvailableDates": "No available dates"
       },
       "fourth": {
         "title": "Summary",

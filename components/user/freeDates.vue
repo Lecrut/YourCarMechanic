@@ -2,6 +2,7 @@
 import type {IWorkshop} from "~/models/workshop";
 import {upperFirst} from "scule";
 import {storeToRefs} from "pinia";
+import {convertToFutureDate} from "~/helpers/time";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -21,23 +22,6 @@ const {loading} = storeToRefs(sharedStore)
 
 function close() {
   isDialogShown.value = false
-}
-
-function convertToFutureDate(day: string, hour: string): Date {
-  const [dayOfWeek, dayMonth] = day.split(', ');
-  const [dayNum, month] = dayMonth.split('.').map(Number);
-
-  const hourNum = parseInt(hour, 10);
-
-  const currentYear = new Date().getFullYear();
-
-  let date = new Date(currentYear, month - 1, dayNum, hourNum, 0, 0);
-
-  if (date < new Date()) {
-    date.setFullYear(currentYear + 1);
-  }
-
-  return date;
 }
 
 function selectDate(day: string, hour: string) {
@@ -74,6 +58,19 @@ watch(isDialogShown, async () => {
             {{ upperFirst(day.day) }}
           </div>
           <v-divider/>
+
+          <div align="center" class="my-1">
+            <v-chip
+                v-if="!day.hours.length || day.hours.every(appointment => appointment.isBooked)"
+                color="error"
+                class="my-1"
+            >
+              <v-icon icon="mdi-alert-outline" start></v-icon>
+
+              {{ t('userBookFix.stepper.third.noAvailableDates') }}
+            </v-chip>
+          </div>
+
 
           <v-chip-group column>
             <v-chip

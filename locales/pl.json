@@ -164,7 +164,8 @@
         "noWorkshops": "Brak warsztatów w wybranym mieście. Wybierz inne miasto.",
         "workshopSelected": "Wybrano warsztat",
         "dateSelected": "Data naprawy",
-        "availableDates": "Dosteępne terminy"
+        "availableDates": "Dosteępne terminy",
+        "noAvailableDates": "Brak dostępnych terminów"
       },
       "fourth": {
         "title": "Podsumowanie",

@@ -1,6 +1,7 @@
 import {type IWorkshop, mapIWorkshop} from "~/models/workshop";
 import type {Ref} from "vue";
 import type {IFreeHours, IWorkshopHours} from "~/models/workshopFreeHours";
+import {convertToFutureDate} from "~/helpers/time";
 
 const apiUrl = "http://localhost:5050/"
 
@@ -87,10 +88,25 @@ export const useWorkshopStore = defineStore('workshops', () => {
         return Array.from({length: closingHour - openingHour}, (_, i) => openingHour + i)
     }
 
-    const checkReservation = async (day: string, hour: number, workshop: IWorkshop): Promise<boolean> => {
-        // todo: check if hour is reserved => return true
+    const checkReservation = async (day: string, hour: string, workshop: IWorkshop): Promise<boolean> => {
+        try {
+            // @ts-ignore
+            const {data} = await useFetch(apiUrl + 'is-fix-booked', {
+                query: {
+                    companyRef: workshop.reference,
+                    hour: convertToFutureDate(day, hour).toISOString()
+                },
+                method: 'POST',
+            }) as unknown as boolean
 
-        return false
+            if (data.value) {
+                return data.value
+            } else {
+                return false
+            }
+        } catch (e) {
+            return false
+        }
     }
 
 
@@ -112,7 +128,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
 
         const data = await Promise.all(days.map(async (day) => {
             const hours = await Promise.all(getHoursList(workshop.openingTime, workshop.closingTime).map(async (hour) => {
-                const isBooked = await checkReservation(day, hour, workshop)
+                const isBooked = await checkReservation(day, hour.toString(), workshop)
                 return {hour, isBooked}
             }))
             return {day, hours}
@@ -136,7 +152,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
             if (findDay)
                 return findDay
             const hours = await Promise.all(getHoursList(workshop.openingTime, workshop.closingTime).map(async (hour) => {
-                const isBooked = await checkReservation(day, hour, workshop)
+                const isBooked = await checkReservation(day, hour.toString(), workshop)
                 return {hour, isBooked}
             }))
             return {day, hours}
