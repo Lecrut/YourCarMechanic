@@ -1,7 +1,21 @@
 {
-  "functions": {
-    "source": ".output/server"
-  },
+  "functions": [
+    {
+      "source": ".output/server",
+      "codebase": "default"
+    },
+    {
+      "source": "functions",
+      "codebase": "functions",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
   "hosting": [
     {
       "site": "yourcarmechanic-624a4",
