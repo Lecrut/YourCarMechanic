@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type {IFix} from "~/models/fix";
 import {services} from "~/composable/services";
+import RepairDetails from "~/components/user/repairDetails.vue";
 
 const props = defineProps<{
   fix: IFix,
@@ -53,6 +54,9 @@ const showDialog = ref(false)
     </div>
   </v-card>
 
-  <!--  todo: add card with fix details -->
+  <repair-details
+      :fix="fix"
+      :is-company="isCompany"
+  />
 
 </template>
