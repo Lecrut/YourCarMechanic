@@ -198,6 +198,10 @@
     "workshop": "Warsztat",
     "user": "Użytkownik"
   },
+  "notifications": {
+    "title": "Aktywne naprawy",
+    "openDetails": "Otwórz"
+  },
   "universal": {
     "save": "Zapisz",
     "close": "Zamknij",

@@ -198,6 +198,9 @@
     "workshop": "Workshop",
     "user": "User"
   },
+  "notifications": {
+    "title": "Active fixes"
+  },
   "universal": {
     "save": "Save",
     "close": "Close",

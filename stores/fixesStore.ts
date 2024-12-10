@@ -23,6 +23,9 @@ export const useFixesStore = defineStore('fixes', () => {
                 query: {companyRef: company.reference},
                 method: 'POST',
             }) as unknown as IFix[]
+
+            // todo: check date map
+
             if (data.value) {
                 fixes.value = data.value.map(mapIFix)
                 sharedStore.success()
@@ -43,6 +46,9 @@ export const useFixesStore = defineStore('fixes', () => {
                 query: {userRef: user.reference},
                 method: 'POST',
             }) as unknown as IFix[]
+
+            // todo: check date map
+
             if (data.value) {
                 fixes.value = data.value.map(mapIFix)
                 sharedStore.success()

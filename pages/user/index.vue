@@ -166,7 +166,7 @@ async function bookFix() {
   })
 
   await fixStore.addFix(newObject)
-  
+
 //   todo: on success push to notifications
 }
 
@@ -466,7 +466,7 @@ watch(companyCity, async (newCity) => {
                 </div>
 
                 <div class="mb-1">
-                  <v-chip-group>
+                  <v-chip-group column>
                     <v-chip
                         v-for="(item) in selectedServices"
                         density="comfortable"
