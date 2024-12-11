@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
+import {useTheme} from 'vuetify'
 
-const { t, locale } = useI18n()
+const {t, locale} = useI18n()
 
 const theme = useTheme()
+
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
@@ -11,6 +12,8 @@ function toggleTheme() {
 function changeLocale(lang: string) {
   locale.value = lang
 }
+
+// todo: save in app
 </script>
 
 <template>
@@ -29,7 +32,7 @@ function changeLocale(lang: string) {
       </v-btn>
     </div>
 
-    <v-spacer />
+    <v-spacer/>
 
     <div class="hidden-sm-and-down">
       <v-btn variant="text" color="default" to="/auth/login">
@@ -42,7 +45,7 @@ function changeLocale(lang: string) {
     </div>
 
     <v-btn class="rounded-xl mr-2" color="default">
-      <v-icon icon="mdi-translate" />
+      <v-icon icon="mdi-translate"/>
       <v-menu activator="parent">
         <v-list class="justify-center">
 
@@ -58,7 +61,7 @@ function changeLocale(lang: string) {
       </v-menu>
     </v-btn>
 
-    <v-btn variant="text" color="default" icon="mdi-theme-light-dark" @click="toggleTheme" />
+    <v-btn variant="text" color="default" icon="mdi-theme-light-dark" @click="toggleTheme"/>
   </v-app-bar>
 
 
