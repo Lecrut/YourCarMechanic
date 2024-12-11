@@ -14,14 +14,14 @@ exports.updateOwner = onRequest(async (req, res, next) => {
             await db.doc(userRef).set({
                 ...userDocument.data(),
                 role: 'workshop',
-                company: companyRef,
+                companyRef: companyRef,
             });
             return res
                 .status(200)
                 .json({
                     ...userDocument.data(),
                     role: 'workshop',
-                    company: companyRef,
+                    companyRef: companyRef,
                     reference: userRef,
                 });
         } else {

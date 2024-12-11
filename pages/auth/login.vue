@@ -24,7 +24,7 @@ async function logIn() {
 
     if (user.value?.role === 'user')
       navigateTo('/user')
-    else if (user.value?.role === 'admin')
+    else if (user.value?.role === 'workshop' && user.value.companyRef && company.value)
       navigateTo('/company')
     else if (user.value) {
       navigateTo('/auth/role-choice')

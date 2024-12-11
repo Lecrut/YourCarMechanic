@@ -25,6 +25,6 @@ export function mapIUserToFirebase(data: IUser) {
         email: data.email || "",
         role: data.role || "",
         profile: data.profile ? mapIUserProfile({...data.profile} as IUserProfile) : null,
-        company: data.companyRef || null,
+        companyRef: data.companyRef || null,
     }
 }

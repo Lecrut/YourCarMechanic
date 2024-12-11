@@ -29,6 +29,10 @@ export const useWorkshopStore = defineStore('workshops', () => {
         workshopsFreeTimes.value = []
     }
 
+    const getWorkshopByRef = async (companyRef: string) => {
+
+    }
+
     const getWorkshopsByCityAndServices = async (city: string, services: string[]) => {
         await getWorkshopsByCity(city).then((_) =>
             workshops.value = workshops.value.filter((item) => {
@@ -176,6 +180,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
         deleteFindResult,
         getWorkshopFreeHours,
         getWorkshopsByCity,
+        getWorkshopByRef,
         getWorkshopsByCityAndServices,
         getNextFreeDays
     }

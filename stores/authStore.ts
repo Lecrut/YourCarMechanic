@@ -27,6 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function setCompany(newCompany: IWorkshop) {
+        console.log(newCompany)
         company.value = mapIWorkshop(newCompany)
     }
 
@@ -41,9 +42,10 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (data.value) {
                 setUser({...data.value})
+                console.log(user.value)
+                if (user.value?.companyRef && user.value?.role === 'workshop')
+                    await getCompany(user.value?.companyRef)
                 sharedStore.success()
-
-                // todo: get company
             } else
                 sharedStore.failure()
         } catch (e) {
@@ -82,6 +84,27 @@ export const useAuthStore = defineStore('auth', () => {
         fixesStore.resetState()
         workshopsStore.resetState()
         resetState()
+    }
+
+    const getCompany = async (companyRef: string) => {
+        sharedStore.init()
+
+        try {
+            // @ts-ignore
+            const {data} = await useFetch(authApiUrl + 'get-workshop', {
+                query: {workshop: companyRef},
+                method: 'POST',
+            }) as unknown as IWorkshop
+
+            if (data.value) {
+                console.log(data.value)
+                setCompany({...data.value})
+                sharedStore.success()
+            } else
+                sharedStore.failure()
+        } catch (e) {
+            sharedStore.failure()
+        }
     }
 
     const resetPassword = async (userEmail: string) => {
@@ -164,6 +187,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const updateCompany = async (data: IWorkshop) => {
+        // todo: write and check update company
         sharedStore.init()
 
         try {
