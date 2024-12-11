@@ -42,6 +42,8 @@ export const useAuthStore = defineStore('auth', () => {
             if (data.value) {
                 setUser({...data.value})
                 sharedStore.success()
+
+                // todo: get company
             } else
                 sharedStore.failure()
         } catch (e) {

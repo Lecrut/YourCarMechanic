@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {IFix} from "~/models/fix";
+import CarCard from "~/components/user/carCard.vue";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -24,8 +25,21 @@ function close() {
       scrollable
       @update:model-value="close">
     <v-card>
+      <v-card-title>
 
-      <!--todo: show card card, workshop card, description and all data-->
+      </v-card-title>
+
+      <v-card-text>
+        <v-row>
+          <v-col cols="12" md="5" sm="12" align="center">
+            <car-card :only-show="true" :car="fix.car"/>
+          </v-col>
+
+          <v-col cols="12" md="7" sm="12">
+
+          </v-col>
+        </v-row>
+      </v-card-text>
       <v-card-actions>
         <v-btn
             color="default"

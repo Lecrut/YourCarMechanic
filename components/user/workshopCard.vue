@@ -24,11 +24,19 @@ const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.valu
       variant="tonal"
       elevation="10"
   >
-    <v-card-title align="center" class="font-weight-bold">
-      {{ workshop.name }}
+    <v-card-title align="center">
+      <v-icon
+          icon="mdi-tools"
+          color="primary"
+          class="my-1"
+      ></v-icon>
     </v-card-title>
 
     <v-card-text>
+      <div align="center" class="text-h6 mb-2 font-weight-bold">
+        {{ workshop.name }}
+      </div>
+
       <div class="mb-2">
         <v-icon
             icon="mdi-routes"

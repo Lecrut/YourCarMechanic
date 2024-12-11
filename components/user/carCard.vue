@@ -37,7 +37,7 @@ const isShowEditCarForm = ref(false)
         {{ car.vin ? car.vin : t('userProfile.vinNotDefined') }}
       </div>
 
-      <div class="my-2" align="center">
+      <div v-if="!onlyShow" class="my-2" align="center">
         <v-btn size="small" class="mx-2" prepend-icon="mdi-pencil" @click="isShowEditCarForm=true">
           {{ t('universal.edit') }}
         </v-btn>
