@@ -118,8 +118,16 @@ onMounted(async () => {
       </v-row>
 
       <v-row cols="12" justify="center">
-        <v-col v-for="(car, index) in cars" cols="12" md="4">
-          <car-card :key="index" :car="car"/>
+        <v-col
+            v-for="(car) in cars"
+            cols="12"
+            md="4"
+            sm="12"
+        >
+          <car-card
+              :only-show="false"
+              :car="car"
+          />
         </v-col>
       </v-row>
 

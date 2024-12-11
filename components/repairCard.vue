@@ -20,12 +20,12 @@ const showDialog = ref(false)
       variant="tonal"
       elevation="10"
   >
-    <v-card-title align="center" class="font-weight-bold">
-      <div class="mb-2">
+    <v-card-title align="center">
+      <div class="mt-2">
         <v-icon
             icon="mdi-car"
             color="primary"
-            class="mx-2 mb-1"
+            class="mx-2 mb-2"
         ></v-icon>
         {{ fix.car.manufacturer }} {{ fix.car.model }} - {{ fix.car.productionYear }}
       </div>
@@ -43,18 +43,23 @@ const showDialog = ref(false)
           </v-chip>
         </v-chip-group>
       </div>
+
+      <!--todo: show fix date-->
+
+      <div align="center" class="mb-2">
+        <v-btn
+            @click="showDialog=true"
+            size="small"
+        >
+          {{ t('notifications.openDetails') }}
+        </v-btn>
+      </div>
+
     </v-card-text>
-    <!--todo: show fix date-->
-    <div>
-      <v-btn
-          @click="showDialog=true"
-      >
-        {{ t('notifications.openDetails') }}
-      </v-btn>
-    </div>
   </v-card>
 
   <repair-details
+      v-model="showDialog"
       :fix="fix"
       :is-company="isCompany"
   />

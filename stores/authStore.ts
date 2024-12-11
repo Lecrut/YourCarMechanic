@@ -5,6 +5,8 @@ import type {IUserProfile} from "~/models/userProfile";
 import {type IWorkshop, mapIWorkshop, mapIWorkshopToFirebase} from "~/models/workshop";
 
 const authApiUrl = "http://localhost:5050/"
+// const authApiUrl = "https://auth-kjrdjk5dua-uc.a.run.app/"
+
 
 export const useAuthStore = defineStore('auth', () => {
     const user: Ref<IUser | null> = ref(null)

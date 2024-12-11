@@ -20,24 +20,29 @@ onMounted(async () => {
 <template>
   <v-container class="h-auto my-15">
     <v-card
-        class="pa-2"
+        class="pa-5"
     >
-      <div class="text-h5 my-2">
-        {{ t('notifications.title') }}
-      </div>
-      <v-row justify="center">
-        <v-col
-            v-for="(item) in fixes"
-            cols="12"
-            md="4"
-            sm="12"
-        >
-          <repair-card
-              :is-company="false"
-              :fix="item"
-          />
-        </v-col>
-      </v-row>
+      <v-card-title>
+        <div class="text-h5 mb-2 " align="center">
+          {{ t('notifications.title') }}
+        </div>
+      </v-card-title>
+      <v-card-title>
+        <v-row justify="center">
+          <v-col
+              v-for="(item) in fixes"
+              cols="12"
+              lg="4"
+              md="6"
+              sm="12"
+          >
+            <repair-card
+                :is-company="false"
+                :fix="item"
+            />
+          </v-col>
+        </v-row>
+      </v-card-title>
     </v-card>
   </v-container>
 </template>
