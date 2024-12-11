@@ -30,7 +30,33 @@ export const useWorkshopStore = defineStore('workshops', () => {
     }
 
     const getWorkshopByRef = async (companyRef: string) => {
+        sharedStore.init()
 
+        const findWorkshop = workshops.value.find(x => x.reference === companyRef)
+        if (findWorkshop) {
+            sharedStore.success()
+            return findWorkshop
+        }
+
+        try {
+            // @ts-ignore
+            const {data} = await useFetch(apiUrl + 'get-workshop', {
+                query: {workshop: companyRef},
+                method: 'POST',
+            }) as unknown as IWorkshop
+
+            if (data.value) {
+                const mappedWorkshop = mapIWorkshop({...data.value})
+                workshops.value = [...workshops.value, mappedWorkshop]
+                sharedStore.success()
+                return mappedWorkshop
+            } else
+                sharedStore.failure()
+            return null
+        } catch (e) {
+            sharedStore.failure()
+            return null
+        }
     }
 
     const getWorkshopsByCityAndServices = async (city: string, services: string[]) => {
