@@ -21,7 +21,7 @@ exports.logIn = onRequest(async (req, res, next) => {
         try {
             usersRef.where("email", "==", email).get().then((querySnapshot) => {
                 const data = querySnapshot.docs.map((doc) => ({
-                    reference: 'users/' + doc.id,
+                    reference: doc.ref.path,
                     ...doc.data(),
                 }));
                 return res.status(200).json({...data[0]});
