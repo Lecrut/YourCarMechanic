@@ -27,7 +27,7 @@ onMounted(async () => {
           {{ t('notifications.title') }}
         </div>
       </v-card-title>
-      <v-card-title>
+      <v-card-text>
         <v-row justify="center">
           <v-col
               v-for="(item) in fixes"
@@ -42,7 +42,7 @@ onMounted(async () => {
             />
           </v-col>
         </v-row>
-      </v-card-title>
+      </v-card-text>
     </v-card>
   </v-container>
 </template>

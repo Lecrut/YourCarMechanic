@@ -1,6 +1,7 @@
 import {type INotification, mapINotification} from "~/models/notification";
 import {type ICar, mapICar} from "~/models/car";
 
+// todo: add client phone
 export interface IFix {
     date: Date,
     bookDate: Date,

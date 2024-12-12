@@ -202,6 +202,9 @@
     "title": "Aktywne naprawy",
     "openDetails": "Otwórz"
   },
+  "history": {
+    "title": "Historia napraw"
+  },
   "universal": {
     "save": "Zapisz",
     "close": "Zamknij",

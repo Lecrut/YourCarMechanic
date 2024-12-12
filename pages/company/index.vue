@@ -3,6 +3,8 @@ definePageMeta({
   layout: 'company',
 })
 
+const {t} = useI18n()
+
 const authStore = useAuthStore()
 const {company} = storeToRefs(authStore)
 
@@ -17,5 +19,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!--todo: inbox view - scroll view on the left side and fix details on right-->
+  <!--  todo: add filters and for instance search in previous-->
+  <v-card-text>
+    <v-row justify="center">
+      <v-col
+          v-for="(item) in fixes"
+          cols="12"
+          lg="4"
+          md="6"
+          sm="12"
+      >
+        <repair-card
+            :is-company="true"
+            :fix="item"
+        />
+      </v-col>
+    </v-row>
+  </v-card-text>
 </template>

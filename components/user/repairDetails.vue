@@ -13,7 +13,7 @@ const props = defineProps<{
   isCompany: boolean
 }>()
 
-const {fix} = toRefs(props)
+const {fix, isCompany} = toRefs(props)
 
 const {t} = useI18n()
 const workshopsStore = useWorkshopStore()
@@ -26,7 +26,7 @@ function close() {
 }
 
 watch(isDialogShown, async (newValue) => {
-  if (newValue && fix.value && fix.value.companyRef) {
+  if (newValue && fix.value && fix.value.companyRef && !isCompany.value) {
     workshop.value = await workshopsStore.getWorkshopByRef(fix.value.companyRef)
   }
 })
@@ -58,7 +58,7 @@ watch(isDialogShown, async (newValue) => {
             />
 
             <workshop-card
-                v-if="workshop"
+                v-if="workshop && !isCompany"
                 :workshop="workshop"
                 :book-fix="close"
                 :is-presentation="true"

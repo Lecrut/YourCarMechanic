@@ -199,7 +199,11 @@
     "user": "User"
   },
   "notifications": {
-    "title": "Active fixes"
+    "title": "Active fixes",
+    "openDetails": "Open details"
+  },
+  "history": {
+    "title": "Fixes history"
   },
   "universal": {
     "save": "Save",
