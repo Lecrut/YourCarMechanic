@@ -4,6 +4,7 @@ import CarCard from "~/components/user/carCard.vue";
 import type {Ref} from "vue";
 import type {IWorkshop} from "~/models/workshop";
 import WorkshopCard from "~/components/user/workshopCard.vue";
+import {services} from "~/composable/services";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -36,7 +37,8 @@ watch(isDialogShown, async (newValue) => {
       max-width="1100px"
       :model-value="isDialogShown"
       scrollable
-      @update:model-value="close">
+      @update:model-value="close"
+  >
     <v-card>
       <v-card-title>
 
@@ -64,6 +66,26 @@ watch(isDialogShown, async (newValue) => {
           </v-col>
 
           <v-col cols="12" md="7" sm="12">
+            <v-chip-group column>
+              <v-chip
+                  v-for="(item) in fix.services"
+                  density="comfortable"
+                  class="mr-1 my-2"
+              >
+                {{ services(t).find(x => x.value === item)?.title || '' }}
+              </v-chip>
+            </v-chip-group>
+
+            <v-divider class="my-2"/>
+
+            <v-textarea
+                :model-value="fix.description"
+                :label="t('universal.description')"
+                variant="solo"
+                readonly
+            />
+
+            <v-divider class="my-2"/>
 
           </v-col>
         </v-row>

@@ -16,7 +16,8 @@ const isShowEditCarForm = ref(false)
 <template>
   <v-card
       variant="tonal"
-      class="rounded-lg"
+      elevation="10"
+      class="rounded-lg my-2"
   >
     <v-card-title class="mt-2">
       <v-icon

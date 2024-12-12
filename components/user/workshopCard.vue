@@ -23,6 +23,7 @@ const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.valu
   <v-card
       variant="tonal"
       elevation="10"
+      class="rounded-lg my-2"
   >
     <v-card-title align="center">
       <v-icon
