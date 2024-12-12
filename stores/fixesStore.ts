@@ -25,6 +25,7 @@ export const useFixesStore = defineStore('fixes', () => {
             }) as unknown as IFix[]
 
             // todo: check date map
+            // todo: get only active fixes
 
             if (data.value) {
                 fixes.value = data.value.map(mapIFix)
@@ -48,6 +49,7 @@ export const useFixesStore = defineStore('fixes', () => {
             }) as unknown as IFix[]
 
             // todo: check date map
+            // todo: get only active
 
             if (data.value) {
                 fixes.value = data.value.map(mapIFix)
@@ -110,6 +112,10 @@ export const useFixesStore = defineStore('fixes', () => {
         }
     }
 
+    const getUserHistoryFixes = async (user: IUser) => {
+        //     todo: write get historical user fixes
+    }
+
 
     return {
         fixes,
@@ -118,5 +124,6 @@ export const useFixesStore = defineStore('fixes', () => {
         resetState,
         getWorkshopFixes,
         addNotification,
+        getUserHistoryFixes,
     }
 }, {persist: true})

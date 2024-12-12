@@ -13,8 +13,7 @@ const {fixes} = storeToRefs(fixStore)
 
 onMounted(async () => {
   if (user.value)
-    await fixStore.getUserFixes(user.value)
-//   todo: get only historical fixes
+    await fixStore.getUserHistoryFixes(user.value)
 })
 
 </script>
