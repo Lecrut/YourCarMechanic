@@ -29,7 +29,7 @@ const workshopStore = useWorkshopStore()
 const {workshops} = storeToRefs(workshopStore)
 
 const sharedStore = useSharedStore()
-const {loading} = storeToRefs(sharedStore)
+const {error, loading} = storeToRefs(sharedStore)
 
 const fixStore = useFixesStore()
 
@@ -148,6 +148,7 @@ async function bookFix() {
     carMillage: Number(carMileage.value),
     companyRef: selectedWorkshop.value?.reference || "",
     description: serviceDescription.value || "",
+    clientPhone: user.value?.profile?.phone || "",
     notifications: [],
     reference: "",
     services: selectedServices.value || [],
@@ -156,7 +157,8 @@ async function bookFix() {
 
   await fixStore.addFix(newObject)
 
-//   todo: on success push to notifications
+  if (!error.value)
+    navigateTo('/user/notifications')
 }
 
 onMounted(async () => {

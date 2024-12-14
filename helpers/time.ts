@@ -18,11 +18,11 @@ export function convertToFutureDate(day: string, hour: string): Date {
 export function formatDateToString(date: Date) {
     const padToTwoDigits = (num: number) => num.toString().padStart(2, '0')
 
-    const day = padToTwoDigits(date.getDate())
-    const month = padToTwoDigits(date.getMonth() + 1)
-    const year = date.getFullYear()
-    const hours = padToTwoDigits(date.getHours())
-    const minutes = padToTwoDigits(date.getMinutes())
+    const day = padToTwoDigits(new Date(date).getDate())
+    const month = padToTwoDigits(new Date(date).getMonth() + 1)
+    const year = new Date(date).getFullYear()
+    const hours = padToTwoDigits(new Date(date).getHours())
+    const minutes = padToTwoDigits(new Date(date).getMinutes())
 
     return `${day}.${month}.${year} ${hours}:${minutes}`
 }

@@ -23,6 +23,7 @@ exports.addFix = onRequest(async (req, res, next) => {
             userRef,
             services,
             description,
+            clientPhone,
             notifications,
         } = fixData;
 
@@ -47,6 +48,7 @@ exports.addFix = onRequest(async (req, res, next) => {
                     userRef: userRef,
                     services: services,
                     description: description,
+                    clientPhone: clientPhone,
                     notifications: notifications,
                     createTime: Timestamp.now()
                 });
@@ -62,6 +64,7 @@ exports.addFix = onRequest(async (req, res, next) => {
                         userRef: userRef,
                         services: services,
                         description: description,
+                        clientPhone: clientPhone,
                         notifications: notifications,
                         reference: docRef.path
                     });

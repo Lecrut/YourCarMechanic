@@ -29,6 +29,8 @@ onMounted(async () => {
       </v-card-title>
       <v-card-text>
         <v-row justify="center">
+          <!--              todo: sort by fixes date-->
+
           <v-col
               v-for="(item) in fixes"
               cols="12"

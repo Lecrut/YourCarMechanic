@@ -1,7 +1,6 @@
 import {type INotification, mapINotification} from "~/models/notification";
 import {type ICar, mapICar} from "~/models/car";
 
-// todo: add client phone
 export interface IFix {
     date: Date,
     bookDate: Date,
@@ -13,6 +12,7 @@ export interface IFix {
 
     services: string[],
     description: string
+    clientPhone: string
 
     notifications: INotification[]
 
@@ -31,6 +31,7 @@ export function mapIFix(data: IFix): IFix {
 
         services: [...data.services],
         description: data.description || "",
+        clientPhone: data.clientPhone || "",
 
         notifications: [...data.notifications.map(mapINotification)],
 
@@ -50,6 +51,7 @@ export function mapIFixToFirebase(data: IFix) {
 
         services: [...data.services],
         description: data.description || "",
+        clientPhone: data.clientPhone || "",
 
         notifications: [...data.notifications.map(mapINotification)],
 

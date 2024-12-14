@@ -205,6 +205,9 @@
   "history": {
     "title": "Fixes history"
   },
+  "fixStatues": {
+    "title": "Fix statuses"
+  },
   "universal": {
     "save": "Save",
     "close": "Close",

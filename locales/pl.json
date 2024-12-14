@@ -205,6 +205,9 @@
   "history": {
     "title": "Historia napraw"
   },
+  "fixStatues": {
+    "title": "Status naprawy"
+  },
   "universal": {
     "save": "Zapisz",
     "close": "Zamknij",

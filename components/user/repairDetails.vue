@@ -98,9 +98,32 @@ watch(isDialogShown, async (newValue) => {
             />
 
             <v-divider class="my-2"/>
-            
+
+            <div class="my-2" align="center">
+              <v-icon
+                  icon="mdi-car-info"
+                  color="primary"
+                  class="mx-2 mb-2"
+              ></v-icon>
+              {{ fix.carMillage }}km
+            </div>
+
+            <div v-if="fix.clientPhone && isCompany" class="my-2" align="center">
+              <v-icon
+                  icon="mdi-phone"
+                  color="primary"
+                  class="mx-2 mb-2"
+              ></v-icon>
+              {{ fix.clientPhone }}
+            </div>
+
           </v-col>
         </v-row>
+        <v-divider/>
+
+        <div align="center" class="text-h5 my-4">
+          {{ t('fixStatues.title') }}
+        </div>
       </v-card-text>
       <v-card-actions>
         <v-btn
