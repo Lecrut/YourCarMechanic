@@ -6,6 +6,7 @@ import {type ICar, mapICar} from "~/models/car";
 import {type IFix, mapIFix} from "~/models/fix";
 import WorkshopCard from "~/components/user/workshopCard.vue";
 import type {IWorkshop} from "~/models/workshop";
+import {formatDateToString} from "~/helpers/time";
 
 definePageMeta({
   layout: 'user',
@@ -78,18 +79,6 @@ const myCars = computed(() => {
 function bookFixTime(workshop: IWorkshop, date: Date) {
   selectedDate.value = date
   selectedWorkshop.value = workshop
-}
-
-function formatDateToString(date: Date) {
-  const padToTwoDigits = (num: number) => num.toString().padStart(2, '0')
-
-  const day = padToTwoDigits(date.getDate())
-  const month = padToTwoDigits(date.getMonth() + 1)
-  const year = date.getFullYear()
-  const hours = padToTwoDigits(date.getHours())
-  const minutes = padToTwoDigits(date.getMinutes())
-
-  return `${day}.${month}.${year} ${hours}:${minutes}`
 }
 
 async function checkStepConditions(next: () => void) {

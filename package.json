@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@firebase/app-types": "^0.9.2",
+    "@firebase/firestore": "^4.7.5",
     "@mdi/font": "^7.4.47",
     "@nuxtjs/i18n": "^8.5.5",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",

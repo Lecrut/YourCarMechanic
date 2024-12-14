@@ -5,6 +5,7 @@ import type {Ref} from "vue";
 import type {IWorkshop} from "~/models/workshop";
 import WorkshopCard from "~/components/user/workshopCard.vue";
 import {services} from "~/composable/services";
+import {formatDateToString} from "~/helpers/time";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -66,6 +67,17 @@ watch(isDialogShown, async (newValue) => {
           </v-col>
 
           <v-col cols="12" md="7" sm="12">
+            <div class="my-2 text-h5" align="center">
+              <v-icon
+                  icon="mdi-calendar-blank"
+                  color="primary"
+                  class="mx-2 mb-2"
+              ></v-icon>
+              {{ formatDateToString(fix.date) }}
+            </div>
+
+            <v-divider/>
+
             <v-chip-group column>
               <v-chip
                   v-for="(item) in fix.services"
@@ -86,7 +98,7 @@ watch(isDialogShown, async (newValue) => {
             />
 
             <v-divider class="my-2"/>
-
+            
           </v-col>
         </v-row>
       </v-card-text>

@@ -24,7 +24,6 @@ export const useFixesStore = defineStore('fixes', () => {
                 method: 'POST',
             }) as unknown as IFix[]
 
-            // todo: check date map
             // todo: get only active fixes
 
             if (data.value) {
@@ -48,7 +47,6 @@ export const useFixesStore = defineStore('fixes', () => {
                 method: 'POST',
             }) as unknown as IFix[]
 
-            // todo: check date map
             // todo: get only active
 
             if (data.value) {

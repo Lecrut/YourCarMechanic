@@ -9,8 +9,10 @@ exports.getUserFixes = onRequest(async (req, res) => {
     try {
         fixesRef.where("userRef", "==", userRef).get().then((snapshot) => {
             const data = snapshot.docs.map((doc) => ({
-                reference: doc.ref.path,
                 ...doc.data(),
+                reference: doc.ref.path,
+                date: doc.data().date.toDate().toISOString(),
+                bookDate: doc.data().bookDate.toDate().toISOString(),
             }));
             console.log(data);
             return res.status(200).json(data);

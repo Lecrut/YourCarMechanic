@@ -2,6 +2,7 @@
 import type {IFix} from "~/models/fix";
 import {services} from "~/composable/services";
 import RepairDetails from "~/components/user/repairDetails.vue";
+import {formatDateToString} from "~/helpers/time";
 
 const props = defineProps<{
   fix: IFix,
@@ -44,7 +45,14 @@ const showDialog = ref(false)
         </v-chip-group>
       </div>
 
-      <!--todo: show fix date-->
+      <div class="mb-2" align="center">
+        <v-icon
+            icon="mdi-calendar-blank"
+            color="primary"
+            class="mx-2 mb-2"
+        ></v-icon>
+        {{ formatDateToString(fix.date) }}
+      </div>
 
       <div align="center" class="mb-2">
         <v-btn

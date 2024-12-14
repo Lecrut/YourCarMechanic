@@ -145,7 +145,6 @@ export const useWorkshopStore = defineStore('workshops', () => {
 
         const findWorkshop = workshopsFreeTimes.value.find(x => x.workshop.reference === workshop.reference)
         if (findWorkshop) {
-            console.log(findWorkshop)
             freeHoursTable.value = findWorkshop.data
             sharedStore.success()
             return

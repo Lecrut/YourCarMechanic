@@ -27,7 +27,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function setCompany(newCompany: IWorkshop) {
-        console.log(newCompany)
         company.value = mapIWorkshop(newCompany)
     }
 
@@ -42,7 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (data.value) {
                 setUser({...data.value})
-                console.log(user.value)
+
                 if (user.value?.companyRef && user.value?.role === 'workshop')
                     await getCompany(user.value?.companyRef)
                 sharedStore.success()
@@ -97,7 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
             }) as unknown as IWorkshop
 
             if (data.value) {
-                console.log(data.value)
+
                 setCompany({...data.value})
                 sharedStore.success()
             } else

@@ -9,8 +9,10 @@ exports.getWorkshopFixes = onRequest(async (req, res) => {
     try {
         fixesRef.where("companyRef", "==", companyRef).get().then((snapshot) => {
             const data = snapshot.docs.map((doc) => ({
-                reference: doc.ref.path,
                 ...doc.data(),
+                reference: doc.ref.path,
+                date: doc.data().date.toDate().toISOString(),
+                bookDate: doc.data().bookDate.toDate().toISOString(),
             }));
             console.log(data);
             return res.status(200).json(data);

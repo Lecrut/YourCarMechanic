@@ -14,3 +14,15 @@ export function convertToFutureDate(day: string, hour: string): Date {
 
     return date;
 }
+
+export function formatDateToString(date: Date) {
+    const padToTwoDigits = (num: number) => num.toString().padStart(2, '0')
+
+    const day = padToTwoDigits(date.getDate())
+    const month = padToTwoDigits(date.getMonth() + 1)
+    const year = date.getFullYear()
+    const hours = padToTwoDigits(date.getHours())
+    const minutes = padToTwoDigits(date.getMinutes())
+
+    return `${day}.${month}.${year} ${hours}:${minutes}`
+}
