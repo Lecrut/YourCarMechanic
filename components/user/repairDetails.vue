@@ -6,6 +6,10 @@ import type {IWorkshop} from "~/models/workshop";
 import WorkshopCard from "~/components/user/workshopCard.vue";
 import {services} from "~/composable/services";
 import {formatDateToString} from "~/helpers/time";
+import {duringNotification, notifications, startNotification} from "~/composable/notifications";
+import {mapINotification} from "~/models/notification";
+import formValidation from "~/helpers/formValidation";
+import {requiredArrayRule, requiredRule} from "~/helpers/rules";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -18,12 +22,42 @@ const {fix, isCompany} = toRefs(props)
 
 const {t} = useI18n()
 const workshopsStore = useWorkshopStore()
+const fixesStore = useFixesStore()
+
+const {form, valid, isValid} = formValidation()
 
 const workshop: Ref<IWorkshop | null> = ref(null)
+const isAddStatus = ref(false)
+const addNotificationStatus = ref(null)
 
+const notificationsType = computed(() => {
+  return fix.value.notifications.length ? duringNotification(t) : startNotification(t)
+})
+
+function resetAddStatus() {
+  isAddStatus.value = false
+  addNotificationStatus.value = null
+}
+
+async function addNotification() {
+  // todo: check data
+  if (await isValid())
+    await fixesStore.addNotification(
+        fix.value,
+        mapINotification(
+            {
+              sendDate: new Date(),
+              notificationType: addNotificationStatus.value || '',
+              cost: null,
+              date: new Date()
+            }
+        )
+    )
+}
 
 function close() {
   isDialogShown.value = false
+  resetAddStatus()
 }
 
 watch(isDialogShown, async (newValue) => {
@@ -123,6 +157,57 @@ watch(isDialogShown, async (newValue) => {
 
         <div align="center" class="text-h5 my-4">
           {{ t('fixStatues.title') }}
+        </div>
+
+        <!--      todo:  https://vuetifyjs.com/en/components/timelines/#icon-dots-->
+
+
+        <div align="center">
+          <v-btn @click="isAddStatus=true">
+            Dodaj status
+          </v-btn>
+        </div>
+
+        <div v-if="isAddStatus">
+          <v-form
+              ref="form"
+              @submit.prevent="addNotification"
+              v-model="valid"
+          >
+            <!--          todo: add rules to check-->
+            <v-row>
+              <v-col cols="12" md="6" sm="12">
+                <v-select
+                    v-model="addNotificationStatus"
+                    :label="t('fixStatues.title')"
+                    :items="notificationsType"
+                    :rules="[requiredRule(t), requiredArrayRule(t)]"
+                />
+              </v-col>
+              <v-col cols="12" md="6" sm="12">
+                <v-checkbox color="primary" label="Ustaw datę na teraz"/>
+                <!--              todo: datepicker and label for checkbox-->
+              </v-col>
+            </v-row>
+
+            <v-row class="w-100 justify-end my-2">
+              <v-btn
+                  color="primary"
+                  class="mx-1"
+                  @click="addNotification()"
+              >
+                {{ t('universal.add') }}
+              </v-btn>
+
+              <v-btn
+                  color="error"
+                  class="mx-1"
+                  @click="resetAddStatus()"
+              >
+                {{ t('universal.cancel') }}
+              </v-btn>
+            </v-row>
+          </v-form>
         </div>
       </v-card-text>
       <v-card-actions>

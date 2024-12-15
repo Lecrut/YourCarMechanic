@@ -206,10 +206,15 @@
     "title": "Historia napraw"
   },
   "fixStatues": {
-    "title": "Status naprawy"
+    "title": "Status naprawy",
+    "getCar": "Przyjęcie samochodu",
+    "giveBackCar": "Oddanie samochodu",
+    "addExpense": "Wydatek",
+    "addGiveBackTime": "Czas oddania samochodu"
   },
   "universal": {
     "save": "Zapisz",
+    "add": "Dodaj",
     "close": "Zamknij",
     "cancel": "Anuluj",
     "edit": "Edytuj",

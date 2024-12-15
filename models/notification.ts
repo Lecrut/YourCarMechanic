@@ -3,7 +3,7 @@ export interface INotification {
 
     notificationType: string,
     cost: number | null,
-    date: Date | null,
+    date: Date,
 }
 
 export function mapINotification(data: INotification): INotification {
@@ -11,15 +11,15 @@ export function mapINotification(data: INotification): INotification {
         sendDate: new Date(data.sendDate),
         notificationType: data.notificationType || "",
         cost: Number(data.cost || 0),
-        date: data.date ? new Date(data.date) : null,
+        date: new Date(data.date),
     }
 }
 
 export function mapINotificationToFirebase(data: INotification) {
     return {
-        sendDate: new Date(),
+        sendDate: new Date().toISOString(),
         notificationType: data.notificationType || "",
         cost: Number(data.cost || 0),
-        date: data.date ? data.date.toISOString() : null,
+        date: data.date.toISOString(),
     }
 }

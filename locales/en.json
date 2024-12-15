@@ -206,10 +206,15 @@
     "title": "Fixes history"
   },
   "fixStatues": {
-    "title": "Fix statuses"
+    "title": "Fix statuses",
+    "getCar": "Get car",
+    "giveBackCar": "Give back a car",
+    "addExpense": "Expense",
+    "addGiveBackTime": "Car give back time"
   },
   "universal": {
     "save": "Save",
+    "add": "Add",
     "close": "Close",
     "cancel": "Cancel",
     "edit": "Edit",
