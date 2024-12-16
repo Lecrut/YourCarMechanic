@@ -37,6 +37,13 @@ exports.addNotification = onRequest(async (req, res, next) => {
             return res.status(201).json({
                 ...data.data(),
                 reference: data.ref.path,
+                date: data.data().date.toDate().toISOString(),
+                bookDate: data.data().bookDate.toDate().toISOString(),
+                notifications: data.data().notifications.map(notification => ({
+                    ...notification,
+                    date: notification.date.toDate().toISOString(),
+                    sendDate: notification.sendDate.toDate().toISOString(),
+                }))
             });
 
         } else {
