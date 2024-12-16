@@ -200,7 +200,8 @@
   },
   "notifications": {
     "title": "Active fixes",
-    "openDetails": "Open details"
+    "openDetails": "Open details",
+    "setCurrantDate": "Set current date"
   },
   "history": {
     "title": "Fixes history"

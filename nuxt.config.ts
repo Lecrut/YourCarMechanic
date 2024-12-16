@@ -4,7 +4,7 @@ import wasm from 'vite-plugin-wasm';
 
 export default defineNuxtConfig({
     build: {
-        transpile: ['vuetify'],
+        transpile: ['vuetify', '@vuepic/vue-datepicker'],
     },
 
     modules: [

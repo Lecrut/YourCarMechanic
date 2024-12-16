@@ -24,7 +24,7 @@ exports.addNotification = onRequest(async (req, res, next) => {
         const isFixExists = await db.doc(fixRef).get();
         if (isFixExists) {
             db.doc(fixRef).update({
-                notification: FieldValue.arrayUnion({
+                notifications: FieldValue.arrayUnion({
                     sendDate: sendDate,
                     notificationType: notificationType,
                     cost: cost,
@@ -32,13 +32,12 @@ exports.addNotification = onRequest(async (req, res, next) => {
                 })
             })
 
-            await db.doc(fixRef).get().then((snapshot) => {
-                const data = snapshot.docs.map((doc) => ({
-                    reference: doc.ref.path,
-                    ...doc.data(),
-                }));
-                return res.status(201).json(data);
-            })
+            const data = await db.doc(fixRef).get();
+
+            return res.status(201).json({
+                ...data.data(),
+                reference: data.ref.path,
+            });
 
         } else {
             return res

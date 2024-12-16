@@ -200,7 +200,8 @@
   },
   "notifications": {
     "title": "Aktywne naprawy",
-    "openDetails": "Otwórz"
+    "openDetails": "Otwórz",
+    "setCurrantDate": "Ustaw aktualną datę"
   },
   "history": {
     "title": "Historia napraw"

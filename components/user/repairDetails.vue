@@ -10,6 +10,8 @@ import {duringNotification, notifications, startNotification} from "~/composable
 import {mapINotification} from "~/models/notification";
 import formValidation from "~/helpers/formValidation";
 import {requiredArrayRule, requiredRule} from "~/helpers/rules";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const isDialogShown = defineModel<boolean>()
 
@@ -24,11 +26,16 @@ const {t} = useI18n()
 const workshopsStore = useWorkshopStore()
 const fixesStore = useFixesStore()
 
+const sharedStore = useSharedStore()
+const {error} = storeToRefs(sharedStore)
+
 const {form, valid, isValid} = formValidation()
 
 const workshop: Ref<IWorkshop | null> = ref(null)
 const isAddStatus = ref(false)
 const addNotificationStatus = ref(null)
+const notificationDate = ref(new Date)
+const notificationIsCurrentDate = ref(false)
 
 const notificationsType = computed(() => {
   return fix.value.notifications.length ? duringNotification(t) : startNotification(t)
@@ -37,11 +44,12 @@ const notificationsType = computed(() => {
 function resetAddStatus() {
   isAddStatus.value = false
   addNotificationStatus.value = null
+  notificationDate.value = new Date()
+  notificationIsCurrentDate.value = false
 }
 
 async function addNotification() {
-  // todo: check data
-  if (await isValid())
+  if (await isValid()) {
     await fixesStore.addNotification(
         fix.value,
         mapINotification(
@@ -49,10 +57,13 @@ async function addNotification() {
               sendDate: new Date(),
               notificationType: addNotificationStatus.value || '',
               cost: null,
-              date: new Date()
+              date: notificationIsCurrentDate.value ? new Date() : notificationDate.value
             }
         )
     )
+    if (!error.value)
+      resetAddStatus()
+  }
 }
 
 function close() {
@@ -185,8 +196,24 @@ watch(isDialogShown, async (newValue) => {
                 />
               </v-col>
               <v-col cols="12" md="6" sm="12">
-                <v-checkbox color="primary" label="Ustaw datę na teraz"/>
-                <!--              todo: datepicker and label for checkbox-->
+                <VueDatePicker
+                    class="my-3"
+                    v-model="notificationDate"
+                    :dark="true"
+                    :time-picker-inline="true"
+                    :min-date="fix.bookDate"
+                    :auto-apply="true"
+                    :disabled="notificationIsCurrentDate"
+                />
+                <!--              todo: format datepicker: theme-->
+
+              </v-col>
+              <v-col cols="12" md="6" sm="12">
+                <v-checkbox
+                    v-model="notificationIsCurrentDate"
+                    color="primary"
+                    :label="t('notifications.setCurrantDate')"
+                />
               </v-col>
             </v-row>
 
