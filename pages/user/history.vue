@@ -9,7 +9,7 @@ const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
 
 const fixStore = useFixesStore()
-const {fixes} = storeToRefs(fixStore)
+const {historyFixes} = storeToRefs(fixStore)
 
 onMounted(async () => {
   if (user.value)
@@ -31,7 +31,7 @@ onMounted(async () => {
       <v-card-text>
         <v-row justify="center">
           <v-col
-              v-for="(item) in fixes"
+              v-for="(item) in historyFixes"
               cols="12"
               lg="4"
               md="6"

@@ -13,6 +13,7 @@ export const useFixesStore = defineStore("fixes", () => {
         const sharedStore = useSharedStore()
         const resetState = () => {
             fixes.value = []
+            historyFixes.value = []
         }
 
         const getWorkshopFixes = async (company: IWorkshop) => {
@@ -111,7 +112,24 @@ export const useFixesStore = defineStore("fixes", () => {
         }
 
         const getUserHistoryFixes = async (user: IUser) => {
-            //     todo: write get historical user fixes
+            sharedStore.init()
+
+            try {
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'get-user-closed-fixes', {
+                    query: {userRef: user.reference},
+                    method: 'POST',
+                }) as unknown as IFix[]
+
+                if (data.value) {
+                    historyFixes.value = data.value.map(mapIFix)
+                    sharedStore.success()
+                } else {
+                    sharedStore.failure()
+                }
+            } catch (e) {
+                sharedStore.failure()
+            }
         }
 
         const getWorkshopHistoryFixes = async (company: IWorkshop) => {
