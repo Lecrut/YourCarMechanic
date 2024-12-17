@@ -152,7 +152,8 @@ async function bookFix() {
     notifications: [],
     reference: "",
     services: selectedServices.value || [],
-    userRef: user.value?.reference || ""
+    userRef: user.value?.reference || "",
+    isClosed: false
   })
 
   await fixStore.addFix(newObject)

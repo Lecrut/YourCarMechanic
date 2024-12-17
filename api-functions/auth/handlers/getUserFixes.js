@@ -7,7 +7,7 @@ exports.getUserFixes = onRequest(async (req, res) => {
 
     const fixesRef = db.collection('fixes');
     try {
-        fixesRef.where("userRef", "==", userRef).get().then((snapshot) => {
+        fixesRef.where("userRef", "==", userRef).where("isClosed", "!=", true).get().then((snapshot) => {
             const data = snapshot.docs.map((doc) => ({
                 ...doc.data(),
                 reference: doc.ref.path,

@@ -8,6 +8,7 @@ const authApiUrl = "http://localhost:5050/"
 
 export const useFixesStore = defineStore("fixes", () => {
         const fixes: Ref<IFix[]> = ref([])
+        const historyFixes: Ref<IFix[]> = ref([])
 
         const sharedStore = useSharedStore()
         const resetState = () => {
@@ -23,8 +24,6 @@ export const useFixesStore = defineStore("fixes", () => {
                     query: {companyRef: company.reference},
                     method: 'POST',
                 }) as unknown as IFix[]
-
-                // todo: get only active fixes
 
                 if (data.value) {
                     fixes.value = data.value.map(mapIFix)
@@ -46,8 +45,6 @@ export const useFixesStore = defineStore("fixes", () => {
                     query: {userRef: user.reference},
                     method: 'POST',
                 }) as unknown as IFix[]
-
-                // todo: get only active
 
                 if (data.value) {
                     fixes.value = data.value.map(mapIFix)
@@ -99,7 +96,10 @@ export const useFixesStore = defineStore("fixes", () => {
 
                 if (data.value) {
                     const newFix = mapIFix(data.value)
-                    fixes.value = fixes.value.map(tempFix => tempFix.reference === newFix.reference ? newFix : tempFix);
+                    if (newFix.isClosed)
+                        fixes.value = fixes.value.filter(tempFix => tempFix.reference !== newFix.reference);
+                    else
+                        fixes.value = fixes.value.map(tempFix => tempFix.reference === newFix.reference ? newFix : tempFix);
                     sharedStore.success()
                 } else {
                     sharedStore.failure()
@@ -114,19 +114,23 @@ export const useFixesStore = defineStore("fixes", () => {
             //     todo: write get historical user fixes
         }
 
+        const getWorkshopHistoryFixes = async (company: IWorkshop) => {
+            //     todo: write get historical workshop fixes
+        }
+
 
         return {
             fixes,
+            historyFixes,
             getUserFixes,
             addFix,
             resetState,
             getWorkshopFixes,
             addNotification,
             getUserHistoryFixes,
+            getWorkshopHistoryFixes,
         }
     }, {
-        persist: {
-            pick: ['fixes'],
-        }
+        persist: true,
     }
 )

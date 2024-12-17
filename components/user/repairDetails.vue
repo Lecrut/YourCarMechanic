@@ -274,6 +274,7 @@ watch(isDialogShown, async (newValue) => {
                     :min-date="fix.bookDate"
                     :auto-apply="true"
                     :disabled="notificationIsCurrentDate"
+                    auto-position="top"
                 />
                 <!--              todo: format datepicker: theme-->
 

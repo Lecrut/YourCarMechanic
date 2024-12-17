@@ -16,6 +16,8 @@ export interface IFix {
 
     notifications: INotification[]
 
+    isClosed: boolean
+
     reference: string
 }
 
@@ -34,6 +36,8 @@ export function mapIFix(data: IFix): IFix {
         clientPhone: data.clientPhone || "",
 
         notifications: [...data.notifications.map(mapINotification)],
+
+        isClosed: data.isClosed || false,
 
         reference: data.reference || "",
     }
@@ -55,5 +59,6 @@ export function mapIFixToFirebase(data: IFix) {
 
         notifications: [...data.notifications.map(mapINotification)],
 
+        isClosed: data.isClosed || false
     }
 }

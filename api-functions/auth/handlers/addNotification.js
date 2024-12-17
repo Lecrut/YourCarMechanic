@@ -21,9 +21,12 @@ exports.addNotification = onRequest(async (req, res, next) => {
             date,
         } = notificationData;
 
+        const isLastNotification = Boolean(notificationType === 'giveBackCar')
+
         const isFixExists = await db.doc(fixRef).get();
         if (isFixExists) {
             await db.doc(fixRef).update({
+                isClosed: isLastNotification,
                 notifications: FieldValue.arrayUnion({
                     sendDate: sendDate,
                     notificationType: notificationType,

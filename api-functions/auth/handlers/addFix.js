@@ -25,6 +25,7 @@ exports.addFix = onRequest(async (req, res, next) => {
             description,
             clientPhone,
             notifications,
+            isClosed,
         } = fixData;
 
         if (!userRef) {
@@ -50,7 +51,8 @@ exports.addFix = onRequest(async (req, res, next) => {
                     description: description,
                     clientPhone: clientPhone,
                     notifications: notifications,
-                    createTime: Timestamp.now()
+                    createTime: Timestamp.now(),
+                    isClosed: isClosed,
                 });
 
                 return res
@@ -66,6 +68,7 @@ exports.addFix = onRequest(async (req, res, next) => {
                         description: description,
                         clientPhone: clientPhone,
                         notifications: notifications,
+                        isClosed: isClosed,
                         reference: docRef.path
                     });
             } catch (error) {
