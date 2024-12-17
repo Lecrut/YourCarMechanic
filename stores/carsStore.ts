@@ -84,5 +84,9 @@ export const useCarsStore = defineStore("cars", () => {
             resetState,
             updateCar,
         }
-    }, {persist: true}
+    }, {
+        persist: {
+            pick: ['cars']
+        }
+    }
 )

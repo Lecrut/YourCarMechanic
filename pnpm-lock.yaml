@@ -26,6 +26,9 @@ dependencies:
   '@vuepic/vue-datepicker':
     specifier: ^10.0.0
     version: 10.0.0(vue@3.5.12)
+  '@vueuse/core':
+    specifier: ^12.0.0
+    version: 12.0.0
   firebase:
     specifier: ^10.14.1
     version: 10.14.1
@@ -41,6 +44,9 @@ dependencies:
   nuxt:
     specifier: ^3.13.2
     version: 3.13.2(rollup@4.24.0)(vite@5.4.10)
+  nuxt-build-cache:
+    specifier: ^0.1.1
+    version: 0.1.1(rollup@4.24.0)
   nuxt-vuefire:
     specifier: ^1.0.4
     version: 1.0.4(@firebase/app-types@0.9.2)(firebase-admin@12.7.0)(firebase-functions@6.1.0)(firebase@10.14.1)(rollup@4.24.0)(vuefire@3.2.0)
@@ -2789,6 +2795,10 @@ packages:
     dev: false
     optional: true
 
+  /@types/web-bluetooth@0.0.20:
+    resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
+    dev: false
+
   /@unhead/dom@1.11.10:
     resolution: {integrity: sha512-nL1mdRzYVATZIYauK15zOI2YyM3YxCLfhbTqljEjDFJeiJUzTTi+a//5FHiUk84ewSucFnrwHNey/pEXFlyY1A==}
     dependencies:
@@ -2950,11 +2960,28 @@ packages:
       source-map-js: 1.2.1
     dev: false
 
+  /@vue/compiler-core@3.5.13:
+    resolution: {integrity: sha512-oOdAkwqUfW1WqpwSYJce06wvt6HljgY3fGeM9NcVA1HaYOij3mZG9Rkysn0OHuyUAGMbEbARIpsG+LPVlBJ5/Q==}
+    dependencies:
+      '@babel/parser': 7.25.9
+      '@vue/shared': 3.5.13
+      entities: 4.5.0
+      estree-walker: 2.0.2
+      source-map-js: 1.2.1
+    dev: false
+
   /@vue/compiler-dom@3.5.12:
     resolution: {integrity: sha512-9G6PbJ03uwxLHKQ3P42cMTi85lDRvGLB2rSGOiQqtXELat6uI4n8cNz9yjfVHRPIu+MsK6TE418Giruvgptckg==}
     dependencies:
       '@vue/compiler-core': 3.5.12
       '@vue/shared': 3.5.12
+    dev: false
+
+  /@vue/compiler-dom@3.5.13:
+    resolution: {integrity: sha512-ZOJ46sMOKUjO3e94wPdCzQ6P1Lx/vhp2RSvfaab88Ajexs0AHeV0uasYhi99WPaogmBlRHNRuly8xV75cNTMDA==}
+    dependencies:
+      '@vue/compiler-core': 3.5.13
+      '@vue/shared': 3.5.13
     dev: false
 
   /@vue/compiler-sfc@3.5.12:
@@ -2971,11 +2998,32 @@ packages:
       source-map-js: 1.2.1
     dev: false
 
+  /@vue/compiler-sfc@3.5.13:
+    resolution: {integrity: sha512-6VdaljMpD82w6c2749Zhf5T9u5uLBWKnVue6XWxprDobftnletJ8+oel7sexFfM3qIxNmVE7LSFGTpv6obNyaQ==}
+    dependencies:
+      '@babel/parser': 7.25.9
+      '@vue/compiler-core': 3.5.13
+      '@vue/compiler-dom': 3.5.13
+      '@vue/compiler-ssr': 3.5.13
+      '@vue/shared': 3.5.13
+      estree-walker: 2.0.2
+      magic-string: 0.30.12
+      postcss: 8.4.49
+      source-map-js: 1.2.1
+    dev: false
+
   /@vue/compiler-ssr@3.5.12:
     resolution: {integrity: sha512-eLwc7v6bfGBSM7wZOGPmRavSWzNFF6+PdRhE+VFJhNCgHiF8AM7ccoqcv5kBXA2eWUfigD7byekvf/JsOfKvPA==}
     dependencies:
       '@vue/compiler-dom': 3.5.12
       '@vue/shared': 3.5.12
+    dev: false
+
+  /@vue/compiler-ssr@3.5.13:
+    resolution: {integrity: sha512-wMH6vrYHxQl/IybKJagqbquvxpWCuVYpoUJfCqFZwa/JY1GdATAQ+TgVtgrwwMZ0D07QhA99rs/EAAWfvG6KpA==}
+    dependencies:
+      '@vue/compiler-dom': 3.5.13
+      '@vue/shared': 3.5.13
     dev: false
 
   /@vue/devtools-api@6.6.4:
@@ -3022,11 +3070,24 @@ packages:
       '@vue/shared': 3.5.12
     dev: false
 
+  /@vue/reactivity@3.5.13:
+    resolution: {integrity: sha512-NaCwtw8o48B9I6L1zl2p41OHo/2Z4wqYGGIK1Khu5T7yxrn+ATOixn/Udn2m+6kZKB/J7cuT9DbWWhRxqixACg==}
+    dependencies:
+      '@vue/shared': 3.5.13
+    dev: false
+
   /@vue/runtime-core@3.5.12:
     resolution: {integrity: sha512-hrMUYV6tpocr3TL3Ad8DqxOdpDe4zuQY4HPY3X/VRh+L2myQO8MFXPAMarIOSGNu0bFAjh1yBkMPXZBqCk62Uw==}
     dependencies:
       '@vue/reactivity': 3.5.12
       '@vue/shared': 3.5.12
+    dev: false
+
+  /@vue/runtime-core@3.5.13:
+    resolution: {integrity: sha512-Fj4YRQ3Az0WTZw1sFe+QDb0aXCerigEpw418pw1HBUKFtnQHWzwojaukAs2X/c9DQz4MQ4bsXTGlcpGxU/RCIw==}
+    dependencies:
+      '@vue/reactivity': 3.5.13
+      '@vue/shared': 3.5.13
     dev: false
 
   /@vue/runtime-dom@3.5.12:
@@ -3035,6 +3096,15 @@ packages:
       '@vue/reactivity': 3.5.12
       '@vue/runtime-core': 3.5.12
       '@vue/shared': 3.5.12
+      csstype: 3.1.3
+    dev: false
+
+  /@vue/runtime-dom@3.5.13:
+    resolution: {integrity: sha512-dLaj94s93NYLqjLiyFzVs9X6dWhTdAlEAciC3Moq7gzAc13VJUdCnjjRurNM6uTLFATRHexHCTu/Xp3eW6yoog==}
+    dependencies:
+      '@vue/reactivity': 3.5.13
+      '@vue/runtime-core': 3.5.13
+      '@vue/shared': 3.5.13
       csstype: 3.1.3
     dev: false
 
@@ -3048,8 +3118,22 @@ packages:
       vue: 3.5.12
     dev: false
 
+  /@vue/server-renderer@3.5.13(vue@3.5.13):
+    resolution: {integrity: sha512-wAi4IRJV/2SAW3htkTlB+dHeRmpTiVIK1OGLWV1yeStVSebSQQOwGwIq0D3ZIoBj2C2qpgz5+vX9iEBkTdk5YA==}
+    peerDependencies:
+      vue: 3.5.13
+    dependencies:
+      '@vue/compiler-ssr': 3.5.13
+      '@vue/shared': 3.5.13
+      vue: 3.5.13
+    dev: false
+
   /@vue/shared@3.5.12:
     resolution: {integrity: sha512-L2RPSAwUFbgZH20etwrXyVyCBu9OxRSi8T/38QsvnkJyvq2LufW2lDCOzm7t/U9C1mkhJGWYfCuFBCmIuNivrg==}
+    dev: false
+
+  /@vue/shared@3.5.13:
+    resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
     dev: false
 
   /@vuepic/vue-datepicker@10.0.0(vue@3.5.12):
@@ -3071,6 +3155,29 @@ packages:
       upath: 2.0.1
       vue: 3.5.12
       vuetify: 3.7.3(vite-plugin-vuetify@2.0.4)(vue@3.5.12)
+    dev: false
+
+  /@vueuse/core@12.0.0:
+    resolution: {integrity: sha512-C12RukhXiJCbx4MGhjmd/gH52TjJsc3G0E0kQj/kb19H3Nt6n1CA4DRWuTdWWcaFRdlTe0npWDS942mvacvNBw==}
+    dependencies:
+      '@types/web-bluetooth': 0.0.20
+      '@vueuse/metadata': 12.0.0
+      '@vueuse/shared': 12.0.0
+      vue: 3.5.13
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /@vueuse/metadata@12.0.0:
+    resolution: {integrity: sha512-Yzimd1D3sjxTDOlF05HekU5aSGdKjxhuhRFHA7gDWLn57PRbBIh+SF5NmjhJ0WRgF3my7T8LBucyxdFJjIfRJQ==}
+    dev: false
+
+  /@vueuse/shared@12.0.0:
+    resolution: {integrity: sha512-3i6qtcq2PIio5i/vVYidkkcgvmTjCqrf26u+Fd4LhnbBmIT6FN8y6q/GJERp8lfcB9zVEfjdV0Br0443qZuJpw==}
+    dependencies:
+      vue: 3.5.13
+    transitivePeerDependencies:
+      - typescript
     dev: false
 
   /abbrev@1.1.1:
@@ -5958,6 +6065,24 @@ packages:
     hasBin: true
     dev: false
 
+  /nuxt-build-cache@0.1.1(rollup@4.24.0):
+    resolution: {integrity: sha512-jn3iSYR1gdg/eK1HkgERauUu1pJSUzwJ2Oi0qOwDGrYSlO4mycJ62L0cPtpmBR2Ah/iSrMbjLOxfMMWguVEHQA==}
+    dependencies:
+      '@nuxt/kit': 3.13.2(magicast@0.3.5)(rollup@4.24.0)
+      consola: 3.2.3
+      globby: 14.0.2
+      nanotar: 0.1.1
+      nypm: 0.3.12
+      ohash: 1.1.4
+      pkg-types: 1.2.1
+      std-env: 3.7.0
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+      - webpack-sources
+    dev: false
+
   /nuxt-vuefire@1.0.4(@firebase/app-types@0.9.2)(firebase-admin@12.7.0)(firebase-functions@6.1.0)(firebase@10.14.1)(rollup@4.24.0)(vuefire@3.2.0):
     resolution: {integrity: sha512-TomF7Dns77lp2vp223yGLqOMJoJg+RA51SfWXLhXiosiYw2Hro4+hi6ru10OosUaecxC95jIZwte4b5v35JrOQ==}
     peerDependencies:
@@ -6661,6 +6786,15 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  /postcss@8.4.49:
+    resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+    dev: false
 
   /pretty-bytes@6.1.1:
     resolution: {integrity: sha512-mQUvGU6aUFQ+rNvTIAcZuWGRT9a6f6Yrg9bHs4ImKF+HZCEK+plBvnAZYSIQztknZF2qnzNtr6F8s0+IuptdlQ==}
@@ -8021,6 +8155,21 @@ packages:
       '@vue/runtime-dom': 3.5.12
       '@vue/server-renderer': 3.5.12(vue@3.5.12)
       '@vue/shared': 3.5.12
+    dev: false
+
+  /vue@3.5.13:
+    resolution: {integrity: sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ==}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@vue/compiler-dom': 3.5.13
+      '@vue/compiler-sfc': 3.5.13
+      '@vue/runtime-dom': 3.5.13
+      '@vue/server-renderer': 3.5.13(vue@3.5.13)
+      '@vue/shared': 3.5.13
     dev: false
 
   /vuefire@3.2.0(firebase@10.14.1)(vue@3.5.12):

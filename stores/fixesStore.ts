@@ -6,122 +6,127 @@ import {type INotification, mapINotificationToFirebase} from "~/models/notificat
 
 const authApiUrl = "http://localhost:5050/"
 
-export const useFixesStore = defineStore('fixes', () => {
-    const fixes: Ref<IFix[]> = ref([])
+export const useFixesStore = defineStore("fixes", () => {
+        const fixes: Ref<IFix[]> = ref([])
 
-    const sharedStore = useSharedStore()
-    const resetState = () => {
-        fixes.value = []
-    }
+        const sharedStore = useSharedStore()
+        const resetState = () => {
+            fixes.value = []
+        }
 
-    const getWorkshopFixes = async (company: IWorkshop) => {
-        sharedStore.init()
+        const getWorkshopFixes = async (company: IWorkshop) => {
+            sharedStore.init()
 
-        try {
-            // @ts-ignore
-            const {data} = await useFetch(authApiUrl + 'get-workshop-fixes', {
-                query: {companyRef: company.reference},
-                method: 'POST',
-            }) as unknown as IFix[]
+            try {
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'get-workshop-fixes', {
+                    query: {companyRef: company.reference},
+                    method: 'POST',
+                }) as unknown as IFix[]
 
-            // todo: get only active fixes
+                // todo: get only active fixes
 
-            if (data.value) {
-                fixes.value = data.value.map(mapIFix)
-                sharedStore.success()
-            } else {
+                if (data.value) {
+                    fixes.value = data.value.map(mapIFix)
+                    sharedStore.success()
+                } else {
+                    sharedStore.failure()
+                }
+            } catch (e) {
                 sharedStore.failure()
             }
-        } catch (e) {
-            sharedStore.failure()
         }
-    }
 
-    const getUserFixes = async (user: IUser) => {
-        sharedStore.init()
+        const getUserFixes = async (user: IUser) => {
+            sharedStore.init()
 
-        try {
-            // @ts-ignore
-            const {data} = await useFetch(authApiUrl + 'get-user-fixes', {
-                query: {userRef: user.reference},
-                method: 'POST',
-            }) as unknown as IFix[]
+            try {
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'get-user-fixes', {
+                    query: {userRef: user.reference},
+                    method: 'POST',
+                }) as unknown as IFix[]
 
-            // todo: get only active
+                // todo: get only active
 
-            if (data.value) {
-                fixes.value = data.value.map(mapIFix)
-                sharedStore.success()
-            } else {
+                if (data.value) {
+                    fixes.value = data.value.map(mapIFix)
+                    sharedStore.success()
+                } else {
+                    sharedStore.failure()
+                }
+            } catch (e) {
                 sharedStore.failure()
             }
-        } catch (e) {
-            sharedStore.failure()
         }
-    }
 
-    const addFix = async (fix: IFix) => {
-        sharedStore.init()
+        const addFix = async (fix: IFix) => {
+            sharedStore.init()
 
-        try {
-            const queryParam = encodeURIComponent(JSON.stringify(mapIFixToFirebase(fix)))
-            // @ts-ignore
-            const {data} = await useFetch(authApiUrl + 'add-fix', {
-                query: {fix: queryParam},
-                method: 'POST',
-            }) as unknown as IFix
+            try {
+                const queryParam = encodeURIComponent(JSON.stringify(mapIFixToFirebase(fix)))
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'add-fix', {
+                    query: {fix: queryParam},
+                    method: 'POST',
+                }) as unknown as IFix
 
-            if (data.value) {
-                fixes.value = [...fixes.value, mapIFix(data.value)]
-                sharedStore.success()
-            } else {
+                if (data.value) {
+                    fixes.value = [...fixes.value, mapIFix(data.value)]
+                    sharedStore.success()
+                } else {
+                    sharedStore.failure()
+                }
+            } catch (e) {
                 sharedStore.failure()
             }
-        } catch (e) {
-            sharedStore.failure()
         }
-    }
 
-    const addNotification = async (fix: IFix, notification: INotification) => {
-        sharedStore.init()
+        const addNotification = async (fix: IFix, notification: INotification) => {
+            sharedStore.init()
 
-        try {
-            const queryParam = encodeURIComponent(JSON.stringify(mapINotificationToFirebase(notification)))
+            try {
+                const queryParam = encodeURIComponent(JSON.stringify(mapINotificationToFirebase(notification)))
 
-            // @ts-ignore
-            const {data} = await useFetch(authApiUrl + 'add-notification', {
-                query: {
-                    fix: fix.reference,
-                    notification: queryParam,
-                },
-                method: 'POST',
-            }) as unknown as IFix
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'add-notification', {
+                    query: {
+                        fix: fix.reference,
+                        notification: queryParam,
+                    },
+                    method: 'POST',
+                }) as unknown as IFix
 
-            if (data.value) {
-                const newFix = mapIFix(data.value)
-                fixes.value = fixes.value.map(tempFix => tempFix.reference === newFix.reference ? newFix : tempFix);
-                sharedStore.success()
-            } else {
+                if (data.value) {
+                    const newFix = mapIFix(data.value)
+                    fixes.value = fixes.value.map(tempFix => tempFix.reference === newFix.reference ? newFix : tempFix);
+                    sharedStore.success()
+                } else {
+                    sharedStore.failure()
+                }
+
+            } catch (e) {
                 sharedStore.failure()
             }
+        }
 
-        } catch (e) {
-            sharedStore.failure()
+        const getUserHistoryFixes = async (user: IUser) => {
+            //     todo: write get historical user fixes
+        }
+
+
+        return {
+            fixes,
+            getUserFixes,
+            addFix,
+            resetState,
+            getWorkshopFixes,
+            addNotification,
+            getUserHistoryFixes,
+        }
+    }, {
+        persist: {
+            pick: ['fixes'],
         }
     }
-
-    const getUserHistoryFixes = async (user: IUser) => {
-        //     todo: write get historical user fixes
-    }
-
-
-    return {
-        fixes,
-        getUserFixes,
-        addFix,
-        resetState,
-        getWorkshopFixes,
-        addNotification,
-        getUserHistoryFixes,
-    }
-}, {persist: true})
+)

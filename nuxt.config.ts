@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     modules: [
         '@nuxtjs/i18n',
         '@pinia/nuxt',
-        '@pinia-plugin-persistedstate/nuxt',
+        'pinia-plugin-persistedstate/nuxt',
         (_options, nuxt) => {
             nuxt.hooks.hook('vite:extendConfig', (config) => {
                 // @ts-expect-error
@@ -18,7 +18,9 @@ export default defineNuxtConfig({
             })
         },
     ],
-
+    piniaPluginPersistedstate: {
+        storage: 'sessionStorage',
+    },
     vite: {
         plugins: [
             wasm()
@@ -62,4 +64,5 @@ export default defineNuxtConfig({
         enabled: true
     },
     compatibilityDate: '2024-08-18',
+    // ssr: false,
 })

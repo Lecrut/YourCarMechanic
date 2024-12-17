@@ -4,7 +4,7 @@ const {onRequest} = require("firebase-functions/v1/https");
 
 exports.getUserFixes = onRequest(async (req, res) => {
     const userRef = req.query.userRef
-    console.log(new Date(), userRef);
+
     const fixesRef = db.collection('fixes');
     try {
         fixesRef.where("userRef", "==", userRef).get().then((snapshot) => {

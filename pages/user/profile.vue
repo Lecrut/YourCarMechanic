@@ -60,7 +60,7 @@ onMounted(async () => {
               {{ t('userProfile.title') }}
             </div>
 
-            <form class="w-75 my-2">
+            <form v-if="user?.profile" class="w-75 my-2">
               <div>
                 <v-text-field
                     :model-value="user?.profile?.name"
@@ -89,6 +89,14 @@ onMounted(async () => {
                 />
               </div>
             </form>
+
+            <div v-else align="center" class="mt-5">
+              <v-progress-circular
+                  :size="50"
+                  color="primary"
+                  indeterminate
+              />
+            </div>
           </div>
         </v-col>
       </v-row>
