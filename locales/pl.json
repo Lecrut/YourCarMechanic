@@ -201,7 +201,15 @@
   "notifications": {
     "title": "Aktywne naprawy",
     "openDetails": "Otwórz",
-    "setCurrantDate": "Ustaw aktualną datę"
+    "setCurrantDate": "Ustaw aktualną datę",
+    "expense": "Wydatek",
+    "addStatus": "Dodaj status",
+    "comments": {
+      "getCar": "Samochod przyjety przez warsztat.",
+      "addExpense": "Ddano koszt w wysokości: ",
+      "addGiveBackTime": "Dodano przewidywany termin odbioru samochodu na: ",
+      "giveBackCar": "Wydano samochód."
+    }
   },
   "history": {
     "title": "Historia napraw"

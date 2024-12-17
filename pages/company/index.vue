@@ -20,20 +20,26 @@ onMounted(async () => {
 
 <template>
   <!--  todo: add filters and for instance search in previous-->
-  <v-card-text>
-    <v-row justify="center">
-      <v-col
-          v-for="(item) in fixes"
-          cols="12"
-          lg="4"
-          md="6"
-          sm="12"
-      >
-        <repair-card
-            :is-company="true"
-            :fix="item"
-        />
-      </v-col>
-    </v-row>
-  </v-card-text>
+  <v-container class="h-auto my-15">
+    <v-card
+        class="pa-5"
+    >
+      <v-card-text>
+        <v-row justify="center">
+          <v-col
+              v-for="(item) in fixes"
+              cols="12"
+              lg="4"
+              md="6"
+              sm="12"
+          >
+            <repair-card
+                :is-company="true"
+                :fix="item"
+            />
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>

@@ -6,6 +6,7 @@ export interface INotification {
     date: Date,
 }
 
+// todo: add description
 export function mapINotification(data: INotification): INotification {
     return {
         sendDate: new Date(data.sendDate),

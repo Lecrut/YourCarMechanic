@@ -13,6 +13,12 @@ const {fix} = toRefs(props)
 
 const {t} = useI18n()
 
+const fixStatus = computed(() => {
+  const howManyNotifications = fix.value.notifications.length
+  const isEnded = fix.value.notifications.some(x => x.notificationType === 'giveBackCar')
+  return isEnded ? 100 : howManyNotifications > 1 ? 60 : howManyNotifications === 0 ? 10 : 30
+})
+
 const showDialog = ref(false)
 </script>
 
@@ -64,6 +70,7 @@ const showDialog = ref(false)
       </div>
 
     </v-card-text>
+    <v-progress-linear v-model="fixStatus" color="primary"/>
   </v-card>
 
   <repair-details

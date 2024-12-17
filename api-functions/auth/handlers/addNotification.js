@@ -23,7 +23,7 @@ exports.addNotification = onRequest(async (req, res, next) => {
 
         const isFixExists = await db.doc(fixRef).get();
         if (isFixExists) {
-            db.doc(fixRef).update({
+            await db.doc(fixRef).update({
                 notifications: FieldValue.arrayUnion({
                     sendDate: sendDate,
                     notificationType: notificationType,
@@ -39,11 +39,11 @@ exports.addNotification = onRequest(async (req, res, next) => {
                 reference: data.ref.path,
                 date: data.data().date.toDate().toISOString(),
                 bookDate: data.data().bookDate.toDate().toISOString(),
-                notifications: data.data().notifications.map(notification => ({
-                    ...notification,
-                    date: notification.date.toDate().toISOString(),
-                    sendDate: notification.sendDate.toDate().toISOString(),
-                }))
+                // notifications: data.data().notifications.map(notification => ({
+                //     ...notification,
+                //     date: notification.date.toDate().toISOString(),
+                //     sendDate: notification.sendDate.toDate().toISOString(),
+                // }))
             });
 
         } else {

@@ -201,7 +201,15 @@
   "notifications": {
     "title": "Active fixes",
     "openDetails": "Open details",
-    "setCurrantDate": "Set current date"
+    "setCurrantDate": "Set current date",
+    "expense": "Expense",
+    "addStatus": "Add status",
+    "comments": {
+      "getCar": "Workshop received car",
+      "addExpense": "Expense added: ",
+      "addGiveBackTime": "Give back time added: ",
+      "giveBackCar": "Car given back."
+    }
   },
   "history": {
     "title": "Fixes history"

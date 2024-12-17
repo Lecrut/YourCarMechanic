@@ -5,6 +5,9 @@ definePageMeta({
 
 const {t} = useI18n()
 
+const sharedStore = useSharedStore()
+const {loading} = storeToRefs(sharedStore)
+
 const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
 
@@ -28,9 +31,9 @@ onMounted(async () => {
         </div>
       </v-card-title>
       <v-card-text>
-        <v-row justify="center">
-          <!--              todo: sort by fixes date-->
-
+        <v-row
+            justify="center"
+        >
           <v-col
               v-for="(item) in fixes"
               cols="12"
@@ -44,6 +47,14 @@ onMounted(async () => {
             />
           </v-col>
         </v-row>
+
+        <div v-if="loading" align="center" class="mt-5">
+          <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+          />
+        </div>
       </v-card-text>
     </v-card>
   </v-container>

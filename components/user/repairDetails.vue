@@ -27,7 +27,7 @@ const workshopsStore = useWorkshopStore()
 const fixesStore = useFixesStore()
 
 const sharedStore = useSharedStore()
-const {error} = storeToRefs(sharedStore)
+const {error, loading} = storeToRefs(sharedStore)
 
 const {form, valid, isValid} = formValidation()
 
@@ -36,9 +36,14 @@ const isAddStatus = ref(false)
 const addNotificationStatus = ref(null)
 const notificationDate = ref(new Date)
 const notificationIsCurrentDate = ref(false)
+const notificationCost = ref(0)
 
 const notificationsType = computed(() => {
   return fix.value.notifications.length ? duringNotification(t) : startNotification(t)
+})
+
+const isFixEnd = computed(() => {
+  return fix.value.notifications.some(x => x.notificationType === 'giveBackCar')
 })
 
 function resetAddStatus() {
@@ -46,6 +51,7 @@ function resetAddStatus() {
   addNotificationStatus.value = null
   notificationDate.value = new Date()
   notificationIsCurrentDate.value = false
+  notificationCost.value = 0
 }
 
 async function addNotification() {
@@ -56,7 +62,7 @@ async function addNotification() {
             {
               sendDate: new Date(),
               notificationType: addNotificationStatus.value || '',
-              cost: null,
+              cost: addNotificationStatus.value === 'addExpense' ? notificationCost.value : null,
               date: notificationIsCurrentDate.value ? new Date() : notificationDate.value
             }
         )
@@ -166,21 +172,67 @@ watch(isDialogShown, async (newValue) => {
         </v-row>
         <v-divider/>
 
-        <div align="center" class="text-h5 my-4">
+        <div
+            v-if="fix.notifications.length"
+            align="center"
+            class="text-h5 my-4"
+        >
           {{ t('fixStatues.title') }}
         </div>
 
-        <!--      todo:  https://vuetifyjs.com/en/components/timelines/#icon-dots-->
+        <v-timeline
+            align="start"
+            side="end"
+        >
+          <v-timeline-item
+              v-for="(item) in fix.notifications"
+              dot-color="primary"
+              size="small"
+          >
+            <template v-slot:opposite>
+               <span>
+                {{ formatDateToString(item.date) }}
+              </span>
+            </template>
 
+            <div>
+              <div class="text-h6">
+                {{ notifications(t).find(x => item.notificationType === x.value).title }}
+              </div>
+              <p>
+                {{
+                  item.notificationType === 'getCar'
+                      ? t('notifications.comments.getCar')
+                      : item.notificationType === 'addExpense'
+                          ? t('notifications.comments.addExpense') + item.cost + "PLN"
+                          : item.notificationType === 'addGiveBackTime'
+                              ? t('notifications.comments.addGiveBackTime') + formatDateToString(item.date)
+                              : item.notificationType === 'giveBackCar'
+                                  ? t('notifications.comments.giveBackCar')
+                                  : ''
+                }}
+              </p>
 
-        <div align="center">
+            </div>
+          </v-timeline-item>
+
+        </v-timeline>
+        <div
+            v-if="isCompany && !isFixEnd"
+            align="center"
+            class="mt-5"
+        >
           <v-btn @click="isAddStatus=true">
-            Dodaj status
+            {{ t('notifications.addStatus') }}
           </v-btn>
         </div>
 
-        <div v-if="isAddStatus">
+        <div
+            v-if="isAddStatus"
+            class="mt-4"
+        >
           <v-form
+              v-if="!loading"
               ref="form"
               @submit.prevent="addNotification"
               v-model="valid"
@@ -195,6 +247,24 @@ watch(isDialogShown, async (newValue) => {
                     :rules="[requiredRule(t), requiredArrayRule(t)]"
                 />
               </v-col>
+
+              <v-col
+                  v-if="addNotificationStatus === 'addExpense'"
+                  cols="12"
+                  md="6"
+                  sm="12"
+              >
+                <v-text-field
+                    v-model.number="notificationCost"
+                    min="1"
+                    type="number"
+                    :label="t('notifications.expense')"
+                    :rules="[requiredRule(t)]"
+                    suffix="PLN"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="12" md="6" sm="12">
                 <VueDatePicker
                     class="my-3"
@@ -215,6 +285,7 @@ watch(isDialogShown, async (newValue) => {
                     :label="t('notifications.setCurrantDate')"
                 />
               </v-col>
+
             </v-row>
 
             <v-row class="w-100 justify-end my-2">
@@ -235,6 +306,15 @@ watch(isDialogShown, async (newValue) => {
               </v-btn>
             </v-row>
           </v-form>
+
+          <div v-if="loading" align="center" class="mt-5">
+            <v-progress-circular
+                :size="50"
+                color="primary"
+                indeterminate
+            />
+
+          </div>
         </div>
       </v-card-text>
       <v-card-actions>
