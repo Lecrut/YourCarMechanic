@@ -1,19 +1,26 @@
 <script setup lang="ts">
 import {useTheme} from 'vuetify'
+import {useLocalStorage} from "@vueuse/core";
 
-const {t, locale} = useI18n()
+const {t, setLocale} = useI18n()
 
 const theme = useTheme()
 
+const currentThemeStore = useLocalStorage('current-theme', 'dark')
+const currentLangStore = useLocalStorage('current-language', 'pl')
+
 function toggleTheme() {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  currentThemeStore.value = theme.global.current.value.dark ? 'dark' : 'light'
 }
 
 function changeLocale(lang: string) {
-  locale.value = lang
+  setLocale(lang)
+  if (currentLangStore.value)
+    currentLangStore.value = lang
+  else
+    localStorage.setItem('current-language', lang)
 }
-
-// todo: save in app
 </script>
 
 <template>
