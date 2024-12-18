@@ -126,7 +126,7 @@ export const useAuthStore = defineStore("auth", () => {
             sharedStore.init()
             try {
                 // @ts-ignore
-                const {data} = await useFetch(authApiUrl + 'sign-up', {
+                const {data} = await useFetch(authApiUrl + 'update-user', {
                     query: {...userData, reference: user.value?.reference || ''},
                     method: 'POST',
                 }) as unknown as IUser

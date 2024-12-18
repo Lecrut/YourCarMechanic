@@ -12,7 +12,7 @@ exports.updateProfile = onRequest(async (req, res, next) => {
         const userDocument = await db.doc(userRef).get();
 
         if (userDocument.exists) {
-            db.doc(userRef).set({
+            await db.doc(userRef).set({
                 ...userDocument.data(),
                 role: 'user',
                 profile: {

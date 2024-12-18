@@ -113,6 +113,7 @@
     "addCar": "Dodaj samochód",
     "addCarSuccess": "Samochód dodany pomyślnie",
     "updateCarSuccess": "Dane samochodu zmienione",
+    "updateProfileSuccess": "Profil zaaktualizowany pomyślnie",
     "vinNotDefined": "Nie podano numeru Vin",
     "form": {
       "title": "Dodaj swój samochód",

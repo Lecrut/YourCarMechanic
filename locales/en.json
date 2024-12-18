@@ -113,6 +113,7 @@
     "addCar": "Add car",
     "addCarSuccess": "Car added successfully",
     "updateCarSuccess": "Car data changed",
+    "updateProfileSuccess": "Profile updated",
     "vinNotDefined": "Number Vin not given",
     "form": {
       "title": "Add your car",

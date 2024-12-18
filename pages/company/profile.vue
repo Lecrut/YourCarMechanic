@@ -190,6 +190,7 @@ watch(company, (newValue) => {
             ></v-select>
           </v-col>
         </v-row>
+        <!--todo: maybe later edit company profile -->
 
         <!--        <v-row-->
         <!--            v-if="!isEditing"-->
