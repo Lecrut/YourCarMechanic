@@ -134,6 +134,12 @@
     "email": "Email address",
     "services": "Services performed"
   },
+  "company": {
+    "title": "Repair list",
+    "activeFixes": "Active fixes",
+    "toBeAccepted": "Cars to be accepted",
+    "services": "Services"
+  },
   "userBookFix": {
     "stepper": {
       "chooseRepair": "Service",

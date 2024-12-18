@@ -191,39 +191,39 @@ watch(company, (newValue) => {
           </v-col>
         </v-row>
 
-        <v-row
-            v-if="!isEditing"
-            justify="center"
-            class="mb-5">
-          <v-btn
-              prepend-icon="mdi-pencil"
-              @click="isEditing=true"
-          >
-            {{ t('universal.edit') }}
-          </v-btn>
-        </v-row>
+        <!--        <v-row-->
+        <!--            v-if="!isEditing"-->
+        <!--            justify="center"-->
+        <!--            class="mb-5">-->
+        <!--          <v-btn-->
+        <!--              prepend-icon="mdi-pencil"-->
+        <!--              @click="isEditing=true"-->
+        <!--          >-->
+        <!--            {{ t('universal.edit') }}-->
+        <!--          </v-btn>-->
+        <!--        </v-row>-->
 
-        <v-row
-            v-else
-            justify="center"
-            class="mb-5"
-        >
-          <v-btn
-              class="mx-2"
-              color="default"
-              variant="outlined"
-              @click="isEditing=false"
-          >
-            {{ t('universal.cancel') }}
-          </v-btn>
+        <!--        <v-row-->
+        <!--            v-else-->
+        <!--            justify="center"-->
+        <!--            class="mb-5"-->
+        <!--        >-->
+        <!--          <v-btn-->
+        <!--              class="mx-2"-->
+        <!--              color="default"-->
+        <!--              variant="outlined"-->
+        <!--              @click="isEditing=false"-->
+        <!--          >-->
+        <!--            {{ t('universal.cancel') }}-->
+        <!--          </v-btn>-->
 
-          <v-btn
-              class="mx-2"
-              @click="saveForm"
-          >
-            {{ t('universal.save') }}
-          </v-btn>
-        </v-row>
+        <!--          <v-btn-->
+        <!--              class="mx-2"-->
+        <!--              @click="saveForm"-->
+        <!--          >-->
+        <!--            {{ t('universal.save') }}-->
+        <!--          </v-btn>-->
+        <!--        </v-row>-->
       </v-form>
     </v-sheet>
   </v-container>

@@ -134,6 +134,12 @@
     "email": "Adres e-mail",
     "services": "Wykonywane usługi"
   },
+  "company": {
+    "title": "Lista napraw",
+    "activeFixes": "Aktywne naprawy",
+    "toBeAccepted": "Samochody do przyjęcia",
+    "services": "Usługi"
+  },
   "userBookFix": {
     "stepper": {
       "chooseRepair": "Usługa",
