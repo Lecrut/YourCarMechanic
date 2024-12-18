@@ -12,6 +12,7 @@ import formValidation from "~/helpers/formValidation";
 import {requiredArrayRule, requiredRule} from "~/helpers/rules";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import {useTheme} from "vuetify";
 
 const isDialogShown = defineModel<boolean>()
 
@@ -23,6 +24,8 @@ const props = defineProps<{
 const {fix, isCompany} = toRefs(props)
 
 const {t} = useI18n()
+const theme = useTheme()
+
 const workshopsStore = useWorkshopStore()
 const fixesStore = useFixesStore()
 
@@ -45,6 +48,8 @@ const notificationsType = computed(() => {
 const isFixEnd = computed(() => {
   return fix.value.notifications.some(x => x.notificationType === 'giveBackCar')
 })
+
+const isDark = computed(() => theme.global.name.value === 'dark')
 
 function resetAddStatus() {
   isAddStatus.value = false
@@ -269,14 +274,13 @@ watch(isDialogShown, async (newValue) => {
                 <VueDatePicker
                     class="my-3"
                     v-model="notificationDate"
-                    :dark="true"
+                    :dark="isDark"
                     :time-picker-inline="true"
                     :min-date="fix.bookDate"
                     :auto-apply="true"
                     :disabled="notificationIsCurrentDate"
                     auto-position="top"
                 />
-                <!--              todo: format datepicker: theme-->
 
               </v-col>
               <v-col cols="12" md="6" sm="12">
