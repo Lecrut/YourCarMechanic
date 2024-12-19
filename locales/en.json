@@ -211,6 +211,8 @@
     "setCurrantDate": "Set current date",
     "expense": "Expense",
     "addStatus": "Add status",
+    "addDescription": "Add description",
+    "description": "Description",
     "comments": {
       "getCar": "Workshop received car",
       "addExpense": "Expense added: ",

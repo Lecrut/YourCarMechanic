@@ -18,6 +18,7 @@ exports.addNotification = onRequest(async (req, res, next) => {
             sendDate,
             notificationType,
             cost,
+            description,
             date,
         } = notificationData;
 
@@ -31,6 +32,7 @@ exports.addNotification = onRequest(async (req, res, next) => {
                     sendDate: sendDate,
                     notificationType: notificationType,
                     cost: cost,
+                    description: description,
                     date: date,
                 })
             })

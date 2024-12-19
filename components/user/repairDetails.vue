@@ -40,6 +40,8 @@ const addNotificationStatus = ref(null)
 const notificationDate = ref(new Date)
 const notificationIsCurrentDate = ref(false)
 const notificationCost = ref(0)
+const notificationDescription = ref('')
+const isNotificationDescription = ref(false)
 
 const notificationsType = computed(() => {
   return fix.value.notifications.length ? duringNotification(t) : startNotification(t)
@@ -57,6 +59,8 @@ function resetAddStatus() {
   notificationDate.value = new Date()
   notificationIsCurrentDate.value = false
   notificationCost.value = 0
+  notificationDescription.value = ''
+  isNotificationDescription.value = false
 }
 
 async function addNotification() {
@@ -68,6 +72,7 @@ async function addNotification() {
               sendDate: new Date(),
               notificationType: addNotificationStatus.value || '',
               cost: addNotificationStatus.value === 'addExpense' ? notificationCost.value : null,
+              description: notificationDescription.value,
               date: notificationIsCurrentDate.value ? new Date() : notificationDate.value
             }
         )
@@ -218,6 +223,10 @@ watch(isDialogShown, async (newValue) => {
                 }}
               </p>
 
+              <span>
+                {{ item.description }}
+              </span>
+
             </div>
           </v-timeline-item>
 
@@ -290,6 +299,27 @@ watch(isDialogShown, async (newValue) => {
                 />
               </v-col>
 
+            </v-row>
+
+            <v-row>
+              <v-col cols="12" md="4" sm="12">
+                <v-checkbox
+                    v-model="isNotificationDescription"
+                    color="primary"
+                    :label="t('notifications.addDescription')"
+                />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                    v-if="isNotificationDescription"
+                    v-model="notificationDescription"
+                    color="primary"
+                    :label="t('notifications.description')"
+                />
+              </v-col>
             </v-row>
 
             <v-row class="w-100 justify-end my-2">

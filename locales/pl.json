@@ -211,6 +211,8 @@
     "setCurrantDate": "Ustaw aktualną datę",
     "expense": "Wydatek",
     "addStatus": "Dodaj status",
+    "addDescription": "Dodaj opis",
+    "description": "Opis",
     "comments": {
       "getCar": "Samochod przyjety przez warsztat.",
       "addExpense": "Ddano koszt w wysokości: ",

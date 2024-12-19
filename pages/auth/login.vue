@@ -34,7 +34,7 @@ async function logIn() {
 
 onMounted(() => {
   if (user.value) {
-    user.value.role === "company" && company.value
+    user.value.role === "workshop" && company.value
         ? navigateTo('/company')
         : navigateTo('/user')
   }
