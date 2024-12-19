@@ -7,6 +7,7 @@ import type {Ref} from "vue";
 
 definePageMeta({
   layout: 'company',
+  middleware: ['company'],
 })
 
 const {t} = useI18n()

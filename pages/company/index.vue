@@ -3,6 +3,7 @@ import {services} from "~/composable/services";
 
 definePageMeta({
   layout: 'company',
+  middleware: ['company'],
 })
 
 const {t} = useI18n()
