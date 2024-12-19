@@ -7,6 +7,7 @@ import {type IUserProfile, mapIUserProfile} from "~/models/userProfile";
 
 definePageMeta({
   layout: 'user',
+  middleware: ['auth'],
 })
 const {t} = useI18n()
 

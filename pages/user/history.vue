@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'user',
+  middleware: ['auth'],
 })
 
 const {t} = useI18n()
