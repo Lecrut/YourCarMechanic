@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {services} from "~/composable/services";
 import formValidation from "~/helpers/formValidation";
-import {lengthRuleShort, phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
+import {phoneRule, requiredArrayRule, requiredRule} from "~/helpers/rules";
 import {type IWorkshop, mapIWorkshop} from "~/models/workshop";
 import type {Ref} from "vue";
 
