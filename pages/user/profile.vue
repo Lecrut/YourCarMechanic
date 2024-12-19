@@ -142,6 +142,7 @@ onMounted(async () => {
                     :label="t('userProfile.email')"
                     placeholder="example@mail.com"
                     type="email"
+                    :disabled="isEditing"
                     readonly
                 />
               </div>

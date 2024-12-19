@@ -119,6 +119,7 @@ watch(company, (newValue) => {
                 v-model="companyNip"
                 :label="t('companyProfile.nip')"
                 readonly
+                :disabled="isEditing"
             />
           </v-col>
 
@@ -128,6 +129,7 @@ watch(company, (newValue) => {
                 :label="t('companyProfile.email')"
                 readonly
                 placeholder="example@mail.com"
+                :disabled="isEditing"
             />
           </v-col>
 
