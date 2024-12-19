@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import formValidation from "~/helpers/formValidation";
-import {emailRule, requiredRule} from "~/helpers/rules";
+import {emailRule, passwordRule, requiredRule} from "~/helpers/rules";
 import {storeToRefs} from "pinia";
 
 const {t} = useI18n()
@@ -82,7 +82,7 @@ onMounted(() => {
                   :type="showPassword ? 'text' : 'password'"
                   @click:append-inner="showPassword = !showPassword"
                   @keyup.enter="logIn"
-                  :rules="[requiredRule(t)]"
+                  :rules="[requiredRule(t), passwordRule(t)]"
                   :disabled="loading"
               />
 

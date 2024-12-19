@@ -36,6 +36,7 @@ const carModels = computed(() => selectedCarBrand.value ? carsFromJson.value.fin
 function resetState() {
   selectedCarBrand.value = null
   selectedCarModel.value = null
+  iKnowVin.value = false
   carYear.value = null
   carVin.value = null
 }
