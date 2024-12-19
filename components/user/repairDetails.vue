@@ -242,7 +242,6 @@ watch(isDialogShown, async (newValue) => {
               @submit.prevent="addNotification"
               v-model="valid"
           >
-            <!--          todo: add rules to check-->
             <v-row>
               <v-col cols="12" md="6" sm="12">
                 <v-select

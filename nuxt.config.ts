@@ -3,6 +3,15 @@ import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 import wasm from 'vite-plugin-wasm';
 
 export default defineNuxtConfig({
+    app: {
+        head: {
+            title: 'Twój mechanik',
+            meta: [
+                {name: 'description', content: 'Napraw swój samochód!'},
+            ],
+        },
+    },
+
     build: {
         transpile: ['vuetify', '@vuepic/vue-datepicker'],
     },
