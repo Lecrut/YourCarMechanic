@@ -185,13 +185,24 @@ export const useAuthStore = defineStore("auth", () => {
             }
         }
 
-        const updateCompany = async (data: IWorkshop) => {
-            // todo: write and check update company
+        const updateCompany = async (workshop: IWorkshop) => {
             sharedStore.init()
 
             try {
+                const queryParam = encodeURIComponent(JSON.stringify(mapIWorkshop(workshop)))
 
-                sharedStore.success()
+                // @ts-ignore
+                const {data} = await useFetch(authApiUrl + 'update-company', {
+                    query: {company: queryParam},
+                    method: 'POST',
+                }) as unknown as IWorkshop
+
+                if (data.value) {
+                    setCompany(data.value)
+                    sharedStore.success()
+                } else
+                    sharedStore.failure()
+
             } catch (e) {
                 sharedStore.failure()
             }

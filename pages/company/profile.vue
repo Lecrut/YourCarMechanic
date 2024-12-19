@@ -23,6 +23,7 @@ const citiesJsonStore = useCitiesJsonStore()
 const {citiesFromJson} = storeToRefs(citiesJsonStore)
 
 const isEditing = ref(false)
+const showSuccessUpdateProfile = ref(false)
 
 const companyName = ref('')
 const companyNip = ref('')
@@ -46,7 +47,11 @@ async function saveForm() {
       reference: company.value?.reference || "",
       services: companyServices.value || []
     }))
-    isEditing.value = false
+    if (!error.value) {
+      showSuccessUpdateProfile.value = true
+      isEditing.value = false
+    }
+
   }
 }
 
@@ -113,8 +118,7 @@ watch(company, (newValue) => {
             <v-text-field
                 v-model="companyNip"
                 :label="t('companyProfile.nip')"
-                :readonly="!isEditing"
-                :rules="[requiredRule(t), lengthRuleShort(t)]"
+                readonly
             />
           </v-col>
 
@@ -191,41 +195,40 @@ watch(company, (newValue) => {
             ></v-select>
           </v-col>
         </v-row>
-        <!--todo: maybe later edit company profile -->
 
-        <!--        <v-row-->
-        <!--            v-if="!isEditing"-->
-        <!--            justify="center"-->
-        <!--            class="mb-5">-->
-        <!--          <v-btn-->
-        <!--              prepend-icon="mdi-pencil"-->
-        <!--              @click="isEditing=true"-->
-        <!--          >-->
-        <!--            {{ t('universal.edit') }}-->
-        <!--          </v-btn>-->
-        <!--        </v-row>-->
+        <v-row
+            v-if="!isEditing"
+            justify="center"
+            class="mb-5">
+          <v-btn
+              prepend-icon="mdi-pencil"
+              @click="isEditing=true"
+          >
+            {{ t('universal.edit') }}
+          </v-btn>
+        </v-row>
 
-        <!--        <v-row-->
-        <!--            v-else-->
-        <!--            justify="center"-->
-        <!--            class="mb-5"-->
-        <!--        >-->
-        <!--          <v-btn-->
-        <!--              class="mx-2"-->
-        <!--              color="default"-->
-        <!--              variant="outlined"-->
-        <!--              @click="isEditing=false"-->
-        <!--          >-->
-        <!--            {{ t('universal.cancel') }}-->
-        <!--          </v-btn>-->
+        <v-row
+            v-else
+            justify="center"
+            class="mb-5"
+        >
+          <v-btn
+              class="mx-2"
+              color="default"
+              variant="outlined"
+              @click="isEditing=false"
+          >
+            {{ t('universal.cancel') }}
+          </v-btn>
 
-        <!--          <v-btn-->
-        <!--              class="mx-2"-->
-        <!--              @click="saveForm"-->
-        <!--          >-->
-        <!--            {{ t('universal.save') }}-->
-        <!--          </v-btn>-->
-        <!--        </v-row>-->
+          <v-btn
+              class="mx-2"
+              @click="saveForm"
+          >
+            {{ t('universal.save') }}
+          </v-btn>
+        </v-row>
       </v-form>
     </v-sheet>
   </v-container>
@@ -234,6 +237,12 @@ watch(company, (newValue) => {
       v-model="error"
       :text="t('universal.error')"
       :is-error="true"
+  />
+
+  <my-snackbar
+      v-model="showSuccessUpdateProfile"
+      :is-error="false"
+      :text="t('userProfile.updateProfileSuccess')"
   />
 
 </template>

@@ -21,6 +21,7 @@ const {isFixBooked} = require("./handlers/isFixBooked");
 const {getWorkshop} = require("./handlers/getWorkshop");
 const {getUserClosedFixes} = require("./handlers/getUserClosedFixes");
 const {getWorkshopClosedFixes} = require("./handlers/getWorkshopClosedFixes");
+const {updateCompany} = require("./handlers/updateCompany");
 
 const corsOptions = {
     origin: '*',
@@ -35,6 +36,7 @@ app.post('/sign-up', signUp);
 app.post('/log-in', logIn);
 app.post('/add-company', addCompany);
 app.post('/update-user', updateProfile);
+app.post('/update-company', updateCompany);
 app.post('/update-owner', updateOwner);
 app.post('/reset-password', resetPassword);
 app.post('/add-car', addCar);
