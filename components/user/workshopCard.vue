@@ -62,7 +62,7 @@ const getCityName = computed(() => citiesFromJsonStore.getCityName(workshop.valu
         <!--            color="primary"-->
         <!--            class="mx-2"-->
         <!--        ></v-icon>-->
-        <v-chip-group>
+        <v-chip-group column>
           <v-chip
               v-for="(item) in workshop.services"
               density="comfortable"
