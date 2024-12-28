@@ -1,4 +1,4 @@
-const {db} = require("../../util/admin");
+const {db} = require("../util/admin");
 const {Timestamp} = require("firebase-admin/firestore");
 
 const addCar = async (req, res, next) => {

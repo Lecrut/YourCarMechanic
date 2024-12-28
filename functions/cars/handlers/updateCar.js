@@ -1,4 +1,4 @@
-const {db} = require("../../util/admin");
+const {db} = require("../util/admin");
 
 const updateCar = async (req, res, next) => {
     const car = req.query.car

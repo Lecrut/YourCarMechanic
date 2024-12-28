@@ -1,5 +1,5 @@
 const {sendPasswordResetEmail} = require("firebase/auth");
-const {auth} = require("../../util/firebase");
+const {auth} = require("../util/firebase");
 
 
 const resetPassword = async (req, res) => {

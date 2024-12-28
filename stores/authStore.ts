@@ -4,9 +4,7 @@ import type {Ref} from "vue";
 import type {IUserProfile} from "~/models/userProfile";
 import {type IWorkshop, mapIWorkshop, mapIWorkshopToFirebase} from "~/models/workshop";
 
-const authApiUrl = "http://localhost:5050/"
-// const authApiUrl = "https://auth-kjrdjk5dua-uc.a.run.app/"
-
+const authApiUrl = "http://localhost:3005/"
 
 export const useAuthStore = defineStore("auth", () => {
         const user: Ref<IUser | null> = ref(null)

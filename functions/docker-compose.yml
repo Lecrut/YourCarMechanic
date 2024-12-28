@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  auth:
+    image: node:20
+    working_dir: /app
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./auth:/app
+    command: [ "sh", "-c", "npm install && node index.js" ]
+    environment:
+      - NODE_ENV=production
+
+  cars:
+    image: node:20
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./cars:/app
+    command: [ "sh", "-c", "npm install && node index.js" ]
+    environment:
+      - NODE_ENV=production
+
+  fixes:
+    image: node:20
+    working_dir: /app
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./fixes:/app
+    command: [ "sh", "-c", "npm install && node index.js" ]
+    environment:
+      - NODE_ENV=production
+
+  workshops:
+    image: node:20
+    working_dir: /app
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./workshops:/app
+    command: [ "sh", "-c", "npm install && node index.js" ]
+    environment:
+      - NODE_ENV=production
+

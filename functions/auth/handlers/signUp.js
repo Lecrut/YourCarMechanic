@@ -1,5 +1,5 @@
-const {db} = require("../../util/admin");
-const {auth} = require("../../util/firebase");
+const {db} = require("../util/admin");
+const {auth} = require("../util/firebase");
 const {Timestamp} = require("firebase-admin/firestore")
 const {createUserWithEmailAndPassword, sendEmailVerification} = require("firebase/auth");
 

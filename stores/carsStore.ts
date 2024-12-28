@@ -2,7 +2,7 @@ import {type ICar, mapICar, mapICarToFirebase} from "~/models/car";
 import type {Ref} from "vue";
 import type {IUser} from "~/models/user";
 
-const authApiUrl = "http://localhost:5050/"
+const authApiUrl = "http://localhost:3001/"
 
 export const useCarsStore = defineStore("cars", () => {
         const cars: Ref<ICar[]> = ref([])

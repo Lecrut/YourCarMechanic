@@ -3,7 +3,7 @@ import type {Ref} from "vue";
 import type {IFreeHours, IWorkshopHours} from "~/models/workshopFreeHours";
 import {convertToFutureDate} from "~/helpers/time";
 
-const apiUrl = "http://localhost:5050/"
+const apiUrl = "http://localhost:3003/"
 
 interface IWorkshopsInCity {
     city: string

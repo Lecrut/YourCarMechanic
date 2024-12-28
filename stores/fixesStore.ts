@@ -4,7 +4,7 @@ import type {IUser} from "~/models/user";
 import type {IWorkshop} from "~/models/workshop";
 import {type INotification, mapINotificationToFirebase} from "~/models/notification";
 
-const authApiUrl = "http://localhost:5050/"
+const authApiUrl = "http://localhost:3002/"
 
 export const useFixesStore = defineStore("fixes", () => {
         const fixes: Ref<IFix[]> = ref([])

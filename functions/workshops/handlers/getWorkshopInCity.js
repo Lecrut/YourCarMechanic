@@ -1,17 +1,18 @@
-const {db} = require("../../util/admin");
+const {db} = require("../util/admin");
 
-const getUserCars = async (req, res) => {
-    const userRef = req.query.userRef
 
-    const carsRef = db.collection('cars');
+const getWorkshopInCity = async (req, res) => {
+    const city = req.query.city
+
+    const fixesRef = db.collection('companies');
     try {
-        carsRef.where("userRef", "==", userRef).get().then((snapshot) => {
+        fixesRef.where("city", "==", city).get().then((snapshot) => {
             const data = snapshot.docs.map((doc) => ({
                 reference: doc.ref.path,
                 ...doc.data(),
             }));
             console.log(data);
-            return res.status(201).json(data);
+            return res.status(200).json(data);
         })
     } catch (error) {
         return res
@@ -20,4 +21,4 @@ const getUserCars = async (req, res) => {
     }
 };
 
-module.exports = {getUserCars};
+module.exports = {getWorkshopInCity};

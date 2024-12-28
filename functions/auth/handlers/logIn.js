@@ -1,6 +1,6 @@
 const {signInWithEmailAndPassword} = require("firebase/auth");
-const {auth} = require("../../util/firebase");
-const {db} = require("../../util/admin");
+const {auth} = require("../util/firebase");
+const {db} = require("../util/admin");
 
 const logIn = async (req, res, next) => {
     const email = req.query.email;
