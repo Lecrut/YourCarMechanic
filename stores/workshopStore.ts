@@ -22,6 +22,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
         workshops.value = []
         workshopsInCity.value = []
         workshopsFreeTimes.value = []
+        freeHoursTable.value = []
     }
 
     const deleteFindResult = () => {
@@ -108,8 +109,8 @@ export const useWorkshopStore = defineStore('workshops', () => {
     const getDays = (numDays: number): string[] => {
         const today = new Date()
         return Array.from({length: numDays}, (_, i) => {
-            const day = new Date(today)
-            day.setDate(today.getDate() + i)
+            const day = new Date(today.getDate() + 1)
+            day.setDate(today.getDate() + i + 1)
             return day.toLocaleDateString('pl-PL', {weekday: 'long', day: 'numeric', month: 'numeric'})
         });
     }
