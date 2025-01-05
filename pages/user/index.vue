@@ -509,6 +509,7 @@ watch(companyCity, async (newCity) => {
                 <div class="my-4 text-center">
                   <v-btn
                       @click="bookFix"
+                      :disabled="loading"
                   >
                     {{ t('userBookFix.stepper.fourth.book') }}
                   </v-btn>
