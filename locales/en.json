@@ -213,6 +213,7 @@
     "addStatus": "Add status",
     "addDescription": "Add description",
     "description": "Description",
+    "cancel": "Cancel",
     "comments": {
       "getCar": "Workshop received car",
       "addExpense": "Expense added: ",
@@ -228,7 +229,9 @@
     "getCar": "Get car",
     "giveBackCar": "Give back a car",
     "addExpense": "Expense",
-    "addGiveBackTime": "Car give back time"
+    "addGiveBackTime": "Car give back time",
+    "userCancel": "User canceled",
+    "workshopCancel": "Workshop canceled"
   },
   "universal": {
     "save": "Save",

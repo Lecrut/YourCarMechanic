@@ -213,6 +213,7 @@
     "addStatus": "Dodaj status",
     "addDescription": "Dodaj opis",
     "description": "Opis",
+    "cancel": "Odwołaj",
     "comments": {
       "getCar": "Samochod przyjety przez warsztat.",
       "addExpense": "Ddano koszt w wysokości: ",
@@ -228,7 +229,9 @@
     "getCar": "Przyjęcie samochodu",
     "giveBackCar": "Oddanie samochodu",
     "addExpense": "Wydatek",
-    "addGiveBackTime": "Czas oddania samochodu"
+    "addGiveBackTime": "Czas oddania samochodu",
+    "userCancel": "Odwołane przez użytkownika",
+    "workshopCancel": "Odwołane przez warsztat"
   },
   "universal": {
     "save": "Zapisz",

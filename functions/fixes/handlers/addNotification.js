@@ -21,7 +21,7 @@ const addNotification = async (req, res, next) => {
             date,
         } = notificationData;
 
-        const isLastNotification = Boolean(notificationType === 'giveBackCar')
+        const isLastNotification = Boolean(notificationType === 'giveBackCar' || notificationType === 'workshopCancel' || notificationType === 'userCancel')
 
         const isFixExists = await db.doc(fixRef).get();
         if (isFixExists) {

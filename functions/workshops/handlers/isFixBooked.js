@@ -11,6 +11,7 @@ const isFixBooked = async (req, res) => {
         const isFixExists = await fixesRef
             .where("companyRef", "==", companyRef)
             .where("date", "==", Timestamp.fromDate(new Date(hour)))
+            .where("isClosed", "==", false)
             .get();
 
         if (!isFixExists.empty) {
