@@ -1,5 +1,5 @@
 version: "3.8"
-
+name: "your-car-mechanic-functions"
 services:
   auth:
     image: node:20
