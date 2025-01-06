@@ -57,7 +57,8 @@
     "userName": "Nazwa użytkownika",
     "password": "Hasło",
     "repeatPassword": "Powtórz hasło",
-    "acceptStatute": "Akceptuję regulamin",
+    "acceptStatute": "Akceptuję",
+    "statute": "regulamin",
     "button": "Zarejestruj się",
     "error": "Niepoprawne dane rejestracji"
   },

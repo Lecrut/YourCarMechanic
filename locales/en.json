@@ -57,7 +57,8 @@
     "userName": "Username",
     "password": "Password",
     "repeatPassword": "Repeat Password",
-    "acceptStatute": "I accept the regulations",
+    "acceptStatute": "I accept",
+    "statute": "the regulations",
     "button": "Register",
     "error": "Invalid register data"
   },

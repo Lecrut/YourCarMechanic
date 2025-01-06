@@ -116,9 +116,20 @@ onMounted(() => {
 
               <v-checkbox
                   v-model="rules"
-                  :label="t('register.acceptStatute')"
                   :rules="[requiredRule(t)]"
-              />
+              >
+                <template #label>
+                  <a>{{ t('register.acceptStatute') }}&nbsp; </a>
+                  <v-spacer/>
+                  <a
+                      href="/Regulamin_Twoj_Mechanik.pdf"
+                      target="_blank"
+                      style="font-weight: bold; text-decoration: none;"
+                  >
+                    {{ t('register.statute') }}
+                  </a>
+                </template>
+              </v-checkbox>
 
               <v-btn
                   @click="registerUser"
