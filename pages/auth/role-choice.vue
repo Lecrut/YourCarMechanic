@@ -9,6 +9,7 @@ import type {Ref} from "vue";
 
 definePageMeta({
   layout: 'no-role',
+  middleware: ['auth'],
 })
 
 const {t} = useI18n()
