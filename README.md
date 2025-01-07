@@ -1,4 +1,8 @@
-# Nuxt 3 Minimal Starter
+# Your car mechanic - Nuxt 3
+
+The "Your Car Mechanic" application is a workshop management system that leverages microservices architecture to
+streamline processes and improve communication in automotive repair shops. Its goal is to enhance operational efficiency
+and facilitate seamless interaction among staff and clients.
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
@@ -18,6 +22,16 @@ yarn install
 
 # bun
 bun install
+```
+
+## Docker
+
+Make sure Docker is installed and running.
+
+Start the application using Docker:
+
+```bash
+docker-compose up
 ```
 
 ## Development Server
