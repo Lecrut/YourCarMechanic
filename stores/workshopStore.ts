@@ -107,13 +107,14 @@ export const useWorkshopStore = defineStore('workshops', () => {
     }
 
     const getDays = (numDays: number): string[] => {
-        const today = new Date()
+        const today = new Date();
         return Array.from({length: numDays}, (_, i) => {
-            const day = new Date(today.getDate() + 1)
-            day.setDate(today.getDate() + i + 1)
-            return day.toLocaleDateString('pl-PL', {weekday: 'long', day: 'numeric', month: 'numeric'})
+            const day = new Date();
+            day.setDate(today.getDate() + i + 1);
+            return day.toLocaleDateString('pl-PL', {weekday: 'long', day: 'numeric', month: 'numeric'});
         });
-    }
+    };
+
 
     const getHoursList = (openingHour: number, closingHour: number): number[] => {
         return Array.from({length: closingHour - openingHour}, (_, i) => openingHour + i)
