@@ -9,10 +9,15 @@ export const notificationLabel = (t: Translate, type: NotificationType) => t(`fi
 const toOptions = (t: Translate, types: NotificationType[]): Option[] =>
   types.map(value => ({ title: notificationLabel(t, value), value }))
 
-/** Statuses the viewer may add, given whether the car was already received. */
-export function statusOptions(t: Translate, mode: ViewerMode, carReceived: boolean): Option[] {
+/**
+ * Statuses the viewer may add. A visit booked by the workshop can only be cancelled
+ * until the client confirms it.
+ */
+export function statusOptions(t: Translate, mode: ViewerMode, carReceived: boolean, confirmed = true): Option[] {
   if (mode === 'moderator')
     return toOptions(t, ['getCar', 'addQuote', 'addGiveBackTime', 'addExpense', 'giveBackCar', 'moderatorCancel'])
+  if (mode === 'workshop' && !confirmed)
+    return toOptions(t, ['workshopCancel'])
   if (mode === 'workshop')
     return toOptions(t, carReceived
       ? ['addQuote', 'addGiveBackTime', 'addExpense', 'giveBackCar']

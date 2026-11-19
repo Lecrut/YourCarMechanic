@@ -1,9 +1,12 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   title: string
   icon: string
   subtitle?: string
 }>()
+
+// Every page starts with a PageHeader – it also names the browser tab.
+useHead({ title: () => props.title })
 </script>
 
 <template>

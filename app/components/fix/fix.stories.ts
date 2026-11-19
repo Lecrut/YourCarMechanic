@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import RepairDetails from './repairDetails.vue'
 import RepairList from './repairList.vue'
-import { autofix, fixWithProposal, moderator, newFix, userAnna, workshopOwner } from '../../../.storybook/mocks/fixtures'
+import { autofix, fixBookedByWorkshop, fixWithProposal, moderator, newFix, userAnna, workshopOwner } from '../../../.storybook/mocks/fixtures'
 import { mapIFix } from '~/models/fix'
 import { fixesService, moderatorService } from '~/services'
 
@@ -101,5 +101,35 @@ export const EmptyList: Story = {
   }),
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByTestId('repairs-empty')).toBeVisible()
+  },
+}
+
+/** Until the client confirms a visit booked by the workshop, the workshop can only cancel it. */
+export const UnconfirmedBookingOnlyCancel: Story = {
+  args: { fix: fixBookedByWorkshop, mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await expect(await screen.findByText('Czeka na decyzję klienta')).toBeVisible()
+    await userEvent.click(screen.getByTestId('add-status'))
+    const combobox = within(await screen.findByTestId('status-type')).getAllByRole('combobox')[0]!
+    await waitFor(() => expect(combobox.closest('.v-expand-transition-enter-active')).toBeNull())
+    await userEvent.click(combobox)
+    const options = await screen.findAllByRole('option')
+    await expect(options.map(o => o.textContent?.trim())).toEqual(['Odwołane przez warsztat'])
+  },
+}
+
+/** A proposed date must be a real slot: future, full hour, working day, opening hours. */
+export const ProposalDateValidated: Story = {
+  args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await userEvent.click(await screen.findByTestId('propose-change'))
+    const input = (await screen.findByTestId('proposal-date')).querySelector('input')!
+    await userEvent.clear(input)
+    await userEvent.type(input, '2020-01-01T10:00')
+    await userEvent.click(screen.getByTestId('send-proposal'))
+    await expect(await screen.findByText('Termin musi być w przyszłości')).toBeInTheDocument()
+    await expect(fixesService.proposeChange).not.toHaveBeenCalled()
   },
 }

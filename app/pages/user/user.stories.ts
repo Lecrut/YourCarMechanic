@@ -6,6 +6,8 @@ import History from './history.vue'
 import Profile from './profile.vue'
 import { userAnna } from '../../../.storybook/mocks/fixtures'
 import { carsService, fixesService } from '~/services'
+import { useSharedStore } from '~/stores/sharedStore'
+import { AppError } from '~/utils/errors'
 
 const meta = {
   title: 'Pages/Customer',
@@ -65,5 +67,16 @@ export const ProfileAndCars: Story = {
     await expect(canvas.getByText('Skoda Octavia')).toBeVisible()
     await userEvent.click(canvas.getByTestId('add-car'))
     await expect(await screen.findByText('Dodaj swój samochód')).toBeVisible()
+  },
+}
+
+/** Errors from services show one global, specific message (no duplicated snackbars). */
+export const SlotTakenMessage: Story = {
+  render: () => ({ components: { Notifications }, template: '<notifications />' }),
+  play: async () => {
+    useSharedStore().fail(new AppError('errors.slotTaken'))
+    const snackbars = await screen.findAllByTestId('error-snackbar')
+    await expect(await screen.findByText('Ten termin został właśnie zajęty – wybierz inną godzinę')).toBeVisible()
+    await expect(snackbars.length).toBe(1)
   },
 }

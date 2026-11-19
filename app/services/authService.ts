@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth'
 import { doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
+import { AppError } from '~/utils/errors'
 import { fromDoc } from './mappers'
 import { type IUser, mapIUser } from '~/models/user'
 import type { IUserProfile } from '~/models/userProfile'
@@ -16,7 +17,7 @@ const userDoc = (uid: string) => doc(db(), 'users', uid)
 
 async function loadUser(uid: string): Promise<IUser> {
   const data = fromDoc<IUser>(await getDoc(userDoc(uid)))
-  if (!data) throw new Error(`User profile users/${uid} does not exist`)
+  if (!data) throw new AppError('errors.profileMissing')
   return mapIUser(data)
 }
 
@@ -42,6 +43,13 @@ export const resetPassword = (email: string) => sendPasswordResetEmail(auth(), e
 export async function isSignedIn(): Promise<boolean> {
   await auth().authStateReady()
   return Boolean(auth().currentUser)
+}
+
+/** Profile of the restored session (e.g. when the local cache was cleared), or null when signed out. */
+export async function loadCurrentUser(): Promise<IUser | null> {
+  await auth().authStateReady()
+  const user = auth().currentUser
+  return user ? loadUser(user.uid) : null
 }
 
 /** Calls back with the signed-in user's uid, or null after sign-out. */

@@ -7,7 +7,12 @@ import { authService } from '~/services'
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
 
-  if (!(await authService.isSignedIn()) || !authStore.user) {
+  if (!(await authService.isSignedIn())) {
+    authStore.clearSession()
+    return navigateTo('/auth/login')
+  }
+  // Signed in, but the local cache is gone (cleared storage, new tab) – restore it instead of logging out.
+  if (!authStore.user && !(await authStore.restoreSession())) {
     authStore.clearSession()
     return navigateTo('/auth/login')
   }

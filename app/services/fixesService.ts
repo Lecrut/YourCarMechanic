@@ -12,6 +12,7 @@ import {
   where,
 } from 'firebase/firestore'
 import { db } from './firebase'
+import { AppError } from '~/utils/errors'
 import { fromDoc, fromQuery } from './mappers'
 import { type IFix, type IFixProposal, mapIFix } from '~/models/fix'
 import { mapICarToFirebase } from '~/models/car'
@@ -79,7 +80,7 @@ export async function addFix(fix: IFix): Promise<IFix> {
   const byWorkshop = fix.createdBy === 'workshop'
 
   await runTransaction(db(), async (tx) => {
-    if ((await tx.get(slotRef)).exists()) throw new Error('Slot already booked')
+    if ((await tx.get(slotRef)).exists()) throw new AppError('errors.slotTaken')
 
     tx.set(slotRef, {
       date: Timestamp.fromDate(fix.date),
@@ -153,7 +154,7 @@ export async function acceptProposal(fix: IFix): Promise<IFix> {
 
   await runTransaction(db(), async (tx) => {
     const newSlot = slotDoc(fix.companyRef, proposal.date)
-    if (dateChanged && (await tx.get(newSlot)).exists()) throw new Error('Slot already booked')
+    if (dateChanged && (await tx.get(newSlot)).exists()) throw new AppError('errors.slotTaken')
 
     if (dateChanged) {
       tx.delete(slotDoc(fix.companyRef, fix.date))

@@ -12,6 +12,8 @@ const fixesStore = useFixesStore()
 const { fixes, historyFixes, watching } = storeToRefs(fixesStore)
 const servicesStore = useServicesStore()
 const { loading } = storeToRefs(useSharedStore())
+const reviewsStore = useReviewsStore()
+const { ownRating } = storeToRefs(reviewsStore)
 
 const tab = ref<'active' | 'history'>('active')
 const searchedServices = ref<string[]>([])
@@ -31,7 +33,9 @@ const toAcceptCount = computed(() => fixes.value.filter(f => !f.notifications.le
 
 // Live: new bookings, cancellations and client decisions show up immediately.
 watch(() => company.value?.reference, (ref) => {
-  if (ref) fixesStore.watchActive('companyRef', ref)
+  if (!ref) return
+  fixesStore.watchActive('companyRef', ref)
+  reviewsStore.loadOwnRating(ref)
 }, { immediate: true })
 onUnmounted(() => fixesStore.stopWatching())
 
@@ -50,6 +54,16 @@ watch(tab, async (value) => {
       :subtitle="company?.name"
       icon="mdi-car-wrench"
     >
+      <v-chip
+        v-if="ownRating?.count"
+        v-tooltip:bottom="t('reviews.ownRatingHint', { count: ownRating.count })"
+        color="amber"
+        variant="tonal"
+        prepend-icon="mdi-star"
+        data-testid="own-rating"
+      >
+        {{ ownRating.average }}
+      </v-chip>
       <span v-tooltip:bottom="company?.status === 'approved' ? null : t('company.notApprovedHint')">
         <v-btn
           to="/company/clients"

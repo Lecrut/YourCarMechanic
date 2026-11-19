@@ -68,7 +68,7 @@ service cloud.firestore {
 
       // Owners edit their profile & price settings; status, NIP, owner and deletion belong to moderators.
       allow update: if isModerator() || (
-        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate'])
+        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate', 'workingDays'])
       );
 
       allow delete: if false;

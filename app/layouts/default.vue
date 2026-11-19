@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppNavigation from '~/components/appNavigation.vue'
+import ErrorSnackbar from '~/components/errorSnackbar.vue'
 </script>
 
 <template>
@@ -8,5 +9,6 @@ import AppNavigation from '~/components/appNavigation.vue'
     <v-main>
       <slot />
     </v-main>
+    <error-snackbar />
   </v-app>
 </template>

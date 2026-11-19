@@ -36,7 +36,7 @@ export const newUser = mapIUser({ email: 'new@example.com', role: null, referenc
 
 export const autofix = mapIWorkshop({
   name: 'AutoFix Kraków',
-  nip: '6762345678',
+  nip: '5260259950',
   city: 'krakow',
   address: 'ul. Długa 5',
   phone: '123456789',
@@ -52,7 +52,7 @@ export const autofix = mapIWorkshop({
 
 export const pendingWorkshop = mapIWorkshop({
   name: 'Garage Nowy',
-  nip: '1234567890',
+  nip: '1130213812',
   city: 'krakow',
   address: 'ul. Krótka 1',
   phone: '987654321',

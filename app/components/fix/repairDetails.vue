@@ -38,7 +38,7 @@ const useCurrentDate = ref(true)
 const newStatusCost = ref<number | null>(null)
 const newStatusDescription = ref('')
 
-const options = computed(() => statusOptions(t, props.mode, props.fix.notifications.length > 0))
+const options = computed(() => statusOptions(t, props.mode, props.fix.notifications.length > 0, props.fix.confirmed))
 const canAddStatus = computed(() => options.value.length > 0 && !props.fix.isClosed && !isFixFinished(props.fix))
 const quote = computed(() => latestQuote(props.fix))
 const canPropose = computed(() => props.mode === 'workshop' && !props.fix.isClosed && !props.fix.proposal)

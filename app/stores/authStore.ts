@@ -3,6 +3,7 @@ import type { IUser } from '~/models/user'
 import type { IUserProfile } from '~/models/userProfile'
 import type { IWorkshop } from '~/models/workshop'
 import { createSubscription } from '~/utils/subscription'
+import { AppError } from '~/utils/errors'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<IUser | null>(null)
@@ -73,12 +74,25 @@ export const useAuthStore = defineStore('auth', () => {
       : null
   }
 
+  /** Loads the signed-in user's profile when the cached one is missing. Returns success. */
+  async function restoreSession(): Promise<boolean> {
+    try {
+      const restored = await authService.loadCurrentUser()
+      if (restored) await setUser(restored)
+      return Boolean(restored)
+    }
+    catch (e) {
+      sharedStore.fail(e)
+      return false
+    }
+  }
+
   const logIn = (email: string, password: string) =>
     sharedStore.run(async () => setUser(await authService.logIn(email, password)))
 
   async function signUp(email: string, password1: string, password2: string) {
     if (password1 !== password2) {
-      sharedStore.error = true
+      sharedStore.fail(new AppError('rules.passwordsMustMatch'))
       return
     }
     await sharedStore.run(async () => setUser(await authService.signUp(email, password1)))
@@ -93,13 +107,13 @@ export const useAuthStore = defineStore('auth', () => {
 
   const updateUserProfile = (profile: IUserProfile) =>
     sharedStore.run(async () => {
-      if (!user.value) throw new Error('Not signed in')
+      if (!user.value) throw new AppError('errors.notSignedIn')
       user.value = await authService.updateProfile(user.value.reference, profile, user.value.role)
     })
 
   const createCompany = (workshop: IWorkshop) =>
     sharedStore.run(async () => {
-      if (!user.value) throw new Error('Not signed in')
+      if (!user.value) throw new AppError('errors.notSignedIn')
       const created = await workshopsService.addWorkshop(workshop, uid.value)
       user.value = await authService.setWorkshopOwner(user.value.reference, created.reference)
       company.value = created
@@ -116,6 +130,7 @@ export const useAuthStore = defineStore('auth', () => {
     role,
     homePath,
     startSession,
+    restoreSession,
     logIn,
     signUp,
     logOut,

@@ -1,10 +1,12 @@
 import { reviewsService } from '~/services'
 import type { IFix } from '~/models/fix'
-import type { IReview } from '~/models/review'
+import { type IRatingSummary, type IReview, ratingSummary } from '~/models/review'
 
 export const useReviewsStore = defineStore('reviews', () => {
   /** All reviews – loaded by the moderator panel only. */
   const all = ref<IReview[]>([])
+  /** Rating of the signed-in workshop. */
+  const ownRating = ref<IRatingSummary | null>(null)
   const sharedStore = useSharedStore()
 
   const addReview = (fix: IFix, rating: number, comment: string) =>
@@ -15,6 +17,16 @@ export const useReviewsStore = defineStore('reviews', () => {
       useFixesStore().markReviewed(fix.reference)
       return review
     })
+
+  async function loadOwnRating(companyRef: string) {
+    try {
+      ownRating.value = ratingSummary(await reviewsService.getReviewsForWorkshops([companyRef]))
+    }
+    catch (e) {
+      // A missing rating must not break the dashboard.
+      console.error(e)
+    }
+  }
 
   const loadAll = () =>
     sharedStore.run(async () => {
@@ -43,5 +55,5 @@ export const useReviewsStore = defineStore('reviews', () => {
       patch(review, { deletedAt: null })
     })
 
-  return { all, addReview, loadAll, setHidden, remove, restore }
+  return { all, ownRating, addReview, loadOwnRating, loadAll, setHidden, remove, restore }
 })

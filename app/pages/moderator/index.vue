@@ -19,7 +19,7 @@ const moderatorStore = useModeratorStore()
 const { users, workshops, fixes, pendingWorkshops } = storeToRefs(moderatorStore)
 const servicesStore = useServicesStore()
 const reviewsStore = useReviewsStore()
-const { loading, error } = storeToRefs(useSharedStore())
+const { loading } = storeToRefs(useSharedStore())
 
 const tabs: Tab[] = ['stats', 'companies', 'services', 'users', 'fixes', 'reviews']
 /** Tab lives in the URL (?tab=) so it survives reloads and can be linked from the navigation. */
@@ -157,11 +157,5 @@ onMounted(refresh)
         </v-tabs-window>
       </v-card>
     </v-container>
-
-    <my-snackbar
-      v-model="error"
-      :text="t('universal.error')"
-      :is-error="true"
-    />
   </div>
 </template>

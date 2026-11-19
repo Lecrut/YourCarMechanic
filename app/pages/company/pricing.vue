@@ -223,10 +223,5 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
       :is-error="false"
       :text="t('pricing.saved')"
     />
-    <my-snackbar
-      v-model="error"
-      :is-error="true"
-      :text="t('universal.error')"
-    />
   </div>
 </template>

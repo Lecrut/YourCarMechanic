@@ -7,7 +7,14 @@ import {
   indexedDBLocalPersistence,
   initializeAuth,
 } from 'firebase/auth'
-import { connectFirestoreEmulator, type Firestore, getFirestore } from 'firebase/firestore'
+import {
+  connectFirestoreEmulator,
+  type Firestore,
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore'
 
 let app: FirebaseApp | null = null
 
@@ -21,9 +28,14 @@ export function initFirebase(options: FirebaseOptions, useEmulators = false) {
     persistence: [indexedDBLocalPersistence, browserLocalPersistence],
   })
 
+  // Offline cache shared between tabs: lists render instantly from cache and survive short network drops.
+  const firestore = initializeFirestore(app, {
+    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+  })
+
   if (useEmulators) {
     connectAuthEmulator(firebaseAuth, 'http://127.0.0.1:9099', { disableWarnings: true })
-    connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080)
+    connectFirestoreEmulator(firestore, '127.0.0.1', 8080)
   }
 
   return app

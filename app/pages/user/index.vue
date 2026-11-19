@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { VForm } from 'vuetify/components'
-import { productionYearRule, requiredRule } from '~/utils/rules'
+import { productionYearRule, requiredRule, vinRule } from '~/utils/rules'
 import { type ICar, mapICar } from '~/models/car'
 import { mapIFix } from '~/models/fix'
 import type { IWorkshop } from '~/models/workshop'
@@ -63,7 +63,7 @@ const bookedCar = computed(() =>
         manufacturer: selectedCarBrand.value ?? '',
         model: selectedCarModel.value ?? '',
         productionYear: carYear.value ?? 1900,
-        vin: iKnowVin.value ? carVin.value : '',
+        vin: iKnowVin.value ? carVin.value.trim().toUpperCase() : '',
       }),
 )
 
@@ -121,7 +121,15 @@ async function bookFix() {
     createdBy: 'user',
   }))
 
-  if (!error.value) await navigateTo('/user/notifications')
+  if (!error.value) {
+    await navigateTo('/user/notifications')
+    return
+  }
+  // Someone booked this hour in the meantime – back to choosing a time (the error snackbar explains why).
+  if (sharedStore.errorMessage === 'errors.slotTaken') {
+    selectedDate.value = null
+    step.value = 3
+  }
 }
 
 onMounted(() => {
@@ -131,11 +139,12 @@ onMounted(() => {
   workshopStore.deleteFindResult()
 })
 
-watch(city, (newCity) => {
+// Changing the city *or* the chosen services invalidates the workshop list and the picked time.
+watch([city, selectedServices], ([newCity, services]) => {
   selectedWorkshop.value = null
   selectedDate.value = null
-  if (newCity) workshopStore.getWorkshopsByCityAndServices(newCity, selectedServices.value)
-})
+  if (newCity) workshopStore.getWorkshopsByCityAndServices(newCity, services)
+}, { deep: true })
 </script>
 
 <template>
@@ -314,7 +323,9 @@ watch(city, (newCity) => {
                       <v-text-field
                         v-model="carVin"
                         :label="t('userBookFix.stepper.second.vin')"
-                        :rules="[requiredRule(t)]"
+                        :hint="t('userBookFix.stepper.second.vinHint')"
+                        counter="17"
+                        :rules="[requiredRule(t), vinRule(t)]"
                       />
                     </v-col>
                   </v-row>
@@ -520,11 +531,5 @@ watch(city, (newCity) => {
         />
       </v-stepper>
     </v-container>
-
-    <my-snackbar
-      v-model="error"
-      :text="t('universal.error')"
-      :is-error="true"
-    />
   </div>
 </template>

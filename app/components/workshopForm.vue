@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IWorkshop } from '~/models/workshop'
-import { lengthRuleShort, phoneRule, requiredArrayRule, requiredRule } from '~/utils/rules'
+import { nipRule, phoneRule, requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 
 /** Company data form shared by role choice, the company profile and the moderator panel. */
@@ -13,19 +13,30 @@ const props = withDefaults(defineProps<{
   email?: string
 }>(), { readonly: false, nipEditable: false, email: '' })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { form, valid, isValid } = formValidation()
 
 const citiesJsonStore = useCitiesJsonStore()
 const servicesStore = useServicesStore()
 
 const hours = Array.from({ length: 25 }, (_, h) => ({ title: `${h}:00`, value: h }))
+
+/** Monday first; values are `Date#getDay()` numbers. Labels come from Intl, so they follow the locale. */
+const weekDays = computed(() => [1, 2, 3, 4, 5, 6, 0].map(value => ({
+  value,
+  title: new Date(2024, 0, 7 + value).toLocaleDateString(locale.value === 'pl' ? 'pl-PL' : 'en-GB', { weekday: 'short' }),
+})))
 const closingAfterOpening = () =>
   workshop.value.closingTime > workshop.value.openingTime || t('rules.closingAfterOpening')
 
 onMounted(() => citiesJsonStore.getCitiesFromJson())
 
-defineExpose({ isValid })
+/** Also requires at least one working day (chip groups are not part of v-form validation). */
+async function validate() {
+  return (await isValid()) && workshop.value.workingDays.length > 0
+}
+
+defineExpose({ isValid: validate })
 </script>
 
 <template>
@@ -54,7 +65,8 @@ defineExpose({ isValid })
           :label="t('companyProfile.nip')"
           prepend-inner-icon="mdi-identifier"
           :readonly="!nipEditable"
-          :rules="nipEditable ? [requiredRule(t), lengthRuleShort(t)] : []"
+          :rules="nipEditable ? [requiredRule(t), nipRule(t)] : []"
+          :hint="nipEditable ? t('companyProfile.nipHint') : ''"
           data-testid="company-nip"
         />
       </v-col>
@@ -138,6 +150,41 @@ defineExpose({ isValid })
           :rules="[closingAfterOpening]"
           data-testid="company-closing"
         />
+      </v-col>
+
+      <v-col cols="12">
+        <div class="text-body-medium text-medium-emphasis mb-1 d-flex align-center ga-1">
+          {{ t('companyProfile.workingDays') }}
+          <v-icon
+            v-tooltip:top="t('companyProfile.workingDaysHint')"
+            icon="mdi-information-outline"
+            size="small"
+          />
+        </div>
+        <v-chip-group
+          v-model="workshop.workingDays"
+          multiple
+          column
+          selected-class="text-primary"
+          :disabled="props.readonly"
+          data-testid="company-working-days"
+        >
+          <v-chip
+            v-for="day in weekDays"
+            :key="day.value"
+            :value="day.value"
+            filter
+            variant="tonal"
+          >
+            {{ day.title }}
+          </v-chip>
+        </v-chip-group>
+        <div
+          v-if="!workshop.workingDays.length"
+          class="text-error text-body-small"
+        >
+          {{ t('rules.requiredArrayRule') }}
+        </div>
       </v-col>
 
       <v-col cols="12">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IClient } from '~/models/client'
 import { mapIFix } from '~/models/fix'
+import { slotProblem } from '~/models/workshop'
 import { formatRange } from '~/models/priceList'
 import { requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
@@ -32,13 +33,12 @@ const carOptions = computed(() => (props.client?.cars ?? []).map((car, i) => ({
 const car = computed(() => (carIndex.value == null ? null : props.client?.cars[carIndex.value] ?? null))
 const estimate = computed(() => (car.value ? pricingStore.estimate(services.value, car.value.manufacturer) : null))
 
-/** Visits must start on a full hour within opening hours – the same slots customers can pick. */
-const withinOpeningHours = (value: string) => {
+/** The same slots customers can pick: future full hour on a working day within opening hours. */
+const validSlot = (value: string) => {
   const company = authStore.company
   if (!value || !company) return true
-  const d = fromLocalInput(value)
-  return (d > new Date() && d.getMinutes() === 0 && d.getHours() >= company.openingTime && d.getHours() < company.closingTime)
-    || t('clients.invalidSlot', { from: company.openingTime, to: company.closingTime })
+  const problem = slotProblem(company, fromLocalInput(value))
+  return problem ? t(problem, { from: company.openingTime, to: company.closingTime }) : true
 }
 
 watch(isDialogShown, (shown) => {
@@ -134,7 +134,7 @@ async function submit() {
             type="datetime-local"
             step="3600"
             :label="t('moderator.date')"
-            :rules="[requiredRule(t), withinOpeningHours]"
+            :rules="[requiredRule(t), validSlot]"
             data-testid="client-date"
           />
           <v-alert

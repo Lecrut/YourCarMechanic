@@ -43,17 +43,17 @@
   "rules": {
     "requiredRule": "Pole jest wymagane",
     "emailRule": "Niepoprawny format email",
-    "phoneRule": "Niepoprawny format nr. telefonu",
+    "phoneRule": "Podaj 9-cyfrowy numer (opcjonalnie z +48)",
     "passwordRule": "Hasło musi mieć co najmniej 12 znaków",
-    "lengthRuleShort": "Nazwa jest za krótka.",
-    "lengthRule": "Nazwa jest za długa",
-    "firstSignRule": "Rejestracja niepoprawna",
-    "registerLengthRule": "Niepoprawna długość rejestracji",
-    "productionYearRule": "Rok produkcji musi być pomiędzy 1800 a bieżącym",
+    "productionYearRule": "Rok produkcji musi być między 1900 a bieżącym",
     "closingAfterOpening": "Zamknięcie musi być po otwarciu",
     "passwordsMustMatch": "Hasła muszą być identyczne",
     "serviceKeyRule": "Mała litera na początku, tylko litery i cyfry",
-    "serviceKeyTaken": "Taki klucz już istnieje"
+    "serviceKeyTaken": "Taki klucz już istnieje",
+    "nipRule": "Niepoprawny NIP (10 cyfr, błędna suma kontrolna)",
+    "vinRule": "VIN ma 17 znaków (bez liter I, O, Q)",
+    "maxLength": "Tekst jest za długi",
+    "requiredArrayRule": "Wybierz co najmniej jedną opcję"
   },
   "register": {
     "title": "Rejestracja",
@@ -152,7 +152,10 @@
     "closingTime": "Godzina zamknięcia",
     "phone": "Telefon",
     "email": "Adres e-mail",
-    "services": "Wykonywane usługi"
+    "services": "Wykonywane usługi",
+    "nipHint": "10 cyfr, sprawdzamy sumę kontrolną",
+    "workingDays": "Dni pracy",
+    "workingDaysHint": "Klienci mogą rezerwować tylko w te dni"
   },
   "company": {
     "title": "Lista napraw",
@@ -189,7 +192,8 @@
         "productionYear": "Rok produkcji",
         "vin": "Numer Vin",
         "iKnowVin": "Znam numer Vin",
-        "mileage": "Przebieg"
+        "mileage": "Przebieg",
+        "vinHint": "Znajdziesz go w dowodzie rejestracyjnym (pole E)"
       },
       "third": {
         "title": "Wybierz warsztat",
@@ -299,8 +303,7 @@
     "consentCheckbox": "Zgadzam się na kontakt od warsztatu {workshop} z informacjami o promocjach (opcjonalne)",
     "serviceFilter": "Korzystali z usług",
     "serviceFilterHint": "Np. wybierz „Opony”, aby przed sezonem obdzwonić klientów",
-    "empty": "Brak klientów spełniających kryteria",
-    "invalidSlot": "Wybierz pełną godzinę w przyszłości, między {from}:00 a {to}:00"
+    "empty": "Brak klientów spełniających kryteria"
   },
   "moderator": {
     "title": "Panel moderatora",
@@ -467,6 +470,36 @@
     "show": "Pokaż opinię",
     "filterAll": "Wszystkie",
     "filterLow": "≤ 2 gwiazdki",
-    "filterMid": "≤ 3 gwiazdki"
+    "filterMid": "≤ 3 gwiazdki",
+    "ownRatingHint": "Średnia ocena z {count} opinii klientów"
+  },
+  "errors": {
+    "invalidCredentials": "Niepoprawne dane logowania",
+    "invalidEmail": "Niepoprawny adres e-mail",
+    "emailTaken": "Konto z tym adresem e-mail już istnieje",
+    "weakPassword": "Hasło jest za słabe",
+    "tooManyRequests": "Zbyt wiele prób – spróbuj ponownie za chwilę",
+    "offline": "Brak połączenia z internetem",
+    "accountDisabled": "To konto zostało zablokowane",
+    "permissionDenied": "Nie masz uprawnień do tej operacji",
+    "notFound": "Nie znaleziono danych",
+    "conflict": "Dane zmieniły się w międzyczasie – odśwież i spróbuj ponownie",
+    "slotTaken": "Ten termin został właśnie zajęty – wybierz inną godzinę",
+    "nipTaken": "Firma z tym NIP-em jest już zarejestrowana",
+    "profileMissing": "Nie znaleziono profilu konta – skontaktuj się z obsługą",
+    "notSignedIn": "Sesja wygasła – zaloguj się ponownie"
+  },
+  "slots": {
+    "inPast": "Termin musi być w przyszłości",
+    "fullHour": "Wizyty zaczynają się o pełnej godzinie",
+    "closedDay": "Warsztat jest w tym dniu zamknięty",
+    "outsideHours": "Poza godzinami pracy ({from}:00–{to}:00)"
+  },
+  "errorPage": {
+    "title": "Coś poszło nie tak",
+    "text": "Spróbuj ponownie za chwilę. Jeśli problem się powtarza, daj nam znać.",
+    "notFoundTitle": "Nie ma takiej strony",
+    "notFoundText": "Link mógł wygasnąć albo zawierać literówkę.",
+    "home": "Wróć na stronę główną"
   }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { productionYearRule, requiredRule } from '~/utils/rules'
+import { productionYearRule, requiredRule, vinRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 import { type ICar, mapICar } from '~/models/car'
 
@@ -48,7 +48,7 @@ async function saveForm() {
     manufacturer: selectedCarBrand.value ?? '',
     model: selectedCarModel.value ?? '',
     productionYear: carYear.value ?? 1900,
-    vin: iKnowVin.value ? carVin.value ?? '' : '',
+    vin: iKnowVin.value ? (carVin.value ?? '').trim().toUpperCase() : '',
     userRef: authStore.user?.reference ?? '',
     reference: props.car?.reference ?? '',
   })
@@ -110,7 +110,7 @@ watch(isDialogShown, (shown) => {
           <v-text-field
             v-model.number="carYear"
             type="number"
-            min="1800"
+            min="1900"
             :max="new Date().getFullYear()"
             :label="t('userBookFix.stepper.second.productionYear')"
             :rules="[requiredRule(t), productionYearRule(t)]"
@@ -127,7 +127,9 @@ watch(isDialogShown, (shown) => {
             v-if="iKnowVin"
             v-model="carVin"
             :label="t('userBookFix.stepper.second.vin')"
-            :rules="[requiredRule(t)]"
+            :hint="t('userBookFix.stepper.second.vinHint')"
+            counter="17"
+            :rules="[requiredRule(t), vinRule(t)]"
           />
         </v-form>
       </v-card-text>
@@ -150,10 +152,4 @@ watch(isDialogShown, (shown) => {
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-  <my-snackbar
-    v-model="error"
-    :text="t('universal.error')"
-    :is-error="true"
-  />
 </template>

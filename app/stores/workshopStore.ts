@@ -1,10 +1,11 @@
 import { pricingService, reviewsService, workshopsService } from '~/services'
-import type { IWorkshop } from '~/models/workshop'
+import { type IWorkshop, upcomingWorkingDays } from '~/models/workshop'
 import type { IFreeHours } from '~/models/workshopFreeHours'
 import { estimateRepair, type IPriceListItem, type Range } from '~/models/priceList'
 import { type IRatingSummary, ratingSummary } from '~/models/review'
-import { addDays, atHour, startOfDay } from '~/utils/time'
+import { addDays, atHour } from '~/utils/time'
 import { createSubscription } from '~/utils/subscription'
+import { AppError } from '~/utils/errors'
 
 const DAYS_PER_PAGE = 6
 
@@ -40,7 +41,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
     sharedStore.run(async () => {
       if (!workshopsByRef.has(companyRef)) {
         const workshop = await workshopsService.getWorkshop(companyRef)
-        if (!workshop) throw new Error(`Workshop ${companyRef} not found`)
+        if (!workshop) throw new AppError('errors.notFound')
         workshopsByRef.set(companyRef, workshop)
       }
       return workshopsByRef.get(companyRef)!
@@ -70,10 +71,15 @@ export const useWorkshopStore = defineStore('workshops', () => {
     return estimateRepair(priceLists.value[workshop.reference] ?? [], workshop.hourlyRate, services, brand)
   }
 
-  /** Watches booked slots of `workshop` and rebuilds the availability table for `days` days from tomorrow. */
+  /** Watches booked slots and rebuilds the availability table for the next `days` working days (from tomorrow). */
   function watchFreeHours(workshop: IWorkshop, days = DAYS_PER_PAGE) {
-    const from = startOfDay(addDays(new Date(), 1))
-    const to = addDays(from, days)
+    const workingDays = upcomingWorkingDays(workshop, addDays(new Date(), 1), days)
+    if (!workingDays.length) {
+      freeHoursTable.value = []
+      return
+    }
+    const from = workingDays[0]!
+    const to = addDays(workingDays.at(-1)!, 1)
     const openHours = Array.from(
       { length: Math.max(0, workshop.closingTime - workshop.openingTime) },
       (_, h) => workshop.openingTime + h,
@@ -86,13 +92,10 @@ export const useWorkshopStore = defineStore('workshops', () => {
       to,
       (slots) => {
         const booked = new Set(slots.map(d => d.getTime()))
-        freeHoursTable.value = Array.from({ length: days }, (_, i) => {
-          const day = addDays(from, i)
-          return {
-            day,
-            hours: openHours.map(hour => ({ hour, isBooked: booked.has(atHour(day, hour).getTime()) })),
-          }
-        })
+        freeHoursTable.value = workingDays.map(day => ({
+          day,
+          hours: openHours.map(hour => ({ hour, isBooked: booked.has(atHour(day, hour).getTime()) })),
+        }))
         sharedStore.loading = false
       },
       e => sharedStore.fail(e),

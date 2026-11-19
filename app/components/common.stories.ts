@@ -76,6 +76,39 @@ export const CompanyFormValidation: Story = {
   },
 }
 
+/** Working days are part of the company form; at least one is required. */
+export const CompanyWorkingDays: Story = {
+  args: { title: '', icon: '' },
+  render: () => ({
+    components: { WorkshopForm },
+    setup() {
+      const workshop = ref(mapIWorkshop({ ...autofix, workingDays: [1] }))
+      const form = ref<InstanceType<typeof WorkshopForm> | null>(null)
+      const result = ref('')
+      const validate = async () => (result.value = String(await form.value?.isValid()))
+      return { workshop, form, result, validate }
+    },
+    template: `
+      <div>
+        <workshop-form ref="form" v-model="workshop" />
+        <v-btn data-testid="validate" @click="validate">validate</v-btn>
+        <span data-testid="result">{{ result }}</span>
+        <span data-testid="days">{{ workshop.workingDays.join(',') }}</span>
+      </div>`,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const chips = [...canvas.getByTestId('company-working-days').querySelectorAll<HTMLElement>('.v-chip')]
+    await expect(chips).toHaveLength(7)
+    // Monday is the only selected day – unselecting it leaves none.
+    await userEvent.click(chips[0]!)
+    await expect(canvas.getByTestId('days')).toHaveTextContent('')
+    await expect(canvas.getByText('Wybierz co najmniej jedną opcję')).toBeVisible()
+    await userEvent.click(canvas.getByTestId('validate'))
+    await waitFor(() => expect(canvas.getByTestId('result')).toHaveTextContent('false'))
+  },
+}
+
 export const CompanyFormReadonly: Story = {
   args: { title: '', icon: '' },
   render: () => ({

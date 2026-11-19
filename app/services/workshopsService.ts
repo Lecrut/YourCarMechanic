@@ -13,6 +13,7 @@ import {
   where,
 } from 'firebase/firestore'
 import { db } from './firebase'
+import { AppError } from '~/utils/errors'
 import { fromDoc, fromQuery } from './mappers'
 import { notDeleted } from '~/models/softDelete'
 import { type IWorkshop, mapIWorkshop } from '~/models/workshop'
@@ -32,7 +33,7 @@ export async function getWorkshopsInCity(city: string): Promise<IWorkshop[]> {
 
 export async function addWorkshop(workshop: IWorkshop, ownerUid: string): Promise<IWorkshop> {
   const existing = await getDocs(query(companies(), where('nip', '==', workshop.nip)))
-  if (!existing.empty) throw new Error('Company with this NIP already exists')
+  if (!existing.empty) throw new AppError('errors.nipTaken')
 
   const { reference: _reference, deletedAt: _deletedAt, ...data } = mapIWorkshop({ ...workshop, ownerUid, status: 'pending', contractSignedAt: null })
   const ref = await addDoc(companies(), { ...data, createTime: serverTimestamp() })
@@ -41,8 +42,8 @@ export async function addWorkshop(workshop: IWorkshop, ownerUid: string): Promis
 
 /** NIP, owner and status are immutable for workshop owners (enforced by firestore.rules). */
 export async function updateWorkshop(workshop: IWorkshop): Promise<IWorkshop> {
-  const { name, openingTime, closingTime, city, services, phone, address, hourlyRate } = mapIWorkshop(workshop)
-  await updateDoc(doc(db(), workshop.reference), { name, openingTime, closingTime, city, services, phone, address, hourlyRate })
+  const { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays } = mapIWorkshop(workshop)
+  await updateDoc(doc(db(), workshop.reference), { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays })
   return mapIWorkshop(workshop)
 }
 

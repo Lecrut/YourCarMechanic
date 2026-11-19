@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IFix } from '~/models/fix'
+import { maxLengthRule } from '~/utils/rules'
 
 const isDialogShown = defineModel<boolean>({ default: false })
 
@@ -46,7 +47,7 @@ async function submit() {
           rows="3"
           auto-grow
           counter="500"
-          :rules="[(v: string) => v.length <= 500 || t('rules.lengthRule')]"
+          :rules="[maxLengthRule(t, 500)]"
           data-testid="review-comment"
         />
       </v-card-text>
@@ -61,6 +62,7 @@ async function submit() {
         </v-btn>
         <v-btn
           :loading="loading"
+          :disabled="comment.length > 500"
           data-testid="submit-review"
           @click="submit"
         >

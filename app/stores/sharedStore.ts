@@ -1,6 +1,21 @@
+import { errorKey } from '~/utils/errors'
+
+/**
+ * Global loading/error state. Errors are shown by the single snackbar in layouts/default.vue,
+ * so components never render their own error snackbars.
+ */
 export const useSharedStore = defineStore('shared', () => {
   const loading = ref(false)
   const error = ref(false)
+  /** i18n key of the last error message. */
+  const errorMessage = ref('universal.error')
+
+  function fail(e: unknown) {
+    console.error(e)
+    errorMessage.value = errorKey(e)
+    error.value = true
+    loading.value = false
+  }
 
   /**
    * Runs an async action with global loading/error tracking.
@@ -13,8 +28,7 @@ export const useSharedStore = defineStore('shared', () => {
       return await action()
     }
     catch (e) {
-      console.error(e)
-      error.value = true
+      fail(e)
       return null
     }
     finally {
@@ -22,17 +36,10 @@ export const useSharedStore = defineStore('shared', () => {
     }
   }
 
-  /** For errors reported outside `run()` (e.g. by a realtime listener). */
-  function fail(e: unknown) {
-    console.error(e)
-    error.value = true
-    loading.value = false
-  }
-
   function resetState() {
     error.value = false
     loading.value = false
   }
 
-  return { loading, error, run, fail, resetState }
+  return { loading, error, errorMessage, run, fail, resetState }
 })

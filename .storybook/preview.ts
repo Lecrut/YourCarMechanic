@@ -12,6 +12,7 @@ import { vuetifyOptions } from '~/utils/vuetifyOptions'
 import pl from '../i18n/locales/pl.json'
 import en from '../i18n/locales/en.json'
 import MySnackbar from '~/components/mySnackbar.vue'
+import ErrorSnackbar from '~/components/errorSnackbar.vue'
 import { resetDb } from './mocks/services'
 import { navigatedTo } from './mocks/nuxt'
 import { useAuthStore } from '~/stores/authStore'
@@ -75,7 +76,7 @@ const withApp: Decorator = (story, context) => {
       auth.company = params.company ?? null
     },
     render: () => h(components.VApp, null, {
-      default: () => h(components.VMain, { class: 'pa-4' }, { default: () => h(Story) }),
+      default: () => h(components.VMain, { class: 'pa-4' }, { default: () => [h(Story), h(ErrorSnackbar)] }),
     }),
   }
 }

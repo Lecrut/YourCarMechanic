@@ -80,11 +80,5 @@ onMounted(() => sharedStore.resetState())
     >
       {{ t('navBar.login') }}
     </v-btn>
-
-    <my-snackbar
-      v-model="error"
-      :text="t('universal.error')"
-      :is-error="true"
-    />
   </auth-card>
 </template>

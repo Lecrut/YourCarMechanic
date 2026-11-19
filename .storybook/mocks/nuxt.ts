@@ -13,3 +13,5 @@ export const definePageMeta = (_meta: unknown) => {}
 export const defineNuxtRouteMiddleware = <T>(fn: T) => fn
 
 export const defineNuxtPlugin = <T>(plugin: T) => plugin
+
+export const useHead = (_input: unknown) => {}

@@ -40,8 +40,8 @@ async function save() {
 }
 
 onMounted(() => {
-  // Already configured accounts have nothing to do here.
-  if (authStore.role && authStore.role !== 'workshop') navigateTo(authStore.homePath)
+  // Already configured accounts have nothing to do here (a workshop without a company may finish setup).
+  if (authStore.role && (authStore.role !== 'workshop' || authStore.company)) navigateTo(authStore.homePath)
 })
 </script>
 
@@ -178,11 +178,5 @@ onMounted(() => {
         </v-window>
       </v-card>
     </v-container>
-
-    <my-snackbar
-      v-model="error"
-      :text="t('universal.error')"
-      :is-error="true"
-    />
   </div>
 </template>

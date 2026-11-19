@@ -86,12 +86,6 @@ watch(company, value => (draft.value = mapIWorkshop(value ?? {})))
         </v-expand-transition>
       </v-card>
     </v-container>
-
-    <my-snackbar
-      v-model="error"
-      :text="t('universal.error')"
-      :is-error="true"
-    />
     <my-snackbar
       v-model="showSuccess"
       :is-error="false"

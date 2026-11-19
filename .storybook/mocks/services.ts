@@ -69,7 +69,7 @@ export const authService = {
   }).mockName('signUp'),
   logIn: fn(async (email: string, _password: string) => {
     const user = db.users.find(u => u.email === email)
-    if (!user) throw new Error('auth/invalid-credential')
+    if (!user) throw Object.assign(new Error('Firebase: invalid credential'), { code: 'auth/invalid-credential' })
     db.currentUser = user
     return later(user)
   }).mockName('logIn'),
@@ -78,6 +78,7 @@ export const authService = {
   }).mockName('logOut'),
   resetPassword: fn(async (_email: string) => {}).mockName('resetPassword'),
   isSignedIn: fn(async () => true).mockName('isSignedIn'),
+  loadCurrentUser: fn(async () => later(db.currentUser)).mockName('loadCurrentUser'),
   onAuthChange: fn((_cb: (uid: string | null) => void) => () => {}).mockName('onAuthChange'),
   watchUser: fn((_uid: string, _cb: (u: IUser | null) => void) => () => {}).mockName('watchUser'),
   updateProfile: fn(async (userRef: string, profile: IUserProfile, role: IUser['role']) => {

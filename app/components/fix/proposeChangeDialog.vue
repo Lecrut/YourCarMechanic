@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IFix } from '~/models/fix'
+import { slotProblem } from '~/models/workshop'
 import { formatRange } from '~/models/priceList'
 import { requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
@@ -22,6 +23,16 @@ const services = ref<string[]>([])
 const description = ref('')
 const date = ref('')
 const note = ref('')
+
+/** A new date must be a valid slot; keeping the current date is always allowed. */
+const validSlot = (value: string) => {
+  const company = authStore.company
+  if (!value || !company) return true
+  const when = fromLocalInput(value)
+  if (when.getTime() === props.fix.date.getTime()) return true
+  const problem = slotProblem(company, when)
+  return problem ? t(problem, { from: company.openingTime, to: company.closingTime }) : true
+}
 
 const estimate = computed(() => pricingStore.estimate(services.value, props.fix.car.manufacturer))
 
@@ -82,8 +93,9 @@ async function submit() {
           <v-text-field
             v-model="date"
             type="datetime-local"
+            step="3600"
             :label="t('moderator.date')"
-            :rules="[requiredRule(t)]"
+            :rules="[requiredRule(t), validSlot]"
             data-testid="proposal-date"
           />
           <v-alert

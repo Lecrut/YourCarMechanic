@@ -10,7 +10,7 @@ const { form, valid, isValid } = formValidation()
 
 const authStore = useAuthStore()
 const sharedStore = useSharedStore()
-const { loading, error } = storeToRefs(sharedStore)
+const { loading } = storeToRefs(sharedStore)
 
 const email = ref('')
 const password1 = ref('')
@@ -117,11 +117,5 @@ onMounted(() => sharedStore.resetState())
     >
       {{ t('register.haveAccount') }}
     </v-btn>
-
-    <my-snackbar
-      v-model="error"
-      :text="t('register.error')"
-      :is-error="true"
-    />
   </auth-card>
 </template>

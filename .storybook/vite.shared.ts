@@ -43,6 +43,7 @@ export function sharedPlugins(withVue = true): PluginOption[] {
             'definePageMeta',
             'defineNuxtRouteMiddleware',
             'defineNuxtPlugin',
+            'useHead',
           ],
         },
       ],
