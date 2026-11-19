@@ -1,89 +1,57 @@
-# Your car mechanic - Nuxt 3
+# Twój mechanik – Your Car Mechanic
 
-The "Your Car Mechanic" application is a workshop management system that leverages microservices architecture to
-streamline processes and improve communication in automotive repair shops. Its goal is to enhance operational efficiency
-and facilitate seamless interaction among staff and clients.
+Web app for booking car repairs. Customers find a workshop, see a price estimate and free hours,
+book a visit and follow the repair live. Workshops manage repairs, quotes, scope changes, their
+price list and client list. Moderators unlock companies, manage the service catalog, moderate
+repairs and reviews and see statistics.
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+**Stack:** Nuxt 4 (SPA) · Vue 3 · Vuetify 4 · Pinia · Firebase (Auth + Firestore) · Storybook 10 · Vitest 5 · bun
+
+> Working on the code (human or AI agent)? Read [AGENTS.md](AGENTS.md) first.
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
 bun install
+bunx playwright install chromium   # once, for the Storybook tests
+cp .env.example .env               # fill in the Firebase web app config
+bun run dev                        # http://localhost:3000
 ```
 
-## Docker
-
-Make sure Docker is installed and running.
-
-Start the application using Docker:
+### Local Firebase (optional)
 
 ```bash
-docker-compose up
+firebase emulators:start           # Auth :9099, Firestore :8080, UI :4000
+NUXT_PUBLIC_USE_EMULATORS=true bun run dev
 ```
 
-## Development Server
+### First moderator
 
-Start the development server on `http://localhost:3000`:
+Moderators cannot be created from the app. Register a normal account, then in the Firebase console
+set `users/{uid}.role` to `"moderator"`.
 
-```bash
-# npm
-npm run dev
+## Scripts
 
-# pnpm
-pnpm run dev
+| | |
+|---|---|
+| `bun run dev` | dev server |
+| `bun run lint` | ESLint |
+| `bun run typecheck` | vue-tsc |
+| `bun run test` | unit tests + Storybook play tests (Chromium) |
+| `bun run storybook` | component workshop on http://localhost:6006 |
+| `bun run generate` | static build (`.output/public`) |
+| `bun run deploy` | build + deploy hosting and Firestore rules |
 
-# yarn
-yarn dev
+## Architecture in one paragraph
 
-# bun
-bun run dev
-```
+There is no custom backend: the browser talks to Firebase through `app/services/`, and
+[`firestore.rules`](firestore.rules) enforce who may read or change what. Data that another party
+changes while you look at it (active repairs, booked hours, your own account) is streamed with
+`onSnapshot`; everything else is read once. Nothing is hard-deleted – records get `deletedAt` and
+stay available for history and moderators.
 
-## Production
+## Migrating data from the old backend
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+The previous Express backend stored users under random document ids. The app now expects
+`users/{firebaseAuthUid}`. Existing `users`, `cars` and `fixes` documents need a one-off migration
+(copy each user document to its auth uid and rewrite `userRef` fields) before going live.

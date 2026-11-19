@@ -67,4 +67,4 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-In this repo "verified" means: `pnpm lint` and `pnpm test` pass, and for UI changes the affected Storybook story renders and its `play` test passes.
+In this repo "verified" means: `bun run lint` and `bun run test` pass, and for UI changes the affected Storybook story renders and its `play` test passes.
