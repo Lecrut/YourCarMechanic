@@ -1,4 +1,4 @@
-import cities from '../../public/cities.json'
+import cities from '~/assets/data/cities.json'
 
 interface ICityOption {
   value: string

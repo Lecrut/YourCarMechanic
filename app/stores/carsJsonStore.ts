@@ -1,4 +1,4 @@
-import cars from '../../public/cars.json'
+import cars from '~/assets/data/cars.json'
 
 interface ICarsFromJson {
   brand: string

@@ -52,7 +52,8 @@ watch(isDialogShown, (shown) => {
 })
 
 async function submit() {
-  if (!props.client || !car.value || !authStore.company || !(await isValid())) return
+  // Validate first so the user always sees what is missing.
+  if (!(await isValid()) || !props.client || !car.value || !authStore.company) return
   await fixesStore.addFix(mapIFix({
     date: fromLocalInput(date.value),
     bookDate: new Date(),
