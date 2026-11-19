@@ -1,0 +1,472 @@
+{
+  "landing": {
+    "first": {
+      "title": "Witamy u Twojego mechanika",
+      "text": "Znajdź idealne miejsce dla twojego samochodu w kilku prostych krokach",
+      "button": "Zacznij już teraz"
+    },
+    "second": {
+      "title": "To tylko kilka prostych kroków",
+      "timeline": {
+        "first": {
+          "title": "Umów wizytę",
+          "subtitle": "Znajdź najlepszego mechanika i umów u niego wizytę."
+        },
+        "second": {
+          "title": "Naprawa samochodu",
+          "subtitle": "Oddaj samochód do naprawy i śledź powiadomienia."
+        },
+        "third": {
+          "title": "Odbierz samochód",
+          "subtitle": "Odbierz swój naprawiony samochód i podziel się swoją opinią z innymi"
+        }
+      }
+    },
+    "third": {
+      "title": "Chcesz dowiedzieć się więcej?",
+      "text": "Zajrzyj na kolejną stronę, gdzie wszystko jest wyjaśnione",
+      "button": "Zobacz więcej"
+    }
+  },
+  "login": {
+    "title": "Logowanie",
+    "email": "Adres Email",
+    "password": "Hasło",
+    "noAccount": "Nie masz jeszcze konta?",
+    "error": "Niepoprawne dane logowania",
+    "button": {
+      "login": "Zaloguj",
+      "resetPassword": "Zapomniałeś hasła?",
+      "register": "Zarejestruj się"
+    }
+  },
+  "rules": {
+    "requiredRule": "Pole jest wymagane",
+    "emailRule": "Niepoprawny format email",
+    "phoneRule": "Niepoprawny format nr. telefonu",
+    "passwordRule": "Hasło musi mieć co najmniej 12 znaków",
+    "lengthRuleShort": "Nazwa jest za krótka.",
+    "lengthRule": "Nazwa jest za długa",
+    "firstSignRule": "Rejestracja niepoprawna",
+    "registerLengthRule": "Niepoprawna długość rejestracji",
+    "productionYearRule": "Rok produkcji musi być pomiędzy 1800 a bieżącym",
+    "closingAfterOpening": "Zamknięcie musi być po otwarciu",
+    "passwordsMustMatch": "Hasła muszą być identyczne",
+    "serviceKeyRule": "Mała litera na początku, tylko litery i cyfry",
+    "serviceKeyTaken": "Taki klucz już istnieje"
+  },
+  "register": {
+    "title": "Rejestracja",
+    "email": "Adres Email",
+    "userName": "Nazwa użytkownika",
+    "password": "Hasło",
+    "repeatPassword": "Powtórz hasło",
+    "acceptStatute": "Akceptuję",
+    "statute": "regulamin",
+    "button": "Zarejestruj się",
+    "error": "Niepoprawne dane rejestracji",
+    "haveAccount": "Masz już konto? Zaloguj się"
+  },
+  "resetPassword": {
+    "title": "Resetowanie hasła",
+    "text": "Jeżeli zapomniałeś hasła wpisz swój mail.",
+    "email": "Adres Email",
+    "button": "Zresetuj",
+    "sendSuccessfully": "Proszę sprawdź swoją skrzynke email."
+  },
+  "navBar": {
+    "title": "Twój mechanik",
+    "login": "Logowanie",
+    "home": "Strona główna",
+    "about": "O stronie",
+    "english": "Angielski",
+    "polish": "Polski",
+    "changeTheme": "Zmień motyw",
+    "logOut": "Wyloguj się",
+    "notifications": "Powiadomienia",
+    "user": {
+      "profile": "Profil",
+      "bookedFix": "Zamów naprawę",
+      "history": "Historia"
+    },
+    "account": "Konto",
+    "menu": "Menu",
+    "language": "Język",
+    "company": {
+      "repairs": "Naprawy",
+      "clients": "Klienci",
+      "pricing": "Cennik",
+      "profile": "Profil firmy"
+    }
+  },
+  "about": {
+    "first": {
+      "title": "Nowoczesny system do rezerwacji napraw",
+      "text": "Wygodny, szybki i bezproblemowy."
+    },
+    "second": {
+      "title": "Wygodna rezerwacja z domu",
+      "text": "Wygodnie i bez wychodzenia z domu zarezerwuj naprawę w wybranym przez Ciebie warsztacie."
+    },
+    "third": {
+      "title": "Jesteś cały czas informowany",
+      "text": "Warsztat poinformuje cię o wszystkim. Przyjęto samochód, zaczęto naprawę, skończono i wydano samochód. Wiesz wszystko."
+    },
+    "fourth": {
+      "title": "Sprawdź",
+      "text": "Zarejestruj się aby zacząć przygodę",
+      "button": "Zarejestruj się"
+    }
+  },
+  "userProfile": {
+    "title": "Profil",
+    "userName": "Imię",
+    "userSurname": "Nazwisko",
+    "userPhone": "Nr. telefonu",
+    "email": "Adres Email",
+    "yourCars": "Twoje samochody",
+    "addCar": "Dodaj samochód",
+    "addCarSuccess": "Samochód dodany pomyślnie",
+    "updateCarSuccess": "Dane samochodu zmienione",
+    "updateProfileSuccess": "Profil zaaktualizowany pomyślnie",
+    "vinNotDefined": "Nie podano numeru Vin",
+    "form": {
+      "title": "Dodaj swój samochód",
+      "editTitle": "Edytuj samochód",
+      "carBrand": "Marka pojazdu",
+      "carModel": "Model pojazdu",
+      "productionYear": "Rok produkcji"
+    },
+    "deleteCar": "Usuń samochód",
+    "deleteCarTitle": "Usunąć samochód?",
+    "deleteCarText": "{car} zniknie z Twojej listy. Historia napraw i dane dla warsztatu zostaną zachowane.",
+    "noCars": "Nie dodałeś jeszcze samochodu"
+  },
+  "companyProfile": {
+    "title": "Profil firmy",
+    "name": "Nazwa firmy",
+    "city": "Miasto",
+    "nip": "NIP",
+    "address": "Adres",
+    "openingTime": "Godzina otwarcia",
+    "closingTime": "Godzina zamknięcia",
+    "phone": "Telefon",
+    "email": "Adres e-mail",
+    "services": "Wykonywane usługi"
+  },
+  "company": {
+    "title": "Lista napraw",
+    "activeFixes": "Aktywne naprawy",
+    "toBeAccepted": "Samochody do przyjęcia",
+    "services": "Usługi",
+    "pendingTitle": "Firma zablokowana – oczekuje na podpisanie umowy",
+    "pendingText": "Moderator odblokuje firmę po podpisaniu umowy. Do tego czasu nie jesteś widoczny dla klientów, ale możesz uzupełnić profil i cennik.",
+    "suspendedTitle": "Firma zawieszona",
+    "suspendedText": "Twoja firma została zawieszona przez moderatora. Skontaktuj się z obsługą.",
+    "toBeAcceptedHint": "Pokaż tylko rezerwacje bez żadnego statusu",
+    "notApprovedHint": "Dostępne po odblokowaniu firmy przez moderatora"
+  },
+  "userBookFix": {
+    "stepper": {
+      "chooseRepair": "Usługa",
+      "chooseCar": "Pojazd",
+      "summary": "Naprawa",
+      "chooseMechanic": "Warsztat",
+      "nextStep": "Dalej",
+      "prevStep": "Cofnij",
+      "first": {
+        "title": "Wybierz typ naprawy",
+        "description": "Opis problemu",
+        "error": "Wybierz typ naprawy!"
+      },
+      "second": {
+        "chooseCar": "Wybierz samochód",
+        "carData": "Dane pojazdu",
+        "chooseFromYourCars": "Wybierz samochód ze swojej listy",
+        "chooseOtherCar": "Wybierz samochód spoza swoich samochodów",
+        "carBrand": "Marka pojazdu",
+        "carModel": "Model pojazdu",
+        "productionYear": "Rok produkcji",
+        "vin": "Numer Vin",
+        "iKnowVin": "Znam numer Vin",
+        "mileage": "Przebieg"
+      },
+      "third": {
+        "title": "Wybierz warsztat",
+        "noWorkshops": "Brak warsztatów w wybranym mieście. Wybierz inne miasto.",
+        "workshopSelected": "Wybrano warsztat",
+        "dateSelected": "Data naprawy",
+        "availableDates": "Dostępne terminy",
+        "noAvailableDates": "Brak dostępnych terminów",
+        "chooseDate": "Wybierz warsztat i termin"
+      },
+      "fourth": {
+        "title": "Podsumowanie",
+        "car": "Samochód",
+        "repair": "Naprawa",
+        "description": "Opis naprawy",
+        "workshop": "Warsztat",
+        "book": "Zamów naprawę"
+      }
+    }
+  },
+  "services": {
+    "bodyWork": "Blacharz",
+    "paint": "Lakiernik",
+    "electrician": "Elektryk",
+    "oil": "Oleje i filtry",
+    "engine": "Silnik",
+    "tires": "Opony",
+    "windows": "Szyby",
+    "airConditioning": "Klimatyzacja",
+    "other": "Inne"
+  },
+  "noRole": {
+    "chooseRole": "Kim jesteś?",
+    "select": "Wybierz role",
+    "userProfile": "Profil użytkownika",
+    "companyProfile": "Profil firmy"
+  },
+  "roles": {
+    "workshop": "Warsztat",
+    "user": "Użytkownik",
+    "none": "Brak roli",
+    "moderator": "Moderator"
+  },
+  "notifications": {
+    "title": "Moje naprawy",
+    "openDetails": "Otwórz",
+    "setCurrantDate": "Ustaw aktualną datę",
+    "expense": "Wydatek",
+    "addStatus": "Dodaj status",
+    "addDescription": "Dodaj opis",
+    "description": "Opis",
+    "cancel": "Odwołaj",
+    "comments": {
+      "getCar": "Samochód przyjęty przez warsztat.",
+      "addExpense": "Dodano koszt w wysokości: ",
+      "addGiveBackTime": "Dodano przewidywany termin odbioru samochodu na: ",
+      "giveBackCar": "Wydano samochód.",
+      "addQuote": "Wycena naprawy: ",
+      "moderatorCancel": "Naprawa anulowana przez moderatora."
+    },
+    "date": "Data"
+  },
+  "history": {
+    "title": "Historia napraw"
+  },
+  "fixStatues": {
+    "title": "Status naprawy",
+    "getCar": "Przyjęcie samochodu",
+    "giveBackCar": "Oddanie samochodu",
+    "addExpense": "Wydatek",
+    "addGiveBackTime": "Czas oddania samochodu",
+    "userCancel": "Odwołane przez użytkownika",
+    "workshopCancel": "Odwołane przez warsztat",
+    "addQuote": "Wycena mechanika",
+    "moderatorCancel": "Anulowane przez moderatora",
+    "changeProposed": "Warsztat zaproponował zmianę",
+    "changeAccepted": "Klient zaakceptował zmianę",
+    "changeRejected": "Klient odrzucił zmianę",
+    "bookingConfirmed": "Klient potwierdził wizytę"
+  },
+  "universal": {
+    "save": "Zapisz",
+    "add": "Dodaj",
+    "close": "Zamknij",
+    "cancel": "Anuluj",
+    "edit": "Edytuj",
+    "history": "Historia",
+    "description": "Opis",
+    "error": "Wystąpił błąd"
+  },
+  "clients": {
+    "title": "Klienci",
+    "subtitle": "Osoby, które korzystały z Twojego warsztatu",
+    "bookForClient": "Umów klienta",
+    "bookHint": "Wizyta zostanie oznaczona jako umówiona przez warsztat i będzie czekać na potwierdzenie klienta.",
+    "bookingSent": "Propozycja wizyty wysłana do klienta",
+    "sendBooking": "Wyślij do akceptacji",
+    "call": "Zadzwoń",
+    "name": "Klient",
+    "visits": "Wizyty",
+    "lastVisit": "Ostatnia wizyta",
+    "consent": "Zgoda",
+    "consentYes": "Klient zgodził się na kontakt z ofertami",
+    "consentNo": "Brak zgody na kontakt marketingowy",
+    "onlyConsent": "Tylko ze zgodą",
+    "consentHint": "Kontakt z promocjami jest dozwolony tylko za zgodą klienta (RODO)",
+    "consentCheckbox": "Zgadzam się na kontakt od warsztatu {workshop} z informacjami o promocjach (opcjonalne)",
+    "serviceFilter": "Korzystali z usług",
+    "serviceFilterHint": "Np. wybierz „Opony”, aby przed sezonem obdzwonić klientów",
+    "empty": "Brak klientów spełniających kryteria",
+    "invalidSlot": "Wybierz pełną godzinę w przyszłości, między {from}:00 a {to}:00"
+  },
+  "moderator": {
+    "title": "Panel moderatora",
+    "subtitle": "Firmy, usługi, klienci, naprawy i opinie w jednym miejscu",
+    "refresh": "Odśwież",
+    "refreshHint": "Pobierz najnowsze dane z bazy",
+    "tabs": {
+      "stats": "Statystyki",
+      "companies": "Firmy",
+      "services": "Usługi",
+      "users": "Klienci",
+      "fixes": "Naprawy",
+      "reviews": "Opinie"
+    },
+    "stats": {
+      "pending": "Do odblokowania",
+      "pendingHint": "Firmy czekające na podpisanie umowy",
+      "companiesHint": "Wszystkie nieusunięte firmy",
+      "usersHint": "Wszystkie konta w aplikacji",
+      "fixesHint": "Naprawy w toku we wszystkich warsztatach",
+      "reviewsHint": "Widoczne opinie klientów"
+    },
+    "activeFixes": "Aktywne naprawy",
+    "search": "Szukaj",
+    "date": "Termin",
+    "client": "Klient",
+    "company": "Firma",
+    "cars": "Samochody",
+    "fullName": "Imię i nazwisko",
+    "role": "Rola",
+    "roleHint": "Zmiana roli działa od razu – użytkownik zobaczy nowy panel bez przelogowania",
+    "ownRole": "Nie możesz zmienić własnej roli",
+    "statusNew": "Nowa",
+    "moderation": "Moderacja",
+    "addCompany": "Dodaj firmę",
+    "editCompany": "Edytuj firmę",
+    "owner": "Właściciel (opcjonalnie)",
+    "ownerHint": "Wybrany użytkownik dostanie rolę warsztatu i dostęp do panelu firmy",
+    "noCompanies": "Brak firm",
+    "unlock": "Odblokuj (umowa podpisana)",
+    "suspend": "Zawieś firmę",
+    "delete": "Usuń",
+    "deleted": "Usunięte",
+    "restore": "Przywróć",
+    "deleteCompanyTitle": "Usunąć firmę?",
+    "deleteCompanyText": "Firma {name} zniknie z wyszukiwarki. Dane i historia napraw zostaną w bazie – możesz ją przywrócić.",
+    "addService": "Dodaj usługę",
+    "editService": "Edytuj usługę",
+    "deleteServiceHint": "Usuń – stare naprawy zachowają nazwę usługi",
+    "serviceKey": "Klucz",
+    "serviceKeyHint": "Techniczny identyfikator, np. „tires” – nie można go później zmienić",
+    "namePl": "Nazwa (PL)",
+    "nameEn": "Nazwa (EN)",
+    "order": "Kolejność",
+    "active": "Aktywna",
+    "activeHint": "Nieaktywne usługi nie są dostępne przy nowych rezerwacjach",
+    "servicesEmpty": "Katalog usług jest pusty – aplikacja używa listy domyślnej.",
+    "seedServices": "Wczytaj domyślne"
+  },
+  "stats": {
+    "total": "Wszystkie naprawy",
+    "inProgress": "W toku",
+    "finished": "Zakończone",
+    "cancelled": "Anulowane",
+    "avgRepairTime": "Średni czas naprawy",
+    "avgRepairTimeHint": "Od przyjęcia samochodu do jego oddania",
+    "avgWaitTime": "Średni czas oczekiwania",
+    "avgWaitTimeHint": "Od rezerwacji do przyjęcia samochodu przez warsztat",
+    "cancelRate": "Odsetek anulowań",
+    "quotesTotal": "Suma wycen",
+    "quotesTotalHint": "Suma ostatnich wycen mechaników w zakończonych naprawach",
+    "perMonth": "Naprawy w ostatnich 12 miesiącach",
+    "byStatus": "Status napraw",
+    "topServices": "Najpopularniejsze usługi",
+    "workshops": "Warsztaty",
+    "repairs": "Naprawy",
+    "avgRating": "Średnia ocena",
+    "hours": "{value} h",
+    "days": "{value} dni",
+    "noData": "Za mało danych"
+  },
+  "workshopStatus": {
+    "label": "Status",
+    "pending": "Zablokowana",
+    "approved": "Aktywna",
+    "suspended": "Zawieszona",
+    "pendingHint": "Czeka na podpisanie umowy – niewidoczna dla klientów",
+    "approvedHint": "Widoczna dla klientów",
+    "suspendedHint": "Zawieszona przez moderatora – niewidoczna dla klientów",
+    "contractSigned": "Umowa podpisana {date}"
+  },
+  "pricing": {
+    "title": "Cennik",
+    "subtitle": "Roboczogodziny i części – z tego liczymy wyceny dla klientów",
+    "hourlyRate": "Stawka za roboczogodzinę",
+    "hourlyRateHint": "Mnożona przez liczbę roboczogodzin każdej pozycji",
+    "howItWorks": "Jak działa wycena?",
+    "howItWorksText": "Dla każdej usługi dodaj pozycje z widełkami roboczogodzin i kosztu części dla segmentu auta. Klient przy rezerwacji widzi przedział cenowy, a Ty, wystawiając wycenę, musisz zmieścić się w tych widełkach.",
+    "missingPrices": "Usługi bez cennika – klienci nie zobaczą dla nich wyceny:",
+    "allPriced": "Wszystkie Twoje usługi mają cennik.",
+    "addItem": "Dodaj pozycję",
+    "editItem": "Edytuj pozycję",
+    "service": "Usługa",
+    "itemName": "Nazwa pozycji",
+    "itemNamePlaceholder": "np. Wymiana klocków hamulcowych",
+    "laborHours": "Roboczogodziny",
+    "laborHoursHint": "Liczone po stawce {rate} PLN/h",
+    "partsCost": "Koszt części wg segmentu auta",
+    "segmentHint": "Segment wynika z marki auta klienta (np. BMW, Audi = premium; Dacia, Fiat = ekonomiczny)",
+    "segments": {
+      "economy": "Ekonomiczny",
+      "standard": "Standard",
+      "premium": "Premium"
+    },
+    "min": "Od",
+    "max": "Do",
+    "maxBelowMin": "„Do” nie może być mniejsze niż „Od”",
+    "nonNegative": "Wartość nie może być ujemna",
+    "partsTooltip": "W tym części: {parts}",
+    "empty": "Brak pozycji w cenniku",
+    "emptyText": "Dodaj pierwszą pozycję, aby klienci widzieli wycenę.",
+    "saved": "Cennik zapisany",
+    "estimate": "Szacowany koszt",
+    "estimateSegment": "Szacowany koszt · segment: {segment}",
+    "estimateHint": "Wyliczone z cennika warsztatu: roboczogodziny × stawka + części dla segmentu Twojego auta. Ostateczną kwotę poda mechanik w tych widełkach.",
+    "noEstimate": "Wycena po oględzinach",
+    "quote": "Kwota wyceny",
+    "allowedRange": "Dozwolone widełki: {range}",
+    "quoteOutOfRange": "Wycena musi mieścić się w widełkach {range} – zaproponuj zmianę zakresu, jeśli potrzeba więcej"
+  },
+  "proposal": {
+    "bookedByWorkshop": "Wizyta umówiona przez warsztat",
+    "bookedByWorkshopText": "Warsztat zaproponował wizytę {date}. Potwierdź ją lub odrzuć.",
+    "changeTitle": "Warsztat proponuje zmianę zakresu",
+    "current": "Obecnie",
+    "proposed": "Propozycja",
+    "accept": "Akceptuję",
+    "confirm": "Potwierdzam",
+    "reject": "Odrzuć",
+    "createdByWorkshop": "Umówione przez warsztat",
+    "waitingForClient": "Czeka na decyzję klienta",
+    "waiting": "Czeka na klienta",
+    "yourDecision": "Wymaga decyzji",
+    "decisionsWaiting": "Sprawy od warsztatu do zatwierdzenia: {count}",
+    "proposeTitle": "Zaproponuj zmianę",
+    "proposeHint": "Klient musi zaakceptować zmianę – do tego czasu obowiązuje obecny zakres",
+    "note": "Wiadomość dla klienta (np. co znaleźliście)",
+    "send": "Wyślij propozycję"
+  },
+  "repairs": {
+    "empty": "Brak napraw do wyświetlenia"
+  },
+  "reviews": {
+    "title": "Oceń naprawę",
+    "rate": "Oceń",
+    "rating": "Ocena",
+    "comment": "Komentarz (opcjonalnie)",
+    "submit": "Wystaw opinię",
+    "none": "Brak opinii",
+    "empty": "Brak opinii",
+    "hidden": "Ukryta",
+    "visible": "Widoczna",
+    "hide": "Ukryj opinię",
+    "show": "Pokaż opinię",
+    "filterAll": "Wszystkie",
+    "filterLow": "≤ 2 gwiazdki",
+    "filterMid": "≤ 3 gwiazdki"
+  }
+}

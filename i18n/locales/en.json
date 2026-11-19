@@ -1,0 +1,472 @@
+{
+  "landing": {
+    "first": {
+      "title": "Welcome to your mechanic",
+      "text": "Find the perfect place for your car in a few simple steps",
+      "button": "Start now"
+    },
+    "second": {
+      "title": "It's just a few simple steps",
+      "timeline": {
+        "first": {
+          "title": "Make an appointment",
+          "subtitle": "Find the best mechanic and make an appointment with him."
+        },
+        "second": {
+          "title": "Car repair",
+          "subtitle": "Get your car repaired and follow notifications."
+        },
+        "third": {
+          "title": "Pick up your car",
+          "subtitle": "Collect your repaired car and share your opinion with others"
+        }
+      }
+    },
+    "third": {
+      "title": "Want to learn more?",
+      "text": "See the next page where everything is explained",
+      "button": "See more"
+    }
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email Address",
+    "password": "Password",
+    "noAccount": "Don't have an account yet?",
+    "error": "Invalid user credentials",
+    "button": {
+      "login": "Log in",
+      "resetPassword": "Forgot your password?",
+      "register": "Register"
+    }
+  },
+  "rules": {
+    "requiredRule": "The field is required",
+    "emailRule": "Invalid email format",
+    "phoneRule": "Invalid phone format",
+    "passwordRule": "Password must be at least 12 characters",
+    "lengthRuleShort": "The name is too short.",
+    "lengthRule": "The name is too long",
+    "firstSignRule": "Registration invalid",
+    "registerLengthRule": "Invalid registration length",
+    "productionYearRule": "Production year must be between 1800 and current year",
+    "closingAfterOpening": "Closing must be after opening",
+    "passwordsMustMatch": "Passwords must match",
+    "serviceKeyRule": "Start with a lowercase letter, letters and digits only",
+    "serviceKeyTaken": "This key already exists"
+  },
+  "register": {
+    "title": "Registration",
+    "email": "Email Address",
+    "userName": "Username",
+    "password": "Password",
+    "repeatPassword": "Repeat Password",
+    "acceptStatute": "I accept",
+    "statute": "the regulations",
+    "button": "Register",
+    "error": "Invalid register data",
+    "haveAccount": "Already have an account? Log in"
+  },
+  "resetPassword": {
+    "title": "Password Reset",
+    "text": "If you forgot your password, enter your email address.",
+    "email": "Email Address",
+    "button": "Reset",
+    "sendSuccessfully": "Please check your inbox."
+  },
+  "navBar": {
+    "title": "Your mechanic",
+    "login": "Login",
+    "home": "Home",
+    "about": "About",
+    "english": "English",
+    "polish": "Polish",
+    "changeTheme": "Change theme",
+    "logOut": "Log out",
+    "notifications": "Notifications",
+    "user": {
+      "profile": "Profile",
+      "bookedFix": "Order repair",
+      "history": "History"
+    },
+    "account": "Account",
+    "menu": "Menu",
+    "language": "Language",
+    "company": {
+      "repairs": "Repairs",
+      "clients": "Clients",
+      "pricing": "Price list",
+      "profile": "Company profile"
+    }
+  },
+  "about": {
+    "first": {
+      "title": "A modern system for booking repairs",
+      "text": "Convenient, fast and hassle-free."
+    },
+    "second": {
+      "title": "Convenient booking from home",
+      "text": "Book a repair conveniently and without leaving your home at the workshop of your choice."
+    },
+    "third": {
+      "title": "You are constantly informed",
+      "text": "The workshop will inform you about everything. The car was accepted, the repair was started, the car was completed and delivered. You know everything."
+    },
+    "fourth": {
+      "title": "Check",
+      "text": "Register to start your adventure",
+      "button": "Register"
+    }
+  },
+  "userProfile": {
+    "title": "Profile",
+    "userName": "Name",
+    "userSurname": "Surname",
+    "userPhone": "Phone number",
+    "email": "Email Address",
+    "yourCars": "Your cars",
+    "addCar": "Add car",
+    "addCarSuccess": "Car added successfully",
+    "updateCarSuccess": "Car data changed",
+    "updateProfileSuccess": "Profile updated",
+    "vinNotDefined": "Number Vin not given",
+    "form": {
+      "title": "Add your car",
+      "editTitle": "Edit your car",
+      "carBrand": "Vehicle Brand",
+      "carModel": "Vehicle Model",
+      "productionYear": "Production year"
+    },
+    "deleteCar": "Delete car",
+    "deleteCarTitle": "Delete car?",
+    "deleteCarText": "{car} will be removed from your list. Repair history and workshop records are kept.",
+    "noCars": "You haven't added a car yet"
+  },
+  "companyProfile": {
+    "title": "Company profile",
+    "name": "Company name",
+    "city": "City",
+    "nip": "VAT number",
+    "address": "Address",
+    "openingTime": "Opening time",
+    "closingTime": "Closing time",
+    "phone": "Phone",
+    "email": "Email address",
+    "services": "Services performed"
+  },
+  "company": {
+    "title": "Repair list",
+    "activeFixes": "Active fixes",
+    "toBeAccepted": "Cars to be accepted",
+    "services": "Services",
+    "pendingTitle": "Company blocked – waiting for the contract",
+    "pendingText": "A moderator will unlock the company once the contract is signed. Until then customers cannot see you, but you can prepare your profile and price list.",
+    "suspendedTitle": "Company suspended",
+    "suspendedText": "Your company was suspended by a moderator. Please contact support.",
+    "toBeAcceptedHint": "Show only bookings without any status",
+    "notApprovedHint": "Available once a moderator unlocks your company"
+  },
+  "userBookFix": {
+    "stepper": {
+      "chooseRepair": "Service",
+      "chooseCar": "Vehicle",
+      "summary": "Summary",
+      "chooseMechanic": "Workshop",
+      "nextStep": "Next",
+      "prevStep": "Back",
+      "first": {
+        "title": "Select repair type",
+        "description": "Problem description",
+        "error": "Select repair type!"
+      },
+      "second": {
+        "chooseCar": "Choose car",
+        "carData": "Vehicle data",
+        "chooseFromYourCars": "Choose a car from your list",
+        "chooseOtherCar": "Choose a car outside your cars",
+        "carBrand": "Vehicle Brand",
+        "carModel": "Vehicle Model",
+        "productionYear": "Production year",
+        "vin": "Vin number",
+        "iKnowVin": "I know Vin",
+        "mileage": "Mileage"
+      },
+      "third": {
+        "title": "Choose workshop",
+        "noWorkshops": "No workshops in selected city. Chose other location.",
+        "workshopSelected": "Selected workshop",
+        "dateSelected": "Selected date",
+        "availableDates": "Available dates",
+        "noAvailableDates": "No available dates",
+        "chooseDate": "Choose a workshop and a time"
+      },
+      "fourth": {
+        "title": "Summary",
+        "car": "Car",
+        "repair": "Repair",
+        "description": "Repair description",
+        "workshop": "Workshop",
+        "book": "Book repair"
+      }
+    }
+  },
+  "services": {
+    "bodyWork": "Body work",
+    "paint": "Paint",
+    "electrician": "Electrician",
+    "oil": "Oils and filters",
+    "engine": "Engine",
+    "tires": "Tires",
+    "windows": "Windows",
+    "airConditioning": "Air Conditioning",
+    "other": "Other"
+  },
+  "noRole": {
+    "chooseRole": "Who are you?",
+    "select": "Choose role",
+    "userProfile": "User profile",
+    "companyProfile": "Company profile"
+  },
+  "roles": {
+    "workshop": "Workshop",
+    "user": "User",
+    "none": "No role",
+    "moderator": "Moderator"
+  },
+  "notifications": {
+    "title": "My repairs",
+    "openDetails": "Open details",
+    "setCurrantDate": "Set current date",
+    "expense": "Expense",
+    "addStatus": "Add status",
+    "addDescription": "Add description",
+    "description": "Description",
+    "cancel": "Cancel",
+    "comments": {
+      "getCar": "Workshop received car",
+      "addExpense": "Expense added: ",
+      "addGiveBackTime": "Give back time added: ",
+      "giveBackCar": "Car given back.",
+      "addQuote": "Repair quote: ",
+      "moderatorCancel": "Repair cancelled by a moderator."
+    },
+    "date": "Date"
+  },
+  "history": {
+    "title": "Fixes history"
+  },
+  "fixStatues": {
+    "title": "Fix statuses",
+    "getCar": "Get car",
+    "giveBackCar": "Give back a car",
+    "addExpense": "Expense",
+    "addGiveBackTime": "Car give back time",
+    "userCancel": "User canceled",
+    "workshopCancel": "Workshop canceled",
+    "addQuote": "Mechanic's quote",
+    "moderatorCancel": "Cancelled by a moderator",
+    "changeProposed": "Workshop proposed a change",
+    "changeAccepted": "Client accepted the change",
+    "changeRejected": "Client rejected the change",
+    "bookingConfirmed": "Client confirmed the visit"
+  },
+  "universal": {
+    "save": "Save",
+    "add": "Add",
+    "close": "Close",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "history": "History",
+    "description": "Description",
+    "error": "Error occurred"
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "People who used your workshop",
+    "bookForClient": "Book a client",
+    "bookHint": "The visit is marked as booked by the workshop and waits for the client's confirmation.",
+    "bookingSent": "Visit proposal sent to the client",
+    "sendBooking": "Send for approval",
+    "call": "Call",
+    "name": "Client",
+    "visits": "Visits",
+    "lastVisit": "Last visit",
+    "consent": "Consent",
+    "consentYes": "Client agreed to be contacted with offers",
+    "consentNo": "No consent for marketing contact",
+    "onlyConsent": "Consent only",
+    "consentHint": "Promotional contact is only allowed with the client's consent (GDPR)",
+    "consentCheckbox": "I agree that {workshop} may contact me about promotions (optional)",
+    "serviceFilter": "Used services",
+    "serviceFilterHint": "E.g. pick “Tires” to call clients before the season",
+    "empty": "No clients match the filters",
+    "invalidSlot": "Pick a full hour in the future between {from}:00 and {to}:00"
+  },
+  "moderator": {
+    "title": "Moderator panel",
+    "subtitle": "Companies, services, clients, repairs and reviews in one place",
+    "refresh": "Refresh",
+    "refreshHint": "Load the latest data",
+    "tabs": {
+      "stats": "Statistics",
+      "companies": "Companies",
+      "services": "Services",
+      "users": "Clients",
+      "fixes": "Repairs",
+      "reviews": "Reviews"
+    },
+    "stats": {
+      "pending": "To unlock",
+      "pendingHint": "Companies waiting for a signed contract",
+      "companiesHint": "All companies that are not deleted",
+      "usersHint": "All accounts",
+      "fixesHint": "Repairs in progress across all workshops",
+      "reviewsHint": "Visible customer reviews"
+    },
+    "activeFixes": "Active repairs",
+    "search": "Search",
+    "date": "Date",
+    "client": "Client",
+    "company": "Company",
+    "cars": "Cars",
+    "fullName": "Full name",
+    "role": "Role",
+    "roleHint": "Role changes apply immediately – no re-login needed",
+    "ownRole": "You cannot change your own role",
+    "statusNew": "New",
+    "moderation": "Moderation",
+    "addCompany": "Add company",
+    "editCompany": "Edit company",
+    "owner": "Owner (optional)",
+    "ownerHint": "The selected user gets the workshop role and access to the company panel",
+    "noCompanies": "No companies",
+    "unlock": "Unlock (contract signed)",
+    "suspend": "Suspend company",
+    "delete": "Delete",
+    "deleted": "Deleted",
+    "restore": "Restore",
+    "deleteCompanyTitle": "Delete company?",
+    "deleteCompanyText": "{name} will disappear from search. Data and repair history stay in the database – you can restore it.",
+    "addService": "Add service",
+    "editService": "Edit service",
+    "deleteServiceHint": "Delete – old repairs keep the service name",
+    "serviceKey": "Key",
+    "serviceKeyHint": "Technical id, e.g. “tires” – cannot be changed later",
+    "namePl": "Name (PL)",
+    "nameEn": "Name (EN)",
+    "order": "Order",
+    "active": "Active",
+    "activeHint": "Inactive services cannot be picked for new bookings",
+    "servicesEmpty": "The service catalog is empty – the app uses the default list.",
+    "seedServices": "Load defaults"
+  },
+  "stats": {
+    "total": "All repairs",
+    "inProgress": "In progress",
+    "finished": "Finished",
+    "cancelled": "Cancelled",
+    "avgRepairTime": "Average repair time",
+    "avgRepairTimeHint": "From receiving the car to handing it back",
+    "avgWaitTime": "Average waiting time",
+    "avgWaitTimeHint": "From booking to the workshop receiving the car",
+    "cancelRate": "Cancellation rate",
+    "quotesTotal": "Quotes total",
+    "quotesTotalHint": "Sum of mechanics' latest quotes in finished repairs",
+    "perMonth": "Repairs in the last 12 months",
+    "byStatus": "Repair status",
+    "topServices": "Most popular services",
+    "workshops": "Workshops",
+    "repairs": "Repairs",
+    "avgRating": "Average rating",
+    "hours": "{value} h",
+    "days": "{value} days",
+    "noData": "Not enough data"
+  },
+  "workshopStatus": {
+    "label": "Status",
+    "pending": "Blocked",
+    "approved": "Active",
+    "suspended": "Suspended",
+    "pendingHint": "Waiting for the contract – hidden from customers",
+    "approvedHint": "Visible to customers",
+    "suspendedHint": "Suspended by a moderator – hidden from customers",
+    "contractSigned": "Contract signed {date}"
+  },
+  "pricing": {
+    "title": "Price list",
+    "subtitle": "Labor hours and parts – customer estimates are calculated from this",
+    "hourlyRate": "Hourly labor rate",
+    "hourlyRateHint": "Multiplied by the labor hours of each item",
+    "howItWorks": "How do estimates work?",
+    "howItWorksText": "For each service add items with labor-hour and parts-cost ranges per car segment. Customers see the price range when booking and your quote has to fit in it.",
+    "missingPrices": "Services without prices – customers won't see an estimate:",
+    "allPriced": "All your services have prices.",
+    "addItem": "Add item",
+    "editItem": "Edit item",
+    "service": "Service",
+    "itemName": "Item name",
+    "itemNamePlaceholder": "e.g. Brake pad replacement",
+    "laborHours": "Labor hours",
+    "laborHoursHint": "Charged at {rate} PLN/h",
+    "partsCost": "Parts cost by car segment",
+    "segmentHint": "The segment comes from the car brand (e.g. BMW, Audi = premium; Dacia, Fiat = economy)",
+    "segments": {
+      "economy": "Economy",
+      "standard": "Standard",
+      "premium": "Premium"
+    },
+    "min": "From",
+    "max": "To",
+    "maxBelowMin": "“To” cannot be lower than “From”",
+    "nonNegative": "Value cannot be negative",
+    "partsTooltip": "Including parts: {parts}",
+    "empty": "The price list is empty",
+    "emptyText": "Add the first item so customers see estimates.",
+    "saved": "Price list saved",
+    "estimate": "Estimated cost",
+    "estimateSegment": "Estimated cost · segment: {segment}",
+    "estimateHint": "Calculated from the workshop's price list: labor hours × rate + parts for your car's segment. The mechanic's final quote stays within this range.",
+    "noEstimate": "Quote after inspection",
+    "quote": "Quote amount",
+    "allowedRange": "Allowed range: {range}",
+    "quoteOutOfRange": "The quote must be within {range} – propose a scope change if more is needed"
+  },
+  "proposal": {
+    "bookedByWorkshop": "Visit booked by the workshop",
+    "bookedByWorkshopText": "The workshop proposed a visit on {date}. Confirm or reject it.",
+    "changeTitle": "The workshop proposes a scope change",
+    "current": "Current",
+    "proposed": "Proposed",
+    "accept": "Accept",
+    "confirm": "Confirm",
+    "reject": "Reject",
+    "createdByWorkshop": "Booked by the workshop",
+    "waitingForClient": "Waiting for the client's decision",
+    "waiting": "Awaiting client",
+    "yourDecision": "Needs your decision",
+    "decisionsWaiting": "Items from the workshop to approve: {count}",
+    "proposeTitle": "Propose a change",
+    "proposeHint": "The client must accept – until then the current scope applies",
+    "note": "Message for the client (e.g. what you found)",
+    "send": "Send proposal"
+  },
+  "repairs": {
+    "empty": "No repairs to show"
+  },
+  "reviews": {
+    "title": "Rate the repair",
+    "rate": "Rate",
+    "rating": "Rating",
+    "comment": "Comment (optional)",
+    "submit": "Submit review",
+    "none": "No reviews yet",
+    "empty": "No reviews",
+    "hidden": "Hidden",
+    "visible": "Visible",
+    "hide": "Hide review",
+    "show": "Show review",
+    "filterAll": "All",
+    "filterLow": "≤ 2 stars",
+    "filterMid": "≤ 3 stars"
+  }
+}
