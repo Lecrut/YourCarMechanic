@@ -41,6 +41,8 @@ export interface IFix {
   /** Workshop-created bookings wait for the client's confirmation. */
   confirmed: boolean
   proposal: IFixProposal | null
+  /** Promotion applied when booking (the estimate already includes it). */
+  promotion: { title: string, percent: number } | null
   /** Note from the workshop, visible to the client. (The internal note lives in `fixes/{id}/internal/note`.) */
   workshopNote: string
 
@@ -90,6 +92,7 @@ export function mapIFix(data: FixInput): IFix {
         }
       : null,
     workshopNote: data.workshopNote || '',
+    promotion: data.promotion ? { title: data.promotion.title || '', percent: Number(data.promotion.percent) || 0 } : null,
 
     reference: data.reference || '',
   }
@@ -153,3 +156,12 @@ export function matchesSearch(fix: IFix, text: string): boolean {
 }
 
 export const isOnDay = (fix: IFix, day: Date) => fix.date.toDateString() === day.toDateString()
+
+/** The client accepted the latest quote (a newer quote needs a new acceptance). */
+export function isQuoteAccepted(fix: IFix): boolean {
+  const lastQuote = fix.notifications.findLastIndex(n => n.notificationType === 'addQuote')
+  const lastAcceptance = fix.notifications.findLastIndex(n => n.notificationType === 'quoteAccepted')
+  return lastQuote >= 0 && lastAcceptance > lastQuote
+}
+
+export const canAcceptQuote = (fix: IFix) => !fix.isClosed && Boolean(latestQuote(fix)) && !isQuoteAccepted(fix)

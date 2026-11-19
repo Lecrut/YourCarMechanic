@@ -20,7 +20,7 @@ export function statusOptions(t: Translate, mode: ViewerMode, carReceived: boole
     return toOptions(t, ['workshopCancel'])
   if (mode === 'workshop')
     return toOptions(t, carReceived
-      ? ['addQuote', 'addGiveBackTime', 'addExpense', 'giveBackCar']
+      ? ['addGiveBackTime', 'addExpense', 'giveBackCar']
       : ['getCar', 'workshopCancel'])
   return []
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useDisplay, useTheme } from 'vuetify'
 import { awaitsClientDecision } from '~/models/fix'
+import NotificationBell from '~/components/notificationBell.vue'
 
 interface NavItem {
   title: string
@@ -174,6 +175,8 @@ async function logOut() {
         />
       </v-list>
     </v-menu>
+
+    <notification-bell v-if="role === 'user' || role === 'workshop'" />
 
     <v-btn
       v-tooltip:bottom="t('navBar.changeTheme')"

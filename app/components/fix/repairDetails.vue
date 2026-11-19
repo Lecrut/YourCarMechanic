@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type IFix, isFixFinished, latestQuote, totalCost, type ViewerMode } from '~/models/fix'
+import { canAcceptQuote, type IFix, isFixFinished, isQuoteAccepted, latestQuote, totalCost, type ViewerMode } from '~/models/fix'
 import { downloadIcs } from '~/utils/calendar'
 import type { IWorkshop } from '~/models/workshop'
 import { type INotification, mapINotification, type NotificationType } from '~/models/notification'
@@ -11,6 +11,7 @@ import { requiredRule } from '~/utils/rules'
 import CarCard from '~/components/user/carCard.vue'
 import ClientDecision from '~/components/fix/clientDecision.vue'
 import RepairNotes from '~/components/fix/repairNotes.vue'
+import QuoteDialog from '~/components/fix/quoteDialog.vue'
 import ProposeChangeDialog from '~/components/fix/proposeChangeDialog.vue'
 import WorkshopCard from '~/components/user/workshopCard.vue'
 
@@ -33,6 +34,7 @@ const { form, valid, isValid } = formValidation()
 
 const workshop = ref<IWorkshop | null>(null)
 const showPropose = ref(false)
+const showQuote = ref(false)
 const isAddStatus = ref(false)
 const newStatus = ref<NotificationType | null>(null)
 const newStatusDate = ref('')
@@ -44,6 +46,13 @@ const options = computed(() => statusOptions(t, props.mode, props.fix.notificati
 const canAddStatus = computed(() => options.value.length > 0 && !props.fix.isClosed && !isFixFinished(props.fix))
 const quote = computed(() => latestQuote(props.fix))
 const cost = computed(() => totalCost(props.fix))
+const quoteAccepted = computed(() => isQuoteAccepted(props.fix))
+const canQuote = computed(() => props.mode === 'workshop' && props.fix.confirmed && !props.fix.isClosed
+  && !isFixFinished(props.fix) && props.fix.notifications.some(n => n.notificationType === 'getCar'))
+
+async function acceptQuote() {
+  await fixesStore.addNotification(props.fix, mapINotification({ notificationType: 'quoteAccepted' }))
+}
 const canAddToCalendar = computed(() => props.mode === 'user' && !props.fix.isClosed && props.fix.date > new Date())
 
 function addToCalendar() {
@@ -253,7 +262,19 @@ watch(isDialogShown, async (shown) => {
                 :title="`${quote.cost} PLN`"
                 :subtitle="t('fixStatues.addQuote')"
                 data-testid="quote"
-              />
+              >
+                <template #append>
+                  <v-chip
+                    :color="quoteAccepted ? 'success' : 'warning'"
+                    size="small"
+                    variant="tonal"
+                    :prepend-icon="quoteAccepted ? 'mdi-check-circle' : 'mdi-timer-sand'"
+                    data-testid="quote-state"
+                  >
+                    {{ quoteAccepted ? t('quote.accepted') : t('quote.awaiting') }}
+                  </v-chip>
+                </template>
+              </v-list-item>
               <v-list-item
                 v-if="cost && cost !== quote?.cost"
                 prepend-icon="mdi-cash-register"
@@ -270,6 +291,87 @@ watch(isDialogShown, async (shown) => {
             </v-list>
           </v-col>
         </v-row>
+
+        <template v-if="quote && (quote.items.length || (mode === 'user' && canAcceptQuote(fix)))">
+          <v-divider class="my-4" />
+          <div class="text-title-large mb-3 d-flex align-center ga-2">
+            <v-icon
+              icon="mdi-file-document-check-outline"
+              color="primary"
+            />
+            {{ t('quote.breakdown') }}
+          </div>
+          <v-table
+            v-if="quote.items.length"
+            density="compact"
+            data-testid="quote-breakdown"
+          >
+            <thead>
+              <tr>
+                <th>{{ t('pricing.itemName') }}</th>
+                <th class="text-end">
+                  {{ t('pricing.laborHours') }}
+                </th>
+                <th class="text-end">
+                  {{ t('quote.parts') }}
+                </th>
+                <th class="text-end">
+                  {{ t('quote.lineTotal') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(item, index) in quote.items"
+                :key="index"
+              >
+                <td>{{ item.name }}</td>
+                <td class="text-end">
+                  {{ item.laborHours }} h
+                </td>
+                <td class="text-end">
+                  {{ item.partsCost }} PLN
+                </td>
+                <td class="text-end font-weight-bold">
+                  {{ item.total }} PLN
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td
+                  colspan="3"
+                  class="text-end"
+                >
+                  {{ t('repairs.total') }}
+                </td>
+                <td class="text-end text-title-medium font-weight-bold">
+                  {{ quote.cost }} PLN
+                </td>
+              </tr>
+            </tfoot>
+          </v-table>
+          <p
+            v-if="quote.description"
+            class="text-body-medium mt-2"
+          >
+            {{ quote.description }}
+          </p>
+          <div
+            v-if="mode === 'user' && canAcceptQuote(fix)"
+            class="d-flex justify-end mt-3"
+          >
+            <v-btn
+              color="success"
+              prepend-icon="mdi-check"
+              :loading="loading"
+              data-testid="accept-quote"
+              @click="acceptQuote"
+            >
+              {{ t('quote.accept') }}
+            </v-btn>
+          </div>
+        </template>
 
         <template v-if="mode !== 'user' || fix.workshopNote">
           <v-divider class="my-4" />
@@ -317,9 +419,17 @@ watch(isDialogShown, async (shown) => {
         </template>
 
         <div
-          v-if="(canAddStatus || canPropose) && !isAddStatus"
+          v-if="(canAddStatus || canPropose || canQuote) && !isAddStatus"
           class="mt-5 d-flex justify-center flex-wrap ga-2"
         >
+          <v-btn
+            v-if="canQuote"
+            prepend-icon="mdi-file-document-edit-outline"
+            data-testid="give-quote"
+            @click="showQuote = true"
+          >
+            {{ latestQuote(fix) ? t('quote.update') : t('quote.title') }}
+          </v-btn>
           <v-btn
             v-if="canPropose"
             prepend-icon="mdi-swap-horizontal"
@@ -442,6 +552,12 @@ watch(isDialogShown, async (shown) => {
       </v-card-text>
     </v-card>
   </v-dialog>
+
+  <quote-dialog
+    v-if="mode === 'workshop'"
+    v-model="showQuote"
+    :fix="fix"
+  />
 
   <propose-change-dialog
     v-if="mode === 'workshop'"

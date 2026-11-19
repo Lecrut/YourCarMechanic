@@ -274,7 +274,8 @@
     "changeProposed": "Warsztat zaproponował zmianę",
     "changeAccepted": "Klient zaakceptował zmianę",
     "changeRejected": "Klient odrzucił zmianę",
-    "bookingConfirmed": "Klient potwierdził wizytę"
+    "bookingConfirmed": "Klient potwierdził wizytę",
+    "quoteAccepted": "Wycena zaakceptowana"
   },
   "universal": {
     "save": "Zapisz",
@@ -540,5 +541,70 @@
     "atWorkshop": "Teraz w warsztacie",
     "atWorkshopHint": "Auta przyjęte i jeszcze nie oddane",
     "emptyWorkshop": "Brak aut w warsztacie"
+  },
+  "quote": {
+    "title": "Wystaw wycenę",
+    "update": "Zaktualizuj wycenę",
+    "parts": "Części",
+    "lineTotal": "Razem",
+    "include": "Uwzględnij pozycję",
+    "customLine": "Inna pozycja",
+    "addLine": "Dodaj pozycję",
+    "allowed": "Z cennika: {range}",
+    "outOfEstimate": "Suma wykracza poza szacunek widziany przez klienta – zaproponuj zmianę zakresu, jeśli naprawa jest większa.",
+    "comment": "Komentarz do wyceny (opcjonalnie)",
+    "send": "Wyślij wycenę",
+    "breakdown": "Wycena",
+    "accept": "Akceptuję wycenę",
+    "accepted": "Zaakceptowana",
+    "awaiting": "Czeka na klienta"
+  },
+  "promotions": {
+    "title": "Promocje",
+    "subtitle": "Czasowe rabaty na wybrane usługi – klienci widzą je przy wyborze warsztatu",
+    "add": "Dodaj promocję",
+    "edit": "Edytuj promocję",
+    "name": "Nazwa promocji",
+    "namePlaceholder": "np. Jesienna wymiana opon",
+    "percent": "Rabat",
+    "from": "Od",
+    "to": "Do",
+    "endBeforeStart": "Koniec nie może być przed początkiem",
+    "empty": "Brak promocji",
+    "emptyText": "Dodaj rabat, np. na sezonową wymianę opon.",
+    "state": {
+      "running": "Trwa",
+      "planned": "Zaplanowana",
+      "ended": "Zakończona"
+    },
+    "badgeHint": "{title} – do {date}"
+  },
+  "feed": {
+    "title": "Powiadomienia",
+    "markRead": "Oznacz jako przeczytane",
+    "empty": "Nic nowego",
+    "now": "przed chwilą",
+    "ago": {
+      "min": "{value} min temu",
+      "h": "{value} godz. temu",
+      "d": "{value} dni temu"
+    },
+    "events": {
+      "newBooking": "Nowa rezerwacja: {car} ({client})",
+      "bookedForYou": "Warsztat umówił wizytę dla {car} – potwierdź ją",
+      "getCar": "Warsztat przyjął {car}",
+      "addQuote": "Nowa wycena dla {car}: {cost} PLN",
+      "quoteAccepted": "{client} zaakceptował(a) wycenę ({car})",
+      "addGiveBackTime": "Znamy termin odbioru {car}",
+      "addExpense": "Dodatkowy koszt dla {car}: {cost} PLN",
+      "giveBackCar": "{car} gotowy – wystaw opinię!",
+      "changeProposed": "Warsztat proponuje zmianę dla {car}",
+      "changeAccepted": "{client} zaakceptował(a) zmianę ({car})",
+      "changeRejected": "{client} odrzucił(a) zmianę ({car})",
+      "bookingConfirmed": "{client} potwierdził(a) wizytę ({car})",
+      "userCancel": "{client} odwołał(a) wizytę ({car})",
+      "workshopCancel": "Warsztat odwołał wizytę ({car})",
+      "moderatorCancel": "Moderator anulował naprawę ({car})"
+    }
   }
 }

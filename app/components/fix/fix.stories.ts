@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
+import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/test'
 import RepairDetails from './repairDetails.vue'
 import RepairList from './repairList.vue'
 import { autofix, fixBookedByWorkshop, fixWithProposal, moderator, newFix, userAnna, workshopOwner } from '../../../.storybook/mocks/fixtures'
@@ -50,24 +50,41 @@ export const ClientRejectsProposal: Story = {
 }
 
 /** A workshop quote outside the booking estimate is rejected by the form. */
+/** Itemised quote from the price list; the total must fit the estimate the client saw. */
 export const WorkshopQuoteMustFitEstimate: Story = {
   args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'workshop' },
   parameters: { app: { user: workshopOwner, company: autofix } },
   play: async () => {
-    await userEvent.click(await screen.findByTestId('add-status'))
+    await userEvent.click(await screen.findByTestId('give-quote'))
+    // BMW = premium: 0.8 h × 150 PLN + 375 PLN parts (mid-range) = 495 PLN
+    await waitFor(() => expect(screen.getByTestId('quote-total')).toHaveTextContent('495 PLN'))
 
-    await pickStatus('Wycena mechanika')
+    const parts = screen.getByTestId('quote-parts-0').querySelector('input')!
+    await userEvent.clear(parts)
+    await userEvent.type(parts, '2000')
+    await expect(await screen.findByTestId('quote-out-of-range')).toBeVisible()
+    await expect(screen.getByTestId('send-quote')).toBeDisabled()
 
-    const cost = screen.getByTestId('status-cost').querySelector('input')!
-    await userEvent.type(cost, '9999')
-    await userEvent.click(screen.getByTestId('save-status'))
-    await expect(await screen.findByText(/Wycena musi mieścić się w widełkach 375 – 600 PLN/)).toBeInTheDocument()
-    await expect(fixesService.addNotification).not.toHaveBeenCalled()
-
-    await userEvent.clear(cost)
-    await userEvent.type(cost, '500')
-    await userEvent.click(screen.getByTestId('save-status'))
+    await userEvent.clear(parts)
+    await userEvent.type(parts, '400')
+    await userEvent.click(screen.getByTestId('send-quote'))
     await waitFor(() => expect(fixesService.addNotification).toHaveBeenCalled())
+    const [, notification] = mocked(fixesService.addNotification).mock.calls.at(-1)!
+    await expect(notification.notificationType).toBe('addQuote')
+    await expect(notification.cost).toBe(520)
+    await expect(notification.items).toHaveLength(1)
+  },
+}
+
+/** The client accepts the mechanic's quote. */
+export const ClientAcceptsQuote: Story = {
+  args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'user' },
+  play: async () => {
+    await expect(await screen.findByTestId('quote-state')).toHaveTextContent('Czeka na klienta')
+    await userEvent.click(screen.getByTestId('accept-quote'))
+    await waitFor(() => expect(fixesService.addNotification).toHaveBeenCalled())
+    const [, notification] = mocked(fixesService.addNotification).mock.calls.at(-1)!
+    await expect(notification.notificationType).toBe('quoteAccepted')
   },
 }
 

@@ -40,19 +40,19 @@ export const setWorkshopStatus = (companyRef: string, status: WorkshopStatus) =>
 
 /** Company created by a moderator (e.g. after signing a contract offline), optionally with an owner account. */
 export async function createWorkshop(workshop: IWorkshop, owner: IUser | null): Promise<IWorkshop> {
-  const ref = doc(collection(db(), 'companies'))
+  const docRef = doc(collection(db(), 'companies'))
   const ownerUid = owner?.reference.split('/').pop() ?? ''
   const approved = workshop.status === 'approved'
   const { reference: _reference, contractSignedAt: _signed, deletedAt: _deletedAt, ...data } = mapIWorkshop({ ...workshop, ownerUid })
 
   const batch = writeBatch(db())
-  batch.set(ref, {
+  batch.set(docRef, {
     ...data,
     contractSignedAt: approved ? Timestamp.now() : null,
     createTime: serverTimestamp(),
   })
-  if (owner) batch.update(doc(db(), owner.reference), { role: 'workshop', companyRef: ref.path })
+  if (owner) batch.update(doc(db(), owner.reference), { role: 'workshop', companyRef: docRef.path })
   await batch.commit()
 
-  return mapIWorkshop({ ...data, contractSignedAt: approved ? new Date() : null, reference: ref.path })
+  return mapIWorkshop({ ...data, contractSignedAt: approved ? new Date() : null, reference: docRef.path })
 }

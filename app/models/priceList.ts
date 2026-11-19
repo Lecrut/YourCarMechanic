@@ -72,6 +72,8 @@ export function estimateRepair(
   hourlyRate: number,
   services: string[],
   brand: string,
+  /** Active promotions: service key → % off (see models/promotion.ts). */
+  discounts: Record<string, number> = {},
 ): Range | null {
   const segment = carSegment(brand)
   let min = 0
@@ -79,10 +81,11 @@ export function estimateRepair(
   for (const service of services) {
     const serviceItems = items.filter(i => i.serviceKey === service)
     if (!serviceItems.length) return null
+    const factor = 1 - (discounts[service] ?? 0) / 100
     for (const item of serviceItems) {
       const e = itemEstimate(item, hourlyRate, segment)
-      min += e.min
-      max += e.max
+      min += Math.round(e.min * factor)
+      max += Math.round(e.max * factor)
     }
   }
   return { min, max }
@@ -91,3 +94,7 @@ export function estimateRepair(
 export const isWithin = (value: number, range: Range) => value >= range.min && value <= range.max
 
 export const formatRange = (r: Range) => (r.min === r.max ? `${r.min} PLN` : `${r.min} – ${r.max} PLN`)
+
+/** Total of a quote line: labor hours × hourly rate + parts. */
+export const quoteLineTotal = (laborHours: number, partsCost: number, hourlyRate: number) =>
+  Math.round(Number(laborHours) * hourlyRate + Number(partsCost))

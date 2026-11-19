@@ -13,4 +13,12 @@ export default withNuxt(
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     },
   },
+  {
+    // Code relying on Nuxt auto-imports: a local `ref`/`computed`/… hides the auto-import
+    // for the whole file (runtime "ref is not defined").
+    files: ['app/**/*.vue', 'app/stores/**', 'app/composables/**', 'app/utils/**', 'app/middleware/**', 'app/plugins/**', 'app/services/**'],
+    rules: {
+      'id-denylist': ['error', 'ref', 'computed', 'reactive', 'watch'],
+    },
+  },
 )

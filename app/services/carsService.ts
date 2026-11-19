@@ -14,8 +14,8 @@ export async function getUserCars(userRef: string): Promise<ICar[]> {
 
 export async function addCar(car: ICar): Promise<ICar> {
   const { reference: _reference, deletedAt: _deletedAt, ...data } = mapICar(car)
-  const ref = await addDoc(cars(), { ...data, createTime: serverTimestamp() })
-  return mapICar({ ...data, reference: ref.path })
+  const docRef = await addDoc(cars(), { ...data, createTime: serverTimestamp() })
+  return mapICar({ ...data, reference: docRef.path })
 }
 
 export async function updateCar(car: ICar): Promise<ICar> {

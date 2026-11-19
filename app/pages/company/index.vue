@@ -59,10 +59,10 @@ const toAcceptCount = computed(() => fixes.value.filter(f => !f.notifications.le
 const todayCount = computed(() => fixes.value.filter(f => isOnDay(f, new Date())).length)
 
 // Live: new bookings, cancellations and client decisions show up immediately.
-watch(() => company.value?.reference, (ref) => {
-  if (!ref) return
-  fixesStore.watchActive('companyRef', ref)
-  reviewsStore.loadOwnRating(ref)
+watch(() => company.value?.reference, (companyRef) => {
+  if (!companyRef) return
+  fixesStore.watchActive('companyRef', companyRef)
+  reviewsStore.loadOwnRating(companyRef)
 }, { immediate: true })
 onUnmounted(() => fixesStore.stopWatching())
 

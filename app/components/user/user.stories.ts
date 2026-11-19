@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import CarCard from './carCard.vue'
 import WorkshopCard from './workshopCard.vue'
-import { anniesCar, autofix, userAnna } from '../../../.storybook/mocks/fixtures'
+import { anniesCar, autofix, promotions, userAnna } from '../../../.storybook/mocks/fixtures'
 import { carsService, workshopsService } from '~/services'
 
 const meta = {
@@ -72,5 +72,20 @@ export const WorkshopWithoutPrices: Story = {
     await expect(canvas.getByTestId('estimate')).toHaveTextContent('Wycena po oględzinach')
     await expect(canvas.getByText('Brak opinii')).toBeVisible()
     await expect(canvas.queryByTestId('available-dates')).toBeNull()
+  },
+}
+
+/** A running promotion shows a badge and the price before the discount. */
+export const WorkshopWithPromotion: Story = {
+  render: () => ({
+    components: { WorkshopCard },
+    setup: () => ({ autofix, promotion: promotions[0], estimate: { min: 120, max: 160 }, before: { min: 150, max: 200 } }),
+    template: `<workshop-card :workshop="autofix" :is-presentation="true" :estimate="estimate" :estimate-before="before" :promotion="promotion" />`,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByTestId('promotion-badge')).toHaveTextContent('−20%')
+    await expect(canvas.getByTestId('estimate')).toHaveTextContent('120 – 160 PLN')
+    await expect(canvas.getByTestId('estimate-before')).toHaveTextContent('150 – 200 PLN')
   },
 }

@@ -5,6 +5,7 @@ import { mapIWorkshop } from '~/models/workshop'
 import { mapIPriceListItem } from '~/models/priceList'
 import { mapIReview } from '~/models/review'
 import { DEFAULT_SERVICES } from '~/models/service'
+import { mapIPromotion } from '~/models/promotion'
 import { addDays, atHour } from '~/utils/time'
 
 const tomorrow = addDays(new Date(), 1)
@@ -195,3 +196,14 @@ export const reviews = [
 ]
 
 export const services = DEFAULT_SERVICES
+
+export const promotions = [
+  mapIPromotion({
+    title: 'Jesienna wymiana opon',
+    services: ['tires'],
+    percent: 20,
+    validFrom: daysAgo(5),
+    validTo: addDays(new Date(), 20),
+    reference: 'companies/autofix/promotions/autumn',
+  }),
+]

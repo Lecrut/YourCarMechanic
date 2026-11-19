@@ -67,9 +67,11 @@ const bookedCar = computed(() =>
       }),
 )
 
-const estimateFor = (workshop: IWorkshop) =>
-  workshopStore.estimateFor(workshop, selectedServices.value, bookedCar.value.manufacturer)
+const estimateFor = (workshop: IWorkshop, discounted = true) =>
+  workshopStore.estimateFor(workshop, selectedServices.value, bookedCar.value.manufacturer, discounted)
+const promotionFor = (workshop: IWorkshop) => workshopStore.promotionFor(workshop, selectedServices.value)
 const selectedEstimate = computed(() => (selectedWorkshop.value ? estimateFor(selectedWorkshop.value) : null))
+const selectedPromotion = computed(() => (selectedWorkshop.value ? promotionFor(selectedWorkshop.value) : null))
 
 function bookTime(workshop: IWorkshop, date: Date) {
   selectedWorkshop.value = workshop
@@ -118,6 +120,7 @@ async function bookFix() {
     services: selectedServices.value,
     userRef: user.value.reference,
     estimate: selectedEstimate.value,
+    promotion: selectedPromotion.value ? { title: selectedPromotion.value.title, percent: selectedPromotion.value.percent } : null,
     createdBy: 'user',
   }))
 
@@ -400,6 +403,8 @@ watch([city, selectedServices], ([newCity, services]) => {
                   :workshop="item"
                   :is-presentation="false"
                   :estimate="estimateFor(item)"
+                  :estimate-before="estimateFor(item, false)"
+                  :promotion="promotionFor(item)"
                   :rating="ratings[item.reference]"
                   :selected="selectedWorkshop?.reference === item.reference"
                   @book="bookTime"
@@ -476,7 +481,7 @@ watch([city, selectedServices], ([newCity, services]) => {
 
               <v-list-item
                 prepend-icon="mdi-cash-multiple"
-                :title="selectedEstimate ? formatRange(selectedEstimate) : t('pricing.noEstimate')"
+                :title="selectedEstimate ? formatRange(selectedEstimate) + (selectedPromotion ? ` (−${selectedPromotion.percent}% · ${selectedPromotion.title})` : '') : t('pricing.noEstimate')"
                 :subtitle="t('pricing.estimateSegment', { segment: t(`pricing.segments.${carSegment(bookedCar.manufacturer)}`) })"
               >
                 <template #append>

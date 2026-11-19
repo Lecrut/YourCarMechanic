@@ -80,6 +80,15 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      match /promotions/{promotionId} {
+        function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
+        allow read: if signedIn();
+        allow create, update: if (isModerator() || ownsCompany())
+          && request.resource.data.percent is int
+          && request.resource.data.percent >= 1 && request.resource.data.percent <= 90;
+        allow delete: if false;
+      }
+
       // Booked hours: a technical index, not history (the fix keeps the history).
       match /slots/{slotId} {
         function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
@@ -141,8 +150,8 @@ service cloud.firestore {
         // …or propose a scope change
         || (isWorkshop() && onlyChanges(['notifications', 'proposal'])
           && request.resource.data.proposal != null && appendsOneStatus(['changeProposed']))
-        // client: cancel
-        || (isClient() && onlyChanges(['notifications', 'isClosed']) && appendsOneStatus(['userCancel']))
+        // client: cancel or accept the quote
+        || (isClient() && onlyChanges(['notifications', 'isClosed']) && appendsOneStatus(['userCancel', 'quoteAccepted']))
         // client: confirm a visit booked by the workshop
         || (isClient() && resource.data.confirmed == false && onlyChanges(['notifications', 'confirmed'])
           && request.resource.data.confirmed == true && appendsOneStatus(['bookingConfirmed']))

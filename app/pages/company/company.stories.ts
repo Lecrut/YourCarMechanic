@@ -129,3 +129,21 @@ export const RepairNotes: Story = {
     await waitFor(() => expect(fixesService.setInternalNote).toHaveBeenCalled())
   },
 }
+
+/** Promotions: running ones are listed; the form validates the date range. */
+export const Promotions: Story = {
+  play: async ({ canvasElement }) => {
+    const section = await within(canvasElement).findByTestId('promotions')
+    await expect(await within(section).findByText(/Jesienna wymiana opon · −20%/)).toBeVisible()
+    await expect(within(section).getByText('Trwa')).toBeVisible()
+
+    await userEvent.click(within(section).getByTestId('add-promotion'))
+    await userEvent.type((await screen.findByTestId('promotion-title')).querySelector('input')!, 'Black Friday')
+    const to = screen.getByTestId('promotion-to').querySelector('input')!
+    await userEvent.clear(to)
+    await userEvent.type(to, '2000-01-01')
+    await userEvent.click(screen.getByTestId('save-promotion'))
+    await expect(await screen.findByText('Koniec nie może być przed początkiem')).toBeInTheDocument()
+    await expect(pricingService.savePromotion).not.toHaveBeenCalled()
+  },
+}

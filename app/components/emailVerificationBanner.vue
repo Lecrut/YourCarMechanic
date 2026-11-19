@@ -11,8 +11,8 @@ async function resend() {
   sent.value = true
 }
 
-watch(() => user.value?.reference, (ref) => {
-  if (ref) authStore.checkEmailVerified()
+watch(() => user.value?.reference, (userRef) => {
+  if (userRef) authStore.checkEmailVerified()
 }, { immediate: true })
 </script>
 

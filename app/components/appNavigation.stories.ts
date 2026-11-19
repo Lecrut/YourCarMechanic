@@ -60,3 +60,28 @@ export const AccountMenuLogout: Story = {
     await waitFor(() => expect(navigatedTo).toContain('/'))
   },
 }
+
+/** Notification centre: unread badge, events from the workshop, mark as read. */
+export const CustomerNotifications: Story = {
+  parameters: { app: { user: userAnna } },
+  play: async ({ canvasElement }) => {
+    const bell = within(canvasElement).getByTestId('feed-bell')
+    await waitFor(() => expect(within(bell).getByText(/\d/)).toBeInTheDocument())
+    await userEvent.click(bell)
+    const menu = await screen.findByTestId('feed-menu')
+    await expect(within(menu).getByText('Skoda Octavia gotowy – wystaw opinię!')).toBeVisible()
+    await expect(within(menu).getByText(/Warsztat umówił wizytę dla BMW Seria 3/)).toBeVisible()
+    await userEvent.click(within(menu).getByTestId('feed-mark-read'))
+    await waitFor(() => expect(within(menu).queryByTestId('feed-mark-read')).toBeNull())
+  },
+}
+
+export const WorkshopNotifications: Story = {
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByTestId('feed-bell'))
+    const menu = await screen.findByTestId('feed-menu')
+    await expect(within(menu).getAllByText(/Nowa rezerwacja: BMW Seria 3 \(Anna Kowalska\)/).length).toBeGreaterThan(0)
+    await expect(within(menu).getByText(/Anna Kowalska odwołał\(a\) wizytę/)).toBeVisible()
+  },
+}

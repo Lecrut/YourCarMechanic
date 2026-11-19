@@ -3,6 +3,8 @@ import { CAR_SEGMENTS, formatRange, type IPriceListItem, itemEstimate } from '~/
 import { mapIWorkshop } from '~/models/workshop'
 import PageHeader from '~/components/pageHeader.vue'
 import PriceItemDialog from '~/components/company/priceItemDialog.vue'
+import PromotionDialog from '~/components/company/promotionDialog.vue'
+import { type IPromotion, isPromotionActive } from '~/models/promotion'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })
 
@@ -11,7 +13,7 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 const { company } = storeToRefs(authStore)
 const pricingStore = usePricingStore()
-const { items } = storeToRefs(pricingStore)
+const { items, promotions } = storeToRefs(pricingStore)
 const servicesStore = useServicesStore()
 const { loading, error } = storeToRefs(useSharedStore())
 
@@ -19,6 +21,26 @@ const hourlyRate = ref(company.value?.hourlyRate ?? 0)
 const editing = ref<IPriceListItem | null>(null)
 const showDialog = ref(false)
 const saved = ref(false)
+const editingPromotion = ref<IPromotion | null>(null)
+const showPromotion = ref(false)
+
+type PromotionState = 'running' | 'planned' | 'ended'
+function promotionState(p: IPromotion): PromotionState {
+  if (isPromotionActive(p)) return 'running'
+  return p.validFrom > new Date() ? 'planned' : 'ended'
+}
+const stateColor: Record<PromotionState, string> = { running: 'success', planned: 'info', ended: 'default' }
+const dateOnly = (d: Date) => d.toLocaleDateString()
+
+function openPromotion(p: IPromotion | null) {
+  editingPromotion.value = p
+  showPromotion.value = true
+}
+
+async function savePromotion(p: IPromotion) {
+  if (company.value) await pricingStore.savePromotion(company.value.reference, p)
+  if (!error.value) saved.value = true
+}
 
 const rateChanged = computed(() => hourlyRate.value !== (company.value?.hourlyRate ?? 0))
 const servicesWithoutPrices = computed(() =>
@@ -208,7 +230,94 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
           </template>
         </v-data-table>
       </v-card>
+
+      <v-card
+        class="mt-6"
+        elevation="2"
+        data-testid="promotions"
+      >
+        <v-card-item
+          :title="t('promotions.title')"
+          :subtitle="t('promotions.subtitle')"
+          prepend-icon="mdi-tag-multiple-outline"
+        >
+          <template #append>
+            <v-btn
+              prepend-icon="mdi-plus"
+              color="error"
+              :disabled="!company?.services.length"
+              data-testid="add-promotion"
+              @click="openPromotion(null)"
+            >
+              {{ t('promotions.add') }}
+            </v-btn>
+          </template>
+        </v-card-item>
+        <v-divider />
+        <v-list
+          v-if="promotions.length"
+          lines="two"
+        >
+          <v-list-item
+            v-for="p in promotions"
+            :key="p.reference"
+            :title="`${p.title} · −${p.percent}%`"
+            :subtitle="`${dateOnly(p.validFrom)} – ${dateOnly(p.validTo)} · ${p.services.map(servicesStore.label).join(', ')}`"
+          >
+            <template #prepend>
+              <v-avatar
+                color="error"
+                variant="tonal"
+              >
+                <v-icon icon="mdi-tag" />
+              </v-avatar>
+            </template>
+            <template #append>
+              <v-chip
+                :color="stateColor[promotionState(p)]"
+                size="small"
+                variant="tonal"
+                class="mr-2"
+              >
+                {{ t(`promotions.state.${promotionState(p)}`) }}
+              </v-chip>
+              <v-btn
+                v-tooltip="t('universal.edit')"
+                icon="mdi-pencil"
+                variant="text"
+                size="small"
+                color="primary"
+                :aria-label="t('universal.edit')"
+                @click="openPromotion(p)"
+              />
+              <v-btn
+                v-tooltip="t('moderator.delete')"
+                icon="mdi-delete"
+                variant="text"
+                size="small"
+                color="error"
+                :aria-label="t('moderator.delete')"
+                @click="pricingStore.removePromotion(p)"
+              />
+            </template>
+          </v-list-item>
+        </v-list>
+        <v-empty-state
+          v-else
+          icon="mdi-tag-off-outline"
+          :title="t('promotions.empty')"
+          :text="t('promotions.emptyText')"
+          size="64"
+        />
+      </v-card>
     </v-container>
+
+    <promotion-dialog
+      v-model="showPromotion"
+      :promotion="editingPromotion"
+      :services="company?.services ?? []"
+      @save="savePromotion"
+    />
 
     <price-item-dialog
       v-model="showDialog"

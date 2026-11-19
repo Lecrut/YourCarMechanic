@@ -67,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
     useModeratorStore().resetState()
     usePricingStore().resetState()
     useClientsStore().resetState()
+    useFeedStore().stop()
     resetState()
   }
 

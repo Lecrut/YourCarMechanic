@@ -36,8 +36,8 @@ export async function addWorkshop(workshop: IWorkshop, ownerUid: string): Promis
   if (!existing.empty) throw new AppError('errors.nipTaken')
 
   const { reference: _reference, deletedAt: _deletedAt, ...data } = mapIWorkshop({ ...workshop, ownerUid, status: 'pending', contractSignedAt: null })
-  const ref = await addDoc(companies(), { ...data, createTime: serverTimestamp() })
-  return mapIWorkshop({ ...data, reference: ref.path })
+  const docRef = await addDoc(companies(), { ...data, createTime: serverTimestamp() })
+  return mapIWorkshop({ ...data, reference: docRef.path })
 }
 
 /** NIP, owner and status are immutable for workshop owners (enforced by firestore.rules). */

@@ -274,7 +274,8 @@
     "changeProposed": "Workshop proposed a change",
     "changeAccepted": "Client accepted the change",
     "changeRejected": "Client rejected the change",
-    "bookingConfirmed": "Client confirmed the visit"
+    "bookingConfirmed": "Client confirmed the visit",
+    "quoteAccepted": "Quote accepted"
   },
   "universal": {
     "save": "Save",
@@ -540,5 +541,70 @@
     "atWorkshop": "At the workshop now",
     "atWorkshopHint": "Cars received and not handed back yet",
     "emptyWorkshop": "No cars at the workshop"
+  },
+  "quote": {
+    "title": "Create quote",
+    "update": "Update quote",
+    "parts": "Parts",
+    "lineTotal": "Total",
+    "include": "Include line",
+    "customLine": "Other item",
+    "addLine": "Add line",
+    "allowed": "From price list: {range}",
+    "outOfEstimate": "The total is outside the estimate the client saw – propose a scope change if the repair is bigger.",
+    "comment": "Comment (optional)",
+    "send": "Send quote",
+    "breakdown": "Quote",
+    "accept": "Accept quote",
+    "accepted": "Accepted",
+    "awaiting": "Awaiting client"
+  },
+  "promotions": {
+    "title": "Promotions",
+    "subtitle": "Time-limited discounts – customers see them when choosing a workshop",
+    "add": "Add promotion",
+    "edit": "Edit promotion",
+    "name": "Promotion name",
+    "namePlaceholder": "e.g. Autumn tyre change",
+    "percent": "Discount",
+    "from": "From",
+    "to": "To",
+    "endBeforeStart": "End cannot be before start",
+    "empty": "No promotions",
+    "emptyText": "Add a discount, e.g. for the seasonal tyre change.",
+    "state": {
+      "running": "Running",
+      "planned": "Planned",
+      "ended": "Ended"
+    },
+    "badgeHint": "{title} – until {date}"
+  },
+  "feed": {
+    "title": "Notifications",
+    "markRead": "Mark all as read",
+    "empty": "Nothing new",
+    "now": "just now",
+    "ago": {
+      "min": "{value} min ago",
+      "h": "{value} h ago",
+      "d": "{value} d ago"
+    },
+    "events": {
+      "newBooking": "New booking: {car} ({client})",
+      "bookedForYou": "The workshop booked a visit for {car} – please confirm",
+      "getCar": "The workshop received {car}",
+      "addQuote": "New quote for {car}: {cost} PLN",
+      "quoteAccepted": "{client} accepted the quote ({car})",
+      "addGiveBackTime": "Pick-up time set for {car}",
+      "addExpense": "Extra cost for {car}: {cost} PLN",
+      "giveBackCar": "{car} is ready – leave a review!",
+      "changeProposed": "The workshop proposes a change for {car}",
+      "changeAccepted": "{client} accepted the change ({car})",
+      "changeRejected": "{client} rejected the change ({car})",
+      "bookingConfirmed": "{client} confirmed the visit ({car})",
+      "userCancel": "{client} cancelled the visit ({car})",
+      "workshopCancel": "The workshop cancelled the visit ({car})",
+      "moderatorCancel": "A moderator cancelled the repair ({car})"
+    }
   }
 }

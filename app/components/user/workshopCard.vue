@@ -2,6 +2,8 @@
 import type { IWorkshop } from '~/models/workshop'
 import { formatRange, type Range } from '~/models/priceList'
 import type { IRatingSummary } from '~/models/review'
+import type { IPromotion } from '~/models/promotion'
+import { formatDateToString } from '~/utils/time'
 import FreeDates from '~/components/user/freeDates.vue'
 
 const props = defineProps<{
@@ -10,6 +12,9 @@ const props = defineProps<{
   /** Price-list estimate for the current booking (undefined = don't show the row). */
   estimate?: Range | null
   rating?: IRatingSummary
+  /** Running promotion for the selected services, and the estimate without it. */
+  promotion?: IPromotion | null
+  estimateBefore?: Range | null
   selected?: boolean
 }>()
 
@@ -43,8 +48,19 @@ const cityName = computed(() => citiesJsonStore.getCityName(props.workshop.city)
           <v-icon icon="mdi-garage" />
         </v-avatar>
       </template>
-      <v-card-title class="font-weight-bold">
-        {{ workshop.name }}
+      <v-card-title class="font-weight-bold d-flex align-center ga-2">
+        <span class="text-truncate">{{ workshop.name }}</span>
+        <v-chip
+          v-if="promotion"
+          v-tooltip:top="t('promotions.badgeHint', { title: promotion.title, date: formatDateToString(promotion.validTo).slice(0, 10) })"
+          color="error"
+          size="small"
+          variant="flat"
+          prepend-icon="mdi-tag"
+          data-testid="promotion-badge"
+        >
+          −{{ promotion.percent }}%
+        </v-chip>
       </v-card-title>
       <v-card-subtitle v-if="rating">
         <div
@@ -90,7 +106,17 @@ const cityName = computed(() => citiesJsonStore.getCityName(props.workshop.city)
           :title="estimate ? formatRange(estimate) : t('pricing.noEstimate')"
           :subtitle="t('pricing.estimate')"
           data-testid="estimate"
-        />
+        >
+          <template
+            v-if="promotion && estimateBefore && estimate && estimateBefore.max !== estimate.max"
+            #append
+          >
+            <span
+              class="text-body-small text-medium-emphasis text-decoration-line-through"
+              data-testid="estimate-before"
+            >{{ formatRange(estimateBefore) }}</span>
+          </template>
+        </v-list-item>
       </v-list>
 
       <v-chip-group column>

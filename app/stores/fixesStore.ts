@@ -12,11 +12,11 @@ export const useFixesStore = defineStore('fixes', () => {
   const activeSubscription = createSubscription()
 
   /** Live list of active fixes for a client (`userRef`) or a workshop (`companyRef`). */
-  function watchActive(field: 'userRef' | 'companyRef', ref: string) {
+  function watchActive(field: 'userRef' | 'companyRef', ownerRef: string) {
     watching.value = true
     activeSubscription.start(() => fixesService.watchActiveFixes(
       field,
-      ref,
+      ownerRef,
       (list) => {
         fixes.value = list
         watching.value = false

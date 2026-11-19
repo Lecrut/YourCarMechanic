@@ -41,8 +41,8 @@ async function readFix(reference: string, fallback: IFix): Promise<IFix> {
   return mapIFix(fromDoc<IFix>(await getDoc(doc(db(), reference))) ?? fallback)
 }
 
-async function listFixes(field: 'userRef' | 'companyRef', ref: string, closed: boolean): Promise<IFix[]> {
-  const snap = await getDocs(query(fixes(), where(field, '==', ref), where('isClosed', '==', closed)))
+async function listFixes(field: 'userRef' | 'companyRef', ownerRef: string, closed: boolean): Promise<IFix[]> {
+  const snap = await getDocs(query(fixes(), where(field, '==', ownerRef), where('isClosed', '==', closed)))
   return fromQuery<IFix>(snap).map(mapIFix).sort((a, b) => a.date.getTime() - b.date.getTime())
 }
 
@@ -61,13 +61,31 @@ export async function getAllWorkshopFixes(companyRef: string): Promise<IFix[]> {
  */
 export function watchActiveFixes(
   field: 'userRef' | 'companyRef',
-  ref: string,
+  ownerRef: string,
   onChange: (fixes: IFix[]) => void,
   onError: (error: Error) => void,
 ): () => void {
   return onSnapshot(
-    query(fixes(), where(field, '==', ref), where('isClosed', '==', false)),
+    query(fixes(), where(field, '==', ownerRef), where('isClosed', '==', false)),
     snap => onChange(fromQuery<IFix>(snap).map(mapIFix).sort((a, b) => a.date.getTime() - b.date.getTime())),
+    onError,
+  )
+}
+
+/**
+ * Repairs of the last weeks (open and closed) for the notification feed, watched live.
+ * Needs the composite indexes in firestore.indexes.json.
+ */
+export function watchRecentFixes(
+  field: 'userRef' | 'companyRef',
+  ownerRef: string,
+  since: Date,
+  onChange: (fixes: IFix[]) => void,
+  onError: (error: Error) => void,
+): () => void {
+  return onSnapshot(
+    query(fixes(), where(field, '==', ownerRef), where('date', '>=', Timestamp.fromDate(since))),
+    snap => onChange(fromQuery<IFix>(snap).map(mapIFix)),
     onError,
   )
 }
@@ -109,6 +127,7 @@ export async function addFix(fix: IFix): Promise<IFix> {
       confirmed: !byWorkshop,
       proposal: null,
       workshopNote: '',
+      promotion: fix.promotion,
       createTime: serverTimestamp(),
     })
   })

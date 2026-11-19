@@ -79,13 +79,13 @@ export const watchUser = (uid: string, onChange: (user: IUser | null) => void) =
 
 /** Completing the profile for the first time picks the `user` role. */
 export async function updateProfile(userRef: string, profile: IUserProfile, currentRole: IUser['role']): Promise<IUser> {
-  const ref = doc(db(), userRef)
-  await updateDoc(ref, { profile, role: currentRole ?? 'user' })
-  return loadUser(ref.id)
+  const docRef = doc(db(), userRef)
+  await updateDoc(docRef, { profile, role: currentRole ?? 'user' })
+  return loadUser(docRef.id)
 }
 
 export async function setWorkshopOwner(userRef: string, companyRef: string): Promise<IUser> {
-  const ref = doc(db(), userRef)
-  await updateDoc(ref, { role: 'workshop', companyRef })
-  return loadUser(ref.id)
+  const docRef = doc(db(), userRef)
+  await updateDoc(docRef, { role: 'workshop', companyRef })
+  return loadUser(docRef.id)
 }

@@ -10,6 +10,7 @@ import type { IWorkshop } from '~/models/workshop'
 import type { IUser } from '~/models/user'
 import type { IService } from '~/models/service'
 import type { IPriceListItem } from '~/models/priceList'
+import type { IPromotion } from '~/models/promotion'
 import { mapIReview, type IReview } from '~/models/review'
 import { CLOSING_NOTIFICATIONS, type INotification } from '~/models/notification'
 import type { IUserProfile } from '~/models/userProfile'
@@ -25,6 +26,7 @@ interface Db {
   reviews: IReview[]
   bookedSlots: Date[]
   internalNotes: Record<string, string>
+  promotions: IPromotion[]
 }
 
 const initial = (): Db => ({
@@ -37,6 +39,7 @@ const initial = (): Db => ({
   priceList: [...fx.priceList],
   reviews: [...fx.reviews],
   bookedSlots: [fx.newFix.date],
+  promotions: [...fx.promotions],
   internalNotes: { [fx.fixWithProposal.reference]: 'Klient prosił o telefon przed wymianą opon.' },
 })
 
@@ -120,6 +123,10 @@ export const fixesService = {
     onChange(clone(activeFixes(field, ref)))
     return () => {}
   }).mockName('watchActiveFixes'),
+  watchRecentFixes: fn((field: 'userRef' | 'companyRef', ref: string, _since: Date, onChange: (f: IFix[]) => void) => {
+    onChange(clone(db.fixes.filter(f => f[field] === ref)))
+    return () => {}
+  }).mockName('watchRecentFixes'),
   addFix: fn(async (fix: IFix) => {
     const saved = mapIFix({ ...fix, confirmed: fix.createdBy !== 'workshop', reference: newRef('fixes') })
     db.fixes.push(saved)
@@ -221,6 +228,14 @@ export const moderatorService = {
 export const pricingService = {
   getPriceList: fn(async (companyRef: string) =>
     later(db.priceList.filter(i => i.reference.startsWith(`${companyRef}/`) && !i.deletedAt))).mockName('getPriceList'),
+  getPromotions: fn(async (companyRef: string) =>
+    later(db.promotions.filter(p => p.reference.startsWith(`${companyRef}/`) && !p.deletedAt))).mockName('getPromotions'),
+  savePromotion: fn(async (companyRef: string, promotion: IPromotion) => {
+    const saved = promotion.reference ? promotion : { ...promotion, reference: newRef(`${companyRef}/promotions`) }
+    db.promotions = promotion.reference ? replace(db.promotions, saved) : [...db.promotions, saved]
+    return later(saved)
+  }).mockName('savePromotion'),
+  deletePromotion: fn(async (_ref: string) => {}).mockName('deletePromotion'),
   savePriceListItem: fn(async (companyRef: string, item: IPriceListItem) => {
     const saved = item.reference ? item : { ...item, reference: newRef(`${companyRef}/priceList`) }
     db.priceList = item.reference ? replace(db.priceList, saved) : [...db.priceList, saved]

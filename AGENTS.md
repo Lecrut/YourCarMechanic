@@ -34,7 +34,8 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
   Storybook/Vitest alias `~/services` to [`.storybook/mocks/services.ts`](.storybook/mocks/services.ts) –
   **every new service function needs a mock with the same signature.**
 - **Realtime vs one-off reads:** use `onSnapshot` (`watch*` functions) only for data another party changes
-  while it is on screen – active repairs, the signed-in user/company doc, booked slots in the date picker.
+  while it is on screen – active repairs, recent repairs for the notification bell, the signed-in user/company doc,
+  booked slots in the date picker.
   Everything else is `getDocs`/`getDoc`. Listeners live in stores via `createSubscription()` and must be
   stopped (`onUnmounted`, `resetState`, logout).
 - **Soft delete only:** never `deleteDoc` business data. Use `softDelete()`/`restore()` from
@@ -53,6 +54,10 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
   (`class="justify-center"`), elevation 0–5, v3 breakpoints (see `utils/vuetifyOptions.ts`).
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
   of the primary action; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
+- **Never name a variable `ref`, `computed`, `reactive` or `watch`** – it hides the Nuxt auto-import for the whole
+  file (`ref is not defined` at runtime). ESLint `id-denylist` enforces it.
+- **Errors:** throw `AppError('errors.someKey')` for domain errors; `sharedStore.run()` maps errors (incl. Firebase codes,
+  `utils/errors.ts`) to a message shown by the single `ErrorSnackbar` – components never render error snackbars.
 - **Components:** `<script setup lang="ts">`, typed `defineProps`, `defineModel`; import child components explicitly
   (Storybook has no Nuxt auto-registration). Don't name a ref like a component used in the template
   (`workshopForm` ref + `<workshop-form>` resolves to the ref!) – use `…Ref`.
@@ -106,7 +111,8 @@ app/
     workshopStore.ts            workshop search, price lists + ratings for estimates, live free hours
     pricingStore.ts             own price list + estimate()
     clientsStore.ts             workshop client list
-    reviewsStore.ts             add review, moderation
+    reviewsStore.ts             add review, own rating, moderation
+    feedStore.ts                notification bell (live recent repairs, unread per browser)
     servicesStore.ts            service catalog (options/label/CRUD)
     moderatorStore.ts           moderator panel data and actions
     carsStore.ts, sharedStore.ts, carsJsonStore.ts, citiesJsonStore.ts
@@ -115,7 +121,10 @@ app/
     priceList.ts                car segments, estimates, ranges
     stats.ts                    moderator statistics
     client.ts                   client list from repairs
-    review.ts, softDelete.ts, notification.ts, workshop.ts, service.ts, user.ts, car.ts, …
+    promotion.ts                time-limited discounts
+    feed.ts                     notification-bell events from repair history
+    week.ts                     week board layout, cars at the workshop
+    review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem), service.ts, user.ts, car.ts, …
   composables/                  role & status option lists
   utils/                        rules, form validation, time, subscription, vuetifyOptions (auto-imported)
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
@@ -124,10 +133,12 @@ app/
   components/
     appNavigation.vue           app bar, rail drawer per role, account card, bottom nav
     authCard, pageHeader, workshopForm, clientsTable, mySnackbar
-    fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog
+    fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog,
+                                quoteDialog (itemised quote), repairNotes (public + internal)
     user/                       carCard, addCarForm, workshopCard, freeDates, reviewDialog
-    company/                    priceItemDialog, bookForClientDialog
+    company/                    priceItemDialog, bookForClientDialog, promotionDialog, weekBoard (7-day calendar)
     moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable
+    notificationBell, errorSnackbar, emailVerificationBanner, appFooter
   pages/
     index, about                public
     auth/                       login, register, reset-password, role-choice
@@ -142,7 +153,7 @@ i18n/                           i18n.config.ts, locales/pl.json, locales/en.json
   vite.shared.ts                aliases + Nuxt auto-imports shared with vitest.config.ts
   mocks/                        services.ts (in-memory, fn() spies), fixtures.ts, nuxt.ts
 firestore.rules                 ★ authorization layer
-firestore.indexes.json          composite indexes (none needed today)
+firestore.indexes.json          composite indexes (fixes: userRef/companyRef + date for the bell)
 firebase.json, .firebaserc      hosting (SPA) + firestore + emulators
 vitest.config.ts                projects: unit (node) + storybook (Chromium)
 eslint.config.mjs               ESLint flat config
@@ -156,14 +167,16 @@ eslint.config.mjs               ESLint flat config
 | `users` | auth uid | `email`, `role`, `profile{name,surname,phone}`, `companyRef` | owner, moderator |
 | `companies` | auto | `name`, `nip`, `city`, `address`, `phone`, `openingTime`, `closingTime`, `services[]`, `ownerUid`, `status` (`pending`/`approved`/`suspended`), `contractSignedAt`, `hourlyRate`, `deletedAt` | read: signed in · owner edits profile fields · moderator all |
 | `companies/{id}/priceList` | auto | `serviceKey`, `name`, `laborHours{min,max}`, `partsCost{economy,standard,premium}{min,max}`, `deletedAt` | read: signed in · write: owner, moderator |
+| `companies/{id}/promotions` | auto | `title`, `services[]`, `percent` (1–90), `validFrom`, `validTo`, `deletedAt` | read: signed in · write: owner, moderator |
 | `companies/{id}/slots` | ISO hour | `date`, `userUid`, `fixRef` | read: signed in · create once · delete: participant/moderator |
 | `cars` | auto | `manufacturer`, `model`, `productionYear`, `vin`, `userRef`, `deletedAt` | owner, moderator (read) |
-| `fixes` | auto | `date`, `bookDate`, `userRef`, `companyRef`, `car` (snapshot), `services[]`, `description`, `clientName`, `clientPhone`, `marketingConsent`, `notifications[]`, `isClosed`, `estimate{min,max}`, `createdBy`, `confirmed`, `proposal`, `reviewed` | client, workshop, moderator – field-level updates per role |
+| `fixes` | auto | `date`, `bookDate`, `userRef`, `companyRef`, `car` (snapshot), `services[]`, `description`, `clientName`, `clientPhone`, `marketingConsent`, `notifications[]`, `isClosed`, `estimate{min,max}`, `createdBy`, `confirmed`, `proposal`, `reviewed`, `workshopNote` (visible to client), `promotion` | client, workshop, moderator – field-level updates per role |
+| `fixes/{id}/internal/note` | `note` | `text` – internal workshop note | workshop of the fix, moderator (never the client) |
 | `services` | key | `key`, `namePl`, `nameEn`, `active`, `order`, `deletedAt` | read: everyone · write: moderator |
 | `reviews` | fix id | `companyRef`, `fixRef`, `userRef`, `authorName`, `rating`, `comment`, `hidden`, `createdAt`, `deletedAt` | read: visible ones · create: the fix's client · moderate: moderator |
 
 References between documents are stored as document **paths** (`users/abc`, `companies/xyz`) in `*Ref` fields.
 
-Repair statuses (`notifications[].notificationType`): `getCar`, `addQuote`, `addGiveBackTime`, `addExpense`,
+Repair statuses (`notifications[].notificationType`): `getCar`, `addQuote` (optional `items[]` – itemised quote), `quoteAccepted`, `addGiveBackTime`, `addExpense`,
 `giveBackCar`, `userCancel`, `workshopCancel`, `moderatorCancel`, `changeProposed`, `changeAccepted`,
 `changeRejected`, `bookingConfirmed`. Closing ones: `giveBackCar` and the three cancellations.
