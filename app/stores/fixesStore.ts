@@ -1,5 +1,7 @@
-import { fixesService } from '~/services'
-import type { IFix, IFixProposal } from '~/models/fix'
+import { fixesService, photosService } from '~/services'
+import { downscaleImage } from '~/utils/image'
+import { AppError } from '~/utils/errors'
+import { type IFix, type IFixPhoto, type IFixProposal, MAX_PHOTOS } from '~/models/fix'
 import type { INotification } from '~/models/notification'
 import { createSubscription } from '~/utils/subscription'
 
@@ -67,6 +69,19 @@ export const useFixesStore = defineStore('fixes', () => {
   const rejectProposal = (fix: IFix) => sharedStore.run(() => fixesService.rejectProposal(fix))
   const confirmBooking = (fix: IFix) => sharedStore.run(() => fixesService.confirmBooking(fix))
 
+  /** Downscales and uploads photos one by one; the live listener shows them on the fix. */
+  const addPhotos = (fix: IFix, files: File[], by: IFixPhoto['by']) =>
+    sharedStore.run(async () => {
+      if (fix.photos.length + files.length > MAX_PHOTOS) throw new AppError('errors.tooManyPhotos')
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) throw new AppError('errors.notAnImage')
+        await photosService.uploadPhoto(fix, await downscaleImage(file), by)
+      }
+    })
+
+  /** All repairs of the customer (car history). */
+  const getAllUserFixes = (userRef: string) => sharedStore.run(() => fixesService.getAllUserFixes(userRef))
+
   // Notes – the public one updates through the live listener, the internal one is read on demand.
   const setPublicNote = (fix: IFix, text: string) => sharedStore.run(() => fixesService.setPublicNote(fix, text))
   const getInternalNote = (fixRef: string) => sharedStore.run(() => fixesService.getInternalNote(fixRef))
@@ -92,6 +107,8 @@ export const useFixesStore = defineStore('fixes', () => {
     rejectProposal,
     confirmBooking,
     setPublicNote,
+    addPhotos,
+    getAllUserFixes,
     getInternalNote,
     setInternalNote,
     markReviewed,

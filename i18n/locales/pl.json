@@ -496,7 +496,9 @@
     "slotTaken": "Ten termin został właśnie zajęty – wybierz inną godzinę",
     "nipTaken": "Firma z tym NIP-em jest już zarejestrowana",
     "profileMissing": "Nie znaleziono profilu konta – skontaktuj się z obsługą",
-    "notSignedIn": "Sesja wygasła – zaloguj się ponownie"
+    "notSignedIn": "Sesja wygasła – zaloguj się ponownie",
+    "tooManyPhotos": "Naprawa może mieć maksymalnie 20 zdjęć",
+    "notAnImage": "To nie jest plik graficzny"
   },
   "slots": {
     "inPast": "Termin musi być w przyszłości",
@@ -604,7 +606,34 @@
       "bookingConfirmed": "{client} potwierdził(a) wizytę ({car})",
       "userCancel": "{client} odwołał(a) wizytę ({car})",
       "workshopCancel": "Warsztat odwołał wizytę ({car})",
-      "moderatorCancel": "Moderator anulował naprawę ({car})"
+      "moderatorCancel": "Moderator anulował naprawę ({car})",
+      "reminder": "Przypomnienie: wizyta {when} – {car}"
+    }
+  },
+  "photos": {
+    "title": "Zdjęcia",
+    "add": "Dodaj zdjęcia",
+    "by": {
+      "user": "Klient",
+      "workshop": "Warsztat",
+      "moderator": "Moderator"
+    },
+    "emptyClient": "Dodaj zdjęcia usterki – mechanik szybciej oceni problem.",
+    "emptyWorkshop": "Brak zdjęć. Udokumentuj stan auta i postęp prac."
+  },
+  "carHistory": {
+    "title": "Historia: {car}",
+    "visits": "Wizyty",
+    "spent": "Wydano",
+    "lastMileage": "Ostatni przebieg",
+    "empty": "To auto nie było jeszcze naprawiane"
+  },
+  "nextVisit": {
+    "title": "Najbliższa wizyta",
+    "in": {
+      "min": "za {value} min",
+      "h": "za {value} godz.",
+      "d": "za {value} dni"
     }
   }
 }

@@ -111,6 +111,7 @@ async function bookFix() {
     date: selectedDate.value,
     bookDate: new Date(),
     car: bookedCar.value,
+    carRef: carSource.value === 'my' ? selectedCar.value?.reference ?? '' : '',
     carMillage: Number(carMileage.value),
     companyRef: selectedWorkshop.value.reference,
     description: serviceDescription.value,

@@ -12,6 +12,7 @@ import CarCard from '~/components/user/carCard.vue'
 import ClientDecision from '~/components/fix/clientDecision.vue'
 import RepairNotes from '~/components/fix/repairNotes.vue'
 import QuoteDialog from '~/components/fix/quoteDialog.vue'
+import RepairPhotos from '~/components/fix/repairPhotos.vue'
 import ProposeChangeDialog from '~/components/fix/proposeChangeDialog.vue'
 import WorkshopCard from '~/components/user/workshopCard.vue'
 
@@ -372,6 +373,12 @@ watch(isDialogShown, async (shown) => {
             </v-btn>
           </div>
         </template>
+
+        <v-divider class="my-4" />
+        <repair-photos
+          :fix="fix"
+          :mode="mode"
+        />
 
         <template v-if="mode !== 'user' || fix.workshopNote">
           <v-divider class="my-4" />

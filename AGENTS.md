@@ -5,10 +5,10 @@ repair (statuses, quotes, scope changes, client lists, price list) and moderator
 the service catalog, reviews and can inspect and moderate everything.
 
 Stack: **Nuxt 4 (SPA, `ssr: false`) · Vue 3.5 · Vuetify 4 · Pinia 4 · @nuxtjs/i18n 10 (pl/en) ·
-Firebase 13 (Auth + Firestore, called directly from the browser) · Storybook 10 + Vitest 5 · ESLint 10 · TypeScript 6 · bun**.
+Firebase 13 (Auth + Firestore + Storage, called directly from the browser) · Storybook 10 + Vitest 5 · ESLint 10 · TypeScript 6 · bun**.
 
-There is **no backend of our own**. Authorization lives in [`firestore.rules`](firestore.rules) –
-every data-model change needs a matching rules change.
+There is **no backend of our own**. Authorization lives in [`firestore.rules`](firestore.rules) and
+[`storage.rules`](storage.rules) – every data-model change needs a matching rules change.
 
 ---
 
@@ -101,7 +101,8 @@ app/
     fixesService.ts             repairs: live active list, history, booking + slot transaction,
                                 statuses, proposals (propose/accept/reject), confirm workshop booking
     workshopsService.ts         companies, live company doc, live booked slots
-    pricingService.ts           companies/{id}/priceList
+    pricingService.ts           companies/{id}/priceList and /promotions
+    photosService.ts            repair photos (Storage + `photos[]` on the fix)
     reviewsService.ts           reviews (one per fix), public ratings, moderation
     servicesCatalogService.ts   service catalog
     moderatorService.ts         moderator-only reads/writes (all users/fixes/cars, status, create company)
@@ -126,7 +127,8 @@ app/
     week.ts                     week board layout, cars at the workshop
     review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem), service.ts, user.ts, car.ts, …
   composables/                  role & status option lists
-  utils/                        rules, form validation, time, subscription, vuetifyOptions (auto-imported)
+  utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
+                                subscription, vuetifyOptions (auto-imported)
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
   layouts/default.vue           single layout with AppNavigation
   types/page-meta.d.ts          `definePageMeta({ role })`
@@ -134,8 +136,8 @@ app/
     appNavigation.vue           app bar, rail drawer per role, account card, bottom nav
     authCard, pageHeader, workshopForm, clientsTable, mySnackbar
     fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog,
-                                quoteDialog (itemised quote), repairNotes (public + internal)
-    user/                       carCard, addCarForm, workshopCard, freeDates, reviewDialog
+                                quoteDialog (itemised quote), repairNotes (public + internal), repairPhotos
+    user/                       carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit
     company/                    priceItemDialog, bookForClientDialog, promotionDialog, weekBoard (7-day calendar)
     moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable
     notificationBell, errorSnackbar, emailVerificationBanner, appFooter
@@ -152,7 +154,8 @@ i18n/                           i18n.config.ts, locales/pl.json, locales/en.json
   main.ts, preview.ts           config, decorator (fresh fake DB + Pinia per story, user via parameters.app)
   vite.shared.ts                aliases + Nuxt auto-imports shared with vitest.config.ts
   mocks/                        services.ts (in-memory, fn() spies), fixtures.ts, nuxt.ts
-firestore.rules                 ★ authorization layer
+firestore.rules                 ★ authorization layer (Firestore)
+storage.rules                   ★ repair photos: parties of the repair only, images < 5 MB, no delete
 firestore.indexes.json          composite indexes (fixes: userRef/companyRef + date for the bell)
 firebase.json, .firebaserc      hosting (SPA) + firestore + emulators
 vitest.config.ts                projects: unit (node) + storybook (Chromium)
@@ -170,7 +173,7 @@ eslint.config.mjs               ESLint flat config
 | `companies/{id}/promotions` | auto | `title`, `services[]`, `percent` (1–90), `validFrom`, `validTo`, `deletedAt` | read: signed in · write: owner, moderator |
 | `companies/{id}/slots` | ISO hour | `date`, `userUid`, `fixRef` | read: signed in · create once · delete: participant/moderator |
 | `cars` | auto | `manufacturer`, `model`, `productionYear`, `vin`, `userRef`, `deletedAt` | owner, moderator (read) |
-| `fixes` | auto | `date`, `bookDate`, `userRef`, `companyRef`, `car` (snapshot), `services[]`, `description`, `clientName`, `clientPhone`, `marketingConsent`, `notifications[]`, `isClosed`, `estimate{min,max}`, `createdBy`, `confirmed`, `proposal`, `reviewed`, `workshopNote` (visible to client), `promotion` | client, workshop, moderator – field-level updates per role |
+| `fixes` | auto | `date`, `bookDate`, `userRef`, `companyRef`, `car` (snapshot), `services[]`, `description`, `clientName`, `clientPhone`, `marketingConsent`, `notifications[]`, `isClosed`, `estimate{min,max}`, `createdBy`, `confirmed`, `proposal`, `reviewed`, `workshopNote` (visible to client), `promotion`, `carRef`, `photos[]` | client, workshop, moderator – field-level updates per role |
 | `fixes/{id}/internal/note` | `note` | `text` – internal workshop note | workshop of the fix, moderator (never the client) |
 | `services` | key | `key`, `namePl`, `nameEn`, `active`, `order`, `deletedAt` | read: everyone · write: moderator |
 | `reviews` | fix id | `companyRef`, `fixRef`, `userRef`, `authorName`, `rating`, `comment`, `hidden`, `createdAt`, `deletedAt` | read: visible ones · create: the fix's client · moderate: moderator |

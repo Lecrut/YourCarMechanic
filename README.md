@@ -5,7 +5,17 @@ book a visit and follow the repair live. Workshops manage repairs, quotes, scope
 price list and client list. Moderators unlock companies, manage the service catalog, moderate
 repairs and reviews and see statistics.
 
-**Stack:** Nuxt 4 (SPA) · Vue 3 · Vuetify 4 · Pinia · Firebase (Auth + Firestore) · Storybook 10 · Vitest 5 · bun
+**Stack:** Nuxt 4 (SPA) · Vue 3 · Vuetify 4 · Pinia · Firebase (Auth + Firestore + Storage) · Storybook 10 · Vitest 5 · bun
+
+## What it does
+
+- **Customers** – book a repair (services → car → workshop with estimate, rating, promotions, live free hours), follow it live,
+  accept quotes and scope changes, add photos, add visits to their calendar, review workshops, see each car's history.
+- **Workshops** – week board and list of repairs, itemised quotes from their price list, statuses, photos, notes
+  (for the client and internal), proposals, client list for seasonal campaigns, promotions, working days and hours.
+- **Moderators** – statistics, unlocking companies after signing the contract, service catalog, clients,
+  moderation of every repair and of reviews.
+- **Everyone** – notification bell (live) with visit reminders, pl/en, dark/light theme.
 
 > Working on the code (human or AI agent)? Read [AGENTS.md](AGENTS.md) first.
 
@@ -21,7 +31,7 @@ bun run dev                        # http://localhost:3000
 ### Local Firebase (optional)
 
 ```bash
-firebase emulators:start           # Auth :9099, Firestore :8080, UI :4000
+firebase emulators:start           # Auth :9099, Firestore :8080, Storage :9199, UI :4000
 NUXT_PUBLIC_USE_EMULATORS=true bun run dev
 ```
 
@@ -40,7 +50,7 @@ set `users/{uid}.role` to `"moderator"`.
 | `bun run test` | unit tests + Storybook play tests (Chromium) |
 | `bun run storybook` | component workshop on http://localhost:6006 |
 | `bun run generate` | static build (`.output/public`) |
-| `bun run deploy` | build + deploy hosting and Firestore rules |
+| `bun run deploy` | build + deploy hosting, Firestore rules/indexes and Storage rules |
 
 ## Architecture in one paragraph
 

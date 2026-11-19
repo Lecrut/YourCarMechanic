@@ -138,6 +138,15 @@ service cloud.firestore {
           && request.resource.data.isClosed == (added in ['giveBackCar', 'userCancel', 'workshopCancel', 'moderatorCancel']);
       }
 
+      function appendsOnePhoto(by) {
+        let before = resource.data.get('photos', []);
+        let after = request.resource.data.photos;
+        return after.size() == before.size() + 1 && after.size() <= 20
+          && after[0:before.size()] == before
+          && after[after.size() - 1].by == by
+          && after[after.size() - 1].path.matches('fixes/' + fixId + '/photos/.*');
+      }
+
       allow update: if isModerator()
         // workshop: add one of its statuses (only cancellation until the client confirms)…
         || (isWorkshop() && onlyChanges(['notifications', 'isClosed'])
@@ -167,6 +176,8 @@ service cloud.firestore {
           && request.resource.data.date == resource.data.proposal.date
           && request.resource.data.estimate == resource.data.proposal.estimate
           && appendsOneStatus(['changeAccepted']))
+        // either party: attach one photo (max 20); photos are never removed or edited
+        || ((isClient() || isWorkshop()) && onlyChanges(['photos']) && appendsOnePhoto(isClient() ? 'user' : 'workshop'))
         // client: mark as reviewed (together with creating the review)
         || (isClient() && onlyChanges(['reviewed']) && request.resource.data.reviewed == true);
 

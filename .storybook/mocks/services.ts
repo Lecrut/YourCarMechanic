@@ -118,6 +118,7 @@ const activeFixes = (field: 'userRef' | 'companyRef', ref: string) => db.fixes.f
 export const fixesService = {
   getUserClosedFixes: fn(async (userRef: string) => later(db.fixes.filter(f => f.userRef === userRef && f.isClosed))).mockName('getUserClosedFixes'),
   getWorkshopClosedFixes: fn(async (companyRef: string) => later(db.fixes.filter(f => f.companyRef === companyRef && f.isClosed))).mockName('getWorkshopClosedFixes'),
+  getAllUserFixes: fn(async (userRef: string) => later(db.fixes.filter(f => f.userRef === userRef))).mockName('getAllUserFixes'),
   getAllWorkshopFixes: fn(async (companyRef: string) => later(db.fixes.filter(f => f.companyRef === companyRef))).mockName('getAllWorkshopFixes'),
   watchActiveFixes: fn((field: 'userRef' | 'companyRef', ref: string, onChange: (f: IFix[]) => void) => {
     onChange(clone(activeFixes(field, ref)))
@@ -242,6 +243,14 @@ export const pricingService = {
     return later(saved)
   }).mockName('savePriceListItem'),
   deletePriceListItem: fn(async (_ref: string) => {}).mockName('deletePriceListItem'),
+}
+
+export const photosService = {
+  uploadPhoto: fn(async (fix: IFix, image: Blob, by: 'user' | 'workshop' | 'moderator') => {
+    const photo = { path: `fixes/${fix.reference.split('/').pop()}/photos/mock-${++seq}.jpg`, url: URL.createObjectURL(image), by, at: new Date() }
+    db.fixes = db.fixes.map(f => (f.reference === fix.reference ? mapIFix({ ...f, photos: [...f.photos, photo] }) : f))
+    return later(photo)
+  }).mockName('uploadPhoto'),
 }
 
 export const reviewsService = {

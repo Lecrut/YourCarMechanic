@@ -45,6 +45,9 @@ export const MyRepairs: Story = {
     const canvas = within(canvasElement)
     await waitFor(() => expect(fixesService.watchActiveFixes).toHaveBeenCalledWith('userRef', userAnna.reference, expect.any(Function), expect.any(Function)))
     await expect(await canvas.findByText('Sprawy od warsztatu do zatwierdzenia: 2')).toBeVisible()
+    // nearest confirmed visit is highlighted on top
+    await expect(canvas.getByTestId('next-visit')).toHaveTextContent('BMW Seria 3')
+    await expect(canvas.getByTestId('next-visit')).toHaveTextContent(/za \d+ (dni|godz\.)/)
     await expect(canvas.getAllByTestId('decision-chip')).toHaveLength(2)
   },
 }

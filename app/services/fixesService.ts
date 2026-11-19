@@ -50,6 +50,11 @@ async function listFixes(field: 'userRef' | 'companyRef', ownerRef: string, clos
 export const getUserClosedFixes = (userRef: string) => listFixes('userRef', userRef, true)
 export const getWorkshopClosedFixes = (companyRef: string) => listFixes('companyRef', companyRef, true)
 
+/** Every fix of a customer (open and closed) – source of the car history. */
+export async function getAllUserFixes(userRef: string): Promise<IFix[]> {
+  return fromQuery<IFix>(await getDocs(query(fixes(), where('userRef', '==', userRef)))).map(mapIFix)
+}
+
 /** Every fix of a workshop (open and closed) – source of its client list. */
 export async function getAllWorkshopFixes(companyRef: string): Promise<IFix[]> {
   return fromQuery<IFix>(await getDocs(query(fixes(), where('companyRef', '==', companyRef)))).map(mapIFix)
@@ -112,6 +117,7 @@ export async function addFix(fix: IFix): Promise<IFix> {
       bookDate: Timestamp.fromDate(fix.bookDate),
       companyRef: fix.companyRef,
       car: mapICarToFirebase(fix.car),
+      carRef: fix.carRef,
       carMillage: fix.carMillage,
       userRef: fix.userRef,
       services: fix.services,
@@ -127,6 +133,7 @@ export async function addFix(fix: IFix): Promise<IFix> {
       confirmed: !byWorkshop,
       proposal: null,
       workshopNote: '',
+      photos: [],
       promotion: fix.promotion,
       createTime: serverTimestamp(),
     })

@@ -496,7 +496,9 @@
     "slotTaken": "This time was just booked – pick another hour",
     "nipTaken": "A company with this tax id is already registered",
     "profileMissing": "Account profile not found – please contact support",
-    "notSignedIn": "Your session expired – please log in again"
+    "notSignedIn": "Your session expired – please log in again",
+    "tooManyPhotos": "A repair can have at most 20 photos",
+    "notAnImage": "This is not an image file"
   },
   "slots": {
     "inPast": "The time must be in the future",
@@ -604,7 +606,34 @@
       "bookingConfirmed": "{client} confirmed the visit ({car})",
       "userCancel": "{client} cancelled the visit ({car})",
       "workshopCancel": "The workshop cancelled the visit ({car})",
-      "moderatorCancel": "A moderator cancelled the repair ({car})"
+      "moderatorCancel": "A moderator cancelled the repair ({car})",
+      "reminder": "Reminder: visit {when} – {car}"
+    }
+  },
+  "photos": {
+    "title": "Photos",
+    "add": "Add photos",
+    "by": {
+      "user": "Client",
+      "workshop": "Workshop",
+      "moderator": "Moderator"
+    },
+    "emptyClient": "Add photos of the problem – the mechanic will assess it faster.",
+    "emptyWorkshop": "No photos yet. Document the car and the progress."
+  },
+  "carHistory": {
+    "title": "History: {car}",
+    "visits": "Visits",
+    "spent": "Spent",
+    "lastMileage": "Last mileage",
+    "empty": "No repairs for this car yet"
+  },
+  "nextVisit": {
+    "title": "Next visit",
+    "in": {
+      "min": "in {value} min",
+      "h": "in {value} h",
+      "d": "in {value} days"
     }
   }
 }

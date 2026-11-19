@@ -2,6 +2,17 @@ import { CLOSING_NOTIFICATIONS, type INotification, mapINotification } from '~/m
 import { type ICar, mapICar } from '~/models/car'
 import type { Range } from '~/models/priceList'
 
+/** Photo attached to a repair (file in Storage, metadata on the fix). */
+export interface IFixPhoto {
+  path: string
+  url: string
+  by: 'user' | 'workshop' | 'moderator'
+  at: Date
+}
+
+/** Most photos one repair can have (also enforced by firestore.rules). */
+export const MAX_PHOTOS = 20
+
 /** A change of an existing repair suggested by the workshop – applied only after the client accepts. */
 export interface IFixProposal {
   services: string[]
@@ -19,6 +30,8 @@ export interface IFix {
 
   companyRef: string
   car: ICar
+  /** The customer's saved car (`cars/{id}`) when booked with one; empty for one-off cars. */
+  carRef: string
   carMillage: number
   userRef: string
 
@@ -43,6 +56,7 @@ export interface IFix {
   proposal: IFixProposal | null
   /** Promotion applied when booking (the estimate already includes it). */
   promotion: { title: string, percent: number } | null
+  photos: IFixPhoto[]
   /** Note from the workshop, visible to the client. (The internal note lives in `fixes/{id}/internal/note`.) */
   workshopNote: string
 
@@ -51,7 +65,8 @@ export interface IFix {
 
 type ProposalInput = Omit<IFixProposal, 'date' | 'createdAt'> & { date: Date | string, createdAt?: Date | string }
 
-type FixInput = Partial<Omit<IFix, 'date' | 'bookDate' | 'notifications' | 'car' | 'proposal'>> & {
+type FixInput = Partial<Omit<IFix, 'date' | 'bookDate' | 'notifications' | 'car' | 'proposal' | 'photos'>> & {
+  photos?: (Omit<IFixPhoto, 'at'> & { at: Date | string })[]
   proposal?: ProposalInput | null
   date?: Date | string
   bookDate?: Date | string
@@ -66,6 +81,7 @@ export function mapIFix(data: FixInput): IFix {
 
     companyRef: data.companyRef || '',
     car: mapICar({ ...data.car }),
+    carRef: data.carRef || '',
     carMillage: Number(data.carMillage || 0),
     userRef: data.userRef || '',
 
@@ -92,6 +108,7 @@ export function mapIFix(data: FixInput): IFix {
         }
       : null,
     workshopNote: data.workshopNote || '',
+    photos: (data.photos ?? []).map(p => ({ path: p.path, url: p.url, by: p.by, at: new Date(p.at) })),
     promotion: data.promotion ? { title: data.promotion.title || '', percent: Number(data.promotion.percent) || 0 } : null,
 
     reference: data.reference || '',
@@ -165,3 +182,21 @@ export function isQuoteAccepted(fix: IFix): boolean {
 }
 
 export const canAcceptQuote = (fix: IFix) => !fix.isClosed && Boolean(latestQuote(fix)) && !isQuoteAccepted(fix)
+
+/** The client's nearest upcoming, confirmed, open visit. */
+export const nextVisit = (fixes: IFix[], now = new Date()) =>
+  fixes
+    .filter(f => !f.isClosed && f.confirmed && f.date > now)
+    .sort((a, b) => a.date.getTime() - b.date.getTime())[0] ?? null
+
+/**
+ * Repairs of a saved car, newest first. Newer repairs link the car by `carRef`; older ones are
+ * matched by VIN or by brand + model + production year.
+ */
+export function fixesForCar(fixes: IFix[], car: ICar): IFix[] {
+  const sameModel = (f: IFix) => !f.carRef
+    && f.car.manufacturer === car.manufacturer && f.car.model === car.model && f.car.productionYear === car.productionYear
+  return fixes
+    .filter(f => f.carRef === car.reference || (car.vin && f.car.vin === car.vin) || sameModel(f))
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+}

@@ -15,6 +15,7 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from 'firebase/firestore'
+import { connectStorageEmulator, type FirebaseStorage, getStorage } from 'firebase/storage'
 
 let app: FirebaseApp | null = null
 
@@ -36,6 +37,7 @@ export function initFirebase(options: FirebaseOptions, useEmulators = false) {
   if (useEmulators) {
     connectAuthEmulator(firebaseAuth, 'http://127.0.0.1:9099', { disableWarnings: true })
     connectFirestoreEmulator(firestore, '127.0.0.1', 8080)
+    connectStorageEmulator(getStorage(app), '127.0.0.1', 9199)
   }
 
   return app
@@ -48,3 +50,4 @@ function requireApp(): FirebaseApp {
 
 export const auth = (): Auth => getAuth(requireApp())
 export const db = (): Firestore => getFirestore(requireApp())
+export const storage = (): FirebaseStorage => getStorage(requireApp())

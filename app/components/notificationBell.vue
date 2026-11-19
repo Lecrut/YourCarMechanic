@@ -2,6 +2,7 @@
 import type { IFeedEvent } from '~/models/feed'
 import { relativeTime } from '~/models/feed'
 import RepairDetails from '~/components/fix/repairDetails.vue'
+import { formatDateToString } from '~/utils/time'
 
 /** Bell with the notification feed (customers and workshops). */
 const { t } = useI18n()
@@ -18,6 +19,7 @@ const mode = computed(() => (authStore.role === 'workshop' ? 'workshop' : 'user'
 
 const meta: Record<string, { icon: string, color: string }> = {
   newBooking: { icon: 'mdi-calendar-plus', color: 'primary' },
+  reminder: { icon: 'mdi-alarm', color: 'info' },
   bookedForYou: { icon: 'mdi-calendar-account', color: 'warning' },
   getCar: { icon: 'mdi-car-arrow-right', color: 'primary' },
   addQuote: { icon: 'mdi-file-document-edit-outline', color: 'warning' },
@@ -133,7 +135,7 @@ onUnmounted(() => feedStore.stop())
             </v-avatar>
           </template>
           <v-list-item-title class="text-wrap">
-            {{ t(`feed.events.${event.type}`, { car: event.car, client: event.client, cost: event.cost ?? 0 }) }}
+            {{ t(`feed.events.${event.type}`, { car: event.car, client: event.client, cost: event.cost ?? 0, when: formatDateToString(event.visit) }) }}
           </v-list-item-title>
           <v-list-item-subtitle>{{ ago(event) }}</v-list-item-subtitle>
           <template #append>

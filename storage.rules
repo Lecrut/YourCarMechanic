@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Repair photos: only the client of the repair, its workshop and moderators.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function fix(fixId) { return firestore.get(/databases/(default)/documents/fixes/$(fixId)).data; }
+    function me() { return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data; }
+    function isParty(fixId) {
+      return request.auth != null && (
+        fix(fixId).userRef == 'users/' + request.auth.uid
+        || (me().role == 'workshop' && me().companyRef == fix(fixId).companyRef)
+        || me().role == 'moderator'
+      );
+    }
+
+    match /fixes/{fixId}/photos/{fileName} {
+      allow read: if isParty(fixId);
+      allow create: if isParty(fixId)
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow update, delete: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -89,3 +89,13 @@ export const WorkshopWithPromotion: Story = {
     await expect(canvas.getByTestId('estimate-before')).toHaveTextContent('150 – 200 PLN')
   },
 }
+
+/** Car history: every repair of the car with money spent. */
+export const CarHistory: Story = {
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByTestId('car-history-open'))
+    const dialog = await screen.findByTestId('car-history')
+    await waitFor(() => expect(within(dialog).getAllByTestId('car-history-item').length).toBe(4))
+    await expect(within(dialog).getByTestId('car-history-spent')).toHaveTextContent('480 PLN')
+  },
+}

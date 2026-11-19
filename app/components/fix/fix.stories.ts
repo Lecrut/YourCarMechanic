@@ -4,7 +4,7 @@ import RepairDetails from './repairDetails.vue'
 import RepairList from './repairList.vue'
 import { autofix, fixBookedByWorkshop, fixWithProposal, moderator, newFix, userAnna, workshopOwner } from '../../../.storybook/mocks/fixtures'
 import { mapIFix } from '~/models/fix'
-import { fixesService, moderatorService } from '~/services'
+import { fixesService, moderatorService, photosService } from '~/services'
 
 /** Opens a v-select inside the status form once its expand transition finished. */
 async function pickStatus(label: string) {
@@ -151,5 +151,25 @@ export const ProposalDateValidated: Story = {
     await userEvent.click(screen.getByTestId('send-proposal'))
     await expect(await screen.findByText('Termin musi być w przyszłości')).toBeInTheDocument()
     await expect(fixesService.proposeChange).not.toHaveBeenCalled()
+  },
+}
+
+/** The client attaches a photo – it is downscaled in the browser and uploaded. */
+export const ClientAddsPhoto: Story = {
+  args: { fix: newFix, mode: 'user' },
+  play: async () => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 3200
+    canvas.height = 2400
+    canvas.getContext('2d')!.fillRect(0, 0, 10, 10)
+    const blob = await new Promise<Blob>(resolve => canvas.toBlob(b => resolve(b!), 'image/png'))
+    const file = new File([blob], 'usterka.png', { type: 'image/png' })
+
+    await expect(await screen.findByTestId('repair-photos')).toHaveTextContent('Dodaj zdjęcia usterki')
+    await userEvent.upload(screen.getByTestId('photo-input') as HTMLInputElement, file)
+    await waitFor(() => expect(photosService.uploadPhoto).toHaveBeenCalled())
+    const [, image, by] = mocked(photosService.uploadPhoto).mock.calls.at(-1)!
+    await expect(by).toBe('user')
+    await expect(image.type).toBe('image/jpeg')
   },
 }

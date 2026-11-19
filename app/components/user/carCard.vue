@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ICar } from '~/models/car'
 import AddCarForm from '~/components/user/addCarForm.vue'
+import CarHistoryDialog from '~/components/user/carHistoryDialog.vue'
 
 defineProps<{
   car: ICar
@@ -11,6 +12,7 @@ const { t } = useI18n()
 
 const isShowEditCarForm = ref(false)
 const confirmDelete = ref(false)
+const showHistory = ref(false)
 
 const carsStore = useCarsStore()
 const { loading } = storeToRefs(useSharedStore())
@@ -57,6 +59,16 @@ async function deleteCar(car: ICar) {
           {{ t('universal.edit') }}
         </v-btn>
         <v-btn
+          size="small"
+          class="mx-1"
+          variant="tonal"
+          prepend-icon="mdi-history"
+          data-testid="car-history-open"
+          @click="showHistory = true"
+        >
+          {{ t('universal.history') }}
+        </v-btn>
+        <v-btn
           v-tooltip="t('userProfile.deleteCar')"
           size="small"
           class="mx-1"
@@ -100,6 +112,12 @@ async function deleteCar(car: ICar) {
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <car-history-dialog
+    v-if="!onlyShow"
+    v-model="showHistory"
+    :car="car"
+  />
 
   <add-car-form
     v-if="!onlyShow"

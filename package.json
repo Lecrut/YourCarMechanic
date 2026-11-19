@@ -18,7 +18,7 @@
     "build-storybook": "storybook build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "bun run generate && firebase deploy --only hosting,firestore",
+    "deploy": "bun run generate && firebase deploy --only hosting,firestore,storage",
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {

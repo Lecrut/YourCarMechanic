@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import RepairList from '~/components/fix/repairList.vue'
 import PageHeader from '~/components/pageHeader.vue'
-import { awaitsClientDecision } from '~/models/fix'
+import { awaitsClientDecision, nextVisit as findNextVisit } from '~/models/fix'
+import NextVisit from '~/components/user/nextVisit.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'user' })
 
@@ -12,6 +13,7 @@ const fixesStore = useFixesStore()
 const { fixes, watching } = storeToRefs(fixesStore)
 
 const decisions = computed(() => fixes.value.filter(awaitsClientDecision).length)
+const upcoming = computed(() => findNextVisit(fixes.value))
 
 // Live: statuses and proposals from the workshop appear without reloading.
 onMounted(() => {
@@ -33,6 +35,11 @@ onUnmounted(() => fixesStore.stopWatching())
         {{ t('navBar.user.bookedFix') }}
       </v-btn>
     </page-header>
+
+    <next-visit
+      v-if="upcoming"
+      :fix="upcoming"
+    />
 
     <v-expand-transition>
       <v-alert
