@@ -1,77 +1,82 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
-import wasm from 'vite-plugin-wasm';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
-    app: {
-        head: {
-            title: 'Twój mechanik',
-            meta: [
-                {name: 'description', content: 'Napraw swój samochód!'},
-            ],
-        },
-    },
+  // The app talks to Firebase directly from the browser (Auth + Firestore),
+  // so it is built as a static SPA and served from Firebase Hosting.
 
-    build: {
-        transpile: ['vuetify', '@vuepic/vue-datepicker'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        config.plugins?.push(vuetify({ autoImport: true }))
+      })
     },
+  ], ssr: false,
 
-    modules: [
-        '@nuxtjs/i18n',
-        '@pinia/nuxt',
-        'pinia-plugin-persistedstate/nuxt',
-        (_options, nuxt) => {
-            nuxt.hooks.hook('vite:extendConfig', (config) => {
-                // @ts-expect-error
-                config.plugins.push(vuetify({autoImport: true}))
-            })
-        },
+  devtools: { enabled: false },
+
+  app: {
+    head: {
+      title: 'Twój mechanik',
+      meta: [{ name: 'description', content: 'Napraw swój samochód!' }],
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      firebase: {
+        apiKey: '',
+        authDomain: '',
+        projectId: '',
+        storageBucket: '',
+        messagingSenderId: '',
+        appId: '',
+        measurementId: '',
+      },
+      // Set NUXT_PUBLIC_USE_EMULATORS=true to talk to `firebase emulators:start`.
+      useEmulators: false,
+    },
+  },
+
+  build: {
+    transpile: ['vuetify'],
+  },
+
+  compatibilityDate: '2026-11-01',
+
+  vite: {
+    vue: {
+      template: { transformAssetUrls },
+    },
+  },
+
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
+
+  i18n: {
+    strategy: 'no_prefix',
+    defaultLocale: 'pl',
+    locales: [
+      { code: 'pl', name: 'Polski', file: 'pl.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
     ],
-    piniaPluginPersistedstate: {
-        storage: 'sessionStorage',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'current-language',
+      fallbackLocale: 'pl',
     },
-    vite: {
-        plugins: [
-            wasm()
-        ],
-        vue: {
-            template: {
-                transformAssetUrls,
-            },
-        },
-    },
+    vueI18n: './i18n.config.ts',
+  },
 
-    i18n: {
-        strategy: 'no_prefix',
-        defaultLocale: 'pl',
-        vueI18n: './i18n.config.ts',
-    },
-
-    nitro: {
-        firebase: {
-            nodeVersion: "20",
-            gen: 2,
-        },
-        preset: "firebase"
-    },
-
-    runtimeConfig: {
-        public: {
-            NODE_ENV: process.env.NODE_ENV,
-            APP_VERSION: process.env.npm_package_version,
-            apiKey: process.env.apiKey,
-            authDomain: process.env.authDomain,
-            projectId: process.env.projectId,
-            storageBucket: process.env.storageBucket,
-            messagingSenderId: process.env.messagingSenderId,
-            appId: process.env.appId,
-            measurementId: process.env.measurementId,
-        },
-    },
-
-    devtools: {
-        enabled: false
-    },
-    compatibilityDate: '2024-08-18',
-    // ssr: false,
+  // Signed-in users are remembered between browser sessions.
+  piniaPluginPersistedstate: {
+    storage: 'localStorage',
+  },
 })

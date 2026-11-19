@@ -22,3 +22,9 @@ logs
 .env
 .env.*
 !.env.example
+
+# Storybook / tests
+storybook-static
+coverage
+.vitest-attachments
+__screenshots__
