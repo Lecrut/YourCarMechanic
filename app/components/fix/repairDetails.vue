@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type IFix, isFixFinished, latestQuote, type ViewerMode } from '~/models/fix'
+import { type IFix, isFixFinished, latestQuote, totalCost, type ViewerMode } from '~/models/fix'
+import { downloadIcs } from '~/utils/calendar'
 import type { IWorkshop } from '~/models/workshop'
 import { type INotification, mapINotification, type NotificationType } from '~/models/notification'
 import { formatRange, isWithin } from '~/models/priceList'
@@ -9,6 +10,7 @@ import formValidation from '~/utils/formValidation'
 import { requiredRule } from '~/utils/rules'
 import CarCard from '~/components/user/carCard.vue'
 import ClientDecision from '~/components/fix/clientDecision.vue'
+import RepairNotes from '~/components/fix/repairNotes.vue'
 import ProposeChangeDialog from '~/components/fix/proposeChangeDialog.vue'
 import WorkshopCard from '~/components/user/workshopCard.vue'
 
@@ -41,6 +43,21 @@ const newStatusDescription = ref('')
 const options = computed(() => statusOptions(t, props.mode, props.fix.notifications.length > 0, props.fix.confirmed))
 const canAddStatus = computed(() => options.value.length > 0 && !props.fix.isClosed && !isFixFinished(props.fix))
 const quote = computed(() => latestQuote(props.fix))
+const cost = computed(() => totalCost(props.fix))
+const canAddToCalendar = computed(() => props.mode === 'user' && !props.fix.isClosed && props.fix.date > new Date())
+
+function addToCalendar() {
+  const place = workshop.value
+  downloadIcs({
+    uid: `${props.fix.reference.replace('/', '-')}@twojmechanik`,
+    title: `${t('navBar.title')}: ${place?.name ?? ''} – ${props.fix.car.manufacturer} ${props.fix.car.model}`,
+    start: props.fix.date,
+    durationMinutes: 60,
+    location: place ? `${place.address}, ${place.phone}` : undefined,
+    description: props.fix.services.map(servicesStore.label).join(', '),
+  }, 'wizyta-w-warsztacie.ics')
+}
+
 const canPropose = computed(() => props.mode === 'workshop' && !props.fix.isClosed && !props.fix.proposal)
 const needsCost = computed(() => newStatus.value === 'addExpense' || newStatus.value === 'addQuote')
 
@@ -137,6 +154,18 @@ watch(isDialogShown, async (shown) => {
           </v-chip>
           <v-spacer />
           <v-btn
+            v-if="canAddToCalendar"
+            v-tooltip:bottom="t('repairs.addToCalendar')"
+            icon="mdi-calendar-export"
+            variant="text"
+            color="primary"
+            :aria-label="t('repairs.addToCalendar')"
+            data-testid="add-to-calendar"
+            @click="addToCalendar"
+          />
+          <v-btn
+            v-tooltip:bottom="t('universal.close')"
+            :aria-label="t('universal.close')"
             icon="mdi-close"
             variant="text"
             color="default"
@@ -226,6 +255,13 @@ watch(isDialogShown, async (shown) => {
                 data-testid="quote"
               />
               <v-list-item
+                v-if="cost && cost !== quote?.cost"
+                prepend-icon="mdi-cash-register"
+                :title="`${cost} PLN`"
+                :subtitle="t('repairs.total')"
+                data-testid="total-cost"
+              />
+              <v-list-item
                 v-if="fix.clientPhone && mode !== 'user'"
                 prepend-icon="mdi-phone"
                 :title="fix.clientPhone"
@@ -234,6 +270,15 @@ watch(isDialogShown, async (shown) => {
             </v-list>
           </v-col>
         </v-row>
+
+        <template v-if="mode !== 'user' || fix.workshopNote">
+          <v-divider class="my-4" />
+          <repair-notes
+            :key="fix.reference"
+            :fix="fix"
+            :mode="mode"
+          />
+        </template>
 
         <template v-if="fix.notifications.length">
           <v-divider class="my-4" />

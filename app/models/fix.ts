@@ -41,6 +41,8 @@ export interface IFix {
   /** Workshop-created bookings wait for the client's confirmation. */
   confirmed: boolean
   proposal: IFixProposal | null
+  /** Note from the workshop, visible to the client. (The internal note lives in `fixes/{id}/internal/note`.) */
+  workshopNote: string
 
   reference: string
 }
@@ -87,6 +89,7 @@ export function mapIFix(data: FixInput): IFix {
           createdAt: new Date(data.proposal.createdAt ?? Date.now()),
         }
       : null,
+    workshopNote: data.workshopNote || '',
 
     reference: data.reference || '',
   }
@@ -118,3 +121,35 @@ export type ViewerMode = 'user' | 'workshop' | 'moderator'
 
 /** Something is waiting for the client's decision. */
 export const awaitsClientDecision = (fix: IFix) => !fix.isClosed && (!fix.confirmed || fix.proposal !== null)
+
+/** Most recent status, or null for a fresh booking. */
+export const lastStatus = (fix: IFix) => fix.notifications.at(-1) ?? null
+
+/** What the client pays so far: the latest quote plus every extra expense. */
+export function totalCost(fix: IFix): number | null {
+  const quote = latestQuote(fix)?.cost ?? 0
+  const expenses = fix.notifications
+    .filter(n => n.notificationType === 'addExpense')
+    .reduce((sum, n) => sum + Number(n.cost ?? 0), 0)
+  const total = Number(quote) + expenses
+  return total > 0 ? total : null
+}
+
+/** Colour used for a repair's status everywhere (cards, tables). */
+export function statusColor(fix: IFix): string {
+  const progress = fixProgress(fix)
+  if (progress === 100) return 'success'
+  if (progress === 0) return 'error'
+  if (awaitsClientDecision(fix)) return 'warning'
+  return fix.notifications.length ? 'primary' : 'info'
+}
+
+/** Case-insensitive search over the fields a mechanic remembers: client, phone, car, VIN, description. */
+export function matchesSearch(fix: IFix, text: string): boolean {
+  const needle = text.trim().toLowerCase()
+  if (!needle) return true
+  return [fix.clientName, fix.clientPhone, fix.car.manufacturer, fix.car.model, fix.car.vin, fix.description]
+    .some(value => value.toLowerCase().includes(needle))
+}
+
+export const isOnDay = (fix: IFix, day: Date) => fix.date.toDateString() === day.toDateString()

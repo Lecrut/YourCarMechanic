@@ -67,6 +67,11 @@ export const useFixesStore = defineStore('fixes', () => {
   const rejectProposal = (fix: IFix) => sharedStore.run(() => fixesService.rejectProposal(fix))
   const confirmBooking = (fix: IFix) => sharedStore.run(() => fixesService.confirmBooking(fix))
 
+  // Notes – the public one updates through the live listener, the internal one is read on demand.
+  const setPublicNote = (fix: IFix, text: string) => sharedStore.run(() => fixesService.setPublicNote(fix, text))
+  const getInternalNote = (fixRef: string) => sharedStore.run(() => fixesService.getInternalNote(fixRef))
+  const setInternalNote = (fixRef: string, text: string) => sharedStore.run(() => fixesService.setInternalNote(fixRef, text))
+
   /** Local patch after a review was saved (history is not live). */
   function markReviewed(fixRef: string) {
     historyFixes.value = historyFixes.value.map(f => (f.reference === fixRef ? { ...f, reviewed: true } : f))
@@ -86,6 +91,9 @@ export const useFixesStore = defineStore('fixes', () => {
     acceptProposal,
     rejectProposal,
     confirmBooking,
+    setPublicNote,
+    getInternalNote,
+    setInternalNote,
     markReviewed,
     resetState,
   }

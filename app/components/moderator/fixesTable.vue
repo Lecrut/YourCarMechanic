@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fixProgress, type IFix } from '~/models/fix'
+import { type IFix, statusColor } from '~/models/fix'
 import { notificationLabel } from '~/composables/notifications'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
@@ -30,13 +30,6 @@ const headers = computed(() => [
 function lastStatus(fix: IFix) {
   const last = fix.notifications.at(-1)
   return last ? notificationLabel(t, last.notificationType) : t('moderator.statusNew')
-}
-
-function statusColor(fix: IFix) {
-  const progress = fixProgress(fix)
-  if (progress === 100) return 'success'
-  if (progress === 0) return 'error'
-  return fix.notifications.length ? 'primary' : 'warning'
 }
 
 function open(_: unknown, row: { item: IFix }) {

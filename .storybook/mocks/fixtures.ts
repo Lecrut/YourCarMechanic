@@ -131,6 +131,7 @@ export const fixWithProposal = mapIFix({
     date: atHour(daysAgo(1), 9),
     estimate: { min: 525, max: 800 },
   },
+  workshopNote: 'Opony mają ok. 2 mm bieżnika – zalecamy wymianę przed zimą.',
   reference: 'fixes/proposal',
 })
 

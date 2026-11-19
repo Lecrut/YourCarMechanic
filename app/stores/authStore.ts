@@ -8,6 +8,8 @@ import { AppError } from '~/utils/errors'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<IUser | null>(null)
   const company = ref<IWorkshop | null>(null)
+  /** null = not checked yet. */
+  const emailVerified = ref<boolean | null>(null)
 
   const sharedStore = useSharedStore()
   const userSubscription = createSubscription()
@@ -53,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
     companySubscription.stop()
     user.value = null
     company.value = null
+    emailVerified.value = null
   }
 
   /** Clears every user-scoped store. Also called when Firebase reports the session ended. */
@@ -105,6 +108,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   const resetPassword = (email: string) => sharedStore.run(() => authService.resetPassword(email))
 
+  async function checkEmailVerified() {
+    try {
+      emailVerified.value = await authService.isEmailVerified()
+    }
+    catch (e) {
+      console.error(e)
+    }
+  }
+
+  const resendVerification = () => sharedStore.run(() => authService.resendVerification())
+
   const updateUserProfile = (profile: IUserProfile) =>
     sharedStore.run(async () => {
       if (!user.value) throw new AppError('errors.notSignedIn')
@@ -131,6 +145,9 @@ export const useAuthStore = defineStore('auth', () => {
     homePath,
     startSession,
     restoreSession,
+    emailVerified,
+    checkEmailVerified,
+    resendVerification,
     logIn,
     signUp,
     logOut,

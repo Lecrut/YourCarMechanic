@@ -31,6 +31,9 @@ type Story = StoryObj<typeof meta>
 /** The client compares current vs proposed scope and accepts. */
 export const ClientAcceptsProposal: Story = {
   play: async () => {
+    // The workshop's note for the client is shown; the internal one is not.
+    await expect(await screen.findByTestId('public-note')).toHaveTextContent('zalecamy wymianę przed zimą')
+    await expect(screen.queryByTestId('internal-note-input')).toBeNull()
     const panel = await screen.findByTestId('proposal-decision')
     await expect(within(panel).getByText('Obecnie')).toBeVisible()
     await expect(within(panel).getByText('525 – 800 PLN')).toBeVisible()

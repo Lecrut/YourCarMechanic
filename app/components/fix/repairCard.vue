@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { awaitsClientDecision, canBeReviewed, fixProgress, type IFix, type ViewerMode } from '~/models/fix'
+import { awaitsClientDecision, canBeReviewed, fixProgress, type IFix, lastStatus, statusColor, totalCost, type ViewerMode } from '~/models/fix'
+import { formatRange } from '~/models/priceList'
+import { notificationLabel } from '~/composables/notifications'
 import { mapINotification } from '~/models/notification'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
@@ -17,6 +19,14 @@ const servicesStore = useServicesStore()
 
 const showDetails = ref(false)
 const showReview = ref(false)
+const confirmCancel = ref(false)
+const { loading } = storeToRefs(useSharedStore())
+
+const statusText = computed(() => {
+  const last = lastStatus(props.fix)
+  return last ? notificationLabel(t, last.notificationType) : t('moderator.statusNew')
+})
+const cost = computed(() => totalCost(props.fix))
 
 const progress = computed(() => fixProgress(props.fix))
 const needsDecision = computed(() => awaitsClientDecision(props.fix))
@@ -32,6 +42,7 @@ async function cancelRepair() {
   await fixesStore.addNotification(props.fix, mapINotification({
     notificationType: props.mode === 'workshop' ? 'workshopCancel' : 'userCancel',
   }))
+  confirmCancel.value = false
 }
 </script>
 
@@ -76,6 +87,29 @@ async function cancelRepair() {
     </v-card-item>
 
     <v-card-text class="flex-grow-1">
+      <div class="d-flex align-center flex-wrap ga-2 mb-2">
+        <v-chip
+          :color="statusColor(fix)"
+          size="small"
+          variant="flat"
+          data-testid="status-chip"
+        >
+          {{ statusText }}
+        </v-chip>
+        <v-spacer />
+        <span
+          v-if="cost"
+          v-tooltip:top="t('repairs.costHint')"
+          class="text-title-small font-weight-bold"
+          data-testid="card-cost"
+        >{{ cost }} PLN</span>
+        <span
+          v-else-if="fix.estimate"
+          v-tooltip:top="t('pricing.estimate')"
+          class="text-body-small text-medium-emphasis"
+        >≈ {{ formatRange(fix.estimate) }}</span>
+      </div>
+
       <div class="d-flex align-center ga-2 mb-2">
         <v-icon
           icon="mdi-calendar-blank"
@@ -125,7 +159,7 @@ async function cancelRepair() {
         color="error"
         size="small"
         data-testid="cancel-repair"
-        @click.stop="cancelRepair"
+        @click.stop="confirmCancel = true"
       >
         {{ t('notifications.cancel') }}
       </v-btn>
@@ -142,6 +176,36 @@ async function cancelRepair() {
     :fix="fix"
     :mode="mode"
   />
+
+  <v-dialog
+    v-model="confirmCancel"
+    max-width="440"
+  >
+    <v-card
+      :title="t('repairs.cancelTitle')"
+      :text="t('repairs.cancelText', { date: formatDateToString(fix.date) })"
+      prepend-icon="mdi-calendar-remove"
+    >
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          color="default"
+          @click="confirmCancel = false"
+        >
+          {{ t('repairs.keep') }}
+        </v-btn>
+        <v-btn
+          color="error"
+          :loading="loading"
+          data-testid="confirm-cancel"
+          @click="cancelRepair"
+        >
+          {{ t('notifications.cancel') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
   <review-dialog
     v-if="mode === 'user'"

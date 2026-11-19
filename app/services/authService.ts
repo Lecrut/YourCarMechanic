@@ -39,6 +39,20 @@ export const logOut = () => signOut(auth())
 
 export const resetPassword = (email: string) => sendPasswordResetEmail(auth(), email)
 
+/** Refreshes the token state – `emailVerified` changes only after a reload. */
+export async function isEmailVerified(): Promise<boolean> {
+  await auth().authStateReady()
+  const user = auth().currentUser
+  if (!user) return true
+  await user.reload()
+  return user.emailVerified
+}
+
+export async function resendVerification(): Promise<void> {
+  const user = auth().currentUser
+  if (user) await sendEmailVerification(user)
+}
+
 /** Resolves once Firebase has restored the session. */
 export async function isSignedIn(): Promise<boolean> {
   await auth().authStateReady()

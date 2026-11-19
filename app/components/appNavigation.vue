@@ -20,8 +20,17 @@ const fixesStore = useFixesStore()
 const moderatorStore = useModeratorStore()
 
 const drawer = ref(false)
+const passwordLinkSent = ref(false)
+
+async function changePassword() {
+  if (!user.value) return
+  await authStore.resetPassword(user.value.email)
+  passwordLinkSent.value = !useSharedStore().error
+}
 
 const decisionCount = computed(() => fixesStore.fixes.filter(awaitsClientDecision).length)
+/** New bookings the workshop has not reacted to yet. */
+const toAcceptCount = computed(() => fixesStore.fixes.filter(f => !f.notifications.length && f.confirmed).length)
 
 const items = computed<NavItem[]>(() => {
   switch (role.value) {
@@ -34,7 +43,7 @@ const items = computed<NavItem[]>(() => {
       ]
     case 'workshop':
       return [
-        { title: t('navBar.company.repairs'), icon: 'mdi-car-wrench', to: '/company' },
+        { title: t('navBar.company.repairs'), icon: 'mdi-car-wrench', to: '/company', badge: toAcceptCount.value },
         { title: t('navBar.company.clients'), icon: 'mdi-account-group-outline', to: '/company/clients' },
         { title: t('navBar.company.pricing'), icon: 'mdi-cash-multiple', to: '/company/pricing' },
         { title: t('navBar.company.profile'), icon: 'mdi-domain', to: '/company/profile' },
@@ -272,6 +281,13 @@ async function logOut() {
           />
           <v-divider class="my-1" />
           <v-list-item
+            prepend-icon="mdi-lock-reset"
+            :title="t('account.changePassword')"
+            rounded="lg"
+            data-testid="change-password"
+            @click="changePassword"
+          />
+          <v-list-item
             prepend-icon="mdi-logout"
             :title="t('navBar.logOut')"
             base-color="error"
@@ -340,6 +356,12 @@ async function logOut() {
       </v-list>
     </template>
   </v-navigation-drawer>
+
+  <my-snackbar
+    v-model="passwordLinkSent"
+    :is-error="false"
+    :text="t('account.passwordLinkSent')"
+  />
 
   <v-bottom-navigation
     v-if="hasSidebar && !mdAndUp"

@@ -27,9 +27,23 @@ export const Upcoming: Story = {
 export const CancelByClient: Story = {
   play: async ({ canvasElement }) => {
     await userEvent.click(within(canvasElement).getByTestId('cancel-repair'))
+    // Cancelling asks for confirmation first.
+    await expect(await screen.findByText('Odwołać wizytę?')).toBeVisible()
+    await expect(fixesService.addNotification).not.toHaveBeenCalled()
+    await userEvent.click(screen.getByTestId('confirm-cancel'))
     await waitFor(() => expect(fixesService.addNotification).toHaveBeenCalled())
     const [, notification] = mocked(fixesService.addNotification).mock.calls.at(-1)!
     await expect(notification.notificationType).toBe('userCancel')
+  },
+}
+
+/** Status and money are visible without opening the card. */
+export const StatusAndCost: Story = {
+  args: { fix: fixWithProposal },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByTestId('status-chip')).toHaveTextContent('Wycena mechanika')
+    await expect(canvas.getByTestId('card-cost')).toHaveTextContent('480 PLN')
   },
 }
 

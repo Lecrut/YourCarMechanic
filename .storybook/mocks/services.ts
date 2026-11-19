@@ -24,6 +24,7 @@ interface Db {
   priceList: IPriceListItem[]
   reviews: IReview[]
   bookedSlots: Date[]
+  internalNotes: Record<string, string>
 }
 
 const initial = (): Db => ({
@@ -36,6 +37,7 @@ const initial = (): Db => ({
   priceList: [...fx.priceList],
   reviews: [...fx.reviews],
   bookedSlots: [fx.newFix.date],
+  internalNotes: { [fx.fixWithProposal.reference]: 'Klient prosił o telefon przed wymianą opon.' },
 })
 
 export const db: Db = initial()
@@ -78,6 +80,8 @@ export const authService = {
   }).mockName('logOut'),
   resetPassword: fn(async (_email: string) => {}).mockName('resetPassword'),
   isSignedIn: fn(async () => true).mockName('isSignedIn'),
+  isEmailVerified: fn(async () => true).mockName('isEmailVerified'),
+  resendVerification: fn(async () => {}).mockName('resendVerification'),
   loadCurrentUser: fn(async () => later(db.currentUser)).mockName('loadCurrentUser'),
   onAuthChange: fn((_cb: (uid: string | null) => void) => () => {}).mockName('onAuthChange'),
   watchUser: fn((_uid: string, _cb: (u: IUser | null) => void) => () => {}).mockName('watchUser'),
@@ -147,6 +151,15 @@ export const fixesService = {
     db.fixes = replace(db.fixes, updated)
     return later(updated)
   }).mockName('rejectProposal'),
+  setPublicNote: fn(async (fix: IFix, text: string) => {
+    const updated = mapIFix({ ...fix, workshopNote: text })
+    db.fixes = replace(db.fixes, updated)
+    return later(updated)
+  }).mockName('setPublicNote'),
+  getInternalNote: fn(async (fixRef: string) => later(db.internalNotes[fixRef] ?? '')).mockName('getInternalNote'),
+  setInternalNote: fn(async (fixRef: string, text: string) => {
+    db.internalNotes[fixRef] = text
+  }).mockName('setInternalNote'),
   confirmBooking: fn(async (fix: IFix) => {
     const updated = mapIFix({ ...fix, confirmed: true })
     db.fixes = replace(db.fixes, updated)

@@ -135,6 +135,9 @@ service cloud.firestore {
           && appendsOneStatus(resource.data.confirmed
             ? ['getCar', 'addQuote', 'addGiveBackTime', 'addExpense', 'giveBackCar', 'workshopCancel']
             : ['workshopCancel']))
+        // …or edit the note visible to the client
+        || (isWorkshop() && onlyChanges(['workshopNote']) && request.resource.data.workshopNote is string
+          && request.resource.data.workshopNote.size() <= 1000)
         // …or propose a scope change
         || (isWorkshop() && onlyChanges(['notifications', 'proposal'])
           && request.resource.data.proposal != null && appendsOneStatus(['changeProposed']))
@@ -159,6 +162,16 @@ service cloud.firestore {
         || (isClient() && onlyChanges(['reviewed']) && request.resource.data.reviewed == true);
 
       allow delete: if false;
+
+      // Internal workshop note – never readable by the client.
+      match /internal/{docId} {
+        function parentFix() { return get(/databases/$(database)/documents/fixes/$(fixId)).data; }
+        function isFixWorkshop() { return signedIn() && myCompanyRef() != null && parentFix().companyRef == myCompanyRef(); }
+        allow read: if isFixWorkshop() || isModerator();
+        allow create, update: if (isFixWorkshop() || isModerator())
+          && request.resource.data.text is string && request.resource.data.text.size() <= 2000;
+        allow delete: if false;
+      }
     }
 
     // ---------- service catalog ----------

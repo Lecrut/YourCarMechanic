@@ -167,7 +167,9 @@
     "suspendedTitle": "Firma zawieszona",
     "suspendedText": "Twoja firma została zawieszona przez moderatora. Skontaktuj się z obsługą.",
     "toBeAcceptedHint": "Pokaż tylko rezerwacje bez żadnego statusu",
-    "notApprovedHint": "Dostępne po odblokowaniu firmy przez moderatora"
+    "notApprovedHint": "Dostępne po odblokowaniu firmy przez moderatora",
+    "search": "Szukaj: klient, telefon, auto, VIN, opis",
+    "today": "Dzisiaj"
   },
   "userBookFix": {
     "stepper": {
@@ -454,7 +456,13 @@
     "send": "Wyślij propozycję"
   },
   "repairs": {
-    "empty": "Brak napraw do wyświetlenia"
+    "empty": "Brak napraw do wyświetlenia",
+    "costHint": "Wycena + dodatkowe koszty",
+    "total": "Razem do zapłaty",
+    "cancelTitle": "Odwołać wizytę?",
+    "cancelText": "Wizyta {date} zostanie odwołana, a termin zwolniony. Tej operacji nie można cofnąć.",
+    "keep": "Zostaw",
+    "addToCalendar": "Dodaj do kalendarza"
   },
   "reviews": {
     "title": "Oceń naprawę",
@@ -501,5 +509,36 @@
     "notFoundTitle": "Nie ma takiej strony",
     "notFoundText": "Link mógł wygasnąć albo zawierać literówkę.",
     "home": "Wróć na stronę główną"
+  },
+  "notes": {
+    "title": "Notatki",
+    "public": "Notatka dla klienta",
+    "publicHint": "Klient zobaczy ją w szczegółach naprawy",
+    "internal": "Notatka wewnętrzna",
+    "internalHint": "Widoczna tylko dla warsztatu (i moderatora)",
+    "fromWorkshop": "Wiadomość od warsztatu",
+    "saved": "Notatka zapisana"
+  },
+  "account": {
+    "verifyEmail": "Potwierdź adres {email} – link wysłaliśmy w wiadomości e-mail.",
+    "resend": "Wyślij ponownie",
+    "verificationSent": "Wysłano",
+    "alreadyVerified": "Już potwierdziłem",
+    "changePassword": "Zmień hasło",
+    "passwordLinkSent": "Link do zmiany hasła wysłaliśmy na Twój e-mail"
+  },
+  "footer": {
+    "tagline": "Rezerwuj naprawy i śledź je na bieżąco.",
+    "terms": "Regulamin"
+  },
+  "board": {
+    "week": "Tydzień",
+    "list": "Lista",
+    "previous": "Poprzedni tydzień",
+    "next": "Następny tydzień",
+    "visits": "Wizyty: {count}",
+    "atWorkshop": "Teraz w warsztacie",
+    "atWorkshopHint": "Auta przyjęte i jeszcze nie oddane",
+    "emptyWorkshop": "Brak aut w warsztacie"
   }
 }

@@ -96,6 +96,36 @@ export const RepairsLive: Story = {
   render: () => ({ components: { CompanyIndex }, template: '<company-index />' }),
   play: async ({ canvasElement }) => {
     await waitFor(() => expect(fixesService.watchActiveFixes).toHaveBeenCalledWith('companyRef', autofix.reference, expect.any(Function), expect.any(Function)))
-    await expect((await within(canvasElement).findAllByTestId('repair-card')).length).toBe(3)
+    // Default view: the week board with the "at the workshop" panel.
+    await expect(await within(canvasElement).findByTestId('week-board')).toBeVisible()
+    await expect(within(canvasElement).getByTestId('at-workshop')).toHaveTextContent('BMW Seria 3')
+  },
+}
+
+export const RepairsAsList: Story = {
+  render: () => ({ components: { CompanyIndex }, template: '<company-index />' }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(within(await canvas.findByTestId('view-toggle')).getByText('Lista'))
+    await expect((await canvas.findAllByTestId('repair-card')).length).toBe(3)
+    // search narrows the list
+    await userEvent.type(canvas.getByTestId('repair-search').querySelector('input')!, 'promocja')
+    await waitFor(() => expect(canvas.getAllByTestId('repair-card')).toHaveLength(1))
+  },
+}
+
+/** Workshop notes: one for the client, one internal. */
+export const RepairNotes: Story = {
+  render: () => ({ components: { CompanyIndex }, template: '<company-index />' }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(within(await canvas.findByTestId('view-toggle')).getByText('Lista'))
+    const card = (await canvas.findAllByTestId('repair-card')).find(c => c.textContent?.includes('Wycena mechanika'))!
+    await userEvent.click(within(card).getByTestId('open-details'))
+    const internal = (await screen.findByTestId('internal-note-input')).querySelector('textarea')!
+    await waitFor(() => expect(internal).toHaveValue('Klient prosił o telefon przed wymianą opon.'))
+    await userEvent.type(internal, ' Oddzwonić po 16.')
+    await userEvent.click(screen.getByTestId('save-internal-note'))
+    await waitFor(() => expect(fixesService.setInternalNote).toHaveBeenCalled())
   },
 }

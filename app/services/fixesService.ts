@@ -8,7 +8,9 @@ import {
   query,
   runTransaction,
   serverTimestamp,
+  setDoc,
   Timestamp,
+  updateDoc,
   where,
 } from 'firebase/firestore'
 import { db } from './firebase'
@@ -106,6 +108,7 @@ export async function addFix(fix: IFix): Promise<IFix> {
       createdBy: fix.createdBy,
       confirmed: !byWorkshop,
       proposal: null,
+      workshopNote: '',
       createTime: serverTimestamp(),
     })
   })
@@ -195,4 +198,22 @@ export async function confirmBooking(fix: IFix): Promise<IFix> {
     })
   })
   return readFix(fix.reference, fix)
+}
+
+/** Note for the client, stored on the fix itself. */
+export async function setPublicNote(fix: IFix, text: string): Promise<IFix> {
+  await updateDoc(doc(db(), fix.reference), { workshopNote: text })
+  return mapIFix({ ...fix, workshopNote: text })
+}
+
+/** Internal workshop note – a separate document the client cannot read (see firestore.rules). */
+const internalNoteDoc = (fixRef: string) => doc(db(), `${fixRef}/internal/note`)
+
+export async function getInternalNote(fixRef: string): Promise<string> {
+  const snap = await getDoc(internalNoteDoc(fixRef))
+  return snap.exists() ? String(snap.data().text ?? '') : ''
+}
+
+export async function setInternalNote(fixRef: string, text: string): Promise<void> {
+  await setDoc(internalNoteDoc(fixRef), { text, updatedAt: serverTimestamp() })
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppFooter from '~/components/appFooter.vue'
+
 definePageMeta({ middleware: ['guest'] })
 
 const { t } = useI18n()
@@ -105,5 +107,7 @@ const steps = computed(() => [
         </div>
       </v-container>
     </v-img>
+
+    <app-footer />
   </div>
 </template>

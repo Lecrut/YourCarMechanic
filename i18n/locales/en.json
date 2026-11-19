@@ -167,7 +167,9 @@
     "suspendedTitle": "Company suspended",
     "suspendedText": "Your company was suspended by a moderator. Please contact support.",
     "toBeAcceptedHint": "Show only bookings without any status",
-    "notApprovedHint": "Available once a moderator unlocks your company"
+    "notApprovedHint": "Available once a moderator unlocks your company",
+    "search": "Search: client, phone, car, VIN, description",
+    "today": "Today"
   },
   "userBookFix": {
     "stepper": {
@@ -454,7 +456,13 @@
     "send": "Send proposal"
   },
   "repairs": {
-    "empty": "No repairs to show"
+    "empty": "No repairs to show",
+    "costHint": "Quote + extra costs",
+    "total": "Total to pay",
+    "cancelTitle": "Cancel the visit?",
+    "cancelText": "The visit on {date} will be cancelled and the time released. This cannot be undone.",
+    "keep": "Keep it",
+    "addToCalendar": "Add to calendar"
   },
   "reviews": {
     "title": "Rate the repair",
@@ -501,5 +509,36 @@
     "notFoundTitle": "Page not found",
     "notFoundText": "The link may be outdated or mistyped.",
     "home": "Back to home"
+  },
+  "notes": {
+    "title": "Notes",
+    "public": "Note for the client",
+    "publicHint": "The client sees it in the repair details",
+    "internal": "Internal note",
+    "internalHint": "Visible only to the workshop (and moderators)",
+    "fromWorkshop": "Message from the workshop",
+    "saved": "Note saved"
+  },
+  "account": {
+    "verifyEmail": "Please confirm {email} – we sent you a link by e-mail.",
+    "resend": "Resend",
+    "verificationSent": "Sent",
+    "alreadyVerified": "I've confirmed it",
+    "changePassword": "Change password",
+    "passwordLinkSent": "We e-mailed you a link to change your password"
+  },
+  "footer": {
+    "tagline": "Book repairs and follow them live.",
+    "terms": "Terms"
+  },
+  "board": {
+    "week": "Week",
+    "list": "List",
+    "previous": "Previous week",
+    "next": "Next week",
+    "visits": "Visits: {count}",
+    "atWorkshop": "At the workshop now",
+    "atWorkshopHint": "Cars received and not handed back yet",
+    "emptyWorkshop": "No cars at the workshop"
   }
 }
