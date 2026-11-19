@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IFix } from '~/models/fix'
-import { carSegment, formatRange, isWithin, quoteLineTotal, type Range } from '~/models/priceList'
+import { carSegment, formatDuration, formatRange, isWithin, quoteLineTotal, type Range, roundUpToQuarter } from '~/models/priceList'
 import { mapINotification } from '~/models/notification'
 
 /**
@@ -36,6 +36,10 @@ const rate = computed(() => authStore.company?.hourlyRate ?? 0)
 const segment = computed(() => carSegment(props.fix.car.manufacturer))
 const lineTotal = (l: Line) => quoteLineTotal(l.laborHours, l.partsCost, rate.value)
 const total = computed(() => lines.value.filter(l => l.include).reduce((sum, l) => sum + lineTotal(l), 0))
+/** Total labor time of the quote (15-min steps) vs the time reserved in the calendar. */
+const totalHours = computed(() => roundUpToQuarter(lines.value.filter(l => l.include).reduce((sum, l) => sum + Number(l.laborHours || 0), 0)))
+const exceedsBooking = computed(() => totalHours.value > props.fix.durationHours)
+
 const fitsEstimate = computed(() => !props.fix.estimate || isWithin(total.value, props.fix.estimate))
 const mid = (r: Range) => Math.round(((r.min + r.max) / 2) * 10) / 10
 
@@ -134,7 +138,7 @@ async function submit() {
                   v-model.number="line.laborHours"
                   v-tooltip:top="line.hoursRange ? t('quote.allowed', { range: `${line.hoursRange.min}–${line.hoursRange.max} h` }) : null"
                   type="number"
-                  step="0.5"
+                  step="0.25"
                   min="0"
                   suffix="h"
                   density="compact"
@@ -192,6 +196,23 @@ async function submit() {
             </tr>
           </tfoot>
         </v-table>
+
+        <div class="d-flex align-center ga-2 mt-3 text-body-medium">
+          <v-icon
+            icon="mdi-timer-outline"
+            size="small"
+          />
+          {{ t('duration.quoteTime', { time: formatDuration(totalHours), booked: formatDuration(fix.durationHours) }) }}
+        </div>
+        <v-alert
+          v-if="exceedsBooking"
+          type="warning"
+          variant="tonal"
+          density="compact"
+          class="mt-3"
+          :text="t('duration.exceedsBooking')"
+          data-testid="quote-exceeds-booking"
+        />
 
         <v-alert
           v-if="!fitsEstimate"

@@ -155,7 +155,10 @@
     "services": "Services performed",
     "nipHint": "10 digits, checksum is verified",
     "workingDays": "Working days",
-    "workingDaysHint": "Customers can only book on these days"
+    "workingDaysHint": "Customers can only book on these days",
+    "stations": "Service bays",
+    "stationsHint": "How many cars you can work on at once – that many visits can share an hour",
+    "stationsRule": "Between 1 and {max}"
   },
   "company": {
     "title": "Repair list",
@@ -413,7 +416,7 @@
     "itemName": "Item name",
     "itemNamePlaceholder": "e.g. Brake pad replacement",
     "laborHours": "Labor hours",
-    "laborHoursHint": "Charged at {rate} PLN/h",
+    "laborHoursHint": "Labor time in 15-min steps, charged at {rate} PLN/h",
     "partsCost": "Parts cost by car segment",
     "segmentHint": "The segment comes from the car brand (e.g. BMW, Audi = premium; Dacia, Fiat = economy)",
     "segments": {
@@ -542,7 +545,8 @@
     "visits": "Visits: {count}",
     "atWorkshop": "At the workshop now",
     "atWorkshopHint": "Cars received and not handed back yet",
-    "emptyWorkshop": "No cars at the workshop"
+    "emptyWorkshop": "No cars at the workshop",
+    "continued": "cont."
   },
   "quote": {
     "title": "Create quote",
@@ -635,5 +639,12 @@
       "h": "in {value} h",
       "d": "in {value} days"
     }
+  },
+  "duration": {
+    "expected": "Expected time",
+    "fromPriceList": "Suggested from the price list – adjust in 15-min steps",
+    "quarterStep": "Use 15-minute steps (0.25 h)",
+    "quoteTime": "Labor time in the quote: {time} (booked {booked})",
+    "exceedsBooking": "The quote needs more time than booked – propose another date so the next visits are not blocked."
   }
 }

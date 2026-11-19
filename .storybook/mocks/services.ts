@@ -6,7 +6,7 @@ import * as fx from './fixtures'
 import type { IFix } from '~/models/fix'
 import { mapIFix } from '~/models/fix'
 import type { ICar } from '~/models/car'
-import type { IWorkshop } from '~/models/workshop'
+import { type IWorkshop, occupiedHours } from '~/models/workshop'
 import type { IUser } from '~/models/user'
 import type { IService } from '~/models/service'
 import type { IPriceListItem } from '~/models/priceList'
@@ -129,9 +129,11 @@ export const fixesService = {
     return () => {}
   }).mockName('watchRecentFixes'),
   addFix: fn(async (fix: IFix) => {
-    const saved = mapIFix({ ...fix, confirmed: fix.createdBy !== 'workshop', reference: newRef('fixes') })
+    const workshop = db.workshops.find(w => w.reference === fix.companyRef)!
+    const hours = occupiedHours(workshop, fix.date, fix.durationHours)
+    const saved = mapIFix({ ...fix, slotIds: hours.map(h => `${h.toISOString()}_0`), confirmed: fix.createdBy !== 'workshop', reference: newRef('fixes') })
     db.fixes.push(saved)
-    db.bookedSlots.push(fix.date)
+    db.bookedSlots.push(...hours)
     return later(saved)
   }).mockName('addFix'),
   addNotification: fn(async (fix: IFix, notification: INotification) => {

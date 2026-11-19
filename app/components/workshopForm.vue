@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IWorkshop } from '~/models/workshop'
+import { type IWorkshop, MAX_STATIONS } from '~/models/workshop'
 import { nipRule, phoneRule, requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 
@@ -149,6 +149,23 @@ defineExpose({ isValid: validate })
           :label="t('companyProfile.closingTime')"
           :rules="[closingAfterOpening]"
           data-testid="company-closing"
+        />
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-text-field
+          v-model.number="workshop.stations"
+          v-tooltip:top="t('companyProfile.stationsHint')"
+          type="number"
+          min="1"
+          :max="MAX_STATIONS"
+          :label="t('companyProfile.stations')"
+          prepend-inner-icon="mdi-garage-variant"
+          :rules="[(v: number) => (v >= 1 && v <= MAX_STATIONS) || t('companyProfile.stationsRule', { max: MAX_STATIONS })]"
+          data-testid="company-stations"
         />
       </v-col>
 

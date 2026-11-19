@@ -15,9 +15,9 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from 'firebase/firestore'
-import { connectStorageEmulator, type FirebaseStorage, getStorage } from 'firebase/storage'
 
 let app: FirebaseApp | null = null
+let emulators = false
 
 export function initFirebase(options: FirebaseOptions, useEmulators = false) {
   if (app) return app
@@ -34,10 +34,10 @@ export function initFirebase(options: FirebaseOptions, useEmulators = false) {
     localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
   })
 
+  emulators = useEmulators
   if (useEmulators) {
     connectAuthEmulator(firebaseAuth, 'http://127.0.0.1:9099', { disableWarnings: true })
     connectFirestoreEmulator(firestore, '127.0.0.1', 8080)
-    connectStorageEmulator(getStorage(app), '127.0.0.1', 9199)
   }
 
   return app
@@ -50,4 +50,6 @@ function requireApp(): FirebaseApp {
 
 export const auth = (): Auth => getAuth(requireApp())
 export const db = (): Firestore => getFirestore(requireApp())
-export const storage = (): FirebaseStorage => getStorage(requireApp())
+export const firebaseApp = (): FirebaseApp => requireApp()
+/** Whether the local emulators are used (lazy SDKs such as Storage connect to them themselves). */
+export const usesEmulators = () => emulators

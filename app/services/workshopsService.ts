@@ -42,8 +42,8 @@ export async function addWorkshop(workshop: IWorkshop, ownerUid: string): Promis
 
 /** NIP, owner and status are immutable for workshop owners (enforced by firestore.rules). */
 export async function updateWorkshop(workshop: IWorkshop): Promise<IWorkshop> {
-  const { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays } = mapIWorkshop(workshop)
-  await updateDoc(doc(db(), workshop.reference), { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays })
+  const { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays, stations } = mapIWorkshop(workshop)
+  await updateDoc(doc(db(), workshop.reference), { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays, stations })
   return mapIWorkshop(workshop)
 }
 

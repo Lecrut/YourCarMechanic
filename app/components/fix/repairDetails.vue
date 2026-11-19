@@ -3,7 +3,7 @@ import { canAcceptQuote, type IFix, isFixFinished, isQuoteAccepted, latestQuote,
 import { downloadIcs } from '~/utils/calendar'
 import type { IWorkshop } from '~/models/workshop'
 import { type INotification, mapINotification, type NotificationType } from '~/models/notification'
-import { formatRange, isWithin } from '~/models/priceList'
+import { formatDuration, formatRange, isWithin } from '~/models/priceList'
 import { notificationLabel, statusOptions } from '~/composables/notifications'
 import { formatDateToString, toLocalInput } from '~/utils/time'
 import formValidation from '~/utils/formValidation'
@@ -250,6 +250,11 @@ watch(isDialogShown, async (shown) => {
               <v-list-item
                 prepend-icon="mdi-car-info"
                 :title="`${fix.carMillage} km`"
+              />
+              <v-list-item
+                prepend-icon="mdi-timer-outline"
+                :title="formatDuration(fix.durationHours)"
+                :subtitle="t('duration.expected')"
               />
               <v-list-item
                 v-if="fix.estimate"

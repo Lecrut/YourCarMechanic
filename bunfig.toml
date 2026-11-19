@@ -1,0 +1,11 @@
+# Supply-chain protection for dependency installs.
+[install]
+# Ignore package versions published less than 7 days ago. Hijacked/malicious releases are
+# usually detected and pulled within hours or days – this keeps them out of our lockfile.
+minimumReleaseAge = 604800
+
+# Pin exact versions when adding packages (`bun add`), so upgrades are always deliberate.
+exact = true
+
+# Install scripts (postinstall etc.) run only for packages listed in package.json
+# `trustedDependencies` – bun's default; everything else is blocked.

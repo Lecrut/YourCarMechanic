@@ -28,7 +28,7 @@ onMounted(() => sharedStore.resetState())
 <template>
   <auth-card
     :title="t('resetPassword.title')"
-    image="/reset.jpg"
+    image="/reset.webp"
     image-first
   >
     <p class="text-body-medium text-center mb-6">

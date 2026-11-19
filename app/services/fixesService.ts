@@ -10,6 +10,7 @@ import {
   serverTimestamp,
   setDoc,
   Timestamp,
+  type Transaction,
   updateDoc,
   where,
 } from 'firebase/firestore'
@@ -18,6 +19,7 @@ import { AppError } from '~/utils/errors'
 import { fromDoc, fromQuery } from './mappers'
 import { type IFix, type IFixProposal, mapIFix } from '~/models/fix'
 import { mapICarToFirebase } from '~/models/car'
+import { mapIWorkshop, occupiedHours } from '~/models/workshop'
 import {
   CLOSING_NOTIFICATIONS,
   type INotification,
@@ -29,10 +31,49 @@ import {
 const fixes = () => collection(db(), 'fixes')
 
 /**
- * One document per booked hour: `companies/{id}/slots/{ISO date}`.
- * Clients check availability here instead of reading other customers' fixes.
+ * Booked hours live in `companies/{id}/slots/{ISO hour}_{station}` – one document per occupied
+ * hour and service bay. Clients check availability there instead of reading other customers' fixes.
+ * Older bookings used `{ISO hour}` without a station; they are still released correctly.
  */
-const slotDoc = (companyRef: string, date: Date) => doc(db(), `${companyRef}/slots/${date.toISOString()}`)
+const slotPath = (companyRef: string, slotId: string) => `${companyRef}/slots/${slotId}`
+const slotId = (hour: Date, station: number) => `${hour.toISOString()}_${station}`
+
+type Tx = Transaction
+
+/**
+ * Reads the company and finds a free bay for every hour of the visit (all reads – call before writes).
+ * `ownIds` are slots of the same fix (moving a visit may overlap its old time) and count as free.
+ */
+async function findFreeSlots(tx: Tx, companyRef: string, start: Date, durationHours: number, ownIds: string[] = []): Promise<string[]> {
+  const companySnap = await tx.get(doc(db(), companyRef))
+  const workshop = mapIWorkshop(companySnap.data() ?? {})
+  const ids: string[] = []
+  for (const hour of occupiedHours(workshop, start, durationHours)) {
+    let free: string | null = null
+    for (let station = 0; station < workshop.stations && !free; station++) {
+      const id = slotId(hour, station)
+      if (ownIds.includes(id) || !(await tx.get(doc(db(), slotPath(companyRef, id)))).exists()) free = id
+    }
+    if (!free) throw new AppError('errors.slotTaken')
+    ids.push(free)
+  }
+  return ids
+}
+
+function reserveSlots(tx: Tx, companyRef: string, ids: string[], fixRef: string, userRef: string) {
+  for (const id of ids) {
+    tx.set(doc(db(), slotPath(companyRef, id)), {
+      date: Timestamp.fromDate(new Date(id.split('_')[0]!)),
+      userUid: userRef.split('/').pop(),
+      fixRef,
+    })
+  }
+}
+
+function releaseSlots(tx: Tx, fix: IFix) {
+  const ids = fix.slotIds.length ? fix.slotIds : [fix.date.toISOString()]
+  for (const id of ids) tx.delete(doc(db(), slotPath(fix.companyRef, id)))
+}
 
 const statusEntry = (notificationType: NotificationType, description = '') =>
   mapINotificationToFirebase(mapINotification({ notificationType, description }))
@@ -96,22 +137,17 @@ export function watchRecentFixes(
 }
 
 /**
- * Creates the fix and reserves its slot atomically – fails if the hour was taken in the meantime.
- * Workshop-created fixes (`createdBy: 'workshop'`) start unconfirmed until the client accepts.
+ * Creates the fix and reserves a bay for every hour of its duration atomically – fails if the
+ * time was taken in the meantime. Workshop-created fixes start unconfirmed until the client accepts.
  */
 export async function addFix(fix: IFix): Promise<IFix> {
   const fixRef = doc(fixes())
-  const slotRef = slotDoc(fix.companyRef, fix.date)
   const byWorkshop = fix.createdBy === 'workshop'
+  let slotIds: string[] = []
 
   await runTransaction(db(), async (tx) => {
-    if ((await tx.get(slotRef)).exists()) throw new AppError('errors.slotTaken')
-
-    tx.set(slotRef, {
-      date: Timestamp.fromDate(fix.date),
-      userUid: fix.userRef.split('/').pop(),
-      fixRef: fixRef.path,
-    })
+    slotIds = await findFreeSlots(tx, fix.companyRef, fix.date, fix.durationHours)
+    reserveSlots(tx, fix.companyRef, slotIds, fixRef.path, fix.userRef)
     tx.set(fixRef, {
       date: Timestamp.fromDate(fix.date),
       bookDate: Timestamp.fromDate(fix.bookDate),
@@ -119,6 +155,8 @@ export async function addFix(fix: IFix): Promise<IFix> {
       car: mapICarToFirebase(fix.car),
       carRef: fix.carRef,
       carMillage: fix.carMillage,
+      durationHours: fix.durationHours,
+      slotIds,
       userRef: fix.userRef,
       services: fix.services,
       description: fix.description,
@@ -139,10 +177,10 @@ export async function addFix(fix: IFix): Promise<IFix> {
     })
   })
 
-  return mapIFix({ ...fix, confirmed: !byWorkshop, reference: fixRef.path })
+  return mapIFix({ ...fix, slotIds, confirmed: !byWorkshop, reference: fixRef.path })
 }
 
-/** Appends a status update; closing statuses also close the fix and free its slot. */
+/** Appends a status update; closing statuses also close the fix and free its slots. */
 export async function addNotification(fix: IFix, notification: INotification): Promise<IFix> {
   const fixRef = doc(db(), fix.reference)
   const isClosing = CLOSING_NOTIFICATIONS.includes(notification.notificationType)
@@ -152,7 +190,7 @@ export async function addNotification(fix: IFix, notification: INotification): P
       isClosed: isClosing,
       notifications: arrayUnion(mapINotificationToFirebase(notification)),
     })
-    if (isClosing) tx.delete(slotDoc(fix.companyRef, fix.date))
+    if (isClosing) releaseSlots(tx, fix)
   })
 
   return readFix(fix.reference, fix)
@@ -175,29 +213,25 @@ export async function proposeChange(fix: IFix, proposal: Omit<IFixProposal, 'cre
   return readFix(fix.reference, fix)
 }
 
-/** Client accepts the workshop's proposal; a new date moves the reserved slot. */
+/** Client accepts the workshop's proposal; a new date moves the reserved slots. */
 export async function acceptProposal(fix: IFix): Promise<IFix> {
   const proposal = fix.proposal
   if (!proposal) return fix
   const dateChanged = proposal.date.getTime() !== fix.date.getTime()
 
   await runTransaction(db(), async (tx) => {
-    const newSlot = slotDoc(fix.companyRef, proposal.date)
-    if (dateChanged && (await tx.get(newSlot)).exists()) throw new AppError('errors.slotTaken')
-
+    let slotIds = fix.slotIds
     if (dateChanged) {
-      tx.delete(slotDoc(fix.companyRef, fix.date))
-      tx.set(newSlot, {
-        date: Timestamp.fromDate(proposal.date),
-        userUid: fix.userRef.split('/').pop(),
-        fixRef: fix.reference,
-      })
+      slotIds = await findFreeSlots(tx, fix.companyRef, proposal.date, fix.durationHours, fix.slotIds)
+      releaseSlots(tx, { ...fix, slotIds: fix.slotIds.filter(id => !slotIds.includes(id)) })
+      reserveSlots(tx, fix.companyRef, slotIds.filter(id => !fix.slotIds.includes(id)), fix.reference, fix.userRef)
     }
     tx.update(doc(db(), fix.reference), {
       services: proposal.services,
       description: proposal.description,
       date: Timestamp.fromDate(proposal.date),
       estimate: proposal.estimate,
+      slotIds,
       proposal: null,
       notifications: arrayUnion(statusEntry('changeAccepted')),
     })

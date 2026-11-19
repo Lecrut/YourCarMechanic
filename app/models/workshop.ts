@@ -9,6 +9,8 @@ export type WorkshopStatus = 'pending' | 'approved' | 'suspended'
 /** Monday–Saturday – also used for companies created before working days existed. */
 export const DEFAULT_WORKING_DAYS = [1, 2, 3, 4, 5, 6]
 
+export const MAX_STATIONS = 20
+
 export interface IWorkshop extends ISoftDeletable {
   name: string
   nip: string
@@ -26,6 +28,8 @@ export interface IWorkshop extends ISoftDeletable {
   contractSignedAt: Date | null
   /** Days the workshop is open, `Date#getDay()` numbers (0 = Sunday). */
   workingDays: number[]
+  /** Service bays – how many cars can be worked on at the same time. */
+  stations: number
 
   reference: string
 }
@@ -44,6 +48,7 @@ export function mapIWorkshop(data: Partial<Omit<IWorkshop, 'contractSignedAt' | 
     status: data.status || 'pending',
     hourlyRate: Number(data.hourlyRate) || 0,
     contractSignedAt: data.contractSignedAt ? new Date(data.contractSignedAt) : null,
+    stations: Math.min(MAX_STATIONS, Math.max(1, Math.round(Number(data.stations) || 1))),
     workingDays: data.workingDays?.length ? [...new Set(data.workingDays.map(Number))].sort() : [...DEFAULT_WORKING_DAYS],
     deletedAt: toDeletedAt(data.deletedAt),
 
@@ -76,4 +81,21 @@ export function upcomingWorkingDays(workshop: IWorkshop, from: Date, count: numb
     day.setDate(day.getDate() + 1)
   }
   return days
+}
+
+/**
+ * Hourly slots a visit of `durationHours` occupies from `start`: one per started hour,
+ * continuing on the next working day at opening time when the workshop closes.
+ */
+export function occupiedHours(workshop: IWorkshop, start: Date, durationHours: number): Date[] {
+  const count = Math.max(1, Math.ceil(durationHours))
+  const hours: Date[] = []
+  const cursor = new Date(start)
+  cursor.setMinutes(0, 0, 0)
+  for (let guard = 0; hours.length < count && guard < 24 * 60; guard++) {
+    if (isWorkingDay(workshop, cursor) && cursor.getHours() >= workshop.openingTime && cursor.getHours() < workshop.closingTime)
+      hours.push(new Date(cursor))
+    cursor.setHours(cursor.getHours() + 1)
+  }
+  return hours
 }

@@ -19,7 +19,7 @@ const steps = computed(() => [
 <template>
   <div>
     <v-img
-      src="/landingOne.jpg"
+      src="/landingOne.webp"
       cover
       gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.75)"
       height="90vh"
@@ -83,7 +83,7 @@ const steps = computed(() => [
     </v-container>
 
     <v-img
-      src="/landingTwo.jpg"
+      src="/landingTwo.webp"
       cover
       gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.75)"
       height="60vh"

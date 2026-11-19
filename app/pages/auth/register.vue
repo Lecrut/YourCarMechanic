@@ -32,7 +32,7 @@ onMounted(() => sharedStore.resetState())
 <template>
   <auth-card
     :title="t('register.title')"
-    image="/register.jpg"
+    image="/register.webp"
     image-first
   >
     <v-form

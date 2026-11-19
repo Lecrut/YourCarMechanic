@@ -33,6 +33,10 @@ export interface IFix {
   /** The customer's saved car (`cars/{id}`) when booked with one; empty for one-off cars. */
   carRef: string
   carMillage: number
+  /** Expected length (hours, 15-min steps) – decides how many hourly slots the visit occupies. */
+  durationHours: number
+  /** Booked slot documents (`companies/{id}/slots/{id}`), released when the repair closes. */
+  slotIds: string[]
   userRef: string
 
   services: string[]
@@ -82,6 +86,8 @@ export function mapIFix(data: FixInput): IFix {
     companyRef: data.companyRef || '',
     car: mapICar({ ...data.car }),
     carRef: data.carRef || '',
+    durationHours: Number(data.durationHours) || 1,
+    slotIds: [...(data.slotIds ?? [])],
     carMillage: Number(data.carMillage || 0),
     userRef: data.userRef || '',
 

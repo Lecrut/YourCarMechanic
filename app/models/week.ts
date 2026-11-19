@@ -1,12 +1,18 @@
 import { type IFix, isFixFinished } from '~/models/fix'
-import { type IWorkshop, isWorkingDay } from '~/models/workshop'
+import { type IWorkshop, isWorkingDay, occupiedHours } from '~/models/workshop'
+
+/** A visit in one hour cell; `continued` marks hours after the first one of a longer visit. */
+export interface IWeekEntry {
+  fix: IFix
+  continued: boolean
+}
 
 export interface IWeekDay {
   day: Date
   isToday: boolean
   isWorking: boolean
-  /** Repairs per hour row (same order as `IWeek.hours`). */
-  cells: IFix[][]
+  /** Entries per hour row (same order as `IWeek.hours`). */
+  cells: IWeekEntry[][]
 }
 
 export interface IWeek {
@@ -16,7 +22,8 @@ export interface IWeek {
 
 /**
  * Calendar board for `days` days from `from`: one row per opening hour (extended if a visit
- * falls outside opening hours, so nothing is hidden), one column per day.
+ * falls outside opening hours, so nothing is hidden), one column per day. Visits longer than an
+ * hour fill every hour they occupy – also on the following working days.
  */
 export function buildWeek(fixes: IFix[], workshop: IWorkshop, from: Date, days = 7, now = new Date()): IWeek {
   const start = new Date(from)
@@ -24,8 +31,12 @@ export function buildWeek(fixes: IFix[], workshop: IWorkshop, from: Date, days =
   const end = new Date(start)
   end.setDate(end.getDate() + days)
 
-  const inRange = fixes.filter(f => f.date >= start && f.date < end)
-  const visitHours = inRange.map(f => f.date.getHours())
+  const placed = fixes.flatMap(fix =>
+    occupiedHours(workshop, fix.date, fix.durationHours)
+      .map((hour, index) => ({ fix, hour, continued: index > 0 }))
+      .filter(e => e.hour >= start && e.hour < end))
+
+  const visitHours = placed.map(e => e.hour.getHours())
   const first = Math.min(workshop.openingTime, ...visitHours)
   const last = Math.max(workshop.closingTime - 1, ...visitHours)
   const hours = Array.from({ length: Math.max(0, last - first + 1) }, (_, i) => first + i)
@@ -35,12 +46,14 @@ export function buildWeek(fixes: IFix[], workshop: IWorkshop, from: Date, days =
     days: Array.from({ length: days }, (_, i) => {
       const day = new Date(start)
       day.setDate(day.getDate() + i)
-      const ofDay = inRange.filter(f => f.date.toDateString() === day.toDateString())
+      const ofDay = placed.filter(e => e.hour.toDateString() === day.toDateString())
       return {
         day,
         isToday: day.toDateString() === now.toDateString(),
         isWorking: isWorkingDay(workshop, day),
-        cells: hours.map(hour => ofDay.filter(f => f.date.getHours() === hour)),
+        cells: hours.map(hour => ofDay
+          .filter(e => e.hour.getHours() === hour)
+          .map(({ fix, continued }) => ({ fix, continued }))),
       }
     }),
   }

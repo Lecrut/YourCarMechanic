@@ -155,7 +155,10 @@
     "services": "Wykonywane usługi",
     "nipHint": "10 cyfr, sprawdzamy sumę kontrolną",
     "workingDays": "Dni pracy",
-    "workingDaysHint": "Klienci mogą rezerwować tylko w te dni"
+    "workingDaysHint": "Klienci mogą rezerwować tylko w te dni",
+    "stations": "Liczba stanowisk",
+    "stationsHint": "Ile aut możecie naprawiać jednocześnie – tyle wizyt można umówić na tę samą godzinę",
+    "stationsRule": "Od 1 do {max}"
   },
   "company": {
     "title": "Lista napraw",
@@ -413,7 +416,7 @@
     "itemName": "Nazwa pozycji",
     "itemNamePlaceholder": "np. Wymiana klocków hamulcowych",
     "laborHours": "Roboczogodziny",
-    "laborHoursHint": "Liczone po stawce {rate} PLN/h",
+    "laborHoursHint": "Czas pracy co 15 min, liczony po stawce {rate} PLN/h",
     "partsCost": "Koszt części wg segmentu auta",
     "segmentHint": "Segment wynika z marki auta klienta (np. BMW, Audi = premium; Dacia, Fiat = ekonomiczny)",
     "segments": {
@@ -542,7 +545,8 @@
     "visits": "Wizyty: {count}",
     "atWorkshop": "Teraz w warsztacie",
     "atWorkshopHint": "Auta przyjęte i jeszcze nie oddane",
-    "emptyWorkshop": "Brak aut w warsztacie"
+    "emptyWorkshop": "Brak aut w warsztacie",
+    "continued": "cd."
   },
   "quote": {
     "title": "Wystaw wycenę",
@@ -635,5 +639,12 @@
       "h": "za {value} godz.",
       "d": "za {value} dni"
     }
+  },
+  "duration": {
+    "expected": "Szacowany czas",
+    "fromPriceList": "Podpowiedź z cennika – możesz zmienić co 15 min",
+    "quarterStep": "Podaj czas co 15 minut (0,25 h)",
+    "quoteTime": "Czas pracy w wycenie: {time} (zarezerwowano {booked})",
+    "exceedsBooking": "Wycena wymaga więcej czasu niż zarezerwowano – zaproponuj klientowi inny termin, aby nie blokować kolejnych wizyt."
   }
 }

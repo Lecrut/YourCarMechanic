@@ -5,7 +5,7 @@ import { type ICar, mapICar } from '~/models/car'
 import { mapIFix } from '~/models/fix'
 import type { IWorkshop } from '~/models/workshop'
 import { formatDateToString } from '~/utils/time'
-import { carSegment, formatRange } from '~/models/priceList'
+import { carSegment, formatDuration, formatRange } from '~/models/priceList'
 import WorkshopCard from '~/components/user/workshopCard.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'user' })
@@ -70,6 +70,7 @@ const bookedCar = computed(() =>
 const estimateFor = (workshop: IWorkshop, discounted = true) =>
   workshopStore.estimateFor(workshop, selectedServices.value, bookedCar.value.manufacturer, discounted)
 const promotionFor = (workshop: IWorkshop) => workshopStore.promotionFor(workshop, selectedServices.value)
+const durationFor = (workshop: IWorkshop) => workshopStore.durationFor(workshop, selectedServices.value)
 const selectedEstimate = computed(() => (selectedWorkshop.value ? estimateFor(selectedWorkshop.value) : null))
 const selectedPromotion = computed(() => (selectedWorkshop.value ? promotionFor(selectedWorkshop.value) : null))
 
@@ -112,6 +113,7 @@ async function bookFix() {
     bookDate: new Date(),
     car: bookedCar.value,
     carRef: carSource.value === 'my' ? selectedCar.value?.reference ?? '' : '',
+    durationHours: durationFor(selectedWorkshop.value),
     carMillage: Number(carMileage.value),
     companyRef: selectedWorkshop.value.reference,
     description: serviceDescription.value,
@@ -406,6 +408,7 @@ watch([city, selectedServices], ([newCity, services]) => {
                   :estimate="estimateFor(item)"
                   :estimate-before="estimateFor(item, false)"
                   :promotion="promotionFor(item)"
+                  :duration-hours="durationFor(item)"
                   :rating="ratings[item.reference]"
                   :selected="selectedWorkshop?.reference === item.reference"
                   @book="bookTime"
@@ -476,6 +479,7 @@ watch([city, selectedServices], ([newCity, services]) => {
               <v-list-item
                 prepend-icon="mdi-calendar"
                 :title="selectedDate ? formatDateToString(selectedDate) : ''"
+                :subtitle="selectedWorkshop ? `${t('duration.expected')}: ${formatDuration(durationFor(selectedWorkshop))}` : ''"
               />
 
               <v-divider inset />

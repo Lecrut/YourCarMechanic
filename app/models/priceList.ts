@@ -98,3 +98,28 @@ export const formatRange = (r: Range) => (r.min === r.max ? `${r.min} PLN` : `${
 /** Total of a quote line: labor hours × hourly rate + parts. */
 export const quoteLineTotal = (laborHours: number, partsCost: number, hourlyRate: number) =>
   Math.round(Number(laborHours) * hourlyRate + Number(partsCost))
+
+/** Times are entered and adjusted in 15-minute steps. */
+export const TIME_STEP_HOURS = 0.25
+
+export const roundUpToQuarter = (hours: number) => Math.ceil(Math.round(hours * 1000) / 250) / 4
+
+/**
+ * Expected visit length from the price list: the longest labor time of every item of the selected
+ * services (a service without prices counts as 1 h), rounded up to 15 minutes.
+ */
+export function estimateDuration(items: IPriceListItem[], services: string[]): number {
+  const total = services.reduce((sum, service) => {
+    const serviceItems = items.filter(i => i.serviceKey === service)
+    return sum + (serviceItems.length ? serviceItems.reduce((s, i) => s + i.laborHours.max, 0) : 1)
+  }, 0)
+  return Math.max(TIME_STEP_HOURS, roundUpToQuarter(total))
+}
+
+/** `1.25` → "1 h 15 min", `0.5` → "30 min", `2` → "2 h". */
+export function formatDuration(hours: number): string {
+  const totalMinutes = Math.round(hours * 60)
+  const h = Math.floor(totalMinutes / 60)
+  const m = totalMinutes % 60
+  return [h ? `${h} h` : '', m ? `${m} min` : ''].filter(Boolean).join(' ') || '0 min'
+}

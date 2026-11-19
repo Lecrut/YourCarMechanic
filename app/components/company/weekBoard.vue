@@ -4,6 +4,7 @@ import type { IWorkshop } from '~/models/workshop'
 import { buildWeek, carsAtWorkshop } from '~/models/week'
 import { notificationLabel } from '~/composables/notifications'
 import { addDays, formatDateToString } from '~/utils/time'
+import { formatDuration } from '~/models/priceList'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 
 /** Google-Calendar-like board: next 7 days × opening hours, plus cars currently at the workshop. */
@@ -24,7 +25,7 @@ const from = computed(() => addDays(new Date(), offset.value * 7))
 const week = computed(() => buildWeek(props.fixes, props.workshop, from.value))
 const selected = computed(() => props.fixes.find(f => f.reference === selectedRef.value) ?? null)
 const atWorkshop = computed(() => carsAtWorkshop(props.fixes))
-const visitsInWeek = computed(() => week.value.days.reduce((sum, d) => sum + d.cells.flat().length, 0))
+const visitsInWeek = computed(() => week.value.days.reduce((sum, d) => sum + d.cells.flat().filter(e => !e.continued).length, 0))
 
 const dateLocale = computed(() => (locale.value === 'pl' ? 'pl-PL' : 'en-GB'))
 const weekday = (d: Date) => d.toLocaleDateString(dateLocale.value, { weekday: 'short' })
@@ -140,11 +141,11 @@ function open(fix: IFix) {
                 :class="{ 'bg-surface-light': !day.isWorking }"
               >
                 <v-card
-                  v-for="fix in day.cells[row]"
+                  v-for="{ fix, continued } in day.cells[row]"
                   :key="fix.reference"
-                  v-tooltip:top="`${statusOf(fix)} · ${fix.services.map(servicesStore.label).join(', ')}`"
+                  v-tooltip:top="`${statusOf(fix)} · ${fix.services.map(servicesStore.label).join(', ')} · ${formatDuration(fix.durationHours)}`"
                   :color="statusColor(fix)"
-                  variant="tonal"
+                  :variant="continued ? 'outlined' : 'tonal'"
                   density="compact"
                   class="mb-1 pa-1"
                   rounded="lg"
@@ -153,7 +154,7 @@ function open(fix: IFix) {
                   @click="open(fix)"
                 >
                   <div class="text-label-medium font-weight-bold text-truncate">
-                    {{ fix.car.manufacturer }} {{ fix.car.model }}
+                    <span v-if="continued">{{ t('board.continued') }} </span>{{ fix.car.manufacturer }} {{ fix.car.model }}
                   </div>
                   <div class="text-label-small text-truncate">
                     {{ fix.clientName || fix.clientPhone }}

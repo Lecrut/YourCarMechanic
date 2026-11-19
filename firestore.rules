@@ -68,7 +68,7 @@ service cloud.firestore {
 
       // Owners edit their profile & price settings; status, NIP, owner and deletion belong to moderators.
       allow update: if isModerator() || (
-        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate', 'workingDays'])
+        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate', 'workingDays', 'stations'])
       );
 
       allow delete: if false;
@@ -93,7 +93,10 @@ service cloud.firestore {
       match /slots/{slotId} {
         function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
         allow read: if signedIn();
-        allow create: if signedIn() && (request.resource.data.userUid == request.auth.uid || ownsCompany() || isModerator());
+        // id = `{ISO hour}_{station}`; the station must exist in this workshop
+        allow create: if signedIn() && (request.resource.data.userUid == request.auth.uid || ownsCompany() || isModerator())
+          && slotId.split('_').size() == 2
+          && int(slotId.split('_')[1]) < companyDoc(companyPath()).get('stations', 1);
         allow delete: if signedIn() && (resource.data.userUid == request.auth.uid || ownsCompany() || isModerator());
         allow update: if false;
       }
@@ -169,7 +172,7 @@ service cloud.firestore {
           && request.resource.data.proposal == null && appendsOneStatus(['changeRejected']))
         // client: accept the proposal – new values must be exactly the proposed ones
         || (isClient() && resource.data.proposal != null
-          && onlyChanges(['notifications', 'proposal', 'services', 'description', 'date', 'estimate'])
+          && onlyChanges(['notifications', 'proposal', 'services', 'description', 'date', 'estimate', 'slotIds'])
           && request.resource.data.proposal == null
           && request.resource.data.services == resource.data.proposal.services
           && request.resource.data.description == resource.data.proposal.description

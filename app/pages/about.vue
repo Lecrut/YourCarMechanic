@@ -7,7 +7,7 @@ const { t } = useI18n()
 <template>
   <div>
     <v-img
-      src="/aboutOne.jpg"
+      src="/aboutOne.webp"
       cover
       gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.75)"
       height="70vh"
@@ -43,7 +43,7 @@ const { t } = useI18n()
         >
           <v-card hover>
             <v-img
-              src="/aboutTwo.jpg"
+              src="/aboutTwo.webp"
               aspect-ratio="4/3"
               cover
             />
@@ -53,7 +53,7 @@ const { t } = useI18n()
     </v-container>
 
     <v-img
-      src="/aboutThree.jpg"
+      src="/aboutThree.webp"
       cover
       gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.75)"
       height="60vh"

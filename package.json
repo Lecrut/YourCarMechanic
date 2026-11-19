@@ -19,7 +19,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy": "bun run generate && firebase deploy --only hosting,firestore,storage",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "audit": "bun audit"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
@@ -59,5 +60,9 @@
     "esbuild",
     "protobufjs",
     "vue-demi"
-  ]
+  ],
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.7",
+    "minimatch": "11.0.4"
+  }
 }

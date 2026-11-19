@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CAR_SEGMENTS, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
+import { CAR_SEGMENTS, formatDuration, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
 import { mapIWorkshop } from '~/models/workshop'
 import PageHeader from '~/components/pageHeader.vue'
 import PriceItemDialog from '~/components/company/priceItemDialog.vue'
@@ -184,7 +184,7 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
           data-testid="price-table"
         >
           <template #[`item.laborHours`]="{ item }">
-            {{ item.laborHours.min }} – {{ item.laborHours.max }} h
+            {{ formatDuration(item.laborHours.min) }} – {{ formatDuration(item.laborHours.max) }}
           </template>
 
           <template

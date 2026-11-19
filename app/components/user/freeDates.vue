@@ -4,9 +4,11 @@ import { atHour, formatDayLabel } from '~/utils/time'
 
 const isDialogShown = defineModel<boolean>({ default: false })
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   workshop: IWorkshop
-}>()
+  /** Visit length in hours – decides how many consecutive free bays a start time needs. */
+  durationHours?: number
+}>(), { durationHours: 1 })
 
 const emit = defineEmits<{
   select: [date: Date]
@@ -32,7 +34,7 @@ function selectDate(day: Date, hour: number) {
 
 // Slots are watched live while the dialog is open, so hours booked by others disappear immediately.
 watch(isDialogShown, (shown) => {
-  if (shown) workshopStore.watchFreeHours(props.workshop)
+  if (shown) workshopStore.watchFreeHours(props.workshop, undefined, props.durationHours)
   else workshopStore.stopWatchingFreeHours()
 })
 

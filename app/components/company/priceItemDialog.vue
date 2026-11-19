@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CAR_SEGMENTS, formatRange, type IPriceListItem, itemEstimate, mapIPriceListItem, type Range } from '~/models/priceList'
+import { CAR_SEGMENTS, formatDuration, formatRange, type IPriceListItem, itemEstimate, mapIPriceListItem, type Range } from '~/models/priceList'
 import { requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 
@@ -25,6 +25,8 @@ const serviceOptions = computed(() => servicesStore.options.filter(o => props.se
 
 const maxNotBelowMin = (range: Range) => () => range.max >= range.min || t('pricing.maxBelowMin')
 const nonNegative = (v: number) => v >= 0 || t('pricing.nonNegative')
+/** Labor time is entered in 15-minute steps. */
+const quarterStep = (v: number) => Number.isInteger(Math.round(Number(v) * 1000) / 250) || t('duration.quarterStep')
 
 watch(isDialogShown, (shown) => {
   if (shown) draft.value = mapIPriceListItem(props.item ?? {})
@@ -97,11 +99,13 @@ async function save() {
               <v-text-field
                 v-model.number="draft.laborHours.min"
                 type="number"
-                step="0.5"
+                step="0.25"
                 min="0"
                 suffix="h"
                 :label="t('pricing.min')"
-                :rules="[nonNegative]"
+                :rules="[nonNegative, quarterStep]"
+                :hint="formatDuration(draft.laborHours.min)"
+                persistent-hint
                 data-testid="labor-min"
               />
             </v-col>
@@ -109,11 +113,13 @@ async function save() {
               <v-text-field
                 v-model.number="draft.laborHours.max"
                 type="number"
-                step="0.5"
+                step="0.25"
                 min="0"
                 suffix="h"
                 :label="t('pricing.max')"
-                :rules="[nonNegative, maxNotBelowMin(draft.laborHours)]"
+                :rules="[nonNegative, quarterStep, maxNotBelowMin(draft.laborHours)]"
+                :hint="formatDuration(draft.laborHours.max)"
+                persistent-hint
                 data-testid="labor-max"
               />
             </v-col>

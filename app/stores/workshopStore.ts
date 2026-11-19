@@ -1,7 +1,7 @@
 import { pricingService, reviewsService, workshopsService } from '~/services'
-import { type IWorkshop, upcomingWorkingDays } from '~/models/workshop'
+import { type IWorkshop, occupiedHours, upcomingWorkingDays } from '~/models/workshop'
 import type { IFreeHours } from '~/models/workshopFreeHours'
-import { estimateRepair, type IPriceListItem, type Range } from '~/models/priceList'
+import { estimateDuration, estimateRepair, type IPriceListItem, type Range } from '~/models/priceList'
 import { bestPromotionFor, discountsAt, type IPromotion } from '~/models/promotion'
 import { type IRatingSummary, ratingSummary } from '~/models/review'
 import { addDays, atHour } from '~/utils/time'
@@ -81,15 +81,22 @@ export const useWorkshopStore = defineStore('workshops', () => {
   const promotionFor = (workshop: IWorkshop, services: string[]) =>
     bestPromotionFor(promotions.value[workshop.reference] ?? [], services)
 
-  /** Watches booked slots and rebuilds the availability table for the next `days` working days (from tomorrow). */
-  function watchFreeHours(workshop: IWorkshop, days = DAYS_PER_PAGE) {
+  let watchedDuration = 1
+
+  /**
+   * Watches booked slots and rebuilds the availability table for the next `days` working days
+   * (from tomorrow). A start hour is free when every hour the visit occupies still has a free bay.
+   */
+  function watchFreeHours(workshop: IWorkshop, days = DAYS_PER_PAGE, durationHours = watchedDuration) {
+    watchedDuration = durationHours
     const workingDays = upcomingWorkingDays(workshop, addDays(new Date(), 1), days)
     if (!workingDays.length) {
       freeHoursTable.value = []
       return
     }
     const from = workingDays[0]!
-    const to = addDays(workingDays.at(-1)!, 1)
+    // Long visits spill into following days – watch a bit further than the table.
+    const to = addDays(workingDays.at(-1)!, 1 + Math.ceil(durationHours / 4) + 7)
     const openHours = Array.from(
       { length: Math.max(0, workshop.closingTime - workshop.openingTime) },
       (_, h) => workshop.openingTime + h,
@@ -101,10 +108,14 @@ export const useWorkshopStore = defineStore('workshops', () => {
       from,
       to,
       (slots) => {
-        const booked = new Set(slots.map(d => d.getTime()))
+        const booked = new Map<number, number>()
+        for (const d of slots) booked.set(d.getTime(), (booked.get(d.getTime()) ?? 0) + 1)
+        const isFree = (start: Date) => occupiedHours(workshop, start, durationHours)
+          .every(hour => (booked.get(hour.getTime()) ?? 0) < workshop.stations)
+
         freeHoursTable.value = workingDays.map(day => ({
           day,
-          hours: openHours.map(hour => ({ hour, isBooked: booked.has(atHour(day, hour).getTime()) })),
+          hours: openHours.map(hour => ({ hour, isBooked: !isFree(atHour(day, hour)) })),
         }))
         sharedStore.loading = false
       },
@@ -116,6 +127,10 @@ export const useWorkshopStore = defineStore('workshops', () => {
   function showMoreDays(workshop: IWorkshop) {
     watchFreeHours(workshop, freeHoursTable.value.length + 3)
   }
+
+  /** Expected visit length at a workshop for the selected services (from its price list). */
+  const durationFor = (workshop: IWorkshop, services: string[]) =>
+    estimateDuration(priceLists.value[workshop.reference] ?? [], services)
 
   function stopWatchingFreeHours() {
     slotsSubscription.stop()
@@ -132,6 +147,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
     getWorkshopsByCityAndServices,
     estimateFor,
     promotionFor,
+    durationFor,
     watchFreeHours,
     showMoreDays,
     stopWatchingFreeHours,

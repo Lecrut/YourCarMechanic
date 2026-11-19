@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IWorkshop } from '~/models/workshop'
-import { formatRange, type Range } from '~/models/priceList'
+import { formatDuration, formatRange, type Range } from '~/models/priceList'
 import type { IRatingSummary } from '~/models/review'
 import type { IPromotion } from '~/models/promotion'
 import { formatDateToString } from '~/utils/time'
@@ -15,6 +15,8 @@ const props = defineProps<{
   /** Running promotion for the selected services, and the estimate without it. */
   promotion?: IPromotion | null
   estimateBefore?: Range | null
+  /** Expected visit length for the selected services (hours). */
+  durationHours?: number
   selected?: boolean
 }>()
 
@@ -101,6 +103,13 @@ const cityName = computed(() => citiesJsonStore.getCityName(props.workshop.city)
           :title="`${workshop.openingTime}:00 – ${workshop.closingTime}:00`"
         />
         <v-list-item
+          v-if="durationHours"
+          prepend-icon="mdi-timer-outline"
+          :title="formatDuration(durationHours)"
+          :subtitle="t('duration.expected')"
+          data-testid="duration"
+        />
+        <v-list-item
           v-if="estimate !== undefined"
           prepend-icon="mdi-cash-multiple"
           :title="estimate ? formatRange(estimate) : t('pricing.noEstimate')"
@@ -148,6 +157,7 @@ const cityName = computed(() => citiesJsonStore.getCityName(props.workshop.city)
     v-if="!isPresentation"
     v-model="showDialog"
     :workshop="workshop"
+    :duration-hours="durationHours"
     @select="(date: Date) => emit('book', workshop, date)"
   />
 </template>

@@ -2,7 +2,7 @@
 import type { IClient } from '~/models/client'
 import { mapIFix } from '~/models/fix'
 import { slotProblem } from '~/models/workshop'
-import { formatRange } from '~/models/priceList'
+import { estimateDuration, formatDuration, formatRange, TIME_STEP_HOURS } from '~/models/priceList'
 import { requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 import { fromLocalInput } from '~/utils/time'
@@ -25,6 +25,12 @@ const services = ref<string[]>([])
 const description = ref('')
 const date = ref('')
 const mileage = ref<number | null>(null)
+const duration = ref(1)
+/** 15 min … 16 h in quarter-hour steps. */
+const durationOptions = Array.from({ length: 64 }, (_, i) => (i + 1) * TIME_STEP_HOURS).map(value => ({ value, title: formatDuration(value) }))
+
+// Suggest the length from the price list whenever the services change.
+watch(services, value => (duration.value = estimateDuration(pricingStore.items, value)))
 
 const carOptions = computed(() => (props.client?.cars ?? []).map((car, i) => ({
   title: `${car.manufacturer} ${car.model} ${car.productionYear}`,
@@ -67,6 +73,7 @@ async function submit() {
     clientName: props.client.name,
     marketingConsent: props.client.marketingConsent,
     estimate: estimate.value,
+    durationHours: duration.value,
     createdBy: 'workshop',
   }))
   if (!error.value) isDialogShown.value = false
@@ -128,6 +135,16 @@ async function submit() {
             rows="2"
             auto-grow
             :rules="[requiredRule(t)]"
+          />
+          <v-select
+            v-model="duration"
+            :items="durationOptions"
+            :label="t('duration.expected')"
+            prepend-inner-icon="mdi-timer-outline"
+            :hint="t('duration.fromPriceList')"
+            persistent-hint
+            class="mb-2"
+            data-testid="client-duration"
           />
           <v-text-field
             v-model="date"

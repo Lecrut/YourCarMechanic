@@ -41,7 +41,7 @@ export const AuthLayout: Story = {
   args: { title: '', icon: '' },
   render: () => ({
     components: { AuthCard },
-    template: `<auth-card title="Logowanie" image="/login.jpg"><p>Formularz</p></auth-card>`,
+    template: `<auth-card title="Logowanie" image="/login.webp"><p>Formularz</p></auth-card>`,
   }),
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByRole('heading', { name: 'Logowanie' })).toBeVisible()
