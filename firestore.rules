@@ -1,0 +1,166 @@
+rules_version = '2';
+
+// The app has no backend of its own – these rules ARE the authorization layer.
+// Principles:
+//   * nothing is hard-deleted (soft delete via `deletedAt`), except booked-hour slots;
+//   * `moderator` is never self-assigned – set it manually in the console;
+//   * self-registered companies start `pending` and only a moderator can unlock them;
+//   * every party may change only the fields its role owns.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function signedIn() { return request.auth != null; }
+    function myPath() { return 'users/' + request.auth.uid; }
+    function me() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function hasRole(r) { return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && me().role == r; }
+    function isModerator() { return hasRole('moderator'); }
+    function myCompanyRef() { return hasRole('workshop') ? me().companyRef : null; }
+    function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    function onlyChanges(keys) { return changed().hasOnly(keys); }
+    function companyDoc(path) { return get(/databases/$(database)/documents/$(path)).data; }
+    function softDeleteKeys() { return ['deletedAt', 'deletedBy']; }
+
+    // ---------- users ----------
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isModerator());
+
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == null
+        && !('companyRef' in request.resource.data);
+
+      allow update: if isModerator() || (
+        signedIn() && request.auth.uid == uid
+        && onlyChanges(['profile', 'role', 'companyRef'])
+        && (
+          // role unchanged, company link unchanged
+          (request.resource.data.role == resource.data.role
+            && request.resource.data.get('companyRef', null) == resource.data.get('companyRef', null))
+          // first choice: user
+          || (resource.data.role == null && request.resource.data.role == 'user'
+            && request.resource.data.get('companyRef', null) == null)
+          // first choice: workshop owning the company it just created
+          || (resource.data.get('companyRef', null) == null
+            && (resource.data.role == null || resource.data.role == 'workshop')
+            && request.resource.data.role == 'workshop'
+            && companyDoc(request.resource.data.companyRef).ownerUid == uid)
+        )
+      );
+
+      allow delete: if false;
+    }
+
+    // ---------- companies ----------
+    match /companies/{companyId} {
+      function companyPath() { return 'companies/' + companyId; }
+      function isOwner() { return signedIn() && resource.data.ownerUid == request.auth.uid; }
+
+      allow read: if signedIn();
+
+      allow create: if isModerator() || (
+        signedIn()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.contractSignedAt == null
+        && !('deletedAt' in request.resource.data)
+      );
+
+      // Owners edit their profile & price settings; status, NIP, owner and deletion belong to moderators.
+      allow update: if isModerator() || (
+        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate'])
+      );
+
+      allow delete: if false;
+
+      match /priceList/{itemId} {
+        function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
+        allow read: if signedIn();
+        allow create, update: if isModerator() || ownsCompany();
+        allow delete: if false;
+      }
+
+      // Booked hours: a technical index, not history (the fix keeps the history).
+      match /slots/{slotId} {
+        function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
+        allow read: if signedIn();
+        allow create: if signedIn() && (request.resource.data.userUid == request.auth.uid || ownsCompany() || isModerator());
+        allow delete: if signedIn() && (resource.data.userUid == request.auth.uid || ownsCompany() || isModerator());
+        allow update: if false;
+      }
+    }
+
+    // ---------- cars ----------
+    match /cars/{carId} {
+      allow read: if signedIn() && (resource.data.userRef == myPath() || isModerator());
+      allow create: if signedIn() && request.resource.data.userRef == myPath();
+      allow update: if signedIn() && resource.data.userRef == myPath()
+        && onlyChanges(['manufacturer', 'model', 'productionYear', 'vin', 'deletedAt', 'deletedBy']);
+      allow delete: if false;
+    }
+
+    // ---------- fixes (repairs) ----------
+    match /fixes/{fixId} {
+      function isClient() { return signedIn() && resource.data.userRef == myPath(); }
+      function isWorkshop() { return signedIn() && myCompanyRef() != null && resource.data.companyRef == myCompanyRef(); }
+
+      allow read: if isClient() || isWorkshop() || isModerator();
+
+      allow create: if isModerator()
+        // client booking
+        || (signedIn() && request.resource.data.userRef == myPath()
+          && request.resource.data.createdBy == 'user' && request.resource.data.confirmed == true
+          && request.resource.data.isClosed == false && request.resource.data.proposal == null
+          && companyDoc(request.resource.data.companyRef).status == 'approved')
+        // workshop booking on behalf of a client – waits for confirmation
+        || (signedIn() && myCompanyRef() != null && request.resource.data.companyRef == myCompanyRef()
+          && request.resource.data.createdBy == 'workshop' && request.resource.data.confirmed == false
+          && request.resource.data.isClosed == false && request.resource.data.proposal == null
+          && companyDoc(myCompanyRef()).status == 'approved');
+
+      allow update: if isModerator()
+        // workshop: statuses and proposals only
+        || (isWorkshop() && onlyChanges(['notifications', 'isClosed', 'proposal']))
+        // client: statuses, confirming, rejecting, reviewing…
+        || (isClient() && onlyChanges(['notifications', 'isClosed', 'confirmed', 'proposal', 'reviewed']))
+        // …or accepting the workshop's proposal: new values must be exactly the proposed ones
+        || (isClient() && resource.data.proposal != null
+          && onlyChanges(['notifications', 'proposal', 'services', 'description', 'date', 'estimate'])
+          && request.resource.data.proposal == null
+          && request.resource.data.services == resource.data.proposal.services
+          && request.resource.data.description == resource.data.proposal.description
+          && request.resource.data.date == resource.data.proposal.date
+          && request.resource.data.estimate == resource.data.proposal.estimate);
+
+      allow delete: if false;
+    }
+
+    // ---------- service catalog ----------
+    match /services/{serviceId} {
+      allow read: if true;
+      allow create, update: if isModerator();
+      allow delete: if false;
+    }
+
+    // ---------- reviews (doc id = fix id) ----------
+    match /reviews/{fixId} {
+      function fix() { return get(/databases/$(database)/documents/fixes/$(fixId)).data; }
+
+      // Soft-deleted reviews are also hidden, so `hidden == false` is enough for public queries.
+      allow read: if isModerator() || (signedIn() && resource.data.hidden == false);
+
+      allow create: if signedIn()
+        && fix().userRef == myPath()
+        && fix().get('reviewed', false) == false
+        && request.resource.data.userRef == myPath()
+        && request.resource.data.companyRef == fix().companyRef
+        && request.resource.data.fixRef == 'fixes/' + fixId
+        && request.resource.data.rating is int && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+        && request.resource.data.comment is string && request.resource.data.comment.size() <= 500
+        && request.resource.data.hidden == false;
+
+      allow update: if isModerator() && onlyChanges(['hidden', 'deletedAt', 'deletedBy']);
+      allow delete: if false;
+    }
+  }
+}
