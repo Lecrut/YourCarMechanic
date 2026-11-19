@@ -118,19 +118,45 @@ service cloud.firestore {
           && request.resource.data.isClosed == false && request.resource.data.proposal == null
           && companyDoc(myCompanyRef()).status == 'approved');
 
+      // Exactly one status is appended and it is one of `types`; `isClosed` matches closing statuses.
+      function appendsOneStatus(types) {
+        let before = resource.data.notifications;
+        let after = request.resource.data.notifications;
+        let added = after[after.size() - 1].notificationType;
+        return after.size() == before.size() + 1
+          && after[0:before.size()] == before
+          && added in types
+          && request.resource.data.isClosed == (added in ['giveBackCar', 'userCancel', 'workshopCancel', 'moderatorCancel']);
+      }
+
       allow update: if isModerator()
-        // workshop: statuses and proposals only
-        || (isWorkshop() && onlyChanges(['notifications', 'isClosed', 'proposal']))
-        // client: statuses, confirming, rejecting, reviewing…
-        || (isClient() && onlyChanges(['notifications', 'isClosed', 'confirmed', 'proposal', 'reviewed']))
-        // …or accepting the workshop's proposal: new values must be exactly the proposed ones
+        // workshop: add one of its statuses (only cancellation until the client confirms)…
+        || (isWorkshop() && onlyChanges(['notifications', 'isClosed'])
+          && appendsOneStatus(resource.data.confirmed
+            ? ['getCar', 'addQuote', 'addGiveBackTime', 'addExpense', 'giveBackCar', 'workshopCancel']
+            : ['workshopCancel']))
+        // …or propose a scope change
+        || (isWorkshop() && onlyChanges(['notifications', 'proposal'])
+          && request.resource.data.proposal != null && appendsOneStatus(['changeProposed']))
+        // client: cancel
+        || (isClient() && onlyChanges(['notifications', 'isClosed']) && appendsOneStatus(['userCancel']))
+        // client: confirm a visit booked by the workshop
+        || (isClient() && resource.data.confirmed == false && onlyChanges(['notifications', 'confirmed'])
+          && request.resource.data.confirmed == true && appendsOneStatus(['bookingConfirmed']))
+        // client: reject the proposal
+        || (isClient() && resource.data.proposal != null && onlyChanges(['notifications', 'proposal'])
+          && request.resource.data.proposal == null && appendsOneStatus(['changeRejected']))
+        // client: accept the proposal – new values must be exactly the proposed ones
         || (isClient() && resource.data.proposal != null
           && onlyChanges(['notifications', 'proposal', 'services', 'description', 'date', 'estimate'])
           && request.resource.data.proposal == null
           && request.resource.data.services == resource.data.proposal.services
           && request.resource.data.description == resource.data.proposal.description
           && request.resource.data.date == resource.data.proposal.date
-          && request.resource.data.estimate == resource.data.proposal.estimate);
+          && request.resource.data.estimate == resource.data.proposal.estimate
+          && appendsOneStatus(['changeAccepted']))
+        // client: mark as reviewed (together with creating the review)
+        || (isClient() && onlyChanges(['reviewed']) && request.resource.data.reviewed == true);
 
       allow delete: if false;
     }
@@ -152,6 +178,9 @@ service cloud.firestore {
       allow create: if signedIn()
         && fix().userRef == myPath()
         && fix().get('reviewed', false) == false
+        // only after the car was handed back
+        && fix().isClosed == true
+        && fix().notifications[fix().notifications.size() - 1].notificationType == 'giveBackCar'
         && request.resource.data.userRef == myPath()
         && request.resource.data.companyRef == fix().companyRef
         && request.resource.data.fixRef == 'fixes/' + fixId
