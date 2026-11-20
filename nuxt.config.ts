@@ -37,11 +37,10 @@ export default defineNuxtConfig({
         appId: '',
         measurementId: '',
       },
-      // Vector map styles (light/dark follow the app theme). OpenFreeMap: free, no API key, commercial
-      // use allowed; the map shows the required OpenStreetMap attribution itself.
+      // Vector base style – OpenFreeMap: free, no API key, commercial use allowed; the map shows the
+      // required OpenStreetMap attribution itself. Light/dark colours and Polish labels: utils/mapStyle.ts.
       map: {
-        lightStyle: 'https://tiles.openfreemap.org/styles/positron',
-        darkStyle: 'https://tiles.openfreemap.org/styles/dark',
+        style: 'https://tiles.openfreemap.org/styles/positron',
       },
       // Set NUXT_PUBLIC_USE_EMULATORS=true to talk to `firebase emulators:start`.
       useEmulators: false,

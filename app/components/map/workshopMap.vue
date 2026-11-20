@@ -2,6 +2,7 @@
 import type { GeoJSONSource, GeoJSONSourceSpecification, Map as MapLibreMap, Marker, StyleSpecification } from 'maplibre-gl'
 import { useTheme } from 'vuetify'
 import { type LatLng, POLAND_CENTER } from '~/models/geo'
+import { themedMapStyle } from '~/utils/mapStyle'
 
 type GeoJSONSourceData = Exclude<GeoJSONSourceSpecification['data'], string>
 
@@ -35,9 +36,9 @@ const emit = defineEmits<{
   pick: [position: LatLng]
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const theme = useTheme()
-const config = useRuntimeConfig().public.map as { lightStyle: string, darkStyle: string }
+const config = useRuntimeConfig().public.map as { style: string }
 
 const container = ref<HTMLElement | null>(null)
 const ready = ref(false)
@@ -60,7 +61,20 @@ const EMPTY_STYLE: StyleSpecification = {
   layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#e8eaed' } }],
 }
 
-const styleUrl = computed(() => (theme.global.current.value.dark ? config.darkStyle : config.lightStyle))
+/** The base style is downloaded once per page load and themed locally (dark/light, label language). */
+let baseStyle: Promise<StyleSpecification> | null = null
+function loadBaseStyle() {
+  baseStyle ??= fetch(config.style).then((r) => {
+    if (!r.ok) throw new Error(`Map style ${r.status}`)
+    return r.json() as Promise<StyleSpecification>
+  })
+  return baseStyle
+}
+
+async function currentStyle(): Promise<StyleSpecification> {
+  if (!config.style) return EMPTY_STYLE
+  return themedMapStyle(await loadBaseStyle(), theme.global.current.value.dark ? 'dark' : 'light', locale.value)
+}
 
 function themeColor(name: string, fallback: string) {
   const value = getComputedStyle(document.documentElement).getPropertyValue(`--v-theme-${name}`).trim()
@@ -202,7 +216,7 @@ onMounted(async () => {
     if (!container.value) return
     map = new ml.Map({
       container: container.value,
-      style: styleUrl.value || EMPTY_STYLE,
+      style: await currentStyle(),
       center: [POLAND_CENTER.lng, POLAND_CENTER.lat],
       zoom: 5.3,
       attributionControl: { compact: true },
@@ -231,8 +245,11 @@ onBeforeUnmount(() => {
   map = null
 })
 
-watch(styleUrl, (url) => {
-  map?.setStyle(url || EMPTY_STYLE)
+// Theme or language switch: restyle in place (markers stay, radius layers are re-added on style.load).
+watch(() => [theme.global.current.value.dark, locale.value], async () => {
+  if (!map || !config.style) return
+  const style = await currentStyle()
+  map?.setStyle(style, { diff: false })
 })
 watch(() => [props.selectedId, props.highlightedId], renderMarkers)
 watch(() => props.markers, () => {

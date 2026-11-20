@@ -7,7 +7,7 @@ export async function navigateTo(path: string) {
 }
 
 // No map style in Storybook/tests – the map renders markers on a plain background, no network.
-export const useRuntimeConfig = () => ({ public: { firebase: {}, useEmulators: false, map: { lightStyle: '', darkStyle: '' } } })
+export const useRuntimeConfig = () => ({ public: { firebase: {}, useEmulators: false, map: { style: '' } } })
 
 export const definePageMeta = (_meta: unknown) => {}
 

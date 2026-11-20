@@ -59,6 +59,7 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
   Only exception: the map (`components/map/workshopMap.vue`) loads MapLibre GL + its CSS on demand;
   markers/controls inside it still use Vuetify classes and components. Style URLs live in `runtimeConfig.public.map`
   (OpenFreeMap – free incl. commercial use, keep the OSM attribution; Storybook uses an empty style).
+  Light/dark palettes and label language (Polish names) are applied in `utils/mapStyle.ts`.
 - **Never name a variable `ref`, `computed`, `reactive` or `watch`** – it hides the Nuxt auto-import for the whole
   file (`ref is not defined` at runtime). ESLint `id-denylist` enforces it.
 - **Errors:** throw `AppError('errors.someKey')` for domain errors; `sharedStore.run()` maps errors (incl. Firebase codes,
