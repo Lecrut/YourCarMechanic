@@ -617,7 +617,8 @@
   },
   "footer": {
     "tagline": "Rezerwuj naprawy i śledź je na bieżąco.",
-    "terms": "Regulamin"
+    "terms": "Regulamin",
+    "privacy": "Polityka prywatności"
   },
   "board": {
     "week": "Tydzień",

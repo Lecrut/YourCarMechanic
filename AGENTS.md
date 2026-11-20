@@ -58,10 +58,10 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
   Polish grammar: "jutro", "za 3 dni"); never build "za {n} dni" strings. Vuetify's own texts follow the i18n locale.
 - **Service catalog** comes from Firestore `services` via `useServicesStore()` (`options`, `label(key)`).
 - **UI: Vuetify only.** No custom CSS. MD3 typography (`text-headline-small`…), grid alignment via classes
-  (`class="justify-center"`), elevation 0–5, v3 breakpoints (see `utils/vuetifyOptions.ts`).
+  (`class="justify-center"`), elevation 0–5, v3 breakpoints for `useDisplay()` (see `utils/vuetifyOptions.ts`; md 960, lg 1280) – note the CSS classes (`d-md-*`, `v-col md=…`) still use Vuetify 4's md 840 / lg 1145, so layout that must switch together with JS (navigation) uses `useDisplay()`; check every layout at 390, 834, 1024, 1180 and 1440 px.
   Navigation: desktop = side rail with the role's pages, avatar menu = my profile, contact, log out only.
   Small screens = no drawer; bottom bar with up to 4 pages (moderator: repairs, companies, messages, stats), the
-  remaining pages go to the avatar menu. Guests get centre links + footer.
+  remaining pages go to the avatar menu. Guests get centre links + footer (only terms, privacy policy, contact).
   Tables: below `md` they switch to stacked rows (`VDataTable` default `mobileBreakpoint: 'md'`) – keep cell
   content wrapping (no `text-truncate`/`text-no-wrap` on long text, use `ServiceList` for service chips).
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
@@ -155,14 +155,14 @@ app/
   composables/                  `use*` only: useLanguage (flags, switching),
                                 useModeratorLive (panel listeners: start once, stop when leaving /moderator)
   utils/                        generic helpers (auto-imported): rules, errors, formValidation, time (+ formatRelative),
-                                format (distance, PLN ranges, durations), options (status & role select lists),
+                                format (distance, PLN ranges, durations), markdown (tiny parser for legal/), options (status & role select lists),
                                 calendar (.ics), image (downscale), mapStyle, subscription, vuetifyOptions
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
   layouts/default.vue           single layout: AppNavigation + footer pinned to the bottom on every page for guests
   components/                   .vue components only, grouped by area
     layout/                     appNavigation (app bar, rail drawer per role, bottom nav), appFooter, notificationBell,
                                 errorSnackbar, emailVerificationBanner
-    common/                     pageHeader, confirmDialog, serviceList, mySnackbar
+    common/                     pageHeader, confirmDialog, serviceList, mySnackbar, markdownCard (renders a .md document)
     account/                    authCard, accountSettingsCard
     workshop/                   workshopForm (incl. brands + map pin), workshopFinder (location bar + radius + sort,
                                 list next to the map), workshopMap (MapLibre, Vuetify-styled markers; `pickable` = picker)
@@ -173,13 +173,14 @@ app/
     moderator/                  moderatorPage, statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable, messagesTable
   pages/
     index, about, contact, workshops   public (workshops = map finder; contact form works for guests too)
+    terms, privacy              public legal pages – content in assets/legal/*.md, rendered by markdownCard
     auth/                       login, register, reset-password, role-choice
     user/                       index (booking wizard: services → car → workshop on the map, ?car= preselect), notifications = "My garage" (car tiles, live), history, profile
     company/                    index (live repairs), clients, pricing, profile
     moderator/                  one page per section: stats, companies, services, clients, repairs, reviews, messages
                                 (+ profile; `/moderator` redirects to stats); each uses components/moderator/moderatorPage
     moderator/profile           moderator's own profile
-  assets/                       data/ (cars.json, cities.json), flags/
+  assets/                       data/ (cars.json, cities.json), flags/, legal/ (terms.md, privacy.md – Polish, edit the text there)
 stories/                        Storybook stories + play tests (components/…, pages/…)
 tests/                          unit tests (node), mirror app/: domain/, mappers/, utils/
 i18n/                           i18n.config.ts, locales/pl.json, locales/en.json

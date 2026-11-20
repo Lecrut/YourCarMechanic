@@ -1,14 +1,12 @@
 <script setup lang="ts">
-/** Footer of the public pages (landing, about). */
+/** Footer of the public pages: terms, privacy policy, contact. */
 const { t } = useI18n()
 const year = new Date().getFullYear()
 
 const links = computed(() => [
-  { title: t('navBar.home'), to: '/' },
-  { title: t('navBar.about'), to: '/about' },
+  { title: t('footer.terms'), to: '/terms' },
+  { title: t('footer.privacy'), to: '/privacy' },
   { title: t('navBar.contact'), to: '/contact' },
-  { title: t('navBar.login'), to: '/auth/login' },
-  { title: t('register.button'), to: '/auth/register' },
 ])
 </script>
 
@@ -58,17 +56,6 @@ const links = computed(() => [
             rounded="xl"
           >
             {{ link.title }}
-          </v-btn>
-          <v-btn
-            href="/Regulamin_Twoj_Mechanik.pdf"
-            target="_blank"
-            variant="text"
-            color="default"
-            size="small"
-            rounded="xl"
-            append-icon="mdi-open-in-new"
-          >
-            {{ t('footer.terms') }}
           </v-btn>
         </v-col>
 

@@ -80,7 +80,7 @@ const steps = computed(() => [
                 size="32"
               />
             </v-avatar>
-            <v-card-title class="text-title-large">
+            <v-card-title class="text-title-large text-wrap">
               {{ index + 1 }}. {{ step.title }}
             </v-card-title>
             <v-card-text class="text-body-large">

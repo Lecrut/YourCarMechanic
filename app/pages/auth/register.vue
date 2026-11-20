@@ -86,7 +86,7 @@ onMounted(() => sharedStore.resetState())
         <template #label>
           {{ t('register.acceptStatute') }}&nbsp;
           <a
-            href="/Regulamin_Twoj_Mechanik.pdf"
+            href="/terms"
             target="_blank"
             class="text-primary font-weight-bold text-decoration-none"
             @click.stop
