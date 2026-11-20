@@ -144,7 +144,7 @@ app/
   layouts/default.vue           single layout with AppNavigation
   types/page-meta.d.ts          `definePageMeta({ role })`
   components/
-    appNavigation.vue           app bar, rail drawer per role, account card, bottom nav
+    appNavigation.vue           app bar (centred animated tabs, language flags, theme), rail drawer per role, account card, bottom nav
     authCard, pageHeader, confirmDialog, workshopForm (incl. brands + map pin), clientsTable, mySnackbar
     workshopFinder.vue          location bar + radius + sort, list next to the map (workshops page, booking step 3)
     map/workshopMap.vue         MapLibre map with Vuetify-styled markers; `pickable` = location picker

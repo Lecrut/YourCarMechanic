@@ -116,7 +116,10 @@
       "pricing": "Price list",
       "profile": "Company profile"
     },
-    "contact": "Contact"
+    "contact": "Contact",
+    "dashboard": "My dashboard",
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme"
   },
   "about": {
     "first": {

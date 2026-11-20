@@ -2,6 +2,8 @@
 import { useDisplay, useTheme } from 'vuetify'
 import { awaitsClientDecision } from '~/models/fix'
 import NotificationBell from '~/components/notificationBell.vue'
+import flagPl from '~/assets/flags/pl.svg'
+import flagGb from '~/assets/flags/gb.svg'
 
 interface NavItem {
   title: string
@@ -10,7 +12,8 @@ interface NavItem {
   badge?: number
 }
 
-const { t, locale, locales, setLocale } = useI18n()
+const i18n = useI18n()
+const { t, locale } = i18n
 const theme = useTheme()
 const { mdAndUp } = useDisplay()
 const route = useRoute()
@@ -59,12 +62,34 @@ const items = computed<NavItem[]>(() => {
   }
 })
 
+/** Centre of the app bar: public pages for everyone; signed-in users get their panel instead of the landing page. */
 const guestLinks = computed<NavItem[]>(() => [
-  { title: t('navBar.home'), icon: 'mdi-home-outline', to: '/' },
+  user.value
+    ? { title: t('navBar.dashboard'), icon: 'mdi-view-dashboard-outline', to: authStore.homePath }
+    : { title: t('navBar.home'), icon: 'mdi-home-outline', to: '/' },
   { title: t('navBar.workshops'), icon: 'mdi-garage', to: '/workshops' },
   { title: t('navBar.about'), icon: 'mdi-information-outline', to: '/about' },
   { title: t('navBar.contact'), icon: 'mdi-email-outline', to: '/contact' },
 ])
+
+/** Tab matching the current page – drives the animated slider under the centre tabs. */
+const activeLink = computed(() => guestLinks.value.find(l => l.to === route.path)?.to ?? null)
+
+const languages = [
+  { code: 'pl', name: 'Polski', flag: flagPl },
+  { code: 'en', name: 'English', flag: flagGb },
+] as const
+const currentLanguage = computed(() => languages.find(l => l.code === locale.value) ?? languages[0])
+
+/** Nuxt i18n switches (and remembers) the language; plain vue-i18n (Storybook) just sets it. */
+async function setLanguage(code: 'pl' | 'en') {
+  const set = (i18n as { setLocale?: (c: string) => Promise<void> }).setLocale
+  if (typeof set === 'function') await set(code)
+  else locale.value = code
+}
+
+const logoHover = ref(false)
+const isDark = computed(() => theme.global.current.value.dark)
 
 /** Own profile page of every role – always reachable from the account menu. */
 const PROFILE_PATHS: Record<string, string> = { user: '/user/profile', workshop: '/company/profile', moderator: '/moderator/profile' }
@@ -82,8 +107,18 @@ const initials = computed(() => {
 
 const roleColor = computed(() => ({ user: 'primary', workshop: 'secondary', moderator: 'warning' })[role.value ?? 'user'] ?? 'primary')
 
-const isActive = (item: NavItem) => route.fullPath === item.to
-  || (item.to.includes('?') ? false : route.path === item.to && !route.query.tab)
+/**
+ * Router links match by path only, so every `/moderator?tab=…` entry would light up on `/moderator`.
+ * Compare the tab ourselves; no tab in the URL means the page's first tab.
+ */
+function isActive(item: NavItem) {
+  const [path, query = ''] = item.to.split('?')
+  if (route.path !== path) return false
+  const tab = new URLSearchParams(query).get('tab')
+  if (!tab) return !route.query.tab
+  const firstTab = new URLSearchParams(items.value.find(i => i.to.startsWith(`${path}?`))?.to.split('?')[1] ?? '').get('tab')
+  return (typeof route.query.tab === 'string' ? route.query.tab : firstTab) === tab
+}
 
 function toggleTheme() {
   theme.change(theme.global.current.value.dark ? 'light' : 'dark')
@@ -108,213 +143,330 @@ async function logOut() {
     scroll-behavior="elevate"
     density="comfortable"
   >
-    <v-app-bar-nav-icon
-      v-if="hasSidebar && !mdAndUp"
-      v-tooltip:bottom="t('navBar.menu')"
-      :aria-label="t('navBar.menu')"
-      @click="drawer = !drawer"
-    />
+    <div class="d-flex align-center flex-1-1-0 ga-1 ps-2">
+      <v-app-bar-nav-icon
+        v-if="hasSidebar && !mdAndUp"
+        v-tooltip:bottom="t('navBar.menu')"
+        :aria-label="t('navBar.menu')"
+        @click="drawer = !drawer"
+      />
 
-    <v-app-bar-title>
       <nuxt-link
         :to="user ? authStore.homePath : '/'"
         class="d-inline-flex align-center ga-2 text-decoration-none text-high-emphasis"
+        data-testid="logo"
+        @mouseenter="logoHover = true"
+        @mouseleave="logoHover = false"
       >
         <v-avatar
-          color="primary"
-          size="34"
+          :color="logoHover ? 'secondary' : 'primary'"
+          size="36"
           rounded="lg"
+          :class="`elevation-${logoHover ? 6 : 2}`"
         >
-          <v-icon
-            icon="mdi-car-wrench"
-            size="20"
-          />
+          <v-scale-transition
+            mode="out-in"
+            origin="center"
+          >
+            <v-icon
+              :key="logoHover ? 'hover' : 'idle'"
+              :icon="logoHover ? 'mdi-car-sports' : 'mdi-car-wrench'"
+              size="20"
+            />
+          </v-scale-transition>
         </v-avatar>
-        <span class="font-weight-bold">{{ t('navBar.title') }}</span>
+        <span class="text-title-medium font-weight-bold d-none d-sm-inline">{{ t('navBar.title') }}</span>
       </nuxt-link>
-    </v-app-bar-title>
-
-    <div
-      v-if="!user"
-      class="d-none d-md-flex ga-1 mr-2"
-    >
-      <v-btn
-        v-for="link in guestLinks"
-        :key="link.to"
-        :to="link.to"
-        variant="text"
-        color="default"
-        rounded="xl"
-        exact
-      >
-        {{ link.title }}
-      </v-btn>
     </div>
 
-    <v-menu
-      v-if="!user"
-      location="bottom end"
+    <v-sheet
+      class="d-none d-md-flex flex-0-0 pa-1"
+      rounded="pill"
+      color="surface-light"
+      border
+      data-testid="center-nav"
     >
-      <template #activator="{ props: menuProps }">
-        <v-btn
-          v-tooltip:bottom="t('navBar.language')"
-          v-bind="menuProps"
-          icon="mdi-translate"
-          variant="text"
-          color="default"
-          :aria-label="t('navBar.language')"
-        />
-      </template>
-      <v-list
+      <v-tabs
+        :model-value="activeLink"
         density="compact"
-        nav
-        rounded="lg"
+        color="primary"
+        slider-color="primary"
+        height="40"
       >
-        <v-list-item
-          v-for="l in locales"
-          :key="l.code"
-          :title="l.name"
-          :active="l.code === locale"
-          :append-icon="l.code === locale ? 'mdi-check' : undefined"
-          color="primary"
-          rounded="lg"
-          @click="setLocale(l.code)"
-        />
-      </v-list>
-    </v-menu>
-
-    <notification-bell v-if="role === 'user' || role === 'workshop'" />
-
-    <v-btn
-      v-tooltip:bottom="t('navBar.changeTheme')"
-      :icon="theme.global.current.value.dark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-      variant="text"
-      color="default"
-      :aria-label="t('navBar.changeTheme')"
-      @click="toggleTheme"
-    />
-
-    <template v-if="!user">
-      <v-btn
-        to="/auth/login"
-        variant="text"
-        rounded="xl"
-        class="ml-1"
-      >
-        {{ t('navBar.login') }}
-      </v-btn>
-      <v-btn
-        to="/auth/register"
-        rounded="xl"
-        class="mx-2 d-none d-sm-flex"
-      >
-        {{ t('register.button') }}
-      </v-btn>
-    </template>
-
-    <v-menu
-      v-else
-      location="bottom end"
-      :close-on-content-click="true"
-    >
-      <template #activator="{ props: menuProps }">
-        <v-btn
-          v-tooltip:bottom="t('navBar.account')"
-          v-bind="menuProps"
-          icon
-          class="mx-2"
-          data-testid="account-menu"
-          :aria-label="t('navBar.account')"
+        <v-tab
+          v-for="link in guestLinks"
+          :key="link.to"
+          :value="link.to"
+          :to="link.to"
+          :prepend-icon="link.icon"
+          rounded="pill"
+          class="text-none"
+          exact
         >
-          <v-avatar
-            :color="roleColor"
-            size="36"
+          {{ link.title }}
+        </v-tab>
+      </v-tabs>
+    </v-sheet>
+
+    <div class="d-flex align-center justify-end flex-1-1-0 ga-2 pe-2">
+      <v-sheet
+        class="d-flex align-center pa-1 ga-1"
+        rounded="pill"
+        color="surface-light"
+        border
+        data-testid="nav-controls"
+      >
+        <v-menu location="bottom end">
+          <template #activator="{ props: menuProps }">
+            <v-btn
+              v-tooltip:bottom="t('navBar.language')"
+              v-bind="menuProps"
+              variant="text"
+              color="default"
+              rounded="pill"
+              height="36"
+              class="px-2"
+              :aria-label="t('navBar.language')"
+              data-testid="language-menu"
+            >
+              <v-avatar
+                :image="currentLanguage.flag"
+                size="22"
+                class="elevation-1"
+              />
+              <span class="ms-2 text-label-large font-weight-bold d-none d-sm-inline">{{ currentLanguage.code.toUpperCase() }}</span>
+              <v-icon
+                icon="mdi-chevron-down"
+                size="16"
+                class="ms-1"
+              />
+            </v-btn>
+          </template>
+          <v-list
+            density="comfortable"
+            nav
+            rounded="xl"
+            min-width="200"
+            class="pa-2"
           >
-            <span class="text-label-large font-weight-bold">{{ initials }}</span>
-          </v-avatar>
+            <v-list-item
+              v-for="l in languages"
+              :key="l.code"
+              :title="l.name"
+              :subtitle="l.code.toUpperCase()"
+              :active="l.code === locale"
+              color="primary"
+              rounded="lg"
+              :data-testid="`language-${l.code}`"
+              @click="setLanguage(l.code)"
+            >
+              <template #prepend>
+                <v-avatar
+                  :image="l.flag"
+                  size="28"
+                  class="elevation-1"
+                />
+              </template>
+              <template #append>
+                <v-scale-transition>
+                  <v-icon
+                    v-if="l.code === locale"
+                    icon="mdi-check-circle"
+                    color="primary"
+                  />
+                </v-scale-transition>
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-btn
+          v-tooltip:bottom="isDark ? t('navBar.lightTheme') : t('navBar.darkTheme')"
+          variant="text"
+          :color="isDark ? 'amber' : 'indigo'"
+          icon
+          size="36"
+          :aria-label="t('navBar.changeTheme')"
+          data-testid="theme-toggle"
+          @click="toggleTheme"
+        >
+          <v-scroll-y-transition
+            mode="out-in"
+            hide-on-leave
+          >
+            <v-icon
+              :key="isDark ? 'sun' : 'moon'"
+              :icon="isDark ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'"
+            />
+          </v-scroll-y-transition>
+        </v-btn>
+
+        <notification-bell v-if="role === 'user' || role === 'workshop'" />
+      </v-sheet>
+
+      <template v-if="!user">
+        <v-menu location="bottom end">
+          <template #activator="{ props: menuProps }">
+            <v-btn
+              v-tooltip:bottom="t('navBar.menu')"
+              v-bind="menuProps"
+              icon="mdi-menu"
+              variant="tonal"
+              size="40"
+              class="d-md-none"
+              :aria-label="t('navBar.menu')"
+              data-testid="guest-menu"
+            />
+          </template>
+          <v-list
+            nav
+            rounded="xl"
+            min-width="220"
+            class="pa-2"
+          >
+            <v-list-item
+              v-for="link in guestLinks"
+              :key="link.to"
+              :to="link.to"
+              :prepend-icon="link.icon"
+              :title="link.title"
+              color="primary"
+              rounded="lg"
+            />
+            <v-divider class="my-1" />
+            <v-list-item
+              to="/auth/login"
+              prepend-icon="mdi-login"
+              :title="t('navBar.login')"
+              rounded="lg"
+            />
+          </v-list>
+        </v-menu>
+        <v-btn
+          to="/auth/login"
+          variant="text"
+          prepend-icon="mdi-login"
+          class="d-none d-sm-flex"
+        >
+          {{ t('navBar.login') }}
         </v-btn>
       </template>
 
-      <v-card
-        min-width="280"
-        rounded="xl"
+      <v-menu
+        v-else
+        location="bottom end"
+        :close-on-content-click="true"
       >
-        <v-card-item>
-          <template #prepend>
-            <v-avatar
-              :color="roleColor"
-              size="48"
+        <template #activator="{ props: menuProps }">
+          <v-btn
+            v-tooltip:bottom="t('navBar.account')"
+            v-bind="menuProps"
+            icon
+            size="44"
+            data-testid="account-menu"
+            :aria-label="t('navBar.account')"
+          >
+            <v-badge
+              dot
+              color="success"
+              location="bottom end"
+              offset-x="3"
+              offset-y="3"
             >
-              <span class="text-title-medium font-weight-bold">{{ initials }}</span>
-            </v-avatar>
-          </template>
-          <v-card-title>
-            {{ user.profile?.name ? `${user.profile.name} ${user.profile.surname}` : user.email }}
-          </v-card-title>
-          <v-card-subtitle>{{ user.email }}</v-card-subtitle>
-        </v-card-item>
+              <v-avatar
+                :color="roleColor"
+                size="38"
+                class="elevation-2"
+              >
+                <span class="text-label-large font-weight-bold">{{ initials }}</span>
+              </v-avatar>
+            </v-badge>
+          </v-btn>
+        </template>
 
-        <v-card-text class="pt-0">
-          <v-chip
-            v-if="role"
-            :color="roleColor"
-            size="small"
-            variant="tonal"
-            prepend-icon="mdi-shield-check-outline"
-          >
-            {{ t(`roles.${role}`) }}
-          </v-chip>
-          <v-chip
-            v-if="company"
-            size="small"
-            variant="tonal"
-            class="ml-1"
-            prepend-icon="mdi-domain"
-          >
-            {{ company.name }}
-          </v-chip>
-        </v-card-text>
-
-        <v-divider />
-
-        <v-list
-          density="compact"
-          nav
+        <v-card
+          min-width="280"
+          rounded="xl"
         >
-          <v-list-item
-            v-if="profilePath"
-            :to="profilePath"
-            prepend-icon="mdi-account-circle-outline"
-            :title="t('account.myProfile')"
-            rounded="lg"
-            data-testid="my-profile"
-          />
-          <v-list-item
-            v-for="item in shortcuts"
-            :key="item.to"
-            :to="item.to"
-            :prepend-icon="item.icon"
-            :title="item.title"
-            rounded="lg"
-          />
-          <v-divider class="my-1" />
-          <v-list-item
-            to="/contact"
-            prepend-icon="mdi-lifebuoy"
-            :title="t('navBar.contact')"
-            rounded="lg"
-          />
-          <v-list-item
-            prepend-icon="mdi-logout"
-            :title="t('navBar.logOut')"
-            base-color="error"
-            rounded="lg"
-            data-testid="logout"
-            @click="logOut"
-          />
-        </v-list>
-      </v-card>
-    </v-menu>
+          <v-card-item>
+            <template #prepend>
+              <v-avatar
+                :color="roleColor"
+                size="48"
+              >
+                <span class="text-title-medium font-weight-bold">{{ initials }}</span>
+              </v-avatar>
+            </template>
+            <v-card-title>
+              {{ user.profile?.name ? `${user.profile.name} ${user.profile.surname}` : user.email }}
+            </v-card-title>
+            <v-card-subtitle>{{ user.email }}</v-card-subtitle>
+          </v-card-item>
+
+          <v-card-text class="pt-0">
+            <v-chip
+              v-if="role"
+              :color="roleColor"
+              size="small"
+              variant="tonal"
+              prepend-icon="mdi-shield-check-outline"
+            >
+              {{ t(`roles.${role}`) }}
+            </v-chip>
+            <v-chip
+              v-if="company"
+              size="small"
+              variant="tonal"
+              class="ml-1"
+              prepend-icon="mdi-domain"
+            >
+              {{ company.name }}
+            </v-chip>
+          </v-card-text>
+
+          <v-divider />
+
+          <v-list
+            density="compact"
+            nav
+          >
+            <v-list-item
+              v-if="profilePath"
+              :to="profilePath"
+              prepend-icon="mdi-account-circle-outline"
+              :title="t('account.myProfile')"
+              rounded="lg"
+              data-testid="my-profile"
+            />
+            <v-list-item
+              v-for="item in shortcuts"
+              :key="item.to"
+              :to="item.to"
+              :active="isActive(item)"
+              color="primary"
+              :prepend-icon="item.icon"
+              :title="item.title"
+              rounded="lg"
+            />
+            <v-divider class="my-1" />
+            <v-list-item
+              to="/contact"
+              prepend-icon="mdi-lifebuoy"
+              :title="t('navBar.contact')"
+              rounded="lg"
+            />
+            <v-list-item
+              prepend-icon="mdi-logout"
+              :title="t('navBar.logOut')"
+              base-color="error"
+              rounded="lg"
+              data-testid="logout"
+              @click="logOut"
+            />
+          </v-list>
+        </v-card>
+      </v-menu>
+    </div>
   </v-app-bar>
 
   <v-navigation-drawer
@@ -386,6 +538,7 @@ async function logOut() {
       :key="item.to"
       :to="item.to"
       :value="item.to"
+      :active="isActive(item)"
     >
       <v-badge
         v-if="item.badge"

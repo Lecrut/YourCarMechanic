@@ -116,7 +116,10 @@
       "pricing": "Cennik",
       "profile": "Profil firmy"
     },
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "dashboard": "Mój panel",
+    "lightTheme": "Jasny motyw",
+    "darkTheme": "Ciemny motyw"
   },
   "about": {
     "first": {

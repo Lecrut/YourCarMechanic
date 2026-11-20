@@ -3,6 +3,7 @@ import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import AppNavigation from './appNavigation.vue'
 import { autofix, moderator, userAnna, workshopOwner } from '../../.storybook/mocks/fixtures'
 import { authService } from '~/services'
+import { useRouter } from 'vue-router'
 import { navigatedTo } from '../../.storybook/mocks/nuxt'
 
 const meta = {
@@ -92,5 +93,44 @@ export const WorkshopNotifications: Story = {
     const menu = await screen.findByTestId('feed-menu')
     await expect(within(menu).getAllByText(/Nowa rezerwacja: BMW Seria 3 \(Anna Kowalska\)/).length).toBeGreaterThan(0)
     await expect(within(menu).getByText(/Anna Kowalska odwołał\(a\) wizytę/)).toBeVisible()
+  },
+}
+
+/** `/moderator` without ?tab= shows statistics – only that entry is highlighted, not every tab. */
+export const ModeratorActiveTab: Story = {
+  parameters: { app: { user: moderator } },
+  render: () => ({
+    components: { AppNavigation },
+    setup() {
+      useRouter().replace('/moderator')
+    },
+    template: '<app-navigation /><div class="pa-8" style="height: 400px" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await waitFor(() => expect(canvas.getByTestId('nav-/moderator?tab=stats')).toHaveClass('v-list-item--active'))
+    const active = canvasElement.querySelectorAll('[data-testid^="nav-"].v-list-item--active')
+    await expect(active).toHaveLength(1)
+  },
+}
+
+/** Language menu with flags; the whole bar switches language. */
+export const LanguageFlags: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByTestId('language-menu')).toHaveTextContent('PL')
+    await userEvent.click(canvas.getByTestId('language-menu'))
+    await userEvent.click(await screen.findByTestId('language-en'), { pointerEventsCheck: 0 })
+    await waitFor(() => expect(canvas.getByTestId('language-menu')).toHaveTextContent('EN'))
+    await expect(canvas.getByTestId('center-nav')).toHaveTextContent(/workshops/i)
+  },
+}
+
+export const ThemeToggle: Story = {
+  play: async ({ canvasElement }) => {
+    const toggle = within(canvasElement).getByTestId('theme-toggle')
+    await expect(toggle.querySelector('.mdi-white-balance-sunny')).not.toBeNull()
+    await userEvent.click(toggle)
+    await waitFor(() => expect(toggle.querySelector('.mdi-moon-waning-crescent')).not.toBeNull())
   },
 }

@@ -45,12 +45,9 @@ watch(user, value => (profile.value = mapIUserProfile(value?.profile ?? {})))
       />
 
       <v-row>
-        <v-col
-          cols="12"
-          md="6"
-        >
+        <v-col cols="12">
           <v-card
-            class="pa-6 h-100"
+            class="pa-6"
             elevation="2"
           >
             <v-form
@@ -106,11 +103,8 @@ watch(user, value => (profile.value = mapIUserProfile(value?.profile ?? {})))
           </v-card>
         </v-col>
 
-        <v-col
-          cols="12"
-          md="6"
-        >
-          <account-settings-card class="h-100" />
+        <v-col cols="12">
+          <account-settings-card />
         </v-col>
       </v-row>
     </v-container>
