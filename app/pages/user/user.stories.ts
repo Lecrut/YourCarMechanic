@@ -111,6 +111,18 @@ export const ProfileAndCars: Story = {
   },
 }
 
+/** Signed-in users switch the language in their account settings (one compact row with flags). */
+export const ProfileLanguage: Story = {
+  render: () => ({ components: { Profile }, template: '<profile />' }),
+  play: async ({ canvasElement }) => {
+    const settings = within(await within(canvasElement).findByTestId('account-settings'))
+    await expect(settings.getByText('Polski')).toBeVisible()
+    await userEvent.click(settings.getByTestId('profile-language-en'))
+    await waitFor(() => expect(settings.getByText('English')).toBeVisible())
+    await expect(settings.getByText('Language')).toBeVisible()
+  },
+}
+
 /** Errors from services show one global, specific message (no duplicated snackbars). */
 export const SlotTakenMessage: Story = {
   render: () => ({ components: { Notifications }, template: '<notifications />' }),

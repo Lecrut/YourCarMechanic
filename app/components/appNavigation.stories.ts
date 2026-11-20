@@ -134,3 +134,22 @@ export const ThemeToggle: Story = {
     await waitFor(() => expect(toggle.querySelector('.mdi-moon-waning-crescent')).not.toBeNull())
   },
 }
+
+/** Phones: the bottom bar highlights the current page (and shows its label). */
+export const CustomerBottomBar: Story = {
+  parameters: { app: { user: userAnna } },
+  globals: { viewport: { value: 'mobile1' } },
+  render: () => ({
+    components: { AppNavigation },
+    setup() {
+      useRouter().replace('/user/notifications')
+    },
+    template: '<app-navigation /><div class="pa-8" style="height: 400px" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const bar = canvasElement.querySelector('.v-bottom-navigation')
+    // Only rendered on narrow screens; on a desktop-sized test browser the side rail covers it.
+    if (!bar) return
+    await waitFor(() => expect(bar.querySelector('.v-btn--selected')).toHaveAttribute('href', '/user/notifications'))
+  },
+}

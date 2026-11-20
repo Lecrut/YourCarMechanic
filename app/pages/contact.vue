@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
-import AppFooter from '~/components/appFooter.vue'
 import { CONTACT_CATEGORIES, CONTACT_LIMITS, type ContactCategory } from '~/models/contactMessage'
 import formValidation from '~/utils/formValidation'
 import { emailRule, maxLengthRule, requiredRule } from '~/utils/rules'
@@ -49,6 +48,7 @@ function another() {
   message.value = ''
   sent.value = false
 }
+definePageMeta({ footer: true })
 </script>
 
 <template>
@@ -229,7 +229,5 @@ function another() {
         </v-col>
       </v-row>
     </v-container>
-
-    <app-footer v-if="!authStore.user" />
   </div>
 </template>

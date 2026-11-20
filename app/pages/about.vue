@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import AppFooter from '~/components/appFooter.vue'
-
 const { t } = useI18n()
+definePageMeta({ footer: true })
 </script>
 
 <template>
@@ -93,7 +92,5 @@ const { t } = useI18n()
         </v-btn>
       </v-sheet>
     </v-container>
-
-    <app-footer />
   </div>
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
-import AppFooter from '~/components/appFooter.vue'
 import WorkshopFinder from '~/components/workshopFinder.vue'
 import { pricingService, reviewsService, workshopsService } from '~/services'
 import { type IWorkshop, servicesBrand } from '~/models/workshop'
@@ -104,11 +103,12 @@ onMounted(() => {
   carsJsonStore.getCarsFromJson()
   loadWorkshops()
 })
+definePageMeta({ footer: true })
 </script>
 
 <template>
-  <div class="d-flex flex-column fill-height">
-    <v-container class="py-8 flex-grow-1">
+  <div>
+    <v-container class="py-8">
       <page-header
         :title="t('workshopsPage.title')"
         :subtitle="t('workshopsPage.subtitle')"
@@ -327,7 +327,5 @@ onMounted(() => {
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <app-footer />
   </div>
 </template>

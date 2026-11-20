@@ -2,8 +2,7 @@
 import { useDisplay, useTheme } from 'vuetify'
 import { awaitsClientDecision } from '~/models/fix'
 import NotificationBell from '~/components/notificationBell.vue'
-import flagPl from '~/assets/flags/pl.svg'
-import flagGb from '~/assets/flags/gb.svg'
+import { useLanguage } from '~/composables/language'
 
 interface NavItem {
   title: string
@@ -12,8 +11,9 @@ interface NavItem {
   badge?: number
 }
 
-const i18n = useI18n()
-const { t, locale } = i18n
+const { t, locale } = useI18n()
+/** Guests pick the language in the bar; signed-in users in their account settings. */
+const { languages, current: currentLanguage, setLanguage } = useLanguage()
 const theme = useTheme()
 const { mdAndUp } = useDisplay()
 const route = useRoute()
@@ -62,11 +62,9 @@ const items = computed<NavItem[]>(() => {
   }
 })
 
-/** Centre of the app bar: public pages for everyone; signed-in users get their panel instead of the landing page. */
+/** Centre of the app bar for guests (signed-in users navigate with the side rail / bottom bar). */
 const guestLinks = computed<NavItem[]>(() => [
-  user.value
-    ? { title: t('navBar.dashboard'), icon: 'mdi-view-dashboard-outline', to: authStore.homePath }
-    : { title: t('navBar.home'), icon: 'mdi-home-outline', to: '/' },
+  { title: t('navBar.home'), icon: 'mdi-home-outline', to: '/' },
   { title: t('navBar.workshops'), icon: 'mdi-garage', to: '/workshops' },
   { title: t('navBar.about'), icon: 'mdi-information-outline', to: '/about' },
   { title: t('navBar.contact'), icon: 'mdi-email-outline', to: '/contact' },
@@ -75,18 +73,8 @@ const guestLinks = computed<NavItem[]>(() => [
 /** Tab matching the current page – drives the animated slider under the centre tabs. */
 const activeLink = computed(() => guestLinks.value.find(l => l.to === route.path)?.to ?? null)
 
-const languages = [
-  { code: 'pl', name: 'Polski', flag: flagPl },
-  { code: 'en', name: 'English', flag: flagGb },
-] as const
-const currentLanguage = computed(() => languages.find(l => l.code === locale.value) ?? languages[0])
-
-/** Nuxt i18n switches (and remembers) the language; plain vue-i18n (Storybook) just sets it. */
-async function setLanguage(code: 'pl' | 'en') {
-  const set = (i18n as { setLocale?: (c: string) => Promise<void> }).setLocale
-  if (typeof set === 'function') await set(code)
-  else locale.value = code
-}
+/** Selected entry of the phone bottom bar (highlight + label in "shift" mode). */
+const bottomSelected = computed(() => items.value.slice(0, 4).find(isActive)?.to ?? null)
 
 const logoHover = ref(false)
 const isDark = computed(() => theme.global.current.value.dark)
@@ -180,6 +168,7 @@ async function logOut() {
     </div>
 
     <v-sheet
+      v-if="!user"
       class="d-none d-md-flex flex-0-0 pa-1"
       rounded="pill"
       color="surface-light"
@@ -216,7 +205,10 @@ async function logOut() {
         border
         data-testid="nav-controls"
       >
-        <v-menu location="bottom end">
+        <v-menu
+          v-if="!user"
+          location="bottom end"
+        >
           <template #activator="{ props: menuProps }">
             <v-btn
               v-tooltip:bottom="t('navBar.language')"
@@ -528,6 +520,7 @@ async function logOut() {
 
   <v-bottom-navigation
     v-if="hasSidebar && !mdAndUp"
+    :model-value="bottomSelected"
     mode="shift"
     color="primary"
     grow

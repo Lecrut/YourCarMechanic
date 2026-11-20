@@ -137,11 +137,11 @@ app/
     garage.ts                   customer garage: repairs grouped by car
     geo.ts                      distance, workshop position (pin or city centre), ranking by distance/rating/reviews
     review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem, servicesBrand), service.ts, user.ts, car.ts, …
-  composables/                  role & status option lists
+  composables/                  role & status option lists, useLanguage (flags, switching)
   utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
                                 subscription, vuetifyOptions (auto-imported)
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
-  layouts/default.vue           single layout with AppNavigation
+  layouts/default.vue           single layout: AppNavigation + footer pinned to the bottom on public pages (`meta.footer`, guests)
   types/page-meta.d.ts          `definePageMeta({ role })`
   components/
     appNavigation.vue           app bar (centred animated tabs, language flags, theme), rail drawer per role, account card, bottom nav
