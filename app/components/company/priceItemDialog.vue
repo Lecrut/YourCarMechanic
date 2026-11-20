@@ -8,6 +8,7 @@ const isDialogShown = defineModel<boolean>({ default: false })
 
 const props = defineProps<{
   item: IPriceListItem | null
+  defaultServiceKey?: string
   hourlyRate: number
   /** Services the workshop offers – a price item must belong to one of them. */
   services: string[]
@@ -29,7 +30,7 @@ const nonNegative = (v: number) => v >= 0 || t('pricing.nonNegative')
 const quarterStep = (v: number) => Number.isInteger(Math.round(Number(v) * 1000) / 250) || t('duration.quarterStep')
 
 watch(isDialogShown, (shown) => {
-  if (shown) draft.value = mapIPriceListItem(props.item ?? {})
+  if (shown) draft.value = mapIPriceListItem(props.item ?? { serviceKey: props.defaultServiceKey ?? '' })
 })
 
 async function save() {
@@ -59,7 +60,7 @@ async function save() {
               cols="12"
               md="6"
             >
-              <v-select
+              <v-autocomplete
                 v-model="draft.serviceKey"
                 :items="serviceOptions"
                 :label="t('pricing.service')"

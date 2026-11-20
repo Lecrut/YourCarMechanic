@@ -19,15 +19,9 @@ const authStore = useAuthStore()
 const { user, role, company } = storeToRefs(authStore)
 const fixesStore = useFixesStore()
 const moderatorStore = useModeratorStore()
+const contactStore = useContactStore()
 
 const drawer = ref(false)
-const passwordLinkSent = ref(false)
-
-async function changePassword() {
-  if (!user.value) return
-  await authStore.resetPassword(user.value.email)
-  passwordLinkSent.value = !useSharedStore().error
-}
 
 const decisionCount = computed(() => fixesStore.fixes.filter(awaitsClientDecision).length)
 /** New bookings the workshop has not reacted to yet. */
@@ -57,6 +51,8 @@ const items = computed<NavItem[]>(() => {
         { title: t('moderator.tabs.users'), icon: 'mdi-account-group-outline', to: '/moderator?tab=users' },
         { title: t('moderator.tabs.fixes'), icon: 'mdi-car-wrench', to: '/moderator?tab=fixes' },
         { title: t('moderator.tabs.reviews'), icon: 'mdi-star-outline', to: '/moderator?tab=reviews' },
+        { title: t('moderator.tabs.messages'), icon: 'mdi-email-outline', to: '/moderator?tab=messages', badge: contactStore.newCount },
+        { title: t('navBar.user.profile'), icon: 'mdi-account-outline', to: '/moderator/profile' },
       ]
     default:
       return []
@@ -65,8 +61,16 @@ const items = computed<NavItem[]>(() => {
 
 const guestLinks = computed<NavItem[]>(() => [
   { title: t('navBar.home'), icon: 'mdi-home-outline', to: '/' },
+  { title: t('navBar.workshops'), icon: 'mdi-garage', to: '/workshops' },
   { title: t('navBar.about'), icon: 'mdi-information-outline', to: '/about' },
+  { title: t('navBar.contact'), icon: 'mdi-email-outline', to: '/contact' },
 ])
+
+/** Own profile page of every role – always reachable from the account menu. */
+const PROFILE_PATHS: Record<string, string> = { user: '/user/profile', workshop: '/company/profile', moderator: '/moderator/profile' }
+const profilePath = computed(() => (role.value ? PROFILE_PATHS[role.value] ?? null : null))
+/** Account-menu shortcuts: the role's main pages without the profile (it has its own entry). */
+const shortcuts = computed(() => items.value.filter(i => i.to !== profilePath.value).slice(0, 4))
 
 const hasSidebar = computed(() => Boolean(user.value && items.value.length))
 
@@ -147,7 +151,10 @@ async function logOut() {
       </v-btn>
     </div>
 
-    <v-menu location="bottom end">
+    <v-menu
+      v-if="!user"
+      location="bottom end"
+    >
       <template #activator="{ props: menuProps }">
         <v-btn
           v-tooltip:bottom="t('navBar.language')"
@@ -275,7 +282,15 @@ async function logOut() {
           nav
         >
           <v-list-item
-            v-for="item in items.slice(0, 4)"
+            v-if="profilePath"
+            :to="profilePath"
+            prepend-icon="mdi-account-circle-outline"
+            :title="t('account.myProfile')"
+            rounded="lg"
+            data-testid="my-profile"
+          />
+          <v-list-item
+            v-for="item in shortcuts"
             :key="item.to"
             :to="item.to"
             :prepend-icon="item.icon"
@@ -284,11 +299,10 @@ async function logOut() {
           />
           <v-divider class="my-1" />
           <v-list-item
-            prepend-icon="mdi-lock-reset"
-            :title="t('account.changePassword')"
+            to="/contact"
+            prepend-icon="mdi-lifebuoy"
+            :title="t('navBar.contact')"
             rounded="lg"
-            data-testid="change-password"
-            @click="changePassword"
           />
           <v-list-item
             prepend-icon="mdi-logout"
@@ -359,12 +373,6 @@ async function logOut() {
       </v-list>
     </template>
   </v-navigation-drawer>
-
-  <my-snackbar
-    v-model="passwordLinkSent"
-    :is-error="false"
-    :text="t('account.passwordLinkSent')"
-  />
 
   <v-bottom-navigation
     v-if="hasSidebar && !mdAndUp"

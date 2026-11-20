@@ -4,6 +4,7 @@ import type { IUser } from '~/models/user'
 import { formatDateToString } from '~/utils/time'
 import WorkshopForm from '~/components/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
+import { emailRule } from '~/utils/rules'
 
 const { t } = useI18n()
 
@@ -15,10 +16,13 @@ const { loading, error } = storeToRefs(useSharedStore())
 
 const search = ref('')
 const statusFilter = ref<WorkshopStatus | null>(null)
+const showDeleted = ref(false)
 const editDialog = ref(false)
 const isNew = ref(false)
 const deleteDialog = ref(false)
 const draft = ref<IWorkshop>(mapIWorkshop({}))
+const ownerMode = ref<'email' | 'existing'>('email')
+const ownerEmail = ref('')
 const ownerRef = ref<string | null>(null)
 const toDelete = ref<IWorkshop | null>(null)
 const workshopFormRef = ref<ValidatableForm | null>(null)
@@ -41,11 +45,18 @@ const ownerOptions = computed(() =>
 )
 
 const items = computed(() =>
-  statusFilter.value ? workshops.value.filter(w => w.status === statusFilter.value) : workshops.value,
+  workshops.value.filter(w =>
+    (showDeleted.value ? Boolean(w.deletedAt) : !w.deletedAt)
+    && (!statusFilter.value || w.status === statusFilter.value),
+  ),
 )
+
+const ownerEmailOf = (w: IWorkshop) =>
+  users.value.find(u => u.reference === `users/${w.ownerUid}` || u.companyRef === w.reference)?.email ?? ''
 
 const headers = computed(() => [
   { title: t('companyProfile.name'), key: 'name' },
+  { title: t('userProfile.email'), key: 'ownerEmail', value: (w: IWorkshop) => ownerEmailOf(w) },
   { title: t('workshopStatus.label'), key: 'status' },
   { title: t('companyProfile.nip'), key: 'nip' },
   { title: t('companyProfile.city'), key: 'city', value: (w: IWorkshop) => citiesJsonStore.getCityName(w.city) },
@@ -56,6 +67,8 @@ const headers = computed(() => [
 
 function add() {
   isNew.value = true
+  ownerMode.value = 'email'
+  ownerEmail.value = ''
   ownerRef.value = null
   draft.value = mapIWorkshop({ openingTime: 8, closingTime: 16, status: 'approved' })
   editDialog.value = true
@@ -68,9 +81,13 @@ function edit(workshop: IWorkshop) {
 }
 
 async function save() {
+  const email = ownerMode.value === 'email' ? (ownerEmail.value.trim() || null) : null
+  if (email && emailRule(t)(email) !== true) return
   if (!(await workshopFormRef.value?.isValid())) return
-  const owner: IUser | null = users.value.find(u => u.reference === ownerRef.value) ?? null
-  if (isNew.value) await moderatorStore.createWorkshop(draft.value, owner)
+  const owner: IUser | null = ownerMode.value === 'existing'
+    ? (users.value.find(u => u.reference === ownerRef.value) ?? null)
+    : null
+  if (isNew.value) await moderatorStore.createWorkshop(draft.value, owner, email)
   else await moderatorStore.updateWorkshop(draft.value)
   if (!error.value) editDialog.value = false
 }
@@ -87,10 +104,10 @@ async function confirmDelete() {
 </script>
 
 <template>
-  <v-row class="mb-2 align-center">
+  <v-row class="mb-4 align-center">
     <v-col
       cols="12"
-      md="5"
+      md="4"
     >
       <v-text-field
         v-model="search"
@@ -102,7 +119,7 @@ async function confirmDelete() {
     </v-col>
     <v-col
       cols="12"
-      md="4"
+      md="3"
     >
       <v-select
         v-model="statusFilter"
@@ -112,6 +129,18 @@ async function confirmDelete() {
         clearable
         hide-details
         data-testid="status-filter"
+      />
+    </v-col>
+    <v-col
+      cols="12"
+      md="2"
+    >
+      <v-switch
+        v-model="showDeleted"
+        color="error"
+        hide-details
+        :label="t('moderator.showDeleted')"
+        data-testid="show-deleted"
       />
     </v-col>
     <v-col
@@ -258,20 +287,51 @@ async function confirmDelete() {
       prepend-icon="mdi-domain"
     >
       <v-card-text>
-        <v-row v-if="isNew">
+        <v-row
+          v-if="isNew"
+          class="mb-2"
+        >
+          <v-col cols="12">
+            <v-btn-toggle
+              v-model="ownerMode"
+              mandatory
+              color="primary"
+              variant="outlined"
+              density="compact"
+              rounded="pill"
+            >
+              <v-btn value="email">
+                {{ t('moderator.ownerModeEmail') }}
+              </v-btn>
+              <v-btn value="existing">
+                {{ t('moderator.ownerModeExisting') }}
+              </v-btn>
+            </v-btn-toggle>
+          </v-col>
           <v-col
             cols="12"
             md="7"
           >
+            <v-text-field
+              v-if="ownerMode === 'email'"
+              v-model="ownerEmail"
+              type="email"
+              :label="t('moderator.ownerEmail')"
+              :hint="t('moderator.ownerEmailHint')"
+              :rules="[v => !v || emailRule(t)(v)]"
+              persistent-hint
+              prepend-inner-icon="mdi-email-outline"
+              clearable
+              data-testid="company-owner-email"
+            />
             <v-autocomplete
+              v-else
               v-model="ownerRef"
               :items="ownerOptions"
               :label="t('moderator.owner')"
               :hint="t('moderator.ownerHint')"
               persistent-hint
               prepend-inner-icon="mdi-account-tie"
-              variant="outlined"
-              density="comfortable"
               clearable
               data-testid="company-owner"
             />

@@ -205,7 +205,7 @@ defineExpose({ isValid: validate })
       </v-col>
 
       <v-col cols="12">
-        <v-select
+        <v-autocomplete
           v-model="workshop.services"
           :label="t('companyProfile.services')"
           :items="servicesStore.options"

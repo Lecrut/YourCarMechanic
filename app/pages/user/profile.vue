@@ -2,6 +2,7 @@
 import AddCarForm from '~/components/user/addCarForm.vue'
 import CarCard from '~/components/user/carCard.vue'
 import PageHeader from '~/components/pageHeader.vue'
+import AccountSettingsCard from '~/components/accountSettingsCard.vue'
 import { phoneRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 import { mapIUserProfile } from '~/models/userProfile'
@@ -158,6 +159,8 @@ onMounted(() => {
           </v-card>
         </v-col>
       </v-row>
+
+      <account-settings-card class="mt-6" />
     </v-container>
 
     <my-snackbar

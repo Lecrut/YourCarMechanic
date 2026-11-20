@@ -28,3 +28,6 @@ storybook-static
 coverage
 .vitest-attachments
 __screenshots__
+
+# Firebase deploy cache
+.firebase/

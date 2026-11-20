@@ -1,6 +1,7 @@
 import { reviewsService } from '~/services'
 import type { IFix } from '~/models/fix'
 import { type IRatingSummary, type IReview, ratingSummary } from '~/models/review'
+import { createSubscription } from '~/utils/subscription'
 
 export const useReviewsStore = defineStore('reviews', () => {
   /** All reviews – loaded by the moderator panel only. */
@@ -8,6 +9,18 @@ export const useReviewsStore = defineStore('reviews', () => {
   /** Rating of the signed-in workshop. */
   const ownRating = ref<IRatingSummary | null>(null)
   const sharedStore = useSharedStore()
+  const subscription = createSubscription()
+
+  function watchAll() {
+    subscription.start(() => reviewsService.watchAllReviews(
+      list => (all.value = list),
+      e => sharedStore.fail(e),
+    ))
+  }
+
+  function stopWatching() {
+    subscription.stop()
+  }
 
   const addReview = (fix: IFix, rating: number, comment: string) =>
     sharedStore.run(async () => {
@@ -55,5 +68,5 @@ export const useReviewsStore = defineStore('reviews', () => {
       patch(review, { deletedAt: null })
     })
 
-  return { all, ownRating, addReview, loadOwnRating, loadAll, setHidden, remove, restore }
+  return { all, ownRating, addReview, loadOwnRating, loadAll, watchAll, stopWatching, setHidden, remove, restore }
 })

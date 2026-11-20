@@ -1,5 +1,17 @@
 [
   {
+    "city": "Aleksandrowice",
+    "lat": "49.8144",
+    "lng": "19.2333",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Śląskie",
+    "capital": "",
+    "population": "1821",
+    "population_proper": "1821",
+    "value": "aleksandrowice"
+  },
+  {
     "city": "Aleksandrów Kujawski",
     "lat": "52.8767",
     "lng": "18.6936",
@@ -12,16 +24,36 @@
     "value": "aleksandrow_kujawski"
   },
   {
-    "city": "Aleksandrowice",
-    "lat": "49.8144",
-    "lng": "19.2333",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Śląskie",
-    "capital": "",
-    "population": "1821",
-    "population_proper": "1821",
-    "value": "aleksandrowice"
+    "city": "Andrychów",
+    "value": "andrychow"
+  },
+  {
+    "city": "Augustów",
+    "value": "augustow"
+  },
+  {
+    "city": "Baborów",
+    "value": "baborow"
+  },
+  {
+    "city": "Baranów Sandomierski",
+    "value": "baranow_sandomierski"
+  },
+  {
+    "city": "Barcin",
+    "value": "barcin"
+  },
+  {
+    "city": "Barczewo",
+    "value": "barczewo"
+  },
+  {
+    "city": "Bardo",
+    "value": "bardo"
+  },
+  {
+    "city": "Barlinek",
+    "value": "barlinek"
   },
   {
     "city": "Bartoszyce",
@@ -36,16 +68,8 @@
     "value": "bartoszyce"
   },
   {
-    "city": "Będzin",
-    "lat": "50.3333",
-    "lng": "19.1167",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Śląskie",
-    "capital": "minor",
-    "population": "55695",
-    "population_proper": "55695",
-    "value": "bedzin"
+    "city": "Barwice",
+    "value": "barwice"
   },
   {
     "city": "Bełchatów",
@@ -58,6 +82,50 @@
     "population": "54338",
     "population_proper": "54338",
     "value": "belchatow"
+  },
+  {
+    "city": "Bełżyce",
+    "value": "belzyce"
+  },
+  {
+    "city": "Będzin",
+    "lat": "50.3333",
+    "lng": "19.1167",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Śląskie",
+    "capital": "minor",
+    "population": "55695",
+    "population_proper": "55695",
+    "value": "bedzin"
+  },
+  {
+    "city": "Biała",
+    "value": "biala"
+  },
+  {
+    "city": "Biała Piska",
+    "value": "biala_piska"
+  },
+  {
+    "city": "Biała Podlaska",
+    "value": "biala_podlaska"
+  },
+  {
+    "city": "Biała Rawska",
+    "value": "biala_rawska"
+  },
+  {
+    "city": "Białobrzegi",
+    "value": "bialobrzegi"
+  },
+  {
+    "city": "Białogard",
+    "value": "bialogard"
+  },
+  {
+    "city": "Biały Bór",
+    "value": "bialy_bor"
   },
   {
     "city": "Biały Kamień",
@@ -84,6 +152,18 @@
     "value": "bialystok"
   },
   {
+    "city": "Biecz",
+    "value": "biecz"
+  },
+  {
+    "city": "Bielawa",
+    "value": "bielawa"
+  },
+  {
+    "city": "Bielsk Podlaski",
+    "value": "bielsk_podlaski"
+  },
+  {
     "city": "Bielsko-Biała",
     "lat": "49.8225",
     "lng": "19.0444",
@@ -94,6 +174,22 @@
     "population": "169089",
     "population_proper": "169089",
     "value": "bielsko-biala"
+  },
+  {
+    "city": "Bielsko-Biała",
+    "value": "bielsko_biala"
+  },
+  {
+    "city": "Bieruń",
+    "value": "bierun"
+  },
+  {
+    "city": "Bierutów",
+    "value": "bierutow"
+  },
+  {
+    "city": "Bieżuń",
+    "value": "biezun"
   },
   {
     "city": "Biłgoraj",
@@ -108,6 +204,54 @@
     "value": "bilgoraj"
   },
   {
+    "city": "Biskupiec",
+    "value": "biskupiec"
+  },
+  {
+    "city": "Bisztynek",
+    "value": "bisztynek"
+  },
+  {
+    "city": "Blachownia",
+    "value": "blachownia"
+  },
+  {
+    "city": "Błaszki",
+    "value": "blaszki"
+  },
+  {
+    "city": "Błażowa",
+    "value": "blazowa"
+  },
+  {
+    "city": "Błonie",
+    "value": "blonie"
+  },
+  {
+    "city": "Bobolice",
+    "value": "bobolice"
+  },
+  {
+    "city": "Bobowa",
+    "value": "bobowa"
+  },
+  {
+    "city": "Bochnia",
+    "value": "bochnia"
+  },
+  {
+    "city": "Bodzentyn",
+    "value": "bodzentyn"
+  },
+  {
+    "city": "Bogatynia",
+    "value": "bogatynia"
+  },
+  {
+    "city": "Boguchwała",
+    "value": "boguchwala"
+  },
+  {
     "city": "Bogucice",
     "lat": "50.2668",
     "lng": "19.0397",
@@ -118,6 +262,14 @@
     "population": "16538",
     "population_proper": "16538",
     "value": "bogucice"
+  },
+  {
+    "city": "Boguszów-Gorce",
+    "value": "boguszow_gorce"
+  },
+  {
+    "city": "Bojanowo",
+    "value": "bojanowo"
   },
   {
     "city": "Bolesławiec",
@@ -132,6 +284,18 @@
     "value": "boleslawiec"
   },
   {
+    "city": "Bolków",
+    "value": "bolkow"
+  },
+  {
+    "city": "Borek Wielkopolski",
+    "value": "borek_wielkopolski"
+  },
+  {
+    "city": "Borne Sulinowo",
+    "value": "borne_sulinowo"
+  },
+  {
     "city": "Braniewo",
     "lat": "54.3833",
     "lng": "19.8333",
@@ -142,6 +306,10 @@
     "population": "16480",
     "population_proper": "16480",
     "value": "braniewo"
+  },
+  {
+    "city": "Brańsk",
+    "value": "bransk"
   },
   {
     "city": "Brodnica",
@@ -156,6 +324,18 @@
     "value": "brodnica"
   },
   {
+    "city": "Brok",
+    "value": "brok"
+  },
+  {
+    "city": "Brusy",
+    "value": "brusy"
+  },
+  {
+    "city": "Brwinów",
+    "value": "brwinow"
+  },
+  {
     "city": "Brzeg",
     "lat": "50.8667",
     "lng": "17.4833",
@@ -166,6 +346,54 @@
     "population": "34492",
     "population_proper": "34492",
     "value": "brzeg"
+  },
+  {
+    "city": "Brzeg Dolny",
+    "value": "brzeg_dolny"
+  },
+  {
+    "city": "Brzesko",
+    "value": "brzesko"
+  },
+  {
+    "city": "Brzeszcze",
+    "value": "brzeszcze"
+  },
+  {
+    "city": "Brześć Kujawski",
+    "value": "brzesc_kujawski"
+  },
+  {
+    "city": "Brzeziny",
+    "value": "brzeziny"
+  },
+  {
+    "city": "Brzostek",
+    "value": "brzostek"
+  },
+  {
+    "city": "Brzozów",
+    "value": "brzozow"
+  },
+  {
+    "city": "Buk",
+    "value": "buk"
+  },
+  {
+    "city": "Bukowno",
+    "value": "bukowno"
+  },
+  {
+    "city": "Busko-Zdrój",
+    "value": "busko_zdroj"
+  },
+  {
+    "city": "Bychawa",
+    "value": "bychawa"
+  },
+  {
+    "city": "Byczyna",
+    "value": "byczyna"
   },
   {
     "city": "Bydgoszcz",
@@ -180,6 +408,10 @@
     "value": "bydgoszcz"
   },
   {
+    "city": "Bystrzyca Kłodzka",
+    "value": "bystrzyca_klodzka"
+  },
+  {
     "city": "Bytom",
     "lat": "50.3483",
     "lng": "18.9156",
@@ -192,6 +424,18 @@
     "value": "bytom"
   },
   {
+    "city": "Bytom Odrzański",
+    "value": "bytom_odrzanski"
+  },
+  {
+    "city": "Bytów",
+    "value": "bytow"
+  },
+  {
+    "city": "Cedynia",
+    "value": "cedynia"
+  },
+  {
     "city": "Chełm",
     "lat": "51.1322",
     "lng": "23.4778",
@@ -202,6 +446,10 @@
     "population": "59546",
     "population_proper": "59546",
     "value": "chelm"
+  },
+  {
+    "city": "Chełmek",
+    "value": "chelmek"
   },
   {
     "city": "Chełmno",
@@ -228,6 +476,26 @@
     "value": "chelmza"
   },
   {
+    "city": "Chęciny",
+    "value": "checiny"
+  },
+  {
+    "city": "Chmielnik",
+    "value": "chmielnik"
+  },
+  {
+    "city": "Chocianów",
+    "value": "chocianow"
+  },
+  {
+    "city": "Chociwel",
+    "value": "chociwel"
+  },
+  {
+    "city": "Chodecz",
+    "value": "chodecz"
+  },
+  {
     "city": "Chodzież",
     "lat": "52.9833",
     "lng": "16.9000",
@@ -238,6 +506,10 @@
     "population": "18044",
     "population_proper": "18044",
     "value": "chodziez"
+  },
+  {
+    "city": "Chojna",
+    "value": "chojna"
   },
   {
     "city": "Chojnice",
@@ -264,6 +536,14 @@
     "value": "chojnow"
   },
   {
+    "city": "Choroszcz",
+    "value": "choroszcz"
+  },
+  {
+    "city": "Chorzele",
+    "value": "chorzele"
+  },
+  {
     "city": "Chorzów",
     "lat": "50.3000",
     "lng": "18.9500",
@@ -274,6 +554,10 @@
     "population": "104193",
     "population_proper": "104193",
     "value": "chorzow"
+  },
+  {
+    "city": "Choszczno",
+    "value": "choszczno"
   },
   {
     "city": "Chropaczów",
@@ -300,6 +584,26 @@
     "value": "chruszczow"
   },
   {
+    "city": "Chrzanów",
+    "value": "chrzanow"
+  },
+  {
+    "city": "Ciechanowiec",
+    "value": "ciechanowiec"
+  },
+  {
+    "city": "Ciechanów",
+    "value": "ciechanow"
+  },
+  {
+    "city": "Ciechocinek",
+    "value": "ciechocinek"
+  },
+  {
+    "city": "Cieszanów",
+    "value": "cieszanow"
+  },
+  {
     "city": "Cieszyn",
     "lat": "49.7484",
     "lng": "18.6332",
@@ -310,6 +614,30 @@
     "population": "33958",
     "population_proper": "33958",
     "value": "cieszyn"
+  },
+  {
+    "city": "Ciężkowice",
+    "value": "ciezkowice"
+  },
+  {
+    "city": "Cybinka",
+    "value": "cybinka"
+  },
+  {
+    "city": "Czaplinek",
+    "value": "czaplinek"
+  },
+  {
+    "city": "Czarna Białostocka",
+    "value": "czarna_bialostocka"
+  },
+  {
+    "city": "Czarna Woda",
+    "value": "czarna_woda"
+  },
+  {
+    "city": "Czarne",
+    "value": "czarne"
   },
   {
     "city": "Czarnków",
@@ -324,6 +652,10 @@
     "value": "czarnkow"
   },
   {
+    "city": "Czchów",
+    "value": "czchow"
+  },
+  {
     "city": "Czechowice-Dziedzice",
     "lat": "49.9131",
     "lng": "19.0064",
@@ -334,6 +666,10 @@
     "population": "35261",
     "population_proper": "35261",
     "value": "czechowice-dziedzice"
+  },
+  {
+    "city": "Czechowice-Dziedzice",
+    "value": "czechowice_dziedzice"
   },
   {
     "city": "Czeladź",
@@ -348,6 +684,26 @@
     "value": "czeladz"
   },
   {
+    "city": "Czempiń",
+    "value": "czempin"
+  },
+  {
+    "city": "Czerniejewo",
+    "value": "czerniejewo"
+  },
+  {
+    "city": "Czersk",
+    "value": "czersk"
+  },
+  {
+    "city": "Czerwieńsk",
+    "value": "czerwiensk"
+  },
+  {
+    "city": "Czerwionka-Leszczyny",
+    "value": "czerwionka_leszczyny"
+  },
+  {
     "city": "Częstochowa",
     "lat": "50.8000",
     "lng": "19.1167",
@@ -358,6 +714,10 @@
     "population": "213107",
     "population_proper": "213107",
     "value": "czestochowa"
+  },
+  {
+    "city": "Człopa",
+    "value": "czlopa"
   },
   {
     "city": "Człuchów",
@@ -372,6 +732,22 @@
     "value": "czluchow"
   },
   {
+    "city": "Czyżew",
+    "value": "czyzew"
+  },
+  {
+    "city": "Ćmielów",
+    "value": "cmielow"
+  },
+  {
+    "city": "Daleszyce",
+    "value": "daleszyce"
+  },
+  {
+    "city": "Darłowo",
+    "value": "darlowo"
+  },
+  {
     "city": "Dąb",
     "lat": "50.2739",
     "lng": "18.9992",
@@ -382,6 +758,14 @@
     "population": "7694",
     "population_proper": "7694",
     "value": "dab"
+  },
+  {
+    "city": "Dąbie",
+    "value": "dabie"
+  },
+  {
+    "city": "Dąbrowa Białostocka",
+    "value": "dabrowa_bialostocka"
   },
   {
     "city": "Dąbrowa Górnicza",
@@ -396,6 +780,10 @@
     "value": "dabrowa_gornicza"
   },
   {
+    "city": "Dąbrowa Tarnowska",
+    "value": "dabrowa_tarnowska"
+  },
+  {
     "city": "Dąbrówka Mała",
     "lat": "50.2769",
     "lng": "19.0808",
@@ -406,6 +794,10 @@
     "population": "5411",
     "population_proper": "5411",
     "value": "dabrowka_mala"
+  },
+  {
+    "city": "Debrzno",
+    "value": "debrzno"
   },
   {
     "city": "Dębica",
@@ -420,6 +812,14 @@
     "value": "debica"
   },
   {
+    "city": "Dęblin",
+    "value": "deblin"
+  },
+  {
+    "city": "Dębno",
+    "value": "debno"
+  },
+  {
     "city": "Długa Szlachecka",
     "lat": "52.2500",
     "lng": "21.3167",
@@ -430,6 +830,78 @@
     "population": "1060",
     "population_proper": "1060",
     "value": "dluga_szlachecka"
+  },
+  {
+    "city": "Dobczyce",
+    "value": "dobczyce"
+  },
+  {
+    "city": "Dobiegniew",
+    "value": "dobiegniew"
+  },
+  {
+    "city": "Dobra",
+    "value": "dobra"
+  },
+  {
+    "city": "Dobre Miasto",
+    "value": "dobre_miasto"
+  },
+  {
+    "city": "Dobrodzień",
+    "value": "dobrodzien"
+  },
+  {
+    "city": "Dobrzany",
+    "value": "dobrzany"
+  },
+  {
+    "city": "Dobrzyca",
+    "value": "dobrzyca"
+  },
+  {
+    "city": "Dobrzyń nad Wisłą",
+    "value": "dobrzyn_nad_wisla"
+  },
+  {
+    "city": "Dolsk",
+    "value": "dolsk"
+  },
+  {
+    "city": "Drawno",
+    "value": "drawno"
+  },
+  {
+    "city": "Drawsko Pomorskie",
+    "value": "drawsko_pomorskie"
+  },
+  {
+    "city": "Drezdenko",
+    "value": "drezdenko"
+  },
+  {
+    "city": "Drobin",
+    "value": "drobin"
+  },
+  {
+    "city": "Drohiczyn",
+    "value": "drohiczyn"
+  },
+  {
+    "city": "Drzewica",
+    "value": "drzewica"
+  },
+  {
+    "city": "Dukla",
+    "value": "dukla"
+  },
+  {
+    "city": "Duszniki-Zdrój",
+    "value": "duszniki_zdroj"
+  },
+  {
+    "city": "Dynów",
+    "value": "dynow"
   },
   {
     "city": "Działdowo",
@@ -444,6 +916,18 @@
     "value": "dzialdowo"
   },
   {
+    "city": "Działoszyce",
+    "value": "dzialoszyce"
+  },
+  {
+    "city": "Działoszyn",
+    "value": "dzialoszyn"
+  },
+  {
+    "city": "Dzierzgoń",
+    "value": "dzierzgon"
+  },
+  {
     "city": "Dzierżoniów",
     "lat": "50.7281",
     "lng": "16.6511",
@@ -454,6 +938,10 @@
     "population": "31866",
     "population_proper": "31866",
     "value": "dzierzoniow"
+  },
+  {
+    "city": "Dziwnów",
+    "value": "dziwnow"
   },
   {
     "city": "Elbląg",
@@ -478,6 +966,22 @@
     "population": "60390",
     "population_proper": "60390",
     "value": "elk"
+  },
+  {
+    "city": "Frampol",
+    "value": "frampol"
+  },
+  {
+    "city": "Frombork",
+    "value": "frombork"
+  },
+  {
+    "city": "Garwolin",
+    "value": "garwolin"
+  },
+  {
+    "city": "Gąbin",
+    "value": "gabin"
   },
   {
     "city": "Gdańsk",
@@ -528,6 +1032,10 @@
     "value": "gizycko"
   },
   {
+    "city": "Glinojeck",
+    "value": "glinojeck"
+  },
+  {
     "city": "Gliwice",
     "lat": "50.2833",
     "lng": "18.6667",
@@ -552,6 +1060,38 @@
     "value": "glogow"
   },
   {
+    "city": "Głogów Małopolski",
+    "value": "glogow_malopolski"
+  },
+  {
+    "city": "Głogówek",
+    "value": "glogowek"
+  },
+  {
+    "city": "Głowno",
+    "value": "glowno"
+  },
+  {
+    "city": "Głubczyce",
+    "value": "glubczyce"
+  },
+  {
+    "city": "Głuchołazy",
+    "value": "glucholazy"
+  },
+  {
+    "city": "Głuszyca",
+    "value": "gluszyca"
+  },
+  {
+    "city": "Gniew",
+    "value": "gniew"
+  },
+  {
+    "city": "Gniewkowo",
+    "value": "gniewkowo"
+  },
+  {
     "city": "Gniezno",
     "lat": "52.5358",
     "lng": "17.5958",
@@ -562,6 +1102,22 @@
     "population": "65452",
     "population_proper": "65452",
     "value": "gniezno"
+  },
+  {
+    "city": "Gogolin",
+    "value": "gogolin"
+  },
+  {
+    "city": "Golczewo",
+    "value": "golczewo"
+  },
+  {
+    "city": "Goleniów",
+    "value": "goleniow"
+  },
+  {
+    "city": "Golina",
+    "value": "golina"
   },
   {
     "city": "Golub-Dobrzyń",
@@ -576,6 +1132,22 @@
     "value": "golub-dobrzyn"
   },
   {
+    "city": "Golub-Dobrzyń",
+    "value": "golub_dobrzyn"
+  },
+  {
+    "city": "Gołańcz",
+    "value": "golancz"
+  },
+  {
+    "city": "Gołdap",
+    "value": "goldap"
+  },
+  {
+    "city": "Goniądz",
+    "value": "goniadz"
+  },
+  {
     "city": "Gorlice",
     "lat": "49.6547",
     "lng": "21.1597",
@@ -588,16 +1160,8 @@
     "value": "gorlice"
   },
   {
-    "city": "Górowo Iławeckie",
-    "lat": "54.2861",
-    "lng": "20.4917",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Warmińsko-Mazurskie",
-    "capital": "",
-    "population": "3797",
-    "population_proper": "3797",
-    "value": "gorowo_ilaweckie"
+    "city": "Gorzów Śląski",
+    "value": "gorzow_slaski"
   },
   {
     "city": "Gorzów Wielkopolski",
@@ -612,6 +1176,50 @@
     "value": "gorzow_wielkopolski"
   },
   {
+    "city": "Gostynin",
+    "value": "gostynin"
+  },
+  {
+    "city": "Gostyń",
+    "value": "gostyn"
+  },
+  {
+    "city": "Gościno",
+    "value": "goscino"
+  },
+  {
+    "city": "Gozdnica",
+    "value": "gozdnica"
+  },
+  {
+    "city": "Góra",
+    "value": "gora"
+  },
+  {
+    "city": "Góra Kalwaria",
+    "value": "gora_kalwaria"
+  },
+  {
+    "city": "Górowo Iławeckie",
+    "lat": "54.2861",
+    "lng": "20.4917",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Warmińsko-Mazurskie",
+    "capital": "",
+    "population": "3797",
+    "population_proper": "3797",
+    "value": "gorowo_ilaweckie"
+  },
+  {
+    "city": "Górzno",
+    "value": "gorzno"
+  },
+  {
+    "city": "Grabów nad Prosną",
+    "value": "grabow_nad_prosna"
+  },
+  {
     "city": "Grajewo",
     "lat": "53.6500",
     "lng": "22.4500",
@@ -622,6 +1230,50 @@
     "population": "21395",
     "population_proper": "21395",
     "value": "grajewo"
+  },
+  {
+    "city": "Grodków",
+    "value": "grodkow"
+  },
+  {
+    "city": "Grodzisk Mazowiecki",
+    "value": "grodzisk_mazowiecki"
+  },
+  {
+    "city": "Grodzisk Wielkopolski",
+    "value": "grodzisk_wielkopolski"
+  },
+  {
+    "city": "Grójec",
+    "value": "grojec"
+  },
+  {
+    "city": "Grudziądz",
+    "value": "grudziadz"
+  },
+  {
+    "city": "Grybów",
+    "value": "grybow"
+  },
+  {
+    "city": "Gryfice",
+    "value": "gryfice"
+  },
+  {
+    "city": "Gryfino",
+    "value": "gryfino"
+  },
+  {
+    "city": "Gryfów Śląski",
+    "value": "gryfow_slaski"
+  },
+  {
+    "city": "Gubin",
+    "value": "gubin"
+  },
+  {
+    "city": "Hajnówka",
+    "value": "hajnowka"
   },
   {
     "city": "Halemba",
@@ -636,6 +1288,18 @@
     "value": "halemba"
   },
   {
+    "city": "Halinów",
+    "value": "halinow"
+  },
+  {
+    "city": "Hel",
+    "value": "hel"
+  },
+  {
+    "city": "Hrubieszów",
+    "value": "hrubieszow"
+  },
+  {
     "city": "Iława",
     "lat": "53.5964",
     "lng": "19.5656",
@@ -646,6 +1310,18 @@
     "population": "32664",
     "population_proper": "32664",
     "value": "ilawa"
+  },
+  {
+    "city": "Iłowa",
+    "value": "ilowa"
+  },
+  {
+    "city": "Iłża",
+    "value": "ilza"
+  },
+  {
+    "city": "Imielin",
+    "value": "imielin"
   },
   {
     "city": "Inowrocław",
@@ -660,6 +1336,42 @@
     "value": "inowroclaw"
   },
   {
+    "city": "Ińsko",
+    "value": "insko"
+  },
+  {
+    "city": "Iwonicz-Zdrój",
+    "value": "iwonicz_zdroj"
+  },
+  {
+    "city": "Izbica Kujawska",
+    "value": "izbica_kujawska"
+  },
+  {
+    "city": "Jabłonowo Pomorskie",
+    "value": "jablonowo_pomorskie"
+  },
+  {
+    "city": "Janikowo",
+    "value": "janikowo"
+  },
+  {
+    "city": "Janowiec Wielkopolski",
+    "value": "janowiec_wielkopolski"
+  },
+  {
+    "city": "Janów Lubelski",
+    "value": "janow_lubelski"
+  },
+  {
+    "city": "Jarocin",
+    "value": "jarocin"
+  },
+  {
+    "city": "Jarosław",
+    "value": "jaroslaw"
+  },
+  {
     "city": "Jasien",
     "lat": "54.3667",
     "lng": "18.6333",
@@ -670,6 +1382,22 @@
     "population": "18014",
     "population_proper": "18014",
     "value": "jasien"
+  },
+  {
+    "city": "Jasło",
+    "value": "jaslo"
+  },
+  {
+    "city": "Jastarnia",
+    "value": "jastarnia"
+  },
+  {
+    "city": "Jastrowie",
+    "value": "jastrowie"
+  },
+  {
+    "city": "Jastrzębie-Zdrój",
+    "value": "jastrzebie_zdroj"
   },
   {
     "city": "Jawor",
@@ -684,6 +1412,42 @@
     "value": "jawor"
   },
   {
+    "city": "Jaworzno",
+    "value": "jaworzno"
+  },
+  {
+    "city": "Jaworzyna Śląska",
+    "value": "jaworzyna_slaska"
+  },
+  {
+    "city": "Jedlicze",
+    "value": "jedlicze"
+  },
+  {
+    "city": "Jedlina-Zdrój",
+    "value": "jedlina_zdroj"
+  },
+  {
+    "city": "Jedwabne",
+    "value": "jedwabne"
+  },
+  {
+    "city": "Jelcz-Laskowice",
+    "value": "jelcz_laskowice"
+  },
+  {
+    "city": "Jelenia Góra",
+    "value": "jelenia_gora"
+  },
+  {
+    "city": "Jeziorany",
+    "value": "jeziorany"
+  },
+  {
+    "city": "Jędrzejów",
+    "value": "jedrzejow"
+  },
+  {
     "city": "Jodłówka",
     "lat": "50.0628",
     "lng": "21.1122",
@@ -694,6 +1458,18 @@
     "population": "1282",
     "population_proper": "1282",
     "value": "jodlowka"
+  },
+  {
+    "city": "Jordanów",
+    "value": "jordanow"
+  },
+  {
+    "city": "Józefów",
+    "value": "jozefow"
+  },
+  {
+    "city": "Jutrosin",
+    "value": "jutrosin"
   },
   {
     "city": "Kajkowo",
@@ -708,6 +1484,10 @@
     "value": "kajkowo"
   },
   {
+    "city": "Kalety",
+    "value": "kalety"
+  },
+  {
     "city": "Kalisz",
     "lat": "51.7575",
     "lng": "18.0800",
@@ -718,6 +1498,58 @@
     "population": "95905",
     "population_proper": "95905",
     "value": "kalisz"
+  },
+  {
+    "city": "Kalisz Pomorski",
+    "value": "kalisz_pomorski"
+  },
+  {
+    "city": "Kalwaria Zebrzydowska",
+    "value": "kalwaria_zebrzydowska"
+  },
+  {
+    "city": "Kałuszyn",
+    "value": "kaluszyn"
+  },
+  {
+    "city": "Kamienna Góra",
+    "value": "kamienna_gora"
+  },
+  {
+    "city": "Kamień Krajeński",
+    "value": "kamien_krajenski"
+  },
+  {
+    "city": "Kamień Pomorski",
+    "value": "kamien_pomorski"
+  },
+  {
+    "city": "Kamieńsk",
+    "value": "kamiensk"
+  },
+  {
+    "city": "Kańczuga",
+    "value": "kanczuga"
+  },
+  {
+    "city": "Karczew",
+    "value": "karczew"
+  },
+  {
+    "city": "Kargowa",
+    "value": "kargowa"
+  },
+  {
+    "city": "Karlino",
+    "value": "karlino"
+  },
+  {
+    "city": "Karpacz",
+    "value": "karpacz"
+  },
+  {
+    "city": "Kartuzy",
+    "value": "kartuzy"
   },
   {
     "city": "Katowice",
@@ -732,6 +1564,34 @@
     "value": "katowice"
   },
   {
+    "city": "Kazimierz Dolny",
+    "value": "kazimierz_dolny"
+  },
+  {
+    "city": "Kazimierza Wielka",
+    "value": "kazimierza_wielka"
+  },
+  {
+    "city": "Kąty Wrocławskie",
+    "value": "katy_wroclawskie"
+  },
+  {
+    "city": "Kcynia",
+    "value": "kcynia"
+  },
+  {
+    "city": "Kędzierzyn-Koźle",
+    "value": "kedzierzyn_kozle"
+  },
+  {
+    "city": "Kępice",
+    "value": "kepice"
+  },
+  {
+    "city": "Kępno",
+    "value": "kepno"
+  },
+  {
     "city": "Kętrzyn",
     "lat": "54.0833",
     "lng": "21.3833",
@@ -742,6 +1602,10 @@
     "population": "26174",
     "population_proper": "26174",
     "value": "ketrzyn"
+  },
+  {
+    "city": "Kęty",
+    "value": "kety"
   },
   {
     "city": "Kielce",
@@ -756,6 +1620,42 @@
     "value": "kielce"
   },
   {
+    "city": "Kietrz",
+    "value": "kietrz"
+  },
+  {
+    "city": "Kisielice",
+    "value": "kisielice"
+  },
+  {
+    "city": "Kleczew",
+    "value": "kleczew"
+  },
+  {
+    "city": "Kleszczele",
+    "value": "kleszczele"
+  },
+  {
+    "city": "Kluczbork",
+    "value": "kluczbork"
+  },
+  {
+    "city": "Kłecko",
+    "value": "klecko"
+  },
+  {
+    "city": "Kłobuck",
+    "value": "klobuck"
+  },
+  {
+    "city": "Kłodawa",
+    "value": "klodawa"
+  },
+  {
+    "city": "Kłodzko",
+    "value": "klodzko"
+  },
+  {
     "city": "Knurów",
     "lat": "50.2167",
     "lng": "18.6833",
@@ -768,6 +1668,14 @@
     "value": "knurow"
   },
   {
+    "city": "Knyszyn",
+    "value": "knyszyn"
+  },
+  {
+    "city": "Kobylin",
+    "value": "kobylin"
+  },
+  {
     "city": "Kobyłka",
     "lat": "52.3333",
     "lng": "21.2000",
@@ -778,6 +1686,30 @@
     "population": "27185",
     "population_proper": "27185",
     "value": "kobylka"
+  },
+  {
+    "city": "Kock",
+    "value": "kock"
+  },
+  {
+    "city": "Kolbuszowa",
+    "value": "kolbuszowa"
+  },
+  {
+    "city": "Kolno",
+    "value": "kolno"
+  },
+  {
+    "city": "Kolonowskie",
+    "value": "kolonowskie"
+  },
+  {
+    "city": "Koluszki",
+    "value": "koluszki"
+  },
+  {
+    "city": "Kołaczyce",
+    "value": "kolaczyce"
   },
   {
     "city": "Koło",
@@ -804,28 +1736,52 @@
     "value": "kolobrzeg"
   },
   {
-    "city": "Kościan",
-    "lat": "52.0833",
-    "lng": "16.6500",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Wielkopolskie",
-    "capital": "minor",
-    "population": "24022",
-    "population_proper": "24022",
-    "value": "koscian"
+    "city": "Koniecpol",
+    "value": "koniecpol"
   },
   {
-    "city": "Kościerzyna",
-    "lat": "54.1167",
-    "lng": "17.9833",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Pomorskie",
-    "capital": "minor",
-    "population": "23723",
-    "population_proper": "23723",
-    "value": "koscierzyna"
+    "city": "Konin",
+    "value": "konin"
+  },
+  {
+    "city": "Konstancin-Jeziorna",
+    "value": "konstancin_jeziorna"
+  },
+  {
+    "city": "Konstantynów Łódzki",
+    "value": "konstantynow_lodzki"
+  },
+  {
+    "city": "Końskie",
+    "value": "konskie"
+  },
+  {
+    "city": "Koprzywnica",
+    "value": "koprzywnica"
+  },
+  {
+    "city": "Korfantów",
+    "value": "korfantow"
+  },
+  {
+    "city": "Koronowo",
+    "value": "koronowo"
+  },
+  {
+    "city": "Korsze",
+    "value": "korsze"
+  },
+  {
+    "city": "Kosów Lacki",
+    "value": "kosow_lacki"
+  },
+  {
+    "city": "Kostrzyn",
+    "value": "kostrzyn"
+  },
+  {
+    "city": "Kostrzyn nad Odrą",
+    "value": "kostrzyn_nad_odra"
   },
   {
     "city": "Koszalin",
@@ -864,6 +1820,66 @@
     "value": "koszyce"
   },
   {
+    "city": "Kościan",
+    "lat": "52.0833",
+    "lng": "16.6500",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Wielkopolskie",
+    "capital": "minor",
+    "population": "24022",
+    "population_proper": "24022",
+    "value": "koscian"
+  },
+  {
+    "city": "Kościerzyna",
+    "lat": "54.1167",
+    "lng": "17.9833",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Pomorskie",
+    "capital": "minor",
+    "population": "23723",
+    "population_proper": "23723",
+    "value": "koscierzyna"
+  },
+  {
+    "city": "Kowal",
+    "value": "kowal"
+  },
+  {
+    "city": "Kowalewo Pomorskie",
+    "value": "kowalewo_pomorskie"
+  },
+  {
+    "city": "Kowary",
+    "value": "kowary"
+  },
+  {
+    "city": "Koziegłowy",
+    "value": "kozieglowy"
+  },
+  {
+    "city": "Kozienice",
+    "value": "kozienice"
+  },
+  {
+    "city": "Koźmin Wielkopolski",
+    "value": "kozmin_wielkopolski"
+  },
+  {
+    "city": "Kożuchów",
+    "value": "kozuchow"
+  },
+  {
+    "city": "Kórnik",
+    "value": "kornik"
+  },
+  {
+    "city": "Krajenka",
+    "value": "krajenka"
+  },
+  {
     "city": "Kraków",
     "lat": "50.0614",
     "lng": "19.9372",
@@ -874,6 +1890,18 @@
     "population": "804237",
     "population_proper": "804237",
     "value": "krakow"
+  },
+  {
+    "city": "Krapkowice",
+    "value": "krapkowice"
+  },
+  {
+    "city": "Krasnobród",
+    "value": "krasnobrod"
+  },
+  {
+    "city": "Krasnystaw",
+    "value": "krasnystaw"
   },
   {
     "city": "Kraśnik",
@@ -888,6 +1916,62 @@
     "value": "krasnik"
   },
   {
+    "city": "Krobia",
+    "value": "krobia"
+  },
+  {
+    "city": "Krosno",
+    "value": "krosno"
+  },
+  {
+    "city": "Krosno Odrzańskie",
+    "value": "krosno_odrzanskie"
+  },
+  {
+    "city": "Krośniewice",
+    "value": "krosniewice"
+  },
+  {
+    "city": "Krotoszyn",
+    "value": "krotoszyn"
+  },
+  {
+    "city": "Kruszwica",
+    "value": "kruszwica"
+  },
+  {
+    "city": "Krynica Morska",
+    "value": "krynica_morska"
+  },
+  {
+    "city": "Krynica-Zdrój",
+    "value": "krynica_zdroj"
+  },
+  {
+    "city": "Krynki",
+    "value": "krynki"
+  },
+  {
+    "city": "Krzanowice",
+    "value": "krzanowice"
+  },
+  {
+    "city": "Krzepice",
+    "value": "krzepice"
+  },
+  {
+    "city": "Krzeszowice",
+    "value": "krzeszowice"
+  },
+  {
+    "city": "Krzywiń",
+    "value": "krzywin"
+  },
+  {
+    "city": "Krzyż Wielkopolski",
+    "value": "krzyz_wielkopolski"
+  },
+  {
     "city": "Ksawerów",
     "lat": "51.6822",
     "lng": "19.4028",
@@ -898,6 +1982,26 @@
     "population": "6897",
     "population_proper": "6897",
     "value": "ksawerow"
+  },
+  {
+    "city": "Książ Wielkopolski",
+    "value": "ksiaz_wielkopolski"
+  },
+  {
+    "city": "Kudowa-Zdrój",
+    "value": "kudowa_zdroj"
+  },
+  {
+    "city": "Kunów",
+    "value": "kunow"
+  },
+  {
+    "city": "Kutno",
+    "value": "kutno"
+  },
+  {
+    "city": "Kuźnia Raciborska",
+    "value": "kuznia_raciborska"
   },
   {
     "city": "Kwidzyn",
@@ -912,18 +2016,6 @@
     "value": "kwidzyn"
   },
   {
-    "city": "Łańcut",
-    "lat": "50.0667",
-    "lng": "22.2333",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Podkarpackie",
-    "capital": "minor",
-    "population": "17768",
-    "population_proper": "17768",
-    "value": "lancut"
-  },
-  {
     "city": "Latoszyn",
     "lat": "50.0333",
     "lng": "21.3667",
@@ -936,28 +2028,8 @@
     "value": "latoszyn"
   },
   {
-    "city": "Lębork",
-    "lat": "54.5500",
-    "lng": "17.7500",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Pomorskie",
-    "capital": "minor",
-    "population": "34500",
-    "population_proper": "34500",
-    "value": "lebork"
-  },
-  {
-    "city": "Łęczyca",
-    "lat": "52.0500",
-    "lng": "19.2000",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Łódzkie",
-    "capital": "minor",
-    "population": "13587",
-    "population_proper": "13587",
-    "value": "leczyca"
+    "city": "Lądek-Zdrój",
+    "value": "ladek_zdroj"
   },
   {
     "city": "Legionowo",
@@ -984,6 +2056,10 @@
     "value": "legnica"
   },
   {
+    "city": "Lesko",
+    "value": "lesko"
+  },
+  {
     "city": "Leszno",
     "lat": "51.8458",
     "lng": "16.5806",
@@ -994,6 +2070,38 @@
     "population": "61791",
     "population_proper": "61791",
     "value": "leszno"
+  },
+  {
+    "city": "Leśna",
+    "value": "lesna"
+  },
+  {
+    "city": "Leśnica",
+    "value": "lesnica"
+  },
+  {
+    "city": "Lewin Brzeski",
+    "value": "lewin_brzeski"
+  },
+  {
+    "city": "Leżajsk",
+    "value": "lezajsk"
+  },
+  {
+    "city": "Lębork",
+    "lat": "54.5500",
+    "lng": "17.7500",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Pomorskie",
+    "capital": "minor",
+    "population": "34500",
+    "population_proper": "34500",
+    "value": "lebork"
+  },
+  {
+    "city": "Lędziny",
+    "value": "ledziny"
   },
   {
     "city": "Libertów",
@@ -1008,6 +2116,14 @@
     "value": "libertow"
   },
   {
+    "city": "Libiąż",
+    "value": "libiaz"
+  },
+  {
+    "city": "Lidzbark",
+    "value": "lidzbark"
+  },
+  {
     "city": "Lidzbark Warmiński",
     "lat": "54.1167",
     "lng": "20.5833",
@@ -1018,6 +2134,14 @@
     "population": "14878",
     "population_proper": "14878",
     "value": "lidzbark_warminski"
+  },
+  {
+    "city": "Limanowa",
+    "value": "limanowa"
+  },
+  {
+    "city": "Lipiany",
+    "value": "lipiany"
   },
   {
     "city": "Lipno",
@@ -1032,40 +2156,16 @@
     "value": "lipno"
   },
   {
-    "city": "Łódź",
-    "lat": "51.7769",
-    "lng": "19.4547",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Łódzkie",
-    "capital": "admin",
-    "population": "670642",
-    "population_proper": "670642",
-    "value": "lodz"
+    "city": "Lipsk",
+    "value": "lipsk"
   },
   {
-    "city": "Łomianki",
-    "lat": "52.3333",
-    "lng": "20.8833",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Mazowieckie",
-    "capital": "",
-    "population": "18124",
-    "population_proper": "18124",
-    "value": "lomianki"
+    "city": "Lipsko",
+    "value": "lipsko"
   },
   {
-    "city": "Łowicz",
-    "lat": "52.1000",
-    "lng": "19.9333",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Łódzkie",
-    "capital": "minor",
-    "population": "26928",
-    "population_proper": "26928",
-    "value": "lowicz"
+    "city": "Lubaczów",
+    "value": "lubaczow"
   },
   {
     "city": "Lubań",
@@ -1092,6 +2192,18 @@
     "value": "lubartow"
   },
   {
+    "city": "Lubawa",
+    "value": "lubawa"
+  },
+  {
+    "city": "Lubawka",
+    "value": "lubawka"
+  },
+  {
+    "city": "Lubień Kujawski",
+    "value": "lubien_kujawski"
+  },
+  {
     "city": "Lubin",
     "lat": "51.4000",
     "lng": "16.2000",
@@ -1116,6 +2228,18 @@
     "value": "lublin"
   },
   {
+    "city": "Lubliniec",
+    "value": "lubliniec"
+  },
+  {
+    "city": "Lubniewice",
+    "value": "lubniewice"
+  },
+  {
+    "city": "Lubomierz",
+    "value": "lubomierz"
+  },
+  {
     "city": "Luboń",
     "lat": "52.3333",
     "lng": "16.8833",
@@ -1126,6 +2250,154 @@
     "population": "33024",
     "population_proper": "33024",
     "value": "lubon"
+  },
+  {
+    "city": "Lubraniec",
+    "value": "lubraniec"
+  },
+  {
+    "city": "Lubsko",
+    "value": "lubsko"
+  },
+  {
+    "city": "Lwówek",
+    "value": "lwowek"
+  },
+  {
+    "city": "Lwówek Śląski",
+    "value": "lwowek_slaski"
+  },
+  {
+    "city": "Łabiszyn",
+    "value": "labiszyn"
+  },
+  {
+    "city": "Łańcut",
+    "lat": "50.0667",
+    "lng": "22.2333",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Podkarpackie",
+    "capital": "minor",
+    "population": "17768",
+    "population_proper": "17768",
+    "value": "lancut"
+  },
+  {
+    "city": "Łapy",
+    "value": "lapy"
+  },
+  {
+    "city": "Łasin",
+    "value": "lasin"
+  },
+  {
+    "city": "Łask",
+    "value": "lask"
+  },
+  {
+    "city": "Łaskarzew",
+    "value": "laskarzew"
+  },
+  {
+    "city": "Łaziska Górne",
+    "value": "laziska_gorne"
+  },
+  {
+    "city": "Łazy",
+    "value": "lazy"
+  },
+  {
+    "city": "Łeba",
+    "value": "leba"
+  },
+  {
+    "city": "Łęczna",
+    "value": "leczna"
+  },
+  {
+    "city": "Łęczyca",
+    "lat": "52.0500",
+    "lng": "19.2000",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Łódzkie",
+    "capital": "minor",
+    "population": "13587",
+    "population_proper": "13587",
+    "value": "leczyca"
+  },
+  {
+    "city": "Łęknica",
+    "value": "leknica"
+  },
+  {
+    "city": "Łobez",
+    "value": "lobez"
+  },
+  {
+    "city": "Łobżenica",
+    "value": "lobzenica"
+  },
+  {
+    "city": "Łochów",
+    "value": "lochow"
+  },
+  {
+    "city": "Łomianki",
+    "lat": "52.3333",
+    "lng": "20.8833",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Mazowieckie",
+    "capital": "",
+    "population": "18124",
+    "population_proper": "18124",
+    "value": "lomianki"
+  },
+  {
+    "city": "Łomża",
+    "value": "lomza"
+  },
+  {
+    "city": "Łosice",
+    "value": "losice"
+  },
+  {
+    "city": "Łowicz",
+    "lat": "52.1000",
+    "lng": "19.9333",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Łódzkie",
+    "capital": "minor",
+    "population": "26928",
+    "population_proper": "26928",
+    "value": "lowicz"
+  },
+  {
+    "city": "Łódź",
+    "lat": "51.7769",
+    "lng": "19.4547",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Łódzkie",
+    "capital": "admin",
+    "population": "670642",
+    "population_proper": "670642",
+    "value": "lodz"
+  },
+  {
+    "city": "Łuków",
+    "value": "lukow"
+  },
+  {
+    "city": "Maków Mazowiecki",
+    "value": "makow_mazowiecki"
+  },
+  {
+    "city": "Maków Podhalański",
+    "value": "makow_podhalanski"
   },
   {
     "city": "Malbork",
@@ -1140,6 +2412,18 @@
     "value": "malbork"
   },
   {
+    "city": "Małogoszcz",
+    "value": "malogoszcz"
+  },
+  {
+    "city": "Małomice",
+    "value": "malomice"
+  },
+  {
+    "city": "Margonin",
+    "value": "margonin"
+  },
+  {
     "city": "Marki",
     "lat": "52.3333",
     "lng": "21.1000",
@@ -1150,6 +2434,30 @@
     "population": "42252",
     "population_proper": "42252",
     "value": "marki"
+  },
+  {
+    "city": "Maszewo",
+    "value": "maszewo"
+  },
+  {
+    "city": "Miasteczko Śląskie",
+    "value": "miasteczko_slaskie"
+  },
+  {
+    "city": "Miastko",
+    "value": "miastko"
+  },
+  {
+    "city": "Michałowo",
+    "value": "michalowo"
+  },
+  {
+    "city": "Miechów",
+    "value": "miechow"
+  },
+  {
+    "city": "Miejska Górka",
+    "value": "miejska_gorka"
   },
   {
     "city": "Mielec",
@@ -1164,6 +2472,50 @@
     "value": "mielec"
   },
   {
+    "city": "Mieroszów",
+    "value": "mieroszow"
+  },
+  {
+    "city": "Mieszkowice",
+    "value": "mieszkowice"
+  },
+  {
+    "city": "Międzybórz",
+    "value": "miedzyborz"
+  },
+  {
+    "city": "Międzychód",
+    "value": "miedzychod"
+  },
+  {
+    "city": "Międzylesie",
+    "value": "miedzylesie"
+  },
+  {
+    "city": "Międzyrzec Podlaski",
+    "value": "miedzyrzec_podlaski"
+  },
+  {
+    "city": "Międzyrzecz",
+    "value": "miedzyrzecz"
+  },
+  {
+    "city": "Międzyzdroje",
+    "value": "miedzyzdroje"
+  },
+  {
+    "city": "Mikołajki",
+    "value": "mikolajki"
+  },
+  {
+    "city": "Mikołów",
+    "value": "mikolow"
+  },
+  {
+    "city": "Mikstat",
+    "value": "mikstat"
+  },
+  {
     "city": "Milanówek",
     "lat": "52.1167",
     "lng": "20.6500",
@@ -1174,6 +2526,22 @@
     "population": "16490",
     "population_proper": "16490",
     "value": "milanowek"
+  },
+  {
+    "city": "Milicz",
+    "value": "milicz"
+  },
+  {
+    "city": "Miłakowo",
+    "value": "milakowo"
+  },
+  {
+    "city": "Miłomłyn",
+    "value": "milomlyn"
+  },
+  {
+    "city": "Miłosław",
+    "value": "miloslaw"
   },
   {
     "city": "Mińsk Mazowiecki",
@@ -1188,6 +2556,54 @@
     "value": "minsk_mazowiecki"
   },
   {
+    "city": "Mirosławiec",
+    "value": "miroslawiec"
+  },
+  {
+    "city": "Mirsk",
+    "value": "mirsk"
+  },
+  {
+    "city": "Mława",
+    "value": "mlawa"
+  },
+  {
+    "city": "Młynary",
+    "value": "mlynary"
+  },
+  {
+    "city": "Modliborzyce",
+    "value": "modliborzyce"
+  },
+  {
+    "city": "Mogielnica",
+    "value": "mogielnica"
+  },
+  {
+    "city": "Mogilno",
+    "value": "mogilno"
+  },
+  {
+    "city": "Mońki",
+    "value": "monki"
+  },
+  {
+    "city": "Morąg",
+    "value": "morag"
+  },
+  {
+    "city": "Mordy",
+    "value": "mordy"
+  },
+  {
+    "city": "Moryń",
+    "value": "moryn"
+  },
+  {
+    "city": "Mosina",
+    "value": "mosina"
+  },
+  {
     "city": "Mrągowo",
     "lat": "53.8667",
     "lng": "21.3000",
@@ -1198,6 +2614,30 @@
     "population": "21325",
     "population_proper": "21325",
     "value": "mragowo"
+  },
+  {
+    "city": "Mrocza",
+    "value": "mrocza"
+  },
+  {
+    "city": "Mrozy",
+    "value": "mrozy"
+  },
+  {
+    "city": "Mszana Dolna",
+    "value": "mszana_dolna"
+  },
+  {
+    "city": "Mszczonów",
+    "value": "mszczonow"
+  },
+  {
+    "city": "Murowana Goślina",
+    "value": "murowana_goslina"
+  },
+  {
+    "city": "Muszyna",
+    "value": "muszyna"
   },
   {
     "city": "Mysłowice",
@@ -1212,6 +2652,82 @@
     "value": "myslowice"
   },
   {
+    "city": "Myszków",
+    "value": "myszkow"
+  },
+  {
+    "city": "Myszyniec",
+    "value": "myszyniec"
+  },
+  {
+    "city": "Myślenice",
+    "value": "myslenice"
+  },
+  {
+    "city": "Myślibórz",
+    "value": "mysliborz"
+  },
+  {
+    "city": "Nakło nad Notecią",
+    "value": "naklo_nad_notecia"
+  },
+  {
+    "city": "Nałęczów",
+    "value": "naleczow"
+  },
+  {
+    "city": "Namysłów",
+    "value": "namyslow"
+  },
+  {
+    "city": "Narol",
+    "value": "narol"
+  },
+  {
+    "city": "Nasielsk",
+    "value": "nasielsk"
+  },
+  {
+    "city": "Nekla",
+    "value": "nekla"
+  },
+  {
+    "city": "Nidzica",
+    "value": "nidzica"
+  },
+  {
+    "city": "Niemcza",
+    "value": "niemcza"
+  },
+  {
+    "city": "Niemodlin",
+    "value": "niemodlin"
+  },
+  {
+    "city": "Niepołomice",
+    "value": "niepolomice"
+  },
+  {
+    "city": "Nieszawa",
+    "value": "nieszawa"
+  },
+  {
+    "city": "Nisko",
+    "value": "nisko"
+  },
+  {
+    "city": "Nowa Dęba",
+    "value": "nowa_deba"
+  },
+  {
+    "city": "Nowa Ruda",
+    "value": "nowa_ruda"
+  },
+  {
+    "city": "Nowa Sarzyna",
+    "value": "nowa_sarzyna"
+  },
+  {
     "city": "Nowa Sól",
     "lat": "51.8000",
     "lng": "15.7167",
@@ -1222,6 +2738,58 @@
     "population": "36843",
     "population_proper": "36843",
     "value": "nowa_sol"
+  },
+  {
+    "city": "Nowe",
+    "value": "nowe"
+  },
+  {
+    "city": "Nowe Brzesko",
+    "value": "nowe_brzesko"
+  },
+  {
+    "city": "Nowe Miasteczko",
+    "value": "nowe_miasteczko"
+  },
+  {
+    "city": "Nowe Miasto Lubawskie",
+    "value": "nowe_miasto_lubawskie"
+  },
+  {
+    "city": "Nowe Miasto nad Pilicą",
+    "value": "nowe_miasto_nad_pilica"
+  },
+  {
+    "city": "Nowe Skalmierzyce",
+    "value": "nowe_skalmierzyce"
+  },
+  {
+    "city": "Nowe Warpno",
+    "value": "nowe_warpno"
+  },
+  {
+    "city": "Nowogard",
+    "value": "nowogard"
+  },
+  {
+    "city": "Nowogrodziec",
+    "value": "nowogrodziec"
+  },
+  {
+    "city": "Nowogród",
+    "value": "nowogrod"
+  },
+  {
+    "city": "Nowogród Bobrzański",
+    "value": "nowogrod_bobrzanski"
+  },
+  {
+    "city": "Nowy Dwór Gdański",
+    "value": "nowy_dwor_gdanski"
+  },
+  {
+    "city": "Nowy Dwór Mazowiecki",
+    "value": "nowy_dwor_mazowiecki"
   },
   {
     "city": "Nowy Sącz",
@@ -1236,16 +2804,60 @@
     "value": "nowy_sacz"
   },
   {
-    "city": "Oława",
-    "lat": "50.9333",
-    "lng": "17.3000",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Dolnośląskie",
-    "capital": "minor",
-    "population": "33268",
-    "population_proper": "33268",
-    "value": "olawa"
+    "city": "Nowy Staw",
+    "value": "nowy_staw"
+  },
+  {
+    "city": "Nowy Targ",
+    "value": "nowy_targ"
+  },
+  {
+    "city": "Nowy Tomyśl",
+    "value": "nowy_tomysl"
+  },
+  {
+    "city": "Nowy Wiśnicz",
+    "value": "nowy_wisnicz"
+  },
+  {
+    "city": "Nysa",
+    "value": "nysa"
+  },
+  {
+    "city": "Oborniki",
+    "value": "oborniki"
+  },
+  {
+    "city": "Oborniki Śląskie",
+    "value": "oborniki_slaskie"
+  },
+  {
+    "city": "Obrzycko",
+    "value": "obrzycko"
+  },
+  {
+    "city": "Odolanów",
+    "value": "odolanow"
+  },
+  {
+    "city": "Ogrodzieniec",
+    "value": "ogrodzieniec"
+  },
+  {
+    "city": "Okonek",
+    "value": "okonek"
+  },
+  {
+    "city": "Olecko",
+    "value": "olecko"
+  },
+  {
+    "city": "Olesno",
+    "value": "olesno"
+  },
+  {
+    "city": "Oleszyce",
+    "value": "oleszyce"
   },
   {
     "city": "Oleśnica",
@@ -1260,6 +2872,10 @@
     "value": "olesnica"
   },
   {
+    "city": "Olkusz",
+    "value": "olkusz"
+  },
+  {
     "city": "Olsztyn",
     "lat": "53.7778",
     "lng": "20.4792",
@@ -1272,6 +2888,38 @@
     "value": "olsztyn"
   },
   {
+    "city": "Olsztynek",
+    "value": "olsztynek"
+  },
+  {
+    "city": "Olszyna",
+    "value": "olszyna"
+  },
+  {
+    "city": "Oława",
+    "lat": "50.9333",
+    "lng": "17.3000",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Dolnośląskie",
+    "capital": "minor",
+    "population": "33268",
+    "population_proper": "33268",
+    "value": "olawa"
+  },
+  {
+    "city": "Opalenica",
+    "value": "opalenica"
+  },
+  {
+    "city": "Opatów",
+    "value": "opatow"
+  },
+  {
+    "city": "Opoczno",
+    "value": "opoczno"
+  },
+  {
     "city": "Opole",
     "lat": "50.6667",
     "lng": "17.9333",
@@ -1282,6 +2930,30 @@
     "population": "127387",
     "population_proper": "127387",
     "value": "opole"
+  },
+  {
+    "city": "Opole Lubelskie",
+    "value": "opole_lubelskie"
+  },
+  {
+    "city": "Orneta",
+    "value": "orneta"
+  },
+  {
+    "city": "Orzesze",
+    "value": "orzesze"
+  },
+  {
+    "city": "Orzysz",
+    "value": "orzysz"
+  },
+  {
+    "city": "Osieczna",
+    "value": "osieczna"
+  },
+  {
+    "city": "Osiek",
+    "value": "osiek"
   },
   {
     "city": "Osowa",
@@ -1308,16 +2980,8 @@
     "value": "ostroleka"
   },
   {
-    "city": "Ostrów Wielkopolski",
-    "lat": "51.6494",
-    "lng": "17.8164",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Wielkopolskie",
-    "capital": "minor",
-    "population": "70725",
-    "population_proper": "70725",
-    "value": "ostrow_wielkopolski"
+    "city": "Ostroróg",
+    "value": "ostrorog"
   },
   {
     "city": "Ostrowiec Świętokrzyski",
@@ -1332,6 +2996,38 @@
     "value": "ostrowiec_swietokrzyski"
   },
   {
+    "city": "Ostróda",
+    "value": "ostroda"
+  },
+  {
+    "city": "Ostrów Lubelski",
+    "value": "ostrow_lubelski"
+  },
+  {
+    "city": "Ostrów Mazowiecka",
+    "value": "ostrow_mazowiecka"
+  },
+  {
+    "city": "Ostrów Wielkopolski",
+    "lat": "51.6494",
+    "lng": "17.8164",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Wielkopolskie",
+    "capital": "minor",
+    "population": "70725",
+    "population_proper": "70725",
+    "value": "ostrow_wielkopolski"
+  },
+  {
+    "city": "Ostrzeszów",
+    "value": "ostrzeszow"
+  },
+  {
+    "city": "Ośno Lubuskie",
+    "value": "osno_lubuskie"
+  },
+  {
     "city": "Oświęcim",
     "lat": "50.0381",
     "lng": "19.2214",
@@ -1342,6 +3038,18 @@
     "population": "36956",
     "population_proper": "36956",
     "value": "oswiecim"
+  },
+  {
+    "city": "Otmuchów",
+    "value": "otmuchow"
+  },
+  {
+    "city": "Otwock",
+    "value": "otwock"
+  },
+  {
+    "city": "Ozimek",
+    "value": "ozimek"
   },
   {
     "city": "Ozorków",
@@ -1356,6 +3064,14 @@
     "value": "ozorkow"
   },
   {
+    "city": "Ożarów",
+    "value": "ozarow"
+  },
+  {
+    "city": "Ożarów Mazowiecki",
+    "value": "ozarow_mazowiecki"
+  },
+  {
     "city": "Pabianice",
     "lat": "51.6500",
     "lng": "19.3833",
@@ -1366,6 +3082,46 @@
     "population": "62954",
     "population_proper": "62954",
     "value": "pabianice"
+  },
+  {
+    "city": "Paczków",
+    "value": "paczkow"
+  },
+  {
+    "city": "Pajęczno",
+    "value": "pajeczno"
+  },
+  {
+    "city": "Pakość",
+    "value": "pakosc"
+  },
+  {
+    "city": "Parczew",
+    "value": "parczew"
+  },
+  {
+    "city": "Pasłęk",
+    "value": "paslek"
+  },
+  {
+    "city": "Pasym",
+    "value": "pasym"
+  },
+  {
+    "city": "Pelplin",
+    "value": "pelplin"
+  },
+  {
+    "city": "Pełczyce",
+    "value": "pelczyce"
+  },
+  {
+    "city": "Piaseczno",
+    "value": "piaseczno"
+  },
+  {
+    "city": "Piaski",
+    "value": "piaski"
   },
   {
     "city": "Piastów",
@@ -1380,6 +3136,10 @@
     "value": "piastow"
   },
   {
+    "city": "Piechowice",
+    "value": "piechowice"
+  },
+  {
     "city": "Piekary Śląskie",
     "lat": "50.3833",
     "lng": "18.9500",
@@ -1390,6 +3150,66 @@
     "population": "53017",
     "population_proper": "53017",
     "value": "piekary_slaskie"
+  },
+  {
+    "city": "Pieniężno",
+    "value": "pieniezno"
+  },
+  {
+    "city": "Pieńsk",
+    "value": "piensk"
+  },
+  {
+    "city": "Pieszyce",
+    "value": "pieszyce"
+  },
+  {
+    "city": "Pilawa",
+    "value": "pilawa"
+  },
+  {
+    "city": "Pilica",
+    "value": "pilica"
+  },
+  {
+    "city": "Pilzno",
+    "value": "pilzno"
+  },
+  {
+    "city": "Piła",
+    "value": "pila"
+  },
+  {
+    "city": "Piława Górna",
+    "value": "pilawa_gorna"
+  },
+  {
+    "city": "Pińczów",
+    "value": "pinczow"
+  },
+  {
+    "city": "Pionki",
+    "value": "pionki"
+  },
+  {
+    "city": "Piotrków Kujawski",
+    "value": "piotrkow_kujawski"
+  },
+  {
+    "city": "Piotrków Trybunalski",
+    "value": "piotrkow_trybunalski"
+  },
+  {
+    "city": "Pisz",
+    "value": "pisz"
+  },
+  {
+    "city": "Piwniczna-Zdrój",
+    "value": "piwniczna_zdroj"
+  },
+  {
+    "city": "Pleszew",
+    "value": "pleszew"
   },
   {
     "city": "Płock",
@@ -1416,6 +3236,22 @@
     "value": "plonsk"
   },
   {
+    "city": "Płoty",
+    "value": "ploty"
+  },
+  {
+    "city": "Pniewy",
+    "value": "pniewy"
+  },
+  {
+    "city": "Pobiedziska",
+    "value": "pobiedziska"
+  },
+  {
+    "city": "Poddębice",
+    "value": "poddebice"
+  },
+  {
     "city": "Podgórze",
     "lat": "50.0417",
     "lng": "19.9833",
@@ -1428,6 +3264,50 @@
     "value": "podgorze"
   },
   {
+    "city": "Podkowa Leśna",
+    "value": "podkowa_lesna"
+  },
+  {
+    "city": "Pogorzela",
+    "value": "pogorzela"
+  },
+  {
+    "city": "Polanica-Zdrój",
+    "value": "polanica_zdroj"
+  },
+  {
+    "city": "Polanów",
+    "value": "polanow"
+  },
+  {
+    "city": "Police",
+    "value": "police"
+  },
+  {
+    "city": "Polkowice",
+    "value": "polkowice"
+  },
+  {
+    "city": "Połaniec",
+    "value": "polaniec"
+  },
+  {
+    "city": "Połczyn-Zdrój",
+    "value": "polczyn_zdroj"
+  },
+  {
+    "city": "Poniatowa",
+    "value": "poniatowa"
+  },
+  {
+    "city": "Poniec",
+    "value": "poniec"
+  },
+  {
+    "city": "Poręba",
+    "value": "poreba"
+  },
+  {
     "city": "Poznań",
     "lat": "52.4083",
     "lng": "16.9336",
@@ -1438,6 +3318,38 @@
     "population": "546859",
     "population_proper": "546859",
     "value": "poznan"
+  },
+  {
+    "city": "Prabuty",
+    "value": "prabuty"
+  },
+  {
+    "city": "Praszka",
+    "value": "praszka"
+  },
+  {
+    "city": "Prochowice",
+    "value": "prochowice"
+  },
+  {
+    "city": "Proszowice",
+    "value": "proszowice"
+  },
+  {
+    "city": "Prószków",
+    "value": "proszkow"
+  },
+  {
+    "city": "Pruchnik",
+    "value": "pruchnik"
+  },
+  {
+    "city": "Prudnik",
+    "value": "prudnik"
+  },
+  {
+    "city": "Prusice",
+    "value": "prusice"
   },
   {
     "city": "Pruszcz Gdański",
@@ -1464,6 +3376,46 @@
     "value": "pruszkow"
   },
   {
+    "city": "Przasnysz",
+    "value": "przasnysz"
+  },
+  {
+    "city": "Przecław",
+    "value": "przeclaw"
+  },
+  {
+    "city": "Przedbórz",
+    "value": "przedborz"
+  },
+  {
+    "city": "Przedecz",
+    "value": "przedecz"
+  },
+  {
+    "city": "Przemków",
+    "value": "przemkow"
+  },
+  {
+    "city": "Przemyśl",
+    "value": "przemysl"
+  },
+  {
+    "city": "Przeworsk",
+    "value": "przeworsk"
+  },
+  {
+    "city": "Przysucha",
+    "value": "przysucha"
+  },
+  {
+    "city": "Pszczyna",
+    "value": "pszczyna"
+  },
+  {
+    "city": "Pszów",
+    "value": "pszow"
+  },
+  {
     "city": "Puck",
     "lat": "54.7000",
     "lng": "18.4000",
@@ -1474,6 +3426,34 @@
     "population": "10868",
     "population_proper": "10868",
     "value": "puck"
+  },
+  {
+    "city": "Puławy",
+    "value": "pulawy"
+  },
+  {
+    "city": "Pułtusk",
+    "value": "pultusk"
+  },
+  {
+    "city": "Puszczykowo",
+    "value": "puszczykowo"
+  },
+  {
+    "city": "Pyrzyce",
+    "value": "pyrzyce"
+  },
+  {
+    "city": "Pyskowice",
+    "value": "pyskowice"
+  },
+  {
+    "city": "Pyzdry",
+    "value": "pyzdry"
+  },
+  {
+    "city": "Rabka-Zdrój",
+    "value": "rabka_zdroj"
   },
   {
     "city": "Raciąż",
@@ -1488,6 +3468,22 @@
     "value": "raciaz"
   },
   {
+    "city": "Racibórz",
+    "value": "raciborz"
+  },
+  {
+    "city": "Radków",
+    "value": "radkow"
+  },
+  {
+    "city": "Radlin",
+    "value": "radlin"
+  },
+  {
+    "city": "Radłów",
+    "value": "radlow"
+  },
+  {
     "city": "Radom",
     "lat": "51.4036",
     "lng": "21.1567",
@@ -1498,6 +3494,26 @@
     "population": "201601",
     "population_proper": "201601",
     "value": "radom"
+  },
+  {
+    "city": "Radomsko",
+    "value": "radomsko"
+  },
+  {
+    "city": "Radomyśl Wielki",
+    "value": "radomysl_wielki"
+  },
+  {
+    "city": "Radymno",
+    "value": "radymno"
+  },
+  {
+    "city": "Radziejów",
+    "value": "radziejow"
+  },
+  {
+    "city": "Radzionków",
+    "value": "radzionkow"
   },
   {
     "city": "Radzionków Nowy",
@@ -1512,6 +3528,30 @@
     "value": "radzionkow_nowy"
   },
   {
+    "city": "Radzymin",
+    "value": "radzymin"
+  },
+  {
+    "city": "Radzyń Chełmiński",
+    "value": "radzyn_chelminski"
+  },
+  {
+    "city": "Radzyń Podlaski",
+    "value": "radzyn_podlaski"
+  },
+  {
+    "city": "Rajgród",
+    "value": "rajgrod"
+  },
+  {
+    "city": "Rakoniewice",
+    "value": "rakoniewice"
+  },
+  {
+    "city": "Raszków",
+    "value": "raszkow"
+  },
+  {
     "city": "Rawa Mazowiecka",
     "lat": "51.7658",
     "lng": "20.2533",
@@ -1524,6 +3564,46 @@
     "value": "rawa_mazowiecka"
   },
   {
+    "city": "Rawicz",
+    "value": "rawicz"
+  },
+  {
+    "city": "Recz",
+    "value": "recz"
+  },
+  {
+    "city": "Reda",
+    "value": "reda"
+  },
+  {
+    "city": "Rejowiec Fabryczny",
+    "value": "rejowiec_fabryczny"
+  },
+  {
+    "city": "Resko",
+    "value": "resko"
+  },
+  {
+    "city": "Reszel",
+    "value": "reszel"
+  },
+  {
+    "city": "Rogoźno",
+    "value": "rogozno"
+  },
+  {
+    "city": "Ropczyce",
+    "value": "ropczyce"
+  },
+  {
+    "city": "Różan",
+    "value": "rozan"
+  },
+  {
+    "city": "Ruciane-Nida",
+    "value": "ruciane_nida"
+  },
+  {
     "city": "Ruda Śląska",
     "lat": "50.2628",
     "lng": "18.8536",
@@ -1534,6 +3614,10 @@
     "population": "133793",
     "population_proper": "133793",
     "value": "ruda_slaska"
+  },
+  {
+    "city": "Rudnik nad Sanem",
+    "value": "rudnik_nad_sanem"
   },
   {
     "city": "Rumia",
@@ -1572,6 +3656,34 @@
     "value": "rybnik"
   },
   {
+    "city": "Rychwał",
+    "value": "rychwal"
+  },
+  {
+    "city": "Rydułtowy",
+    "value": "rydultowy"
+  },
+  {
+    "city": "Rydzyna",
+    "value": "rydzyna"
+  },
+  {
+    "city": "Ryglice",
+    "value": "ryglice"
+  },
+  {
+    "city": "Ryki",
+    "value": "ryki"
+  },
+  {
+    "city": "Rymanów",
+    "value": "rymanow"
+  },
+  {
+    "city": "Ryn",
+    "value": "ryn"
+  },
+  {
     "city": "Rypin",
     "lat": "53.0667",
     "lng": "19.4500",
@@ -1582,6 +3694,10 @@
     "population": "15832",
     "population_proper": "15832",
     "value": "rypin"
+  },
+  {
+    "city": "Rzepin",
+    "value": "rzepin"
   },
   {
     "city": "Rzeszów",
@@ -1596,6 +3712,18 @@
     "value": "rzeszow"
   },
   {
+    "city": "Rzgów",
+    "value": "rzgow"
+  },
+  {
+    "city": "Sandomierz",
+    "value": "sandomierz"
+  },
+  {
+    "city": "Sanok",
+    "value": "sanok"
+  },
+  {
     "city": "Sejny",
     "lat": "54.1167",
     "lng": "23.3667",
@@ -1606,6 +3734,30 @@
     "population": "5075",
     "population_proper": "5075",
     "value": "sejny"
+  },
+  {
+    "city": "Serock",
+    "value": "serock"
+  },
+  {
+    "city": "Sędziszów",
+    "value": "sedziszow"
+  },
+  {
+    "city": "Sędziszów Małopolski",
+    "value": "sedziszow_malopolski"
+  },
+  {
+    "city": "Sępopol",
+    "value": "sepopol"
+  },
+  {
+    "city": "Sępólno Krajeńskie",
+    "value": "sepolno_krajenskie"
+  },
+  {
+    "city": "Sianów",
+    "value": "sianow"
   },
   {
     "city": "Sidlice",
@@ -1620,6 +3772,14 @@
     "value": "sidlice"
   },
   {
+    "city": "Siechnice",
+    "value": "siechnice"
+  },
+  {
+    "city": "Siedlce",
+    "value": "siedlce"
+  },
+  {
     "city": "Siemianowice Śląskie",
     "lat": "50.2758",
     "lng": "18.9858",
@@ -1630,6 +3790,50 @@
     "population": "64676",
     "population_proper": "64676",
     "value": "siemianowice_slaskie"
+  },
+  {
+    "city": "Siemiatycze",
+    "value": "siemiatycze"
+  },
+  {
+    "city": "Sieniawa",
+    "value": "sieniawa"
+  },
+  {
+    "city": "Sieradz",
+    "value": "sieradz"
+  },
+  {
+    "city": "Sieraków",
+    "value": "sierakow"
+  },
+  {
+    "city": "Sierpc",
+    "value": "sierpc"
+  },
+  {
+    "city": "Siewierz",
+    "value": "siewierz"
+  },
+  {
+    "city": "Skalbmierz",
+    "value": "skalbmierz"
+  },
+  {
+    "city": "Skała",
+    "value": "skala"
+  },
+  {
+    "city": "Skarszewy",
+    "value": "skarszewy"
+  },
+  {
+    "city": "Skaryszew",
+    "value": "skaryszew"
+  },
+  {
+    "city": "Skarżysko-Kamienna",
+    "value": "skarzysko_kamienna"
   },
   {
     "city": "Skawina",
@@ -1644,6 +3848,50 @@
     "value": "skawina"
   },
   {
+    "city": "Skępe",
+    "value": "skepe"
+  },
+  {
+    "city": "Skierniewice",
+    "value": "skierniewice"
+  },
+  {
+    "city": "Skoczów",
+    "value": "skoczow"
+  },
+  {
+    "city": "Skoki",
+    "value": "skoki"
+  },
+  {
+    "city": "Skórcz",
+    "value": "skorcz"
+  },
+  {
+    "city": "Skwierzyna",
+    "value": "skwierzyna"
+  },
+  {
+    "city": "Sława",
+    "value": "slawa"
+  },
+  {
+    "city": "Sławków",
+    "value": "slawkow"
+  },
+  {
+    "city": "Sławno",
+    "value": "slawno"
+  },
+  {
+    "city": "Słomniki",
+    "value": "slomniki"
+  },
+  {
+    "city": "Słubice",
+    "value": "slubice"
+  },
+  {
     "city": "Słupca",
     "lat": "52.3000",
     "lng": "17.8667",
@@ -1656,6 +3904,14 @@
     "value": "slupca"
   },
   {
+    "city": "Słupsk",
+    "value": "slupsk"
+  },
+  {
+    "city": "Sobótka",
+    "value": "sobotka"
+  },
+  {
     "city": "Sochaczew",
     "lat": "52.2333",
     "lng": "20.2333",
@@ -1666,6 +3922,26 @@
     "population": "34439",
     "population_proper": "34439",
     "value": "sochaczew"
+  },
+  {
+    "city": "Sokołów Małopolski",
+    "value": "sokolow_malopolski"
+  },
+  {
+    "city": "Sokołów Podlaski",
+    "value": "sokolow_podlaski"
+  },
+  {
+    "city": "Sokółka",
+    "value": "sokolka"
+  },
+  {
+    "city": "Solec Kujawski",
+    "value": "solec_kujawski"
+  },
+  {
+    "city": "Sompolno",
+    "value": "sompolno"
   },
   {
     "city": "Sopot",
@@ -1692,6 +3968,14 @@
     "value": "sosnowiec"
   },
   {
+    "city": "Sośnicowice",
+    "value": "sosnicowice"
+  },
+  {
+    "city": "Stalowa Wola",
+    "value": "stalowa_wola"
+  },
+  {
     "city": "Starachowice",
     "lat": "51.0500",
     "lng": "21.0667",
@@ -1702,6 +3986,10 @@
     "population": "46270",
     "population_proper": "46270",
     "value": "starachowice"
+  },
+  {
+    "city": "Stargard",
+    "value": "stargard"
   },
   {
     "city": "Stargard Szczeciński",
@@ -1728,6 +4016,78 @@
     "value": "starogard_gdanski"
   },
   {
+    "city": "Stary Sącz",
+    "value": "stary_sacz"
+  },
+  {
+    "city": "Staszów",
+    "value": "staszow"
+  },
+  {
+    "city": "Stawiski",
+    "value": "stawiski"
+  },
+  {
+    "city": "Stawiszyn",
+    "value": "stawiszyn"
+  },
+  {
+    "city": "Stąporków",
+    "value": "staporkow"
+  },
+  {
+    "city": "Stepnica",
+    "value": "stepnica"
+  },
+  {
+    "city": "Stęszew",
+    "value": "steszew"
+  },
+  {
+    "city": "Stoczek Łukowski",
+    "value": "stoczek_lukowski"
+  },
+  {
+    "city": "Stronie Śląskie",
+    "value": "stronie_slaskie"
+  },
+  {
+    "city": "Strumień",
+    "value": "strumien"
+  },
+  {
+    "city": "Stryków",
+    "value": "strykow"
+  },
+  {
+    "city": "Strzegom",
+    "value": "strzegom"
+  },
+  {
+    "city": "Strzelce Krajeńskie",
+    "value": "strzelce_krajenskie"
+  },
+  {
+    "city": "Strzelce Opolskie",
+    "value": "strzelce_opolskie"
+  },
+  {
+    "city": "Strzelin",
+    "value": "strzelin"
+  },
+  {
+    "city": "Strzelno",
+    "value": "strzelno"
+  },
+  {
+    "city": "Strzyżów",
+    "value": "strzyzow"
+  },
+  {
+    "city": "Sucha Beskidzka",
+    "value": "sucha_beskidzka"
+  },
+  {
     "city": "Suchanino",
     "lat": "54.3667",
     "lng": "18.6500",
@@ -1740,6 +4100,26 @@
     "value": "suchanino"
   },
   {
+    "city": "Suchań",
+    "value": "suchan"
+  },
+  {
+    "city": "Suchedniów",
+    "value": "suchedniow"
+  },
+  {
+    "city": "Suchowola",
+    "value": "suchowola"
+  },
+  {
+    "city": "Sulechów",
+    "value": "sulechow"
+  },
+  {
+    "city": "Sulejów",
+    "value": "sulejow"
+  },
+  {
     "city": "Sulejówek",
     "lat": "52.2442",
     "lng": "21.2800",
@@ -1750,6 +4130,170 @@
     "population": "21248",
     "population_proper": "21248",
     "value": "sulejowek"
+  },
+  {
+    "city": "Sulęcin",
+    "value": "sulecin"
+  },
+  {
+    "city": "Sulmierzyce",
+    "value": "sulmierzyce"
+  },
+  {
+    "city": "Sułkowice",
+    "value": "sulkowice"
+  },
+  {
+    "city": "Supraśl",
+    "value": "suprasl"
+  },
+  {
+    "city": "Suraż",
+    "value": "suraz"
+  },
+  {
+    "city": "Susz",
+    "value": "susz"
+  },
+  {
+    "city": "Suwałki",
+    "value": "suwalki"
+  },
+  {
+    "city": "Swarzędz",
+    "value": "swarzedz"
+  },
+  {
+    "city": "Syców",
+    "value": "sycow"
+  },
+  {
+    "city": "Szadek",
+    "value": "szadek"
+  },
+  {
+    "city": "Szamocin",
+    "value": "szamocin"
+  },
+  {
+    "city": "Szamotuły",
+    "value": "szamotuly"
+  },
+  {
+    "city": "Szczawnica",
+    "value": "szczawnica"
+  },
+  {
+    "city": "Szczawno-Zdrój",
+    "value": "szczawno_zdroj"
+  },
+  {
+    "city": "Szczebrzeszyn",
+    "value": "szczebrzeszyn"
+  },
+  {
+    "city": "Szczecin",
+    "lat": "53.4325",
+    "lng": "14.5481",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Zachodniopomorskie",
+    "capital": "admin",
+    "population": "396168",
+    "population_proper": "396168",
+    "value": "szczecin"
+  },
+  {
+    "city": "Szczecinek",
+    "value": "szczecinek"
+  },
+  {
+    "city": "Szczekociny",
+    "value": "szczekociny"
+  },
+  {
+    "city": "Szczucin",
+    "value": "szczucin"
+  },
+  {
+    "city": "Szczuczyn",
+    "value": "szczuczyn"
+  },
+  {
+    "city": "Szczyrk",
+    "value": "szczyrk"
+  },
+  {
+    "city": "Szczytna",
+    "value": "szczytna"
+  },
+  {
+    "city": "Szczytno",
+    "lat": "53.5628",
+    "lng": "20.9853",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Warmińsko-Mazurskie",
+    "capital": "minor",
+    "population": "22389",
+    "population_proper": "22389",
+    "value": "szczytno"
+  },
+  {
+    "city": "Szepietowo",
+    "value": "szepietowo"
+  },
+  {
+    "city": "Szklarska Poręba",
+    "value": "szklarska_poreba"
+  },
+  {
+    "city": "Szlichtyngowa",
+    "value": "szlichtyngowa"
+  },
+  {
+    "city": "Szprotawa",
+    "value": "szprotawa"
+  },
+  {
+    "city": "Sztum",
+    "value": "sztum"
+  },
+  {
+    "city": "Szubin",
+    "value": "szubin"
+  },
+  {
+    "city": "Szydłowiec",
+    "value": "szydlowiec"
+  },
+  {
+    "city": "Ścinawa",
+    "value": "scinawa"
+  },
+  {
+    "city": "Ślesin",
+    "value": "slesin"
+  },
+  {
+    "city": "Śmigiel",
+    "value": "smigiel"
+  },
+  {
+    "city": "Śrem",
+    "value": "srem"
+  },
+  {
+    "city": "Środa Śląska",
+    "value": "sroda_slaska"
+  },
+  {
+    "city": "Środa Wielkopolska",
+    "value": "sroda_wielkopolska"
+  },
+  {
+    "city": "Świątniki Górne",
+    "value": "swiatniki_gorne"
   },
   {
     "city": "Świdnica",
@@ -1776,6 +4320,30 @@
     "value": "swidnik"
   },
   {
+    "city": "Świdwin",
+    "value": "swidwin"
+  },
+  {
+    "city": "Świebodzice",
+    "value": "swiebodzice"
+  },
+  {
+    "city": "Świebodzin",
+    "value": "swiebodzin"
+  },
+  {
+    "city": "Świecie",
+    "value": "swiecie"
+  },
+  {
+    "city": "Świeradów-Zdrój",
+    "value": "swieradow_zdroj"
+  },
+  {
+    "city": "Świerzawa",
+    "value": "swierzawa"
+  },
+  {
     "city": "Świętochłowice",
     "lat": "50.2919",
     "lng": "18.9178",
@@ -1788,28 +4356,24 @@
     "value": "swietochlowice"
   },
   {
-    "city": "Szczecin",
-    "lat": "53.4325",
-    "lng": "14.5481",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Zachodniopomorskie",
-    "capital": "admin",
-    "population": "396168",
-    "population_proper": "396168",
-    "value": "szczecin"
+    "city": "Świnoujście",
+    "value": "swinoujscie"
   },
   {
-    "city": "Szczytno",
-    "lat": "53.5628",
-    "lng": "20.9853",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Warmińsko-Mazurskie",
-    "capital": "minor",
-    "population": "22389",
-    "population_proper": "22389",
-    "value": "szczytno"
+    "city": "Tarczyn",
+    "value": "tarczyn"
+  },
+  {
+    "city": "Tarnobrzeg",
+    "value": "tarnobrzeg"
+  },
+  {
+    "city": "Tarnogród",
+    "value": "tarnogrod"
+  },
+  {
+    "city": "Tarnowskie Góry",
+    "value": "tarnowskie_gory"
   },
   {
     "city": "Tarnów",
@@ -1834,6 +4398,18 @@
     "population": "57990",
     "population_proper": "57990",
     "value": "tczew"
+  },
+  {
+    "city": "Terespol",
+    "value": "terespol"
+  },
+  {
+    "city": "Tłuszcz",
+    "value": "tluszcz"
+  },
+  {
+    "city": "Tolkmicko",
+    "value": "tolkmicko"
   },
   {
     "city": "Tomaszów Lubelski",
@@ -1872,6 +4448,58 @@
     "value": "torun"
   },
   {
+    "city": "Torzym",
+    "value": "torzym"
+  },
+  {
+    "city": "Toszek",
+    "value": "toszek"
+  },
+  {
+    "city": "Trzcianka",
+    "value": "trzcianka"
+  },
+  {
+    "city": "Trzciel",
+    "value": "trzciel"
+  },
+  {
+    "city": "Trzcińsko-Zdrój",
+    "value": "trzcinsko_zdroj"
+  },
+  {
+    "city": "Trzebiatów",
+    "value": "trzebiatow"
+  },
+  {
+    "city": "Trzebinia",
+    "value": "trzebinia"
+  },
+  {
+    "city": "Trzebnica",
+    "value": "trzebnica"
+  },
+  {
+    "city": "Trzemeszno",
+    "value": "trzemeszno"
+  },
+  {
+    "city": "Tuchola",
+    "value": "tuchola"
+  },
+  {
+    "city": "Tuchów",
+    "value": "tuchow"
+  },
+  {
+    "city": "Tuczno",
+    "value": "tuczno"
+  },
+  {
+    "city": "Tuliszków",
+    "value": "tuliszkow"
+  },
+  {
     "city": "Turek",
     "lat": "52.0167",
     "lng": "18.5000",
@@ -1882,6 +4510,18 @@
     "population": "25376",
     "population_proper": "25376",
     "value": "turek"
+  },
+  {
+    "city": "Tuszyn",
+    "value": "tuszyn"
+  },
+  {
+    "city": "Twardogóra",
+    "value": "twardogora"
+  },
+  {
+    "city": "Tychowo",
+    "value": "tychowo"
   },
   {
     "city": "Tychy",
@@ -1896,6 +4536,34 @@
     "value": "tychy"
   },
   {
+    "city": "Tyczyn",
+    "value": "tyczyn"
+  },
+  {
+    "city": "Tykocin",
+    "value": "tykocin"
+  },
+  {
+    "city": "Tyszowce",
+    "value": "tyszowce"
+  },
+  {
+    "city": "Ujazd",
+    "value": "ujazd"
+  },
+  {
+    "city": "Ujście",
+    "value": "ujscie"
+  },
+  {
+    "city": "Ulanów",
+    "value": "ulanow"
+  },
+  {
+    "city": "Uniejów",
+    "value": "uniejow"
+  },
+  {
     "city": "Ustka",
     "lat": "54.5833",
     "lng": "16.8500",
@@ -1908,28 +4576,16 @@
     "value": "ustka"
   },
   {
-    "city": "Wąbrzeźno",
-    "lat": "53.2833",
-    "lng": "18.9500",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Kujawsko-Pomorskie",
-    "capital": "minor",
-    "population": "13317",
-    "population_proper": "13317",
-    "value": "wabrzezno"
+    "city": "Ustroń",
+    "value": "ustron"
   },
   {
-    "city": "Wągrowiec",
-    "lat": "52.8000",
-    "lng": "17.2000",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Wielkopolskie",
-    "capital": "minor",
-    "population": "25773",
-    "population_proper": "25773",
-    "value": "wagrowiec"
+    "city": "Ustrzyki Dolne",
+    "value": "ustrzyki_dolne"
+  },
+  {
+    "city": "Wadowice",
+    "value": "wadowice"
   },
   {
     "city": "Wałbrzych",
@@ -1944,6 +4600,14 @@
     "value": "walbrzych"
   },
   {
+    "city": "Wałcz",
+    "value": "walcz"
+  },
+  {
+    "city": "Warka",
+    "value": "warka"
+  },
+  {
     "city": "Warszawa",
     "lat": "52.2300",
     "lng": "21.0111",
@@ -1954,6 +4618,46 @@
     "population": "1860281",
     "population_proper": "1860281",
     "value": "warszawa"
+  },
+  {
+    "city": "Warta",
+    "value": "warta"
+  },
+  {
+    "city": "Wasilków",
+    "value": "wasilkow"
+  },
+  {
+    "city": "Wąbrzeźno",
+    "lat": "53.2833",
+    "lng": "18.9500",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Kujawsko-Pomorskie",
+    "capital": "minor",
+    "population": "13317",
+    "population_proper": "13317",
+    "value": "wabrzezno"
+  },
+  {
+    "city": "Wąchock",
+    "value": "wachock"
+  },
+  {
+    "city": "Wągrowiec",
+    "lat": "52.8000",
+    "lng": "17.2000",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Wielkopolskie",
+    "capital": "minor",
+    "population": "25773",
+    "population_proper": "25773",
+    "value": "wagrowiec"
+  },
+  {
+    "city": "Wąsosz",
+    "value": "wasosz"
   },
   {
     "city": "Wejherowo",
@@ -1968,6 +4672,58 @@
     "value": "wejherowo"
   },
   {
+    "city": "Węgliniec",
+    "value": "wegliniec"
+  },
+  {
+    "city": "Węgorzewo",
+    "value": "wegorzewo"
+  },
+  {
+    "city": "Węgorzyno",
+    "value": "wegorzyno"
+  },
+  {
+    "city": "Węgrów",
+    "value": "wegrow"
+  },
+  {
+    "city": "Wiązów",
+    "value": "wiazow"
+  },
+  {
+    "city": "Wieleń",
+    "value": "wielen"
+  },
+  {
+    "city": "Wielichowo",
+    "value": "wielichowo"
+  },
+  {
+    "city": "Wieliczka",
+    "value": "wieliczka"
+  },
+  {
+    "city": "Wieluń",
+    "value": "wielun"
+  },
+  {
+    "city": "Wieruszów",
+    "value": "wieruszow"
+  },
+  {
+    "city": "Więcbork",
+    "value": "wiecbork"
+  },
+  {
+    "city": "Wilamowice",
+    "value": "wilamowice"
+  },
+  {
+    "city": "Wisła",
+    "value": "wisla"
+  },
+  {
     "city": "Wiśniowa Góra",
     "lat": "51.7167",
     "lng": "19.6333",
@@ -1978,6 +4734,22 @@
     "population": "2569",
     "population_proper": "2569",
     "value": "wisniowa_gora"
+  },
+  {
+    "city": "Witkowo",
+    "value": "witkowo"
+  },
+  {
+    "city": "Witnica",
+    "value": "witnica"
+  },
+  {
+    "city": "Wleń",
+    "value": "wlen"
+  },
+  {
+    "city": "Władysławowo",
+    "value": "wladyslawowo"
   },
   {
     "city": "Włocławek",
@@ -1992,6 +4764,30 @@
     "value": "wloclawek"
   },
   {
+    "city": "Włodawa",
+    "value": "wlodawa"
+  },
+  {
+    "city": "Włoszczowa",
+    "value": "wloszczowa"
+  },
+  {
+    "city": "Wodzisław Śląski",
+    "value": "wodzislaw_slaski"
+  },
+  {
+    "city": "Wojcieszów",
+    "value": "wojcieszow"
+  },
+  {
+    "city": "Wojkowice",
+    "value": "wojkowice"
+  },
+  {
+    "city": "Wojnicz",
+    "value": "wojnicz"
+  },
+  {
     "city": "Wola Rzędzińska",
     "lat": "50.0500",
     "lng": "21.0833",
@@ -2002,6 +4798,26 @@
     "population": "5869",
     "population_proper": "5869",
     "value": "wola_rzedzinska"
+  },
+  {
+    "city": "Wolbórz",
+    "value": "wolborz"
+  },
+  {
+    "city": "Wolbrom",
+    "value": "wolbrom"
+  },
+  {
+    "city": "Wolin",
+    "value": "wolin"
+  },
+  {
+    "city": "Wolsztyn",
+    "value": "wolsztyn"
+  },
+  {
+    "city": "Wołczyn",
+    "value": "wolczyn"
   },
   {
     "city": "Wołomin",
@@ -2016,6 +4832,14 @@
     "value": "wolomin"
   },
   {
+    "city": "Wołów",
+    "value": "wolow"
+  },
+  {
+    "city": "Woźniki",
+    "value": "wozniki"
+  },
+  {
     "city": "Wrocław",
     "lat": "51.1100",
     "lng": "17.0325",
@@ -2028,16 +4852,44 @@
     "value": "wroclaw"
   },
   {
-    "city": "Ząbki",
-    "lat": "52.2928",
-    "lng": "21.1161",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Mazowieckie",
-    "capital": "",
-    "population": "43740",
-    "population_proper": "43740",
-    "value": "zabki"
+    "city": "Wronki",
+    "value": "wronki"
+  },
+  {
+    "city": "Września",
+    "value": "wrzesnia"
+  },
+  {
+    "city": "Wschowa",
+    "value": "wschowa"
+  },
+  {
+    "city": "Wyrzysk",
+    "value": "wyrzysk"
+  },
+  {
+    "city": "Wysoka",
+    "value": "wysoka"
+  },
+  {
+    "city": "Wysokie Mazowieckie",
+    "value": "wysokie_mazowieckie"
+  },
+  {
+    "city": "Wyszków",
+    "value": "wyszkow"
+  },
+  {
+    "city": "Wyszogród",
+    "value": "wyszogrod"
+  },
+  {
+    "city": "Wyśmierzyce",
+    "value": "wysmierzyce"
+  },
+  {
+    "city": "Zabłudów",
+    "value": "zabludow"
   },
   {
     "city": "Zabrze",
@@ -2050,6 +4902,30 @@
     "population": "158307",
     "population_proper": "158307",
     "value": "zabrze"
+  },
+  {
+    "city": "Zagórów",
+    "value": "zagorow"
+  },
+  {
+    "city": "Zagórz",
+    "value": "zagorz"
+  },
+  {
+    "city": "Zakliczyn",
+    "value": "zakliczyn"
+  },
+  {
+    "city": "Zakopane",
+    "value": "zakopane"
+  },
+  {
+    "city": "Zakroczym",
+    "value": "zakroczym"
+  },
+  {
+    "city": "Zalewo",
+    "value": "zalewo"
   },
   {
     "city": "Załęże",
@@ -2088,16 +4964,24 @@
     "value": "zamosc"
   },
   {
-    "city": "Żary",
-    "lat": "51.6333",
-    "lng": "15.1333",
-    "country": "Poland",
-    "iso2": "PL",
-    "admin_name": "Lubuskie",
-    "capital": "minor",
-    "population": "36004",
-    "population_proper": "36004",
-    "value": "zary"
+    "city": "Zator",
+    "value": "zator"
+  },
+  {
+    "city": "Zawadzkie",
+    "value": "zawadzkie"
+  },
+  {
+    "city": "Zawichost",
+    "value": "zawichost"
+  },
+  {
+    "city": "Zawidów",
+    "value": "zawidow"
+  },
+  {
+    "city": "Zawiercie",
+    "value": "zawiercie"
   },
   {
     "city": "Zawodzie",
@@ -2112,6 +4996,30 @@
     "value": "zawodzie"
   },
   {
+    "city": "Ząbki",
+    "lat": "52.2928",
+    "lng": "21.1161",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Mazowieckie",
+    "capital": "",
+    "population": "43740",
+    "population_proper": "43740",
+    "value": "zabki"
+  },
+  {
+    "city": "Ząbkowice Śląskie",
+    "value": "zabkowice_slaskie"
+  },
+  {
+    "city": "Zbąszynek",
+    "value": "zbaszynek"
+  },
+  {
+    "city": "Zbąszyń",
+    "value": "zbaszyn"
+  },
+  {
     "city": "Zbylitowska Góra",
     "lat": "49.9833",
     "lng": "20.9167",
@@ -2122,6 +5030,22 @@
     "population": "2695",
     "population_proper": "2695",
     "value": "zbylitowska_gora"
+  },
+  {
+    "city": "Zduny",
+    "value": "zduny"
+  },
+  {
+    "city": "Zduńska Wola",
+    "value": "zdunska_wola"
+  },
+  {
+    "city": "Zdzieszowice",
+    "value": "zdzieszowice"
+  },
+  {
+    "city": "Zelów",
+    "value": "zelow"
   },
   {
     "city": "Zgierz",
@@ -2172,6 +5096,22 @@
     "value": "zielona_gora"
   },
   {
+    "city": "Zielonka",
+    "value": "zielonka"
+  },
+  {
+    "city": "Ziębice",
+    "value": "ziebice"
+  },
+  {
+    "city": "Złocieniec",
+    "value": "zlocieniec"
+  },
+  {
+    "city": "Złoczew",
+    "value": "zloczew"
+  },
+  {
     "city": "Złotoryja",
     "lat": "51.1333",
     "lng": "15.9167",
@@ -2196,6 +5136,78 @@
     "value": "zlotow"
   },
   {
+    "city": "Złoty Stok",
+    "value": "zloty_stok"
+  },
+  {
+    "city": "Zwierzyniec",
+    "value": "zwierzyniec"
+  },
+  {
+    "city": "Zwoleń",
+    "value": "zwolen"
+  },
+  {
+    "city": "Żabno",
+    "value": "zabno"
+  },
+  {
+    "city": "Żagań",
+    "value": "zagan"
+  },
+  {
+    "city": "Żarki",
+    "value": "zarki"
+  },
+  {
+    "city": "Żarów",
+    "value": "zarow"
+  },
+  {
+    "city": "Żary",
+    "lat": "51.6333",
+    "lng": "15.1333",
+    "country": "Poland",
+    "iso2": "PL",
+    "admin_name": "Lubuskie",
+    "capital": "minor",
+    "population": "36004",
+    "population_proper": "36004",
+    "value": "zary"
+  },
+  {
+    "city": "Żelechów",
+    "value": "zelechow"
+  },
+  {
+    "city": "Żerków",
+    "value": "zerkow"
+  },
+  {
+    "city": "Żmigród",
+    "value": "zmigrod"
+  },
+  {
+    "city": "Żnin",
+    "value": "znin"
+  },
+  {
+    "city": "Żory",
+    "value": "zory"
+  },
+  {
+    "city": "Żukowo",
+    "value": "zukowo"
+  },
+  {
+    "city": "Żuromin",
+    "value": "zuromin"
+  },
+  {
+    "city": "Żychlin",
+    "value": "zychlin"
+  },
+  {
     "city": "Żyrardów",
     "lat": "52.0500",
     "lng": "20.4333",
@@ -2206,5 +5218,9 @@
     "population": "39374",
     "population_proper": "39374",
     "value": "zyrardow"
+  },
+  {
+    "city": "Żywiec",
+    "value": "zywiec"
   }
 ]

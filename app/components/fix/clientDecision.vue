@@ -20,7 +20,7 @@ const rejectBooking = () =>
 
 <template>
   <v-alert
-    v-if="!fix.confirmed"
+    v-if="!fix.isClosed && !fix.confirmed"
     type="info"
     variant="tonal"
     icon="mdi-account-hard-hat"
@@ -50,7 +50,7 @@ const rejectBooking = () =>
   </v-alert>
 
   <v-alert
-    v-else-if="fix.proposal"
+    v-else-if="!fix.isClosed && fix.proposal"
     type="warning"
     variant="tonal"
     icon="mdi-swap-horizontal"

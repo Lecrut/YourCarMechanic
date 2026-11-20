@@ -13,9 +13,9 @@ export const useServicesStore = defineStore('services', () => {
 
   const all = computed(() => (catalog.value.length ? catalog.value : DEFAULT_SERVICES))
 
-  /** `{ title, value }` items for v-select / checkboxes – active, not deleted services only. */
+  /** `{ title, value, category }` items for v-select / checkboxes – active, not deleted services only. */
   const options = computed(() =>
-    all.value.filter(s => s.active && !s.deletedAt).map(s => ({ title: nameOf(s), value: s.key })),
+    all.value.filter(s => s.active && !s.deletedAt).map(s => ({ title: nameOf(s), value: s.key, category: s.category })),
   )
 
   /** Label for any key – including deactivated services still referenced by old fixes. */
@@ -62,11 +62,17 @@ export const useServicesStore = defineStore('services', () => {
       patch(key, { deletedAt: null })
     })
 
+  const missingDefaults = computed(() =>
+    DEFAULT_SERVICES.filter(d => !catalog.value.some(s => s.key === d.key)),
+  )
+
   const seedDefaults = () =>
     sharedStore.run(async () => {
-      await servicesCatalogService.seedServices(DEFAULT_SERVICES)
-      catalog.value = [...DEFAULT_SERVICES]
+      const toSeed = catalog.value.length ? missingDefaults.value : DEFAULT_SERVICES
+      if (!toSeed.length) return
+      await servicesCatalogService.seedServices(toSeed)
+      catalog.value = [...catalog.value, ...toSeed].sort((a, b) => a.order - b.order)
     })
 
-  return { catalog, all, options, label, load, save, remove, restore, seedDefaults }
+  return { catalog, all, options, label, missingDefaults, load, save, remove, restore, seedDefaults }
 })

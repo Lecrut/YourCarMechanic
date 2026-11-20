@@ -3,7 +3,6 @@ import { authService, initFirebase } from '~/services'
 
 export default defineNuxtPlugin({
   name: 'firebase',
-  enforce: 'pre',
   setup() {
     const config = useRuntimeConfig().public
     initFirebase(config.firebase as FirebaseOptions, Boolean(config.useEmulators))

@@ -31,10 +31,16 @@ export function buildWeek(fixes: IFix[], workshop: IWorkshop, from: Date, days =
   const end = new Date(start)
   end.setDate(end.getDate() + days)
 
-  const placed = fixes.flatMap(fix =>
-    occupiedHours(workshop, fix.date, fix.durationHours)
+  const placed = fixes.flatMap((fix) => {
+    const hours = occupiedHours(workshop, fix.date, fix.durationHours)
+    // A visit booked outside opening hours (old data) is shown at its real time, not moved.
+    const startHour = new Date(fix.date)
+    startHour.setMinutes(0, 0, 0)
+    if (hours[0]?.getTime() !== startHour.getTime()) hours.splice(0, 1, startHour)
+    return hours
       .map((hour, index) => ({ fix, hour, continued: index > 0 }))
-      .filter(e => e.hour >= start && e.hour < end))
+      .filter(e => e.hour >= start && e.hour < end)
+  })
 
   const visitHours = placed.map(e => e.hour.getHours())
   const first = Math.min(workshop.openingTime, ...visitHours)

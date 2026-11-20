@@ -74,10 +74,26 @@
     "button": "Zresetuj",
     "sendSuccessfully": "Proszę sprawdź swoją skrzynke email."
   },
+  "workshopsPage": {
+    "title": "Nasze warsztaty",
+    "subtitle": "Sprawdź dostępne warsztaty, godziny otwarcia, opinie oraz orientacyjne cenniki w Twoim mieście",
+    "city": "Miasto",
+    "service": "Usługa",
+    "search": "Szukaj warsztatu (nazwa, adres)",
+    "empty": "Brak warsztatów spełniających wybrane kryteria",
+    "viewPricing": "Zobacz cennik",
+    "noPricing": "Warsztat nie dodał jeszcze pozycji w cenniku",
+    "bookLogin": "Zaloguj się, aby umówić wizytę",
+    "bookNow": "Umów wizytę",
+    "reviewsCount": "{count} opinii",
+    "noReviews": "Brak opinii",
+    "hourlyRate": "Stawka roboczogodziny: {rate} PLN"
+  },
   "navBar": {
     "title": "Twój mechanik",
     "login": "Logowanie",
     "home": "Strona główna",
+    "workshops": "Nasze warsztaty",
     "about": "O stronie",
     "english": "Angielski",
     "polish": "Polski",
@@ -97,7 +113,8 @@
       "clients": "Klienci",
       "pricing": "Cennik",
       "profile": "Profil firmy"
-    }
+    },
+    "contact": "Kontakt"
   },
   "about": {
     "first": {
@@ -322,7 +339,8 @@
       "services": "Usługi",
       "users": "Klienci",
       "fixes": "Naprawy",
-      "reviews": "Opinie"
+      "reviews": "Opinie",
+      "messages": "Zgłoszenia"
     },
     "stats": {
       "pending": "Do odblokowania",
@@ -335,6 +353,8 @@
     "activeFixes": "Aktywne naprawy",
     "search": "Szukaj",
     "date": "Termin",
+    "dateFrom": "Od daty",
+    "dateTo": "Do daty",
     "client": "Klient",
     "company": "Firma",
     "cars": "Samochody",
@@ -348,6 +368,11 @@
     "editCompany": "Edytuj firmę",
     "owner": "Właściciel (opcjonalnie)",
     "ownerHint": "Wybrany użytkownik dostanie rolę warsztatu i dostęp do panelu firmy",
+    "ownerModeEmail": "Nowe konto (e-mail)",
+    "ownerModeExisting": "Istniejący użytkownik",
+    "ownerEmail": "E-mail właściciela",
+    "ownerEmailHint": "Utworzy konto warsztatu i wyśle link do ustawienia hasła",
+    "showDeleted": "Usunięte",
     "noCompanies": "Brak firm",
     "unlock": "Odblokuj (umowa podpisana)",
     "suspend": "Zawieś firmę",
@@ -363,11 +388,15 @@
     "serviceKeyHint": "Techniczny identyfikator, np. „tires” – nie można go później zmienić",
     "namePl": "Nazwa (PL)",
     "nameEn": "Nazwa (EN)",
+    "category": "Kategoria",
     "order": "Kolejność",
     "active": "Aktywna",
     "activeHint": "Nieaktywne usługi nie są dostępne przy nowych rezerwacjach",
     "servicesEmpty": "Katalog usług jest pusty – aplikacja używa listy domyślnej.",
-    "seedServices": "Wczytaj domyślne"
+    "seedServices": "Wczytaj domyślne",
+    "seedMissing": "Uzupełnij domyślne ({count})",
+    "unknownCompany": "Nieznana firma",
+    "unknownUser": "Nieznany użytkownik"
   },
   "stats": {
     "total": "Wszystkie naprawy",
@@ -387,6 +416,7 @@
     "workshops": "Warsztaty",
     "repairs": "Naprawy",
     "avgRating": "Średnia ocena",
+    "deletedOn": "Usunięty {date}",
     "hours": "{value} h",
     "days": "{value} dni",
     "noData": "Za mało danych"
@@ -525,13 +555,25 @@
     "fromWorkshop": "Wiadomość od warsztatu",
     "saved": "Notatka zapisana"
   },
+  "serviceCategories": {
+    "diagnostics": "Diagnostyka i przeglądy",
+    "mechanics": "Mechanika i napęd",
+    "brakesSuspension": "Hamulce i zawieszenie",
+    "electrics": "Elektryka i klimatyzacja",
+    "bodyPaint": "Blacharnia i lakiernia",
+    "tires": "Wulkanizacja i opony",
+    "glass": "Szyby samochodowe",
+    "other": "Pozostałe"
+  },
   "account": {
     "verifyEmail": "Potwierdź adres {email} – link wysłaliśmy w wiadomości e-mail.",
     "resend": "Wyślij ponownie",
     "verificationSent": "Wysłano",
     "alreadyVerified": "Już potwierdziłem",
+    "notYetVerified": "Adres e-mail nadal nie jest potwierdzony – sprawdź skrzynkę i kliknij link w wiadomości.",
     "changePassword": "Zmień hasło",
-    "passwordLinkSent": "Link do zmiany hasła wysłaliśmy na Twój e-mail"
+    "passwordLinkSent": "Link do zmiany hasła wysłaliśmy na Twój e-mail",
+    "myProfile": "Mój profil"
   },
   "footer": {
     "tagline": "Rezerwuj naprawy i śledź je na bieżąco.",
@@ -646,5 +688,52 @@
     "quarterStep": "Podaj czas co 15 minut (0,25 h)",
     "quoteTime": "Czas pracy w wycenie: {time} (zarezerwowano {booked})",
     "exceedsBooking": "Wycena wymaga więcej czasu niż zarezerwowano – zaproponuj klientowi inny termin, aby nie blokować kolejnych wizyt."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Masz pytanie, problem albo chcesz dołączyć jako warsztat? Napisz do nas.",
+    "name": "Imię i nazwisko",
+    "email": "Adres e-mail do odpowiedzi",
+    "category": "Temat zgłoszenia",
+    "subject": "Tytuł (opcjonalnie)",
+    "message": "Wiadomość",
+    "messageTooShort": "Napisz co najmniej {min} znaków",
+    "privacy": "Twoje dane wykorzystamy tylko do odpowiedzi na to zgłoszenie.",
+    "send": "Wyślij wiadomość",
+    "sentTitle": "Dziękujemy, wiadomość wysłana!",
+    "sentText": "Odpowiemy na adres {email}, zwykle w ciągu jednego dnia roboczego.",
+    "another": "Wyślij kolejną",
+    "howWeHelp": "Jak możemy pomóc?",
+    "responseTime": "Szybka odpowiedź",
+    "responseTimeText": "Zwykle w ciągu jednego dnia roboczego",
+    "forWorkshops": "Dla warsztatów",
+    "forWorkshopsText": "Umowa, odblokowanie konta, cennik",
+    "bugs": "Zgłoś błąd",
+    "bugsText": "Opisz, co się stało i na jakiej stronie",
+    "categories": {
+      "general": "Pytanie ogólne",
+      "booking": "Rezerwacja / naprawa",
+      "workshop": "Współpraca – warsztat",
+      "account": "Konto i logowanie",
+      "bug": "Błąd w aplikacji",
+      "other": "Inne"
+    }
+  },
+  "messages": {
+    "from": "Od",
+    "open": "Otwarte",
+    "all": "Wszystkie",
+    "registered": "Zalogowany użytkownik",
+    "noSubject": "(bez tytułu)",
+    "reply": "Odpowiedz e-mailem",
+    "note": "Notatka moderatora",
+    "saveNote": "Zapisz notatkę",
+    "inboxZero": "Wszystkie zgłoszenia obsłużone",
+    "empty": "Brak zgłoszeń",
+    "status": {
+      "new": "Nowe",
+      "inProgress": "W toku",
+      "resolved": "Zamknięte"
+    }
   }
 }

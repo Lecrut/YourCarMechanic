@@ -74,7 +74,7 @@ async function save() {
             :rules="[requiredRule(t)]"
             data-testid="promotion-title"
           />
-          <v-select
+          <v-autocomplete
             v-model="chosenServices"
             :items="serviceOptions"
             :label="t('companyProfile.services')"

@@ -74,10 +74,26 @@
     "button": "Reset",
     "sendSuccessfully": "Please check your inbox."
   },
+  "workshopsPage": {
+    "title": "Our workshops",
+    "subtitle": "Browse verified workshops, opening hours, ratings and price lists in your city",
+    "city": "City",
+    "service": "Service",
+    "search": "Search workshop (name, address)",
+    "empty": "No workshops match the selected filters",
+    "viewPricing": "View price list",
+    "noPricing": "This workshop hasn't added any price list items yet",
+    "bookLogin": "Sign in to book an appointment",
+    "bookNow": "Book appointment",
+    "reviewsCount": "{count} reviews",
+    "noReviews": "No reviews",
+    "hourlyRate": "Hourly labor rate: {rate} PLN"
+  },
   "navBar": {
     "title": "Your mechanic",
     "login": "Login",
     "home": "Home",
+    "workshops": "Our workshops",
     "about": "About",
     "english": "English",
     "polish": "Polish",
@@ -97,7 +113,8 @@
       "clients": "Clients",
       "pricing": "Price list",
       "profile": "Company profile"
-    }
+    },
+    "contact": "Contact"
   },
   "about": {
     "first": {
@@ -322,7 +339,8 @@
       "services": "Services",
       "users": "Clients",
       "fixes": "Repairs",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "messages": "Messages"
     },
     "stats": {
       "pending": "To unlock",
@@ -335,6 +353,8 @@
     "activeFixes": "Active repairs",
     "search": "Search",
     "date": "Date",
+    "dateFrom": "From date",
+    "dateTo": "To date",
     "client": "Client",
     "company": "Company",
     "cars": "Cars",
@@ -348,6 +368,11 @@
     "editCompany": "Edit company",
     "owner": "Owner (optional)",
     "ownerHint": "The selected user gets the workshop role and access to the company panel",
+    "ownerModeEmail": "New account (e-mail)",
+    "ownerModeExisting": "Existing user",
+    "ownerEmail": "Owner e-mail",
+    "ownerEmailHint": "Creates a workshop account and sends a password setup link",
+    "showDeleted": "Deleted",
     "noCompanies": "No companies",
     "unlock": "Unlock (contract signed)",
     "suspend": "Suspend company",
@@ -363,11 +388,15 @@
     "serviceKeyHint": "Technical id, e.g. “tires” – cannot be changed later",
     "namePl": "Name (PL)",
     "nameEn": "Name (EN)",
+    "category": "Category",
     "order": "Order",
     "active": "Active",
     "activeHint": "Inactive services cannot be picked for new bookings",
     "servicesEmpty": "The service catalog is empty – the app uses the default list.",
-    "seedServices": "Load defaults"
+    "seedServices": "Load defaults",
+    "seedMissing": "Add missing defaults ({count})",
+    "unknownCompany": "Unknown company",
+    "unknownUser": "Unknown user"
   },
   "stats": {
     "total": "All repairs",
@@ -387,6 +416,7 @@
     "workshops": "Workshops",
     "repairs": "Repairs",
     "avgRating": "Average rating",
+    "deletedOn": "Deleted {date}",
     "hours": "{value} h",
     "days": "{value} days",
     "noData": "Not enough data"
@@ -525,13 +555,25 @@
     "fromWorkshop": "Message from the workshop",
     "saved": "Note saved"
   },
+  "serviceCategories": {
+    "diagnostics": "Diagnostics & inspections",
+    "mechanics": "Mechanics & drivetrain",
+    "brakesSuspension": "Brakes & suspension",
+    "electrics": "Electrics & A/C",
+    "bodyPaint": "Bodywork & paint",
+    "tires": "Tires & wheels",
+    "glass": "Auto glass",
+    "other": "Other"
+  },
   "account": {
     "verifyEmail": "Please confirm {email} – we sent you a link by e-mail.",
     "resend": "Resend",
     "verificationSent": "Sent",
     "alreadyVerified": "I've confirmed it",
+    "notYetVerified": "Your e-mail is not confirmed yet – please check your inbox and click the link.",
     "changePassword": "Change password",
-    "passwordLinkSent": "We e-mailed you a link to change your password"
+    "passwordLinkSent": "We e-mailed you a link to change your password",
+    "myProfile": "My profile"
   },
   "footer": {
     "tagline": "Book repairs and follow them live.",
@@ -646,5 +688,52 @@
     "quarterStep": "Use 15-minute steps (0.25 h)",
     "quoteTime": "Labor time in the quote: {time} (booked {booked})",
     "exceedsBooking": "The quote needs more time than booked – propose another date so the next visits are not blocked."
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "A question, a problem or want to join as a workshop? Write to us.",
+    "name": "Name",
+    "email": "E-mail for our reply",
+    "category": "Topic",
+    "subject": "Subject (optional)",
+    "message": "Message",
+    "messageTooShort": "Write at least {min} characters",
+    "privacy": "We only use your data to answer this message.",
+    "send": "Send message",
+    "sentTitle": "Thank you, message sent!",
+    "sentText": "We will reply to {email}, usually within one business day.",
+    "another": "Send another",
+    "howWeHelp": "How can we help?",
+    "responseTime": "Quick reply",
+    "responseTimeText": "Usually within one business day",
+    "forWorkshops": "For workshops",
+    "forWorkshopsText": "Contract, account unlock, price list",
+    "bugs": "Report a bug",
+    "bugsText": "Describe what happened and on which page",
+    "categories": {
+      "general": "General question",
+      "booking": "Booking / repair",
+      "workshop": "Workshop partnership",
+      "account": "Account and login",
+      "bug": "Bug report",
+      "other": "Other"
+    }
+  },
+  "messages": {
+    "from": "From",
+    "open": "Open",
+    "all": "All",
+    "registered": "Signed-in user",
+    "noSubject": "(no subject)",
+    "reply": "Reply by e-mail",
+    "note": "Moderator note",
+    "saveNote": "Save note",
+    "inboxZero": "All messages handled",
+    "empty": "No messages",
+    "status": {
+      "new": "New",
+      "inProgress": "In progress",
+      "resolved": "Resolved"
+    }
   }
 }

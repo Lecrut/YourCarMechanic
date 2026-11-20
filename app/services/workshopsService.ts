@@ -26,6 +26,11 @@ export async function getWorkshop(companyRef: string): Promise<IWorkshop | null>
 }
 
 /** Only moderator-approved workshops are offered to customers. */
+export async function getApprovedWorkshops(): Promise<IWorkshop[]> {
+  const snap = await getDocs(query(companies(), where('status', '==', 'approved')))
+  return notDeleted(fromQuery<IWorkshop>(snap).map(mapIWorkshop))
+}
+
 export async function getWorkshopsInCity(city: string): Promise<IWorkshop[]> {
   const snap = await getDocs(query(companies(), where('city', '==', city), where('status', '==', 'approved')))
   return notDeleted(fromQuery<IWorkshop>(snap).map(mapIWorkshop))

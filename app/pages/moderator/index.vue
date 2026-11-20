@@ -5,11 +5,12 @@ import ServicesTable from '~/components/moderator/servicesTable.vue'
 import UsersTable from '~/components/moderator/usersTable.vue'
 import FixesTable from '~/components/moderator/fixesTable.vue'
 import ReviewsTable from '~/components/moderator/reviewsTable.vue'
+import MessagesTable from '~/components/moderator/messagesTable.vue'
 import StatsPanel from '~/components/moderator/statsPanel.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'moderator' })
 
-type Tab = 'stats' | 'companies' | 'services' | 'users' | 'fixes' | 'reviews'
+type Tab = 'stats' | 'companies' | 'services' | 'users' | 'fixes' | 'reviews' | 'messages'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -19,9 +20,9 @@ const moderatorStore = useModeratorStore()
 const { users, workshops, fixes, pendingWorkshops } = storeToRefs(moderatorStore)
 const servicesStore = useServicesStore()
 const reviewsStore = useReviewsStore()
-const { loading } = storeToRefs(useSharedStore())
 
-const tabs: Tab[] = ['stats', 'companies', 'services', 'users', 'fixes', 'reviews']
+const tabs: Tab[] = ['stats', 'companies', 'services', 'users', 'fixes', 'reviews', 'messages']
+const contactStore = useContactStore()
 /** Tab lives in the URL (?tab=) so it survives reloads and can be linked from the navigation. */
 const tab = computed<Tab>({
   get: () => (tabs.includes(route.query.tab as Tab) ? route.query.tab as Tab : 'stats'),
@@ -35,23 +36,29 @@ const tabMeta = computed(() => [
   { value: 'users', icon: 'mdi-account-group', label: t('moderator.tabs.users'), badge: 0 },
   { value: 'fixes', icon: 'mdi-car-wrench', label: t('moderator.tabs.fixes'), badge: 0 },
   { value: 'reviews', icon: 'mdi-star-outline', label: t('moderator.tabs.reviews'), badge: 0 },
+  { value: 'messages', icon: 'mdi-email-outline', label: t('moderator.tabs.messages'), badge: contactStore.newCount },
 ] as const)
 
 const stats = computed(() => [
   { tab: 'companies', icon: 'mdi-lock-clock', color: 'warning', value: pendingWorkshops.value.length, label: t('moderator.stats.pending'), hint: t('moderator.stats.pendingHint') },
   { tab: 'companies', icon: 'mdi-garage', color: 'primary', value: workshops.value.filter(w => !w.deletedAt).length, label: t('moderator.tabs.companies'), hint: t('moderator.stats.companiesHint') },
-  { tab: 'users', icon: 'mdi-account-group', color: 'success', value: users.value.length, label: t('moderator.tabs.users'), hint: t('moderator.stats.usersHint') },
+  { tab: 'users', icon: 'mdi-account-group', color: 'success', value: users.value.filter(u => u.role !== 'workshop' && u.role !== 'moderator').length, label: t('moderator.tabs.users'), hint: t('moderator.stats.usersHint') },
   { tab: 'fixes', icon: 'mdi-car-wrench', color: 'info', value: fixes.value.filter(f => !f.isClosed).length, label: t('moderator.activeFixes'), hint: t('moderator.stats.fixesHint') },
   { tab: 'reviews', icon: 'mdi-star', color: 'amber', value: reviewsStore.all.filter(r => !r.deletedAt && !r.hidden).length, label: t('moderator.tabs.reviews'), hint: t('moderator.stats.reviewsHint') },
 ] as const)
 
-function refresh() {
-  moderatorStore.loadAll()
-  reviewsStore.loadAll()
+onMounted(() => {
+  moderatorStore.watchAll()
+  reviewsStore.watchAll()
+  contactStore.watchInbox()
   servicesStore.load(true)
-}
+})
 
-onMounted(refresh)
+onUnmounted(() => {
+  moderatorStore.stopWatching()
+  reviewsStore.stopWatching()
+  contactStore.stopWatching()
+})
 </script>
 
 <template>
@@ -64,19 +71,9 @@ onMounted(refresh)
         :title="t('moderator.title')"
         :subtitle="t('moderator.subtitle')"
         icon="mdi-shield-account"
-      >
-        <v-btn
-          v-tooltip="t('moderator.refreshHint')"
-          prepend-icon="mdi-refresh"
-          variant="tonal"
-          :loading="loading"
-          @click="refresh"
-        >
-          {{ t('moderator.refresh') }}
-        </v-btn>
-      </page-header>
+      />
 
-      <v-row class="mb-2">
+      <v-row class="mb-6">
         <v-col
           v-for="stat in stats"
           :key="stat.label"
@@ -134,7 +131,7 @@ onMounted(refresh)
 
         <v-tabs-window
           v-model="tab"
-          class="pa-4"
+          class="pa-6"
         >
           <v-tabs-window-item value="stats">
             <stats-panel />
@@ -150,6 +147,9 @@ onMounted(refresh)
           </v-tabs-window-item>
           <v-tabs-window-item value="fixes">
             <fixes-table />
+          </v-tabs-window-item>
+          <v-tabs-window-item value="messages">
+            <messages-table />
           </v-tabs-window-item>
           <v-tabs-window-item value="reviews">
             <reviews-table />

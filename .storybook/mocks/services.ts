@@ -11,6 +11,7 @@ import type { IUser } from '~/models/user'
 import type { IService } from '~/models/service'
 import type { IPriceListItem } from '~/models/priceList'
 import type { IPromotion } from '~/models/promotion'
+import { type IContactMessage, mapIContactMessage } from '~/models/contactMessage'
 import { mapIReview, type IReview } from '~/models/review'
 import { CLOSING_NOTIFICATIONS, type INotification } from '~/models/notification'
 import type { IUserProfile } from '~/models/userProfile'
@@ -27,6 +28,7 @@ interface Db {
   bookedSlots: Date[]
   internalNotes: Record<string, string>
   promotions: IPromotion[]
+  contactMessages: IContactMessage[]
 }
 
 const initial = (): Db => ({
@@ -40,6 +42,7 @@ const initial = (): Db => ({
   reviews: [...fx.reviews],
   bookedSlots: [fx.newFix.date],
   promotions: [...fx.promotions],
+  contactMessages: [...fx.contactMessages],
   internalNotes: { [fx.fixWithProposal.reference]: 'Klient prosił o telefon przed wymianą opon.' },
 })
 
@@ -179,6 +182,8 @@ export const fixesService = {
 
 export const workshopsService = {
   getWorkshop: fn(async (ref: string) => later(db.workshops.find(w => w.reference === ref) ?? null)).mockName('getWorkshop'),
+  getApprovedWorkshops: fn(async () =>
+    later(db.workshops.filter(w => w.status === 'approved' && !w.deletedAt))).mockName('getApprovedWorkshops'),
   getWorkshopsInCity: fn(async (city: string) =>
     later(db.workshops.filter(w => w.city === city && w.status === 'approved' && !w.deletedAt))).mockName('getWorkshopsInCity'),
   addWorkshop: fn(async (workshop: IWorkshop, ownerUid: string) => {
@@ -217,11 +222,23 @@ export const moderatorService = {
   getAllWorkshops: fn(async () => later(db.workshops)).mockName('getAllWorkshops'),
   getAllFixes: fn(async () => later(db.fixes)).mockName('getAllFixes'),
   getAllCars: fn(async () => later(db.cars)).mockName('getAllCars'),
+  watchAll: fn((handlers: {
+    onUsers: (users: IUser[]) => void
+    onWorkshops: (workshops: IWorkshop[]) => void
+    onFixes: (fixes: IFix[]) => void
+    onCars: (cars: ICar[]) => void
+  }) => {
+    handlers.onUsers(db.users)
+    handlers.onWorkshops(db.workshops)
+    handlers.onFixes(db.fixes)
+    handlers.onCars(db.cars)
+    return () => {}
+  }).mockName('watchAll'),
   setUserRole: fn(async (_ref: string, _role: IUser['role']) => {}).mockName('setUserRole'),
   deleteWorkshop: fn(async (_ref: string) => {}).mockName('deleteWorkshop'),
   restoreWorkshop: fn(async (_ref: string) => {}).mockName('restoreWorkshop'),
   setWorkshopStatus: fn(async (_ref: string, _status: IWorkshop['status']) => {}).mockName('setWorkshopStatus'),
-  createWorkshop: fn(async (workshop: IWorkshop, _owner: IUser | null) => {
+  createWorkshop: fn(async (workshop: IWorkshop, _owner: IUser | null, _ownerEmail?: string | null) => {
     const saved = { ...workshop, reference: newRef('companies') }
     db.workshops.push(saved)
     return later(saved)
@@ -255,6 +272,20 @@ export const photosService = {
   }).mockName('uploadPhoto'),
 }
 
+export const contactService = {
+  sendContactMessage: fn(async (input: { name: string, email: string, category: IContactMessage['category'], subject: string, message: string, userRef: string }) => {
+    db.contactMessages = [mapIContactMessage({ ...input, reference: newRef('contactMessages') }), ...db.contactMessages]
+  }).mockName('sendContactMessage'),
+  watchContactMessages: fn((onChange: (list: IContactMessage[]) => void) => {
+    onChange(clone(db.contactMessages))
+    return () => {}
+  }).mockName('watchContactMessages'),
+  setContactStatus: fn(async (_ref: string, _status: IContactMessage['status']) => {}).mockName('setContactStatus'),
+  setContactNote: fn(async (_ref: string, _note: string) => {}).mockName('setContactNote'),
+  deleteContactMessage: fn(async (_ref: string) => {}).mockName('deleteContactMessage'),
+  restoreContactMessage: fn(async (_ref: string) => {}).mockName('restoreContactMessage'),
+}
+
 export const reviewsService = {
   addReview: fn(async (fix: IFix, rating: number, comment: string, authorName: string) => {
     const review = mapIReview({ companyRef: fix.companyRef, fixRef: fix.reference, userRef: fix.userRef, rating, comment, authorName, reference: newRef('reviews') })
@@ -264,6 +295,10 @@ export const reviewsService = {
   getReviewsForWorkshops: fn(async (refs: string[]) =>
     later(db.reviews.filter(r => refs.includes(r.companyRef) && !r.hidden && !r.deletedAt))).mockName('getReviewsForWorkshops'),
   getAllReviews: fn(async () => later(db.reviews)).mockName('getAllReviews'),
+  watchAllReviews: fn((onChange: (reviews: IReview[]) => void) => {
+    onChange(db.reviews)
+    return () => {}
+  }).mockName('watchAllReviews'),
   setReviewHidden: fn(async (_ref: string, _hidden: boolean) => {}).mockName('setReviewHidden'),
   deleteReview: fn(async (_ref: string) => {}).mockName('deleteReview'),
   restoreReview: fn(async (_ref: string) => {}).mockName('restoreReview'),

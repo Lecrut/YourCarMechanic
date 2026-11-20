@@ -96,26 +96,29 @@ onMounted(() => sharedStore.resetState())
         </template>
       </v-checkbox>
 
-      <v-btn
-        type="submit"
-        block
-        size="large"
-        :loading="loading"
-        data-testid="submit"
-      >
-        {{ t('register.button') }}
-      </v-btn>
+      <div class="d-flex justify-center mt-2">
+        <v-btn
+          type="submit"
+          class="px-8"
+          :loading="loading"
+          data-testid="submit"
+        >
+          {{ t('register.button') }}
+        </v-btn>
+      </div>
     </v-form>
 
     <v-divider class="my-6" />
 
-    <v-btn
-      to="/auth/login"
-      variant="tonal"
-      block
-      :disabled="loading"
-    >
-      {{ t('register.haveAccount') }}
-    </v-btn>
+    <div class="d-flex justify-center">
+      <v-btn
+        to="/auth/login"
+        variant="tonal"
+        class="px-6"
+        :disabled="loading"
+      >
+        {{ t('register.haveAccount') }}
+      </v-btn>
+    </div>
   </auth-card>
 </template>

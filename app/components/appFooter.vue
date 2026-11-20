@@ -6,6 +6,7 @@ const year = new Date().getFullYear()
 const links = computed(() => [
   { title: t('navBar.home'), to: '/' },
   { title: t('navBar.about'), to: '/about' },
+  { title: t('navBar.contact'), to: '/contact' },
   { title: t('navBar.login'), to: '/auth/login' },
   { title: t('register.button'), to: '/auth/register' },
 ])

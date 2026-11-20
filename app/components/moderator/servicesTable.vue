@@ -1,30 +1,56 @@
 <script setup lang="ts">
-import { type IService, mapIService } from '~/models/service'
+import { type IService, mapIService, SERVICE_CATEGORIES } from '~/models/service'
 import { requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 
 const { t } = useI18n()
 
 const servicesStore = useServicesStore()
-const { catalog } = storeToRefs(servicesStore)
+const { catalog, missingDefaults } = storeToRefs(servicesStore)
 const { loading, error } = storeToRefs(useSharedStore())
 const { form, valid, isValid } = formValidation()
 
+const search = ref('')
+const categoryFilter = ref<string | null>(null)
 const dialog = ref(false)
 const isNew = ref(false)
 const draft = ref<IService>(mapIService({}))
 
+const categoryOptions = computed(() =>
+  SERVICE_CATEGORIES.map(c => ({ title: t(`serviceCategories.${c}`), value: c })),
+)
+
+const filteredCatalog = computed(() =>
+  categoryFilter.value ? catalog.value.filter(s => s.category === categoryFilter.value) : catalog.value,
+)
+
 const headers = computed(() => [
-  { title: t('moderator.serviceKey'), key: 'key' },
   { title: t('moderator.namePl'), key: 'namePl' },
   { title: t('moderator.nameEn'), key: 'nameEn' },
+  { title: t('moderator.category'), key: 'category' },
   { title: t('moderator.order'), key: 'order' },
   { title: t('moderator.active'), key: 'active' },
   { title: '', key: 'actions', sortable: false, align: 'end' as const },
 ])
 
-const keyPattern = (v: string) => /^[a-z][a-zA-Z0-9]*$/.test(v) || t('rules.serviceKeyRule')
-const uniqueKey = (v: string) => !isNew.value || !catalog.value.some(s => s.key === v) || t('rules.serviceKeyTaken')
+/** Generates a unique camelCase Firestore key from the service name. */
+function slugKey(source: string): string {
+  const words = source
+    .normalize('NFD')
+    .replace(/[\u0300-\u036F]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+  const base = words
+    .map((w, i) => (i === 0 ? w.toLowerCase() : w[0]!.toUpperCase() + w.slice(1).toLowerCase()))
+    .join('')
+  const safe = /^[a-z]/.test(base) ? base : `service${base}`
+  let candidate = safe
+  let idx = 2
+  while (catalog.value.some(s => s.key === candidate)) candidate = `${safe}${idx++}`
+  return candidate
+}
 
 function add() {
   isNew.value = true
@@ -40,6 +66,9 @@ function edit(service: IService) {
 
 async function save() {
   if (!(await isValid())) return
+  if (isNew.value && !draft.value.key) {
+    draft.value.key = slugKey(draft.value.nameEn || draft.value.namePl)
+  }
   await servicesStore.save(draft.value)
   if (!error.value) dialog.value = false
 }
@@ -66,26 +95,68 @@ const toggleActive = (service: IService) => servicesStore.save({ ...service, act
     </template>
   </v-alert>
 
-  <div class="d-flex justify-end mb-4">
-    <v-btn
-      prepend-icon="mdi-plus"
-      data-testid="add-service"
-      @click="add"
+  <v-row class="mb-4 align-center">
+    <v-col
+      cols="12"
+      md="4"
     >
-      {{ t('moderator.addService') }}
-    </v-btn>
-  </div>
+      <v-text-field
+        v-model="search"
+        :label="t('moderator.search')"
+        prepend-inner-icon="mdi-magnify"
+        clearable
+        hide-details
+      />
+    </v-col>
+    <v-col
+      cols="12"
+      md="4"
+    >
+      <v-select
+        v-model="categoryFilter"
+        :items="categoryOptions"
+        :label="t('moderator.category')"
+        prepend-inner-icon="mdi-filter-variant"
+        clearable
+        hide-details
+      />
+    </v-col>
+    <v-col
+      cols="12"
+      md="4"
+      class="d-flex justify-md-end ga-2 flex-wrap"
+    >
+      <v-btn
+        v-if="catalog.length && missingDefaults.length"
+        variant="tonal"
+        prepend-icon="mdi-playlist-plus"
+        :loading="loading"
+        data-testid="seed-missing-services"
+        @click="servicesStore.seedDefaults()"
+      >
+        {{ t('moderator.seedMissing', { count: missingDefaults.length }) }}
+      </v-btn>
+      <v-btn
+        prepend-icon="mdi-plus"
+        data-testid="add-service"
+        @click="add"
+      >
+        {{ t('moderator.addService') }}
+      </v-btn>
+    </v-col>
+  </v-row>
 
   <v-data-table
     :headers="headers"
-    :items="catalog"
+    :items="filteredCatalog"
+    :search="search"
     :loading="loading"
     item-value="key"
     hover
     data-testid="services-table"
   >
-    <template #[`item.key`]="{ item }">
-      <span :class="item.deletedAt ? 'text-disabled text-decoration-line-through' : ''">{{ item.key }}</span>
+    <template #[`item.namePl`]="{ item }">
+      <span :class="item.deletedAt ? 'text-disabled text-decoration-line-through' : ''">{{ item.namePl }}</span>
       <v-chip
         v-if="item.deletedAt"
         size="x-small"
@@ -94,6 +165,15 @@ const toggleActive = (service: IService) => servicesStore.save({ ...service, act
         class="ml-2"
       >
         {{ t('moderator.deleted') }}
+      </v-chip>
+    </template>
+
+    <template #[`item.category`]="{ item }">
+      <v-chip
+        size="small"
+        variant="tonal"
+      >
+        {{ t(`serviceCategories.${item.category}`) }}
       </v-chip>
     </template>
 
@@ -156,14 +236,6 @@ const toggleActive = (service: IService) => servicesStore.save({ ...service, act
           v-model="valid"
         >
           <v-text-field
-            v-model="draft.key"
-            :label="t('moderator.serviceKey')"
-            :readonly="!isNew"
-            :hint="t('moderator.serviceKeyHint')"
-            :rules="[requiredRule(t), keyPattern, uniqueKey]"
-            data-testid="service-key"
-          />
-          <v-text-field
             v-model="draft.namePl"
             :label="t('moderator.namePl')"
             :rules="[requiredRule(t)]"
@@ -174,6 +246,12 @@ const toggleActive = (service: IService) => servicesStore.save({ ...service, act
             :label="t('moderator.nameEn')"
             :rules="[requiredRule(t)]"
             data-testid="service-name-en"
+          />
+          <v-select
+            v-model="draft.category"
+            :items="categoryOptions"
+            :label="t('moderator.category')"
+            data-testid="service-category"
           />
           <v-text-field
             v-model.number="draft.order"

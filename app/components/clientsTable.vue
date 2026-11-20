@@ -37,7 +37,7 @@ const headers = computed(() => [
 </script>
 
 <template>
-  <v-row class="mb-2">
+  <v-row class="mb-4">
     <v-col
       cols="12"
       md="5"
@@ -54,7 +54,7 @@ const headers = computed(() => [
       cols="12"
       md="5"
     >
-      <v-select
+      <v-autocomplete
         v-model="serviceFilter"
         v-tooltip:top="t('clients.serviceFilterHint')"
         :items="servicesStore.options"

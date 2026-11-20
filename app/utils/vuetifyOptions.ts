@@ -31,7 +31,7 @@ export const vuetifyOptions: VuetifyOptions = {
     VBtn: {
       color: 'primary',
       variant: 'flat',
-      rounded: 'lg',
+      rounded: 'pill',
     },
     VCard: {
       rounded: 'xl',
@@ -39,10 +39,14 @@ export const vuetifyOptions: VuetifyOptions = {
     VSheet: {
       rounded: 'xl',
     },
-    VTextField: { variant: 'outlined', density: 'comfortable' },
-    VSelect: { variant: 'outlined', density: 'comfortable' },
-    VCombobox: { variant: 'outlined', density: 'comfortable' },
-    VTextarea: { variant: 'outlined' },
+    VAlert: {
+      rounded: 'xl',
+    },
+    VTextField: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
+    VSelect: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
+    VCombobox: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
+    VAutocomplete: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
+    VTextarea: { variant: 'outlined', rounded: 'lg' },
     VChip: { rounded: 'lg' },
   },
 }

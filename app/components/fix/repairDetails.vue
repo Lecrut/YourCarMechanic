@@ -38,7 +38,7 @@ const showPropose = ref(false)
 const showQuote = ref(false)
 const isAddStatus = ref(false)
 const newStatus = ref<NotificationType | null>(null)
-const newStatusDate = ref('')
+const newStatusDate = ref(toLocalInput(new Date()))
 const useCurrentDate = ref(true)
 const newStatusCost = ref<number | null>(null)
 const newStatusDescription = ref('')
@@ -122,10 +122,12 @@ function close() {
   resetAddStatus()
 }
 
-watch(isDialogShown, async (shown) => {
-  if (shown && props.fix.companyRef && props.mode !== 'workshop')
-    workshop.value = await workshopsStore.getWorkshopByRef(props.fix.companyRef)
-})
+watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) => {
+  if (shown && companyRef && props.mode !== 'workshop')
+    workshop.value = await workshopsStore.getWorkshopByRef(companyRef)
+  else if (!shown)
+    workshop.value = null
+}, { immediate: true })
 </script>
 
 <template>
@@ -193,7 +195,7 @@ watch(isDialogShown, async (shown) => {
           class="mb-4"
         />
         <v-alert
-          v-else-if="fix.proposal || !fix.confirmed"
+          v-else-if="!fix.isClosed && (fix.proposal || !fix.confirmed)"
           type="info"
           variant="tonal"
           density="compact"
@@ -215,6 +217,7 @@ watch(isDialogShown, async (shown) => {
               v-if="workshop"
               :workshop="workshop"
               :is-presentation="true"
+              class="mt-4"
             />
           </v-col>
 
@@ -222,7 +225,10 @@ watch(isDialogShown, async (shown) => {
             cols="12"
             md="7"
           >
-            <v-chip-group column>
+            <v-chip-group
+              column
+              class="mb-4"
+            >
               <v-chip
                 v-for="item in fix.services"
                 :key="item"
@@ -235,12 +241,14 @@ watch(isDialogShown, async (shown) => {
             </v-chip-group>
 
             <v-textarea
+              v-if="fix.description"
               :model-value="fix.description"
               :label="t('universal.description')"
               variant="solo-filled"
               readonly
               auto-grow
               rows="2"
+              class="mb-2"
             />
 
             <v-list
@@ -248,6 +256,12 @@ watch(isDialogShown, async (shown) => {
               bg-color="transparent"
             >
               <v-list-item
+                v-if="fix.clientName && mode !== 'user'"
+                prepend-icon="mdi-account"
+                :title="fix.clientName"
+              />
+              <v-list-item
+                v-if="fix.carMillage"
                 prepend-icon="mdi-car-info"
                 :title="`${fix.carMillage} km`"
               />
@@ -287,6 +301,13 @@ watch(isDialogShown, async (shown) => {
                 :title="`${cost} PLN`"
                 :subtitle="t('repairs.total')"
                 data-testid="total-cost"
+              />
+              <v-list-item
+                v-if="fix.clientName && mode !== 'user'"
+                prepend-icon="mdi-account"
+                :title="fix.clientName"
+                :subtitle="t('moderator.client')"
+                data-testid="client-name"
               />
               <v-list-item
                 v-if="fix.clientPhone && mode !== 'user'"

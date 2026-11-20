@@ -3,6 +3,7 @@ import { mapIWorkshop } from '~/models/workshop'
 import WorkshopForm from '~/components/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
 import PageHeader from '~/components/pageHeader.vue'
+import AccountSettingsCard from '~/components/accountSettingsCard.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })
 
@@ -85,6 +86,8 @@ watch(company, value => (draft.value = mapIWorkshop(value ?? {})))
           </div>
         </v-expand-transition>
       </v-card>
+
+      <account-settings-card class="mt-6" />
     </v-container>
     <my-snackbar
       v-model="showSuccess"

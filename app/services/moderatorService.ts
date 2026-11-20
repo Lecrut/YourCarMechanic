@@ -1,5 +1,7 @@
-import { collection, doc, getDocs, orderBy, query, serverTimestamp, Timestamp, updateDoc, writeBatch } from 'firebase/firestore'
-import { db } from './firebase'
+import { deleteApp, initializeApp } from 'firebase/app'
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signOut } from 'firebase/auth'
+import { collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, Timestamp, updateDoc, writeBatch } from 'firebase/firestore'
+import { db, firebaseApp } from './firebase'
 import { fromQuery } from './mappers'
 import { restore, softDelete } from './softDelete'
 import { type IUser, mapIUser, type UserRole } from '~/models/user'
@@ -26,6 +28,23 @@ export async function getAllCars(): Promise<ICar[]> {
   return fromQuery<ICar>(await getDocs(collection(db(), 'cars'))).map(mapICar)
 }
 
+/** Live snapshot listeners for all moderator collections (users, companies, fixes, cars). */
+export function watchAll(handlers: {
+  onUsers: (users: IUser[]) => void
+  onWorkshops: (workshops: IWorkshop[]) => void
+  onFixes: (fixes: IFix[]) => void
+  onCars: (cars: ICar[]) => void
+  onError: (error: Error) => void
+}): () => void {
+  const unsubs = [
+    onSnapshot(collection(db(), 'users'), snap => handlers.onUsers(fromQuery<IUser>(snap).map(mapIUser)), handlers.onError),
+    onSnapshot(collection(db(), 'companies'), snap => handlers.onWorkshops(fromQuery<IWorkshop>(snap).map(mapIWorkshop)), handlers.onError),
+    onSnapshot(query(collection(db(), 'fixes'), orderBy('date', 'desc')), snap => handlers.onFixes(fromQuery<IFix>(snap).map(mapIFix)), handlers.onError),
+    onSnapshot(collection(db(), 'cars'), snap => handlers.onCars(fromQuery<ICar>(snap).map(mapICar)), handlers.onError),
+  ]
+  return () => unsubs.forEach(u => u())
+}
+
 export const setUserRole = (userRef: string, role: UserRole | null) => updateDoc(doc(db(), userRef), { role })
 
 /** Soft delete – repairs and reviews keep pointing at the company. */
@@ -38,10 +57,37 @@ export const setWorkshopStatus = (companyRef: string, status: WorkshopStatus) =>
     ? { status, contractSignedAt: Timestamp.now() }
     : { status })
 
-/** Company created by a moderator (e.g. after signing a contract offline), optionally with an owner account. */
-export async function createWorkshop(workshop: IWorkshop, owner: IUser | null): Promise<IWorkshop> {
+/**
+ * Company created by a moderator (e.g. after signing a contract offline),
+ * optionally linking an existing user or provisioning a new workshop owner by e-mail.
+ */
+export async function createWorkshop(
+  workshop: IWorkshop,
+  owner: IUser | null,
+  ownerEmail?: string | null,
+): Promise<IWorkshop> {
   const docRef = doc(collection(db(), 'companies'))
-  const ownerUid = owner?.reference.split('/').pop() ?? ''
+  const trimmedEmail = ownerEmail?.trim() ?? ''
+  let createdUid: string | null = null
+  let createdEmail = trimmedEmail.toLowerCase()
+
+  if (!owner && trimmedEmail) {
+    // Secondary app avoids signing out the moderator while provisioning the owner's Auth account.
+    const secondary = initializeApp(firebaseApp().options, `create-owner-${Date.now()}`)
+    const secondaryAuth = getAuth(secondary)
+    try {
+      const { user } = await createUserWithEmailAndPassword(secondaryAuth, trimmedEmail, `${crypto.randomUUID()}Aa1!`)
+      createdUid = user.uid
+      createdEmail = user.email ?? createdEmail
+      await sendPasswordResetEmail(secondaryAuth, createdEmail)
+    }
+    finally {
+      await signOut(secondaryAuth).catch(() => {})
+      await deleteApp(secondary).catch(() => {})
+    }
+  }
+
+  const ownerUid = owner?.reference.split('/').pop() ?? createdUid ?? ''
   const approved = workshop.status === 'approved'
   const { reference: _reference, contractSignedAt: _signed, deletedAt: _deletedAt, ...data } = mapIWorkshop({ ...workshop, ownerUid })
 
@@ -52,6 +98,14 @@ export async function createWorkshop(workshop: IWorkshop, owner: IUser | null): 
     createTime: serverTimestamp(),
   })
   if (owner) batch.update(doc(db(), owner.reference), { role: 'workshop', companyRef: docRef.path })
+  else if (createdUid) {
+    batch.set(doc(db(), 'users', createdUid), {
+      email: createdEmail,
+      role: 'workshop',
+      companyRef: docRef.path,
+      registerTime: serverTimestamp(),
+    })
+  }
   await batch.commit()
 
   return mapIWorkshop({ ...data, contractSignedAt: approved ? new Date() : null, reference: docRef.path })

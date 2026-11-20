@@ -119,7 +119,7 @@ async function submit() {
             :label="t('userBookFix.stepper.second.mileage')"
             :rules="[requiredRule(t)]"
           />
-          <v-select
+          <v-autocomplete
             v-model="services"
             :items="servicesStore.options"
             :label="t('companyProfile.services')"

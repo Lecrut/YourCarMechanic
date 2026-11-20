@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
   serverTimestamp,
@@ -54,6 +55,14 @@ export async function getReviewsForWorkshops(companyRefs: string[]): Promise<IRe
 
 export async function getAllReviews(): Promise<IReview[]> {
   return fromQuery<IReview>(await getDocs(query(reviews(), orderBy('createdAt', 'desc')))).map(mapIReview)
+}
+
+export function watchAllReviews(onChange: (reviews: IReview[]) => void, onError: (error: Error) => void): () => void {
+  return onSnapshot(
+    query(reviews(), orderBy('createdAt', 'desc')),
+    snap => onChange(fromQuery<IReview>(snap).map(mapIReview)),
+    onError,
+  )
 }
 
 export const setReviewHidden = (reviewRef: string, hidden: boolean) => updateDoc(doc(db(), reviewRef), { hidden })

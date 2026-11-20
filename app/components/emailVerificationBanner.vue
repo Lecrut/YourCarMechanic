@@ -5,10 +5,24 @@ const authStore = useAuthStore()
 const { user, emailVerified } = storeToRefs(authStore)
 
 const sent = ref(false)
+const checking = ref(false)
+const notYetVerified = ref(false)
 
 async function resend() {
   await authStore.resendVerification()
   sent.value = true
+}
+
+async function verifyNow() {
+  checking.value = true
+  notYetVerified.value = false
+  try {
+    await authStore.checkEmailVerified()
+    if (emailVerified.value === false) notYetVerified.value = true
+  }
+  finally {
+    checking.value = false
+  }
 }
 
 watch(() => user.value?.reference, (userRef) => {
@@ -22,8 +36,9 @@ watch(() => user.value?.reference, (userRef) => {
       v-if="user && emailVerified === false"
       type="warning"
       variant="tonal"
-      density="compact"
-      rounded="0"
+      density="comfortable"
+      rounded="xl"
+      class="mx-4 mt-4"
       icon="mdi-email-alert-outline"
       data-testid="verify-email-banner"
     >
@@ -42,10 +57,18 @@ watch(() => user.value?.reference, (userRef) => {
         <v-btn
           size="small"
           variant="tonal"
-          @click="authStore.checkEmailVerified()"
+          :loading="checking"
+          data-testid="check-verification"
+          @click="verifyNow"
         >
           {{ t('account.alreadyVerified') }}
         </v-btn>
+      </div>
+      <div
+        v-if="notYetVerified"
+        class="text-body-small mt-1"
+      >
+        {{ t('account.notYetVerified') }}
       </div>
     </v-alert>
   </v-expand-transition>

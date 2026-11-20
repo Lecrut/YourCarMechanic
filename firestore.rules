@@ -25,10 +25,10 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || isModerator());
 
-      allow create: if signedIn() && request.auth.uid == uid
+      allow create: if isModerator() || (signedIn() && request.auth.uid == uid
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.role == null
-        && !('companyRef' in request.resource.data);
+        && !('companyRef' in request.resource.data));
 
       allow update: if isModerator() || (
         signedIn() && request.auth.uid == uid
@@ -56,7 +56,7 @@ service cloud.firestore {
       function companyPath() { return 'companies/' + companyId; }
       function isOwner() { return signedIn() && resource.data.ownerUid == request.auth.uid; }
 
-      allow read: if signedIn();
+      allow read: if signedIn() || resource.data.status == 'approved';
 
       allow create: if isModerator() || (
         signedIn()
@@ -75,14 +75,14 @@ service cloud.firestore {
 
       match /priceList/{itemId} {
         function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
-        allow read: if signedIn();
+        allow read: if true;
         allow create, update: if isModerator() || ownsCompany();
         allow delete: if false;
       }
 
       match /promotions/{promotionId} {
         function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
-        allow read: if signedIn();
+        allow read: if true;
         allow create, update: if (isModerator() || ownsCompany())
           && request.resource.data.percent is int
           && request.resource.data.percent >= 1 && request.resource.data.percent <= 90;
@@ -92,7 +92,7 @@ service cloud.firestore {
       // Booked hours: a technical index, not history (the fix keeps the history).
       match /slots/{slotId} {
         function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
-        allow read: if signedIn();
+        allow read: if signedIn() || resource.data.status == 'approved';
         // id = `{ISO hour}_{station}`; the station must exist in this workshop
         allow create: if signedIn() && (request.resource.data.userUid == request.auth.uid || ownsCompany() || isModerator())
           && slotId.split('_').size() == 2
@@ -197,6 +197,24 @@ service cloud.firestore {
       }
     }
 
+    // ---------- contact form ----------
+    // Anyone (also guests) may send a message; only moderators read and handle them.
+    match /contactMessages/{messageId} {
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'category', 'subject', 'message', 'userRef', 'status', 'moderatorNote', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
+        && request.resource.data.email is string && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.category in ['general', 'booking', 'workshop', 'account', 'bug', 'other']
+        && request.resource.data.subject is string && request.resource.data.subject.size() <= 150
+        && request.resource.data.message is string && request.resource.data.message.size() >= 10 && request.resource.data.message.size() <= 5000
+        && (request.resource.data.userRef == null || (signedIn() && request.resource.data.userRef == myPath()))
+        && request.resource.data.status == 'new'
+        && request.resource.data.moderatorNote == ''
+        && request.resource.data.createdAt == request.time;
+      allow read: if isModerator();
+      allow update: if isModerator() && onlyChanges(['status', 'moderatorNote', 'deletedAt', 'deletedBy']);
+      allow delete: if false;
+    }
+
     // ---------- service catalog ----------
     match /services/{serviceId} {
       allow read: if true;
@@ -209,7 +227,7 @@ service cloud.firestore {
       function fix() { return get(/databases/$(database)/documents/fixes/$(fixId)).data; }
 
       // Soft-deleted reviews are also hidden, so `hidden == false` is enough for public queries.
-      allow read: if isModerator() || (signedIn() && resource.data.hidden == false);
+      allow read: if isModerator() || resource.data.hidden == false;
 
       allow create: if signedIn()
         && fix().userRef == myPath()

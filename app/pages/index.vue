@@ -32,14 +32,25 @@ const steps = computed(() => [
           <p class="text-body-large text-white mb-8">
             {{ t('landing.first.text') }}
           </p>
-          <v-btn
-            to="/auth/register"
-            size="x-large"
-            append-icon="mdi-arrow-right"
-            elevation="4"
-          >
-            {{ t('landing.first.button') }}
-          </v-btn>
+          <div class="d-flex flex-wrap justify-center ga-4">
+            <v-btn
+              to="/auth/register"
+              size="x-large"
+              append-icon="mdi-arrow-right"
+              elevation="4"
+            >
+              {{ t('landing.first.button') }}
+            </v-btn>
+            <v-btn
+              to="/workshops"
+              size="x-large"
+              variant="outlined"
+              color="white"
+              prepend-icon="mdi-garage"
+            >
+              {{ t('navBar.workshops') }}
+            </v-btn>
+          </div>
         </div>
       </v-container>
     </v-img>

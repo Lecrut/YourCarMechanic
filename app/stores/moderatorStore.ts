@@ -4,6 +4,7 @@ import type { IWorkshop, WorkshopStatus } from '~/models/workshop'
 import type { IFix } from '~/models/fix'
 import type { ICar } from '~/models/car'
 import type { INotification } from '~/models/notification'
+import { createSubscription } from '~/utils/subscription'
 
 export const useModeratorStore = defineStore('moderator', () => {
   const users = ref<IUser[]>([])
@@ -12,12 +13,29 @@ export const useModeratorStore = defineStore('moderator', () => {
   const cars = ref<ICar[]>([])
 
   const sharedStore = useSharedStore()
+  const { t } = useI18n()
+  const subscription = createSubscription()
+
+  function stopWatching() {
+    subscription.stop()
+  }
 
   function resetState() {
+    stopWatching()
     users.value = []
     workshops.value = []
     fixes.value = []
     cars.value = []
+  }
+
+  function watchAll() {
+    subscription.start(() => moderatorService.watchAll({
+      onUsers: list => (users.value = list),
+      onWorkshops: list => (workshops.value = list),
+      onFixes: list => (fixes.value = list),
+      onCars: list => (cars.value = list),
+      onError: e => sharedStore.fail(e),
+    }))
   }
 
   const loadAll = () =>
@@ -55,14 +73,17 @@ export const useModeratorStore = defineStore('moderator', () => {
       workshops.value = workshops.value.map(w => (w.reference === workshop.reference ? { ...w, status, contractSignedAt } : w))
     })
 
-  const createWorkshop = (workshop: IWorkshop, owner: IUser | null) =>
+  const createWorkshop = (workshop: IWorkshop, owner: IUser | null, ownerEmail?: string | null) =>
     sharedStore.run(async () => {
-      const created = await moderatorService.createWorkshop(workshop, owner)
+      const created = await moderatorService.createWorkshop(workshop, owner, ownerEmail)
       workshops.value = [...workshops.value, created]
       if (owner) {
         users.value = users.value.map(u => (u.reference === owner.reference
           ? { ...u, role: 'workshop' as const, companyRef: created.reference }
           : u))
+      }
+      else if (ownerEmail?.trim()) {
+        users.value = await moderatorService.getAllUsers()
       }
     })
 
@@ -74,7 +95,7 @@ export const useModeratorStore = defineStore('moderator', () => {
       return updated
     })
 
-  const pendingWorkshops = computed(() => workshops.value.filter(w => w.status === 'pending'))
+  const pendingWorkshops = computed(() => workshops.value.filter(w => !w.deletedAt && w.status === 'pending'))
 
   const setUserRole = (user: IUser, role: UserRole | null) =>
     sharedStore.run(async () => {
@@ -83,10 +104,10 @@ export const useModeratorStore = defineStore('moderator', () => {
     })
 
   const workshopName = (companyRef: string) =>
-    workshops.value.find(w => w.reference === companyRef)?.name ?? companyRef
+    workshops.value.find(w => w.reference === companyRef)?.name || t('moderator.unknownCompany')
 
   const userEmail = (userRef: string) =>
-    users.value.find(u => u.reference === userRef)?.email ?? userRef
+    users.value.find(u => u.reference === userRef)?.email || t('moderator.unknownUser')
 
   return {
     users,
@@ -94,6 +115,8 @@ export const useModeratorStore = defineStore('moderator', () => {
     fixes,
     cars,
     resetState,
+    watchAll,
+    stopWatching,
     loadAll,
     updateWorkshop,
     deleteWorkshop,

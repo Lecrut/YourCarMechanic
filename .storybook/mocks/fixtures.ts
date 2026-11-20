@@ -6,6 +6,7 @@ import { mapIPriceListItem } from '~/models/priceList'
 import { mapIReview } from '~/models/review'
 import { DEFAULT_SERVICES } from '~/models/service'
 import { mapIPromotion } from '~/models/promotion'
+import { mapIContactMessage } from '~/models/contactMessage'
 import { addDays, atHour } from '~/utils/time'
 
 const tomorrow = addDays(new Date(), 1)
@@ -205,5 +206,40 @@ export const promotions = [
     validFrom: daysAgo(5),
     validTo: addDays(new Date(), 20),
     reference: 'companies/autofix/promotions/autumn',
+  }),
+]
+
+export const contactMessages = [
+  mapIContactMessage({
+    name: 'Jan Wiśniewski',
+    email: 'jan@example.com',
+    category: 'booking',
+    subject: 'Nie mogę odwołać wizyty',
+    message: 'Dzień dobry, przycisk odwołania jest nieaktywny, a wizyta jest jutro.',
+    status: 'new',
+    createdAt: daysAgo(1),
+    reference: 'contactMessages/m1',
+  }),
+  mapIContactMessage({
+    name: 'Serwis Nowak',
+    email: 'serwis@example.com',
+    category: 'workshop',
+    subject: 'Podpisanie umowy',
+    message: 'Chcielibyśmy dołączyć do aplikacji – jak wygląda podpisanie umowy?',
+    status: 'inProgress',
+    userRef: 'users/piotr',
+    moderatorNote: 'Wysłano wzór umowy.',
+    createdAt: daysAgo(3),
+    reference: 'contactMessages/m2',
+  }),
+  mapIContactMessage({
+    name: 'Ola',
+    email: 'ola@example.com',
+    category: 'other',
+    subject: 'Dziękuję',
+    message: 'Świetna aplikacja, wszystko działa.',
+    status: 'resolved',
+    createdAt: daysAgo(10),
+    reference: 'contactMessages/m3',
   }),
 ]

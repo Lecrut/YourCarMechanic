@@ -16,7 +16,10 @@ export const useCitiesJsonStore = defineStore('cities-json', () => {
 
   function getCityName(city: string): string {
     getCitiesFromJson()
-    return citiesFromJson.value.find(c => c.value === city)?.title ?? ''
+    if (!city) return ''
+    // Unknown key (old data / typo): show it readable instead of nothing, e.g. `nowy_sacz` -> `Nowy sacz`.
+    return citiesFromJson.value.find(c => c.value === city)?.title
+      ?? city.charAt(0).toUpperCase() + city.slice(1).replace(/_/g, ' ')
   }
 
   return { citiesFromJson, getCitiesFromJson, getCityName }

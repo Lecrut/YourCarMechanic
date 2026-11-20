@@ -18,7 +18,7 @@ const roleOptions = computed(() => [
   ...(['user', 'workshop', 'moderator'] as UserRole[]).map(r => ({ title: t(`roles.${r}`), value: r })),
 ])
 const roleFilterOptions = computed(() => [
-  ...(['user', 'workshop', 'moderator'] as UserRole[]).map(r => ({ title: t(`roles.${r}`), value: r })),
+  { title: t('roles.user'), value: 'user' as const },
   { title: t('roles.none'), value: 'none' as const },
 ])
 
@@ -41,6 +41,7 @@ const stats = computed(() => {
 })
 
 const items = computed(() => users.value.filter((u) => {
+  if (u.role === 'workshop' || u.role === 'moderator') return false
   if (!roleFilter.value) return true
   return roleFilter.value === 'none' ? !u.role : u.role === roleFilter.value
 }))
@@ -49,7 +50,6 @@ const headers = computed(() => [
   { title: t('userProfile.email'), key: 'email' },
   { title: t('moderator.fullName'), key: 'name', value: (u: IUser) => `${u.profile?.name ?? ''} ${u.profile?.surname ?? ''}`.trim() },
   { title: t('userProfile.userPhone'), key: 'phone', value: (u: IUser) => u.profile?.phone ?? '', sortable: false },
-  { title: t('moderator.company'), key: 'company', value: (u: IUser) => (u.companyRef ? moderatorStore.workshopName(u.companyRef) : '') },
   { title: t('moderator.cars'), key: 'cars', value: (u: IUser) => stats.value.get(u.reference)?.cars ?? 0 },
   { title: t('clients.visits'), key: 'fixes', value: (u: IUser) => stats.value.get(u.reference)?.fixes ?? 0 },
   { title: t('clients.lastVisit'), key: 'lastVisit', value: (u: IUser) => stats.value.get(u.reference)?.lastVisit?.getTime() ?? 0 },
@@ -58,7 +58,7 @@ const headers = computed(() => [
 </script>
 
 <template>
-  <v-row class="mb-2">
+  <v-row class="mb-4">
     <v-col
       cols="12"
       md="8"

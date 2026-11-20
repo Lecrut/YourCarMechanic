@@ -60,25 +60,25 @@ onMounted(() => sharedStore.resetState())
         :rules="[requiredRule(t), emailRule(t)]"
       />
 
-      <v-btn
-        type="submit"
-        block
-        size="large"
-        class="mt-2"
-        :loading="loading"
-      >
-        {{ t('resetPassword.button') }}
-      </v-btn>
+      <div class="d-flex justify-center mt-4">
+        <v-btn
+          type="submit"
+          class="px-8"
+          :loading="loading"
+        >
+          {{ t('resetPassword.button') }}
+        </v-btn>
+      </div>
     </v-form>
 
-    <v-btn
-      to="/auth/login"
-      variant="text"
-      block
-      class="mt-4"
-      prepend-icon="mdi-arrow-left"
-    >
-      {{ t('navBar.login') }}
-    </v-btn>
+    <div class="d-flex justify-center mt-4">
+      <v-btn
+        to="/auth/login"
+        variant="text"
+        prepend-icon="mdi-arrow-left"
+      >
+        {{ t('navBar.login') }}
+      </v-btn>
+    </div>
   </auth-card>
 </template>

@@ -4,6 +4,7 @@ import { productionYearRule, requiredRule, vinRule } from '~/utils/rules'
 import { type ICar, mapICar } from '~/models/car'
 import { mapIFix } from '~/models/fix'
 import type { IWorkshop } from '~/models/workshop'
+import { SERVICE_CATEGORIES, type ServiceCategory } from '~/models/service'
 import { formatDateToString } from '~/utils/time'
 import { carSegment, formatDuration, formatRange } from '~/models/priceList'
 import WorkshopCard from '~/components/user/workshopCard.vue'
@@ -33,6 +34,19 @@ const carForm = ref<Form | null>(null)
 const workshopForm = ref<Form | null>(null)
 
 const selectedServices = ref<string[]>([])
+const serviceSearch = ref('')
+const serviceCategory = ref<ServiceCategory>('diagnostics')
+
+const visibleServices = computed(() => {
+  const q = serviceSearch.value.trim().toLowerCase()
+  return servicesStore.options.filter((s) => {
+    if (q) return s.title.toLowerCase().includes(q)
+    return s.category === serviceCategory.value
+  })
+})
+
+const selectedInCategory = (cat: ServiceCategory) =>
+  servicesStore.options.filter(s => s.category === cat && selectedServices.value.includes(s.value)).length
 const serviceDescription = ref('')
 const carSource = ref<'my' | 'add' | null>(null)
 const selectedCar = ref<ICar | null>(null)
@@ -203,13 +217,50 @@ watch([city, selectedServices], ([newCity, services]) => {
               {{ t('userBookFix.stepper.first.title') }}
             </h2>
 
+            <v-text-field
+              v-model="serviceSearch"
+              :label="t('moderator.search')"
+              prepend-inner-icon="mdi-magnify"
+              clearable
+              hide-details
+              class="mb-4"
+            />
+
+            <v-chip-group
+              v-if="!serviceSearch?.trim()"
+              v-model="serviceCategory"
+              mandatory
+              selected-class="text-primary"
+              class="mb-4"
+            >
+              <v-chip
+                v-for="cat in SERVICE_CATEGORIES"
+                :key="cat"
+                :value="cat"
+                variant="tonal"
+              >
+                {{ t(`serviceCategories.${cat}`) }}
+                <template
+                  v-if="selectedInCategory(cat)"
+                  #append
+                >
+                  <v-badge
+                    :content="selectedInCategory(cat)"
+                    color="primary"
+                    inline
+                    class="ml-1"
+                  />
+                </template>
+              </v-chip>
+            </v-chip-group>
+
             <v-item-group
               v-model="selectedServices"
               multiple
             >
               <v-row>
                 <v-col
-                  v-for="service in servicesStore.options"
+                  v-for="service in visibleServices"
                   :key="service.value"
                   cols="6"
                   md="4"

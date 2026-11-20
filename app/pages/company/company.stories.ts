@@ -122,6 +122,8 @@ export const RepairNotes: Story = {
     await userEvent.click(within(await canvas.findByTestId('view-toggle')).getByText('Lista'))
     const card = (await canvas.findAllByTestId('repair-card')).find(c => c.textContent?.includes('Wycena mechanika'))!
     await userEvent.click(within(card).getByTestId('open-details'))
+    // the workshop sees who the client is, not just a phone number
+    await expect(await screen.findByTestId('client-name')).toHaveTextContent('Anna Kowalska')
     const internal = (await screen.findByTestId('internal-note-input')).querySelector('textarea')!
     await waitFor(() => expect(internal).toHaveValue('Klient prosił o telefon przed wymianą opon.'))
     await userEvent.type(internal, ' Oddzwonić po 16.')

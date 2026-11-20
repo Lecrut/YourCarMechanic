@@ -70,15 +70,16 @@ onMounted(() => sharedStore.resetState())
         </v-btn>
       </div>
 
-      <v-btn
-        type="submit"
-        block
-        size="large"
-        :loading="loading"
-        data-testid="submit"
-      >
-        {{ t('login.button.login') }}
-      </v-btn>
+      <div class="d-flex justify-center">
+        <v-btn
+          type="submit"
+          class="px-8"
+          :loading="loading"
+          data-testid="submit"
+        >
+          {{ t('login.button.login') }}
+        </v-btn>
+      </div>
     </v-form>
 
     <v-divider class="my-6" />
@@ -86,13 +87,15 @@ onMounted(() => sharedStore.resetState())
     <p class="text-center text-body-medium mb-3">
       {{ t('login.noAccount') }}
     </p>
-    <v-btn
-      to="/auth/register"
-      variant="tonal"
-      block
-      :disabled="loading"
-    >
-      {{ t('login.button.register') }}
-    </v-btn>
+    <div class="d-flex justify-center">
+      <v-btn
+        to="/auth/register"
+        variant="tonal"
+        class="px-6"
+        :disabled="loading"
+      >
+        {{ t('login.button.register') }}
+      </v-btn>
+    </div>
   </auth-card>
 </template>

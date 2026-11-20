@@ -106,6 +106,7 @@ app/
     reviewsService.ts           reviews (one per fix), public ratings, moderation
     servicesCatalogService.ts   service catalog
     moderatorService.ts         moderator-only reads/writes (all users/fixes/cars, status, create company)
+    contactService.ts           contact form (send) + moderator inbox (live, status, note)
   stores/                       Pinia setup stores (auto-imported); all async via sharedStore.run()
     authStore.ts                user + company (persisted in localStorage as a cache), session, homePath
     fixesStore.ts               live active repairs, history, proposals
@@ -114,6 +115,7 @@ app/
     clientsStore.ts             workshop client list
     reviewsStore.ts             add review, own rating, moderation
     feedStore.ts                notification bell (live recent repairs, unread per browser)
+    contactStore.ts             contact form + moderator inbox
     servicesStore.ts            service catalog (options/label/CRUD)
     moderatorStore.ts           moderator panel data and actions
     carsStore.ts, sharedStore.ts, carsJsonStore.ts, citiesJsonStore.ts
@@ -139,14 +141,15 @@ app/
                                 quoteDialog (itemised quote), repairNotes (public + internal), repairPhotos
     user/                       carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit
     company/                    priceItemDialog, bookForClientDialog, promotionDialog, weekBoard (7-day calendar)
-    moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable
+    moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable, messagesTable
     notificationBell, errorSnackbar, emailVerificationBanner, appFooter
   pages/
-    index, about                public
+    index, about, contact, workshops   public (contact form works for guests too)
     auth/                       login, register, reset-password, role-choice
     user/                       index (booking wizard), notifications (live), history, profile
     company/                    index (live repairs), clients, pricing, profile
-    moderator/index             tabs: stats, companies, services, clients, repairs, reviews (?tab=)
+    moderator/index             tabs: stats, companies, services, clients, repairs, reviews, messages (?tab=)
+    moderator/profile           moderator's own profile
   assets/data/                  cars.json, cities.json
   **/*.stories.ts               Storybook stories + play tests
 i18n/                           i18n.config.ts, locales/pl.json, locales/en.json
@@ -175,6 +178,7 @@ eslint.config.mjs               ESLint flat config
 | `cars` | auto | `manufacturer`, `model`, `productionYear`, `vin`, `userRef`, `deletedAt` | owner, moderator (read) |
 | `fixes` | auto | `date`, `bookDate`, `userRef`, `companyRef`, `car` (snapshot), `services[]`, `description`, `clientName`, `clientPhone`, `marketingConsent`, `notifications[]`, `isClosed`, `estimate{min,max}`, `createdBy`, `confirmed`, `proposal`, `reviewed`, `workshopNote` (visible to client), `promotion`, `carRef`, `photos[]` | client, workshop, moderator – field-level updates per role |
 | `fixes/{id}/internal/note` | `note` | `text` – internal workshop note | workshop of the fix, moderator (never the client) |
+| `contactMessages` | auto | `name`, `email`, `category`, `subject`, `message`, `userRef`, `status` (`new`/`inProgress`/`resolved`), `moderatorNote`, `createdAt`, `deletedAt` | create: anyone (validated) · read/update: moderator |
 | `services` | key | `key`, `namePl`, `nameEn`, `active`, `order`, `deletedAt` | read: everyone · write: moderator |
 | `reviews` | fix id | `companyRef`, `fixRef`, `userRef`, `authorName`, `rating`, `comment`, `hidden`, `createdAt`, `deletedAt` | read: visible ones · create: the fix's client · moderate: moderator |
 

@@ -19,6 +19,7 @@ const { loading, error } = storeToRefs(useSharedStore())
 
 const hourlyRate = ref(company.value?.hourlyRate ?? 0)
 const editing = ref<IPriceListItem | null>(null)
+const defaultServiceKey = ref<string | undefined>(undefined)
 const showDialog = ref(false)
 const saved = ref(false)
 const editingPromotion = ref<IPromotion | null>(null)
@@ -61,8 +62,9 @@ async function saveRate() {
   if (!error.value) saved.value = true
 }
 
-function openDialog(item: IPriceListItem | null) {
+function openDialog(item: IPriceListItem | null, serviceKey?: string) {
   editing.value = item
+  defaultServiceKey.value = serviceKey
   showDialog.value = true
 }
 
@@ -155,7 +157,9 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
                 v-for="key in servicesWithoutPrices"
                 :key="key"
                 size="small"
+                prepend-icon="mdi-plus"
                 class="ma-1"
+                @click="openDialog(null, key)"
               >
                 {{ servicesStore.label(key) }}
               </v-chip>
@@ -322,6 +326,7 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
     <price-item-dialog
       v-model="showDialog"
       :item="editing"
+      :default-service-key="defaultServiceKey"
       :hourly-rate="company?.hourlyRate ?? 0"
       :services="company?.services ?? []"
       @save="saveItem"

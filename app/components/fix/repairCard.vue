@@ -121,12 +121,20 @@ async function cancelRepair() {
 
       <v-chip-group column>
         <v-chip
-          v-for="item in fix.services"
+          v-for="item in fix.services.slice(0, 4)"
           :key="item"
           density="comfortable"
           size="small"
         >
           {{ servicesStore.label(item) }}
+        </v-chip>
+        <v-chip
+          v-if="fix.services.length > 4"
+          density="comfortable"
+          size="small"
+          variant="text"
+        >
+          +{{ fix.services.length - 4 }}
         </v-chip>
       </v-chip-group>
     </v-card-text>

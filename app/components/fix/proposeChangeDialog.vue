@@ -73,7 +73,7 @@ async function submit() {
           ref="form"
           v-model="valid"
         >
-          <v-select
+          <v-autocomplete
             v-model="services"
             :items="servicesStore.options"
             :label="t('companyProfile.services')"

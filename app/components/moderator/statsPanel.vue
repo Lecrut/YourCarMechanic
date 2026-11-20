@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computeStats, type IWorkshopStats } from '~/models/stats'
+import { formatDateToString } from '~/utils/time'
 
 const { t, locale } = useI18n()
 
 const moderatorStore = useModeratorStore()
-const { fixes } = storeToRefs(moderatorStore)
+const { fixes, workshops } = storeToRefs(moderatorStore)
 const reviewsStore = useReviewsStore()
 const servicesStore = useServicesStore()
+
+const workshopOf = (companyRef: string) => workshops.value.find(w => w.reference === companyRef)
 
 const stats = computed(() => computeStats(fixes.value, reviewsStore.all))
 
@@ -202,6 +205,20 @@ const workshopHeaders = computed(() => [
           hover
           data-testid="stats-workshops"
         >
+          <template #[`item.companyRef`]="{ item }">
+            <span :class="workshopOf(item.companyRef)?.deletedAt ? 'text-disabled text-decoration-line-through' : 'font-weight-medium'">
+              {{ moderatorStore.workshopName(item.companyRef) }}
+            </span>
+            <v-chip
+              v-if="workshopOf(item.companyRef)?.deletedAt"
+              size="x-small"
+              color="error"
+              variant="tonal"
+              class="ml-2"
+            >
+              {{ t('stats.deletedOn', { date: formatDateToString(workshopOf(item.companyRef)!.deletedAt!) }) }}
+            </v-chip>
+          </template>
           <template #[`item.avgRepairHours`]="{ item }">
             {{ duration(item.avgRepairHours) }}
           </template>

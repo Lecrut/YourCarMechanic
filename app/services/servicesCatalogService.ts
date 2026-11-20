@@ -23,10 +23,13 @@ export const deleteService = (key: string) => softDelete(`services/${key}`)
 export const restoreService = (key: string) => restore(`services/${key}`)
 
 export async function seedServices(list: IService[]): Promise<void> {
-  const batch = writeBatch(db())
-  list.forEach((s) => {
-    const { deletedAt: _deletedAt, ...data } = mapIService(s)
-    batch.set(doc(services(), s.key), data)
-  })
-  await batch.commit()
+  // Firestore limits a single writeBatch to 500 operations.
+  for (let i = 0; i < list.length; i += 450) {
+    const batch = writeBatch(db())
+    list.slice(i, i + 450).forEach((s) => {
+      const { deletedAt: _deletedAt, ...data } = mapIService(s)
+      batch.set(doc(services(), s.key), data)
+    })
+    await batch.commit()
+  }
 }

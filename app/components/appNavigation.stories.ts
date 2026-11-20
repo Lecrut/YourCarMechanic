@@ -41,6 +41,15 @@ export const Workshop: Story = {
   },
 }
 
+/** Every role reaches its own profile from the account menu (moderators included). */
+export const ModeratorProfileLink: Story = {
+  parameters: { app: { user: moderator } },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByTestId('account-menu'))
+    await expect(await screen.findByTestId('my-profile')).toHaveAttribute('href', '/moderator/profile')
+  },
+}
+
 export const Moderator: Story = {
   parameters: { app: { user: moderator } },
   play: async ({ canvasElement }) => {
