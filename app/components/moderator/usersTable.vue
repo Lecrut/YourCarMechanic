@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IUser, UserRole } from '~/models/user'
+import type { IUser, UserRole } from '~/types/user'
 import { formatDateToString } from '~/utils/time'
 
 /** Every account with its activity – the moderator's client list. */

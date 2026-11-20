@@ -1,11 +1,12 @@
-import { type IFix, latestQuote } from '~/models/fix'
-import type { NotificationType } from '~/models/notification'
-import type { IReview } from '~/models/review'
+import { latestQuote } from '~/domain/fix'
+import type { IFix } from '~/types/fix'
+import type { NotificationType } from '~/types/notification'
+import type { IReview } from '~/types/review'
+import type { FixOutcome, IStats, IWorkshopStats } from '~/types/stats'
 
 const HOUR = 3_600_000
-const CANCELS: NotificationType[] = ['userCancel', 'workshopCancel', 'moderatorCancel']
 
-export type FixOutcome = 'inProgress' | 'finished' | 'cancelled'
+const CANCELS: NotificationType[] = ['userCancel', 'workshopCancel', 'moderatorCancel']
 
 export function fixOutcome(fix: IFix): FixOutcome {
   const types = fix.notifications.map(n => n.notificationType)
@@ -34,28 +35,6 @@ export function waitHours(fix: IFix): number | null {
 
 const average = (values: number[]) =>
   values.length ? Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) / 10 : null
-
-export interface IWorkshopStats {
-  companyRef: string
-  repairs: number
-  finished: number
-  avgRepairHours: number | null
-  avgRating: number | null
-  quotesTotal: number
-}
-
-export interface IStats {
-  total: number
-  byOutcome: Record<FixOutcome, number>
-  cancelRate: number
-  avgRepairHours: number | null
-  avgWaitHours: number | null
-  quotesTotal: number
-  /** Repairs per month for the last 12 months (oldest first), by visit date. */
-  perMonth: { month: Date, count: number }[]
-  topServices: { key: string, count: number }[]
-  workshops: IWorkshopStats[]
-}
 
 export function computeStats(fixes: IFix[], reviews: IReview[], now = new Date()): IStats {
   const byOutcome: Record<FixOutcome, number> = { inProgress: 0, finished: 0, cancelled: 0 }

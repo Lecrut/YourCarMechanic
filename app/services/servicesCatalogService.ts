@@ -1,7 +1,8 @@
 import { collection, doc, getDocs, setDoc, writeBatch } from 'firebase/firestore'
 import { db } from './firebase'
 import { restore, softDelete } from './softDelete'
-import { type IService, mapIService } from '~/models/service'
+import { mapIService } from '~/mappers/service'
+import type { IService } from '~/types/service'
 
 const services = () => collection(db(), 'services')
 

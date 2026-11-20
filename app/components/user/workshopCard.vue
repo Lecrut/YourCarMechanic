@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { IWorkshop } from '~/models/workshop'
-import { formatDuration, formatRange, type Range } from '~/models/priceList'
-import type { IRatingSummary } from '~/models/review'
-import type { IPromotion } from '~/models/promotion'
+import type { IWorkshop } from '~/types/workshop'
+import type { Range } from '~/types/priceList'
+import { formatDuration, formatRange } from '~/utils/format'
+import type { IRatingSummary } from '~/types/review'
+import type { IPromotion } from '~/types/promotion'
 import { formatDateToString } from '~/utils/time'
 import FreeDates from '~/components/user/freeDates.vue'
 

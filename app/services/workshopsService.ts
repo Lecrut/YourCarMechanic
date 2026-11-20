@@ -14,9 +14,10 @@ import {
 } from 'firebase/firestore'
 import { db } from './firebase'
 import { AppError } from '~/utils/errors'
-import { fromDoc, fromQuery } from './mappers'
-import { notDeleted } from '~/models/softDelete'
-import { type IWorkshop, mapIWorkshop } from '~/models/workshop'
+import { fromDoc, fromQuery } from './snapshot'
+import { notDeleted } from '~/domain/softDelete'
+import { mapIWorkshop } from '~/mappers/workshop'
+import type { IWorkshop } from '~/types/workshop'
 
 const companies = () => collection(db(), 'companies')
 

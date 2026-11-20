@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { buildGarage } from './garage'
-import { canReschedule, mapIFix } from './fix'
-import { mapICar } from './car'
-import { mapINotification } from './notification'
+import { buildGarage } from '~/domain/garage'
+import { canReschedule } from '~/domain/fix'
+import { mapIFix } from '~/mappers/fix'
+import { mapICar } from '~/mappers/car'
+import { mapINotification } from '~/mappers/notification'
 
 const bmw = mapICar({ manufacturer: 'BMW', model: 'X1', productionYear: 2020, reference: 'cars/bmw' })
 const skoda = mapICar({ manufacturer: 'Skoda', model: 'Fabia', productionYear: 2012, reference: 'cars/skoda' })

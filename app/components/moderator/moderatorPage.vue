@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import PageHeader from '~/components/pageHeader.vue'
-import { useModeratorLive } from '~/composables/moderator'
+import { useModeratorLive } from '~/composables/useModeratorLive'
 
 /**
  * Frame of every moderator page: header on larger screens, the content in a card.

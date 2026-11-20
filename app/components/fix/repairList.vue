@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IFix, ViewerMode } from '~/models/fix'
+import type { IFix, ViewerMode } from '~/types/fix'
 import RepairCard from '~/components/fix/repairCard.vue'
 
 defineProps<{

@@ -1,24 +1,8 @@
-import { type IFix, isFixFinished } from '~/models/fix'
-import { type IWorkshop, isWorkingDay, occupiedHours } from '~/models/workshop'
-
-/** A visit in one hour cell; `continued` marks hours after the first one of a longer visit. */
-export interface IWeekEntry {
-  fix: IFix
-  continued: boolean
-}
-
-export interface IWeekDay {
-  day: Date
-  isToday: boolean
-  isWorking: boolean
-  /** Entries per hour row (same order as `IWeek.hours`). */
-  cells: IWeekEntry[][]
-}
-
-export interface IWeek {
-  hours: number[]
-  days: IWeekDay[]
-}
+import { isFixFinished } from '~/domain/fix'
+import { isWorkingDay, occupiedHours } from '~/domain/workshop'
+import type { IFix } from '~/types/fix'
+import type { IWeek } from '~/types/week'
+import type { IWorkshop } from '~/types/workshop'
 
 /**
  * Calendar board for `days` days from `from`: one row per opening hour (extended if a visit

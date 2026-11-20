@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { isOnDay, lastStatus, mapIFix, matchesSearch, statusColor, totalCost } from './fix'
-import { buildWeek, carsAtWorkshop } from './week'
-import { mapIWorkshop } from './workshop'
-import { mapICar } from './car'
-import { mapINotification, type NotificationType } from './notification'
+import { isOnDay, lastStatus, matchesSearch, statusColor, totalCost } from '~/domain/fix'
+import { mapIFix } from '~/mappers/fix'
+import { buildWeek, carsAtWorkshop } from '~/domain/week'
+import { mapIWorkshop } from '~/mappers/workshop'
+import { mapICar } from '~/mappers/car'
+import { mapINotification } from '~/mappers/notification'
+import type { NotificationType } from '~/types/notification'
 import { toIcs } from '../utils/calendar'
 
 const s = (notificationType: NotificationType, cost?: number) => mapINotification({ notificationType, cost })

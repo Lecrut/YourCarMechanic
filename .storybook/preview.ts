@@ -14,9 +14,8 @@ import ErrorSnackbar from '~/components/errorSnackbar.vue'
 import { resetDb } from './mocks/services'
 import { navigatedTo } from './mocks/nuxt'
 import { useAuthStore } from '~/stores/authStore'
-import type { IUser } from '~/models/user'
-import type { IWorkshop } from '~/models/workshop'
-
+import type { IUser } from '~/types/user'
+import type { IWorkshop } from '~/types/workshop'
 // Overlays without transitions: play tests can click into dialogs/menus immediately.
 const noTransition = { transition: false }
 const vuetify = createVuetify({

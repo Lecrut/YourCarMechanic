@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { productionYearRule, requiredRule, vinRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
-import { type ICar, mapICar } from '~/models/car'
+import { mapICar } from '~/mappers/car'
+import type { ICar } from '~/types/car'
 
 const isDialogShown = defineModel<boolean>({ default: false })
 

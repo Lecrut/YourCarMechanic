@@ -1,5 +1,6 @@
-import type { NotificationType } from '~/models/notification'
-import type { ViewerMode } from '~/models/fix'
+import type { NotificationType } from '~/types/notification'
+import type { ViewerMode } from '~/types/fix'
+import type { UserRole } from '~/types/user'
 
 type Translate = (key: string) => string
 type Option = { title: string, value: NotificationType }
@@ -24,3 +25,9 @@ export function statusOptions(t: Translate, mode: ViewerMode, carReceived: boole
       : ['getCar', 'workshopCancel'])
   return []
 }
+
+/** Roles a user can pick for themselves. `moderator` is assigned manually only. */
+export const selectableRoles = (t: Translate): { title: string, value: UserRole }[] => [
+  { title: t('roles.user'), value: 'user' },
+  { title: t('roles.workshop'), value: 'workshop' },
+]

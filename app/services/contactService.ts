@@ -1,8 +1,9 @@
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from './firebase'
-import { fromQuery } from './mappers'
+import { fromQuery } from './snapshot'
 import { restore, softDelete } from './softDelete'
-import { type ContactCategory, type ContactStatus, type IContactMessage, mapIContactMessage } from '~/models/contactMessage'
+import { mapIContactMessage } from '~/mappers/contactMessage'
+import type { ContactCategory, ContactStatus, IContactMessage } from '~/types/contactMessage'
 
 const messages = () => collection(db(), 'contactMessages')
 

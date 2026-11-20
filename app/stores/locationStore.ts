@@ -1,4 +1,4 @@
-import type { LatLng } from '~/models/geo'
+import type { LatLng } from '~/types/geo'
 import { AppError } from '~/utils/errors'
 
 const STORAGE_KEY = 'user-location'

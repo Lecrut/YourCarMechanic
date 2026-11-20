@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { CAR_SEGMENTS, formatDuration, formatRange, type IPriceListItem, itemEstimate, mapIPriceListItem, type Range } from '~/models/priceList'
+import { CAR_SEGMENTS, itemEstimate } from '~/domain/priceList'
+import { mapIPriceListItem } from '~/mappers/priceList'
+import type { IPriceListItem, Range } from '~/types/priceList'
+import { formatDuration, formatRange } from '~/utils/format'
 import { requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 

@@ -17,17 +17,16 @@ import {
 } from 'firebase/firestore'
 import { db } from './firebase'
 import { AppError } from '~/utils/errors'
-import { fromDoc, fromQuery } from './mappers'
-import { type IFix, type IFixProposal, mapIFix } from '~/models/fix'
-import { type ICar, mapICarToFirebase } from '~/models/car'
-import { mapIWorkshop, occupiedHours } from '~/models/workshop'
-import {
-  CLOSING_NOTIFICATIONS,
-  type INotification,
-  mapINotification,
-  mapINotificationToFirebase,
-  type NotificationType,
-} from '~/models/notification'
+import { fromDoc, fromQuery } from './snapshot'
+import { mapIFix } from '~/mappers/fix'
+import type { IFix, IFixProposal } from '~/types/fix'
+import { mapICarToFirebase } from '~/mappers/car'
+import type { ICar } from '~/types/car'
+import { occupiedHours } from '~/domain/workshop'
+import { mapIWorkshop } from '~/mappers/workshop'
+import { CLOSING_NOTIFICATIONS } from '~/domain/notification'
+import { mapINotification, mapINotificationToFirebase } from '~/mappers/notification'
+import type { INotification, NotificationType } from '~/types/notification'
 
 const fixes = () => collection(db(), 'fixes')
 

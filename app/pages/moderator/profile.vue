@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
 import AccountSettingsCard from '~/components/accountSettingsCard.vue'
-import { useModeratorLive } from '~/composables/moderator'
-import { mapIUserProfile } from '~/models/userProfile'
+import { useModeratorLive } from '~/composables/useModeratorLive'
+import { mapIUserProfile } from '~/mappers/userProfile'
 import formValidation from '~/utils/formValidation'
 import { phoneRule, requiredRule } from '~/utils/rules'
 

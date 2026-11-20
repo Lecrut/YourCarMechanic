@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IWorkshop } from '~/models/workshop'
+import type { IWorkshop } from '~/types/workshop'
 import { atHour, formatDayLabel } from '~/utils/time'
-import { formatDuration } from '~/models/priceList'
+import { formatDuration } from '~/utils/format'
 
 const isDialogShown = defineModel<boolean>({ default: false })
 

@@ -5,7 +5,7 @@ import PageHeader from './pageHeader.vue'
 import MySnackbar from './mySnackbar.vue'
 import AuthCard from './authCard.vue'
 import WorkshopForm from './workshopForm.vue'
-import { mapIWorkshop } from '~/models/workshop'
+import { mapIWorkshop } from '~/mappers/workshop'
 import { autofix } from '../../.storybook/mocks/fixtures'
 
 const meta = {

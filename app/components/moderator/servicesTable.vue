@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { type IService, mapIService, SERVICE_CATEGORIES } from '~/models/service'
+import { SERVICE_CATEGORIES } from '~/domain/service'
+import { mapIService } from '~/mappers/service'
+import type { IService } from '~/types/service'
 import { requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 

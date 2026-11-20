@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { type IWorkshop, MAX_STATIONS } from '~/models/workshop'
+import { MAX_STATIONS } from '~/domain/workshop'
+import type { IWorkshop } from '~/types/workshop'
 import { nipRule, phoneRule, requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
-import type { LatLng } from '~/models/geo'
+import type { LatLng } from '~/types/geo'
 import WorkshopMap from '~/components/map/workshopMap.vue'
 
 /** Company data form shared by role choice, the company profile and the moderator panel. */

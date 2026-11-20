@@ -1,7 +1,8 @@
 import { pricingService } from '~/services'
-import { estimateRepair, type IPriceListItem, type Range } from '~/models/priceList'
-import { discountsAt, type IPromotion } from '~/models/promotion'
-
+import { estimateRepair } from '~/domain/priceList'
+import type { IPriceListItem, Range } from '~/types/priceList'
+import { discountsAt } from '~/domain/promotion'
+import type { IPromotion } from '~/types/promotion'
 /** The signed-in workshop's own price list. */
 export const usePricingStore = defineStore('pricing', () => {
   const items = ref<IPriceListItem[]>([])

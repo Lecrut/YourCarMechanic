@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
-import { CONTACT_CATEGORIES, CONTACT_LIMITS, type ContactCategory } from '~/models/contactMessage'
+import { CONTACT_CATEGORIES, CONTACT_LIMITS } from '~/domain/contactMessage'
+import type { ContactCategory } from '~/types/contactMessage'
 import formValidation from '~/utils/formValidation'
 import { emailRule, maxLengthRule, requiredRule } from '~/utils/rules'
 

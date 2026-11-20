@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { IClient } from '~/models/client'
-import { mapIFix } from '~/models/fix'
-import { slotProblem } from '~/models/workshop'
-import { estimateDuration, formatDuration, formatRange, TIME_STEP_HOURS } from '~/models/priceList'
+import type { IClient } from '~/types/client'
+import { mapIFix } from '~/mappers/fix'
+import { slotProblem } from '~/domain/workshop'
+import { estimateDuration, TIME_STEP_HOURS } from '~/domain/priceList'
+import { formatDuration, formatRange } from '~/utils/format'
 import { requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 import { fromLocalInput } from '~/utils/time'

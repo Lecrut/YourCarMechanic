@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLanguage } from '~/composables/language'
+import { useLanguage } from '~/composables/useLanguage'
 
 /** Account preferences on every role's profile page – a single compact row with the app language. */
 const { t } = useI18n()

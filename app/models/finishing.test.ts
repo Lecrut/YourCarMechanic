@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { fixesForCar, mapIFix, nextVisit } from './fix'
-import { buildFeed, formatRelative } from './feed'
-import { mapICar } from './car'
+import { fixesForCar, nextVisit } from '~/domain/fix'
+import { mapIFix } from '~/mappers/fix'
+import { buildFeed } from '~/domain/feed'
+import { formatRelative } from '~/utils/time'
+import { mapICar } from '~/mappers/car'
 
 const bmw = mapICar({ manufacturer: 'BMW', model: 'X1', productionYear: 2020, vin: 'WBA0000000000001', reference: 'cars/bmw' })
 const skoda = mapICar({ manufacturer: 'Skoda', model: 'Fabia', productionYear: 2012, reference: 'cars/skoda' })

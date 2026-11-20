@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type IPromotion, mapIPromotion } from '~/models/promotion'
+import { mapIPromotion } from '~/mappers/promotion'
+import type { IPromotion } from '~/types/promotion'
 import { requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 

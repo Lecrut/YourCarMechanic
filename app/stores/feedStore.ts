@@ -1,6 +1,6 @@
 import { fixesService } from '~/services'
-import type { IFix } from '~/models/fix'
-import { buildFeed, unreadCount } from '~/models/feed'
+import type { IFix } from '~/types/fix'
+import { buildFeed, unreadCount } from '~/domain/feed'
 import { addDays } from '~/utils/time'
 import { createSubscription } from '~/utils/subscription'
 

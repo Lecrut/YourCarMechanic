@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IFix } from '~/models/fix'
+import type { IFix } from '~/types/fix'
 import { maxLengthRule } from '~/utils/rules'
 
 const isDialogShown = defineModel<boolean>({ default: false })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IClient } from '~/models/client'
+import type { IClient } from '~/types/client'
 import PageHeader from '~/components/pageHeader.vue'
 import ClientsTable from '~/components/clientsTable.vue'
 import BookForClientDialog from '~/components/company/bookForClientDialog.vue'

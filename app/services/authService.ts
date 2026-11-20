@@ -9,9 +9,10 @@ import {
 import { doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
 import { AppError } from '~/utils/errors'
-import { fromDoc } from './mappers'
-import { type IUser, mapIUser } from '~/models/user'
-import type { IUserProfile } from '~/models/userProfile'
+import { fromDoc } from './snapshot'
+import { mapIUser } from '~/mappers/user'
+import type { IUser } from '~/types/user'
+import type { IUserProfile } from '~/types/userProfile'
 
 const userDoc = (uid: string) => doc(db(), 'users', uid)
 

@@ -1,9 +1,10 @@
 import { addDoc, collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore'
 import { db } from './firebase'
-import { fromQuery } from './mappers'
+import { fromQuery } from './snapshot'
 import { softDelete } from './softDelete'
-import { type ICar, mapICar } from '~/models/car'
-import { notDeleted } from '~/models/softDelete'
+import { mapICar } from '~/mappers/car'
+import type { ICar } from '~/types/car'
+import { notDeleted } from '~/domain/softDelete'
 
 const cars = () => collection(db(), 'cars')
 

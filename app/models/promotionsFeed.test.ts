@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { applyDiscount, bestPromotionFor, discountsAt, isPromotionActive, mapIPromotion } from './promotion'
-import { estimateRepair, mapIPriceListItem, quoteLineTotal } from './priceList'
-import { buildFeed, formatRelative, unreadCount } from './feed'
-import { canAcceptQuote, isQuoteAccepted, mapIFix } from './fix'
-import { mapINotification, type NotificationType } from './notification'
-import { mapICar } from './car'
+import { applyDiscount, bestPromotionFor, discountsAt, isPromotionActive } from '~/domain/promotion'
+import { mapIPromotion } from '~/mappers/promotion'
+import { estimateRepair, quoteLineTotal } from '~/domain/priceList'
+import { mapIPriceListItem } from '~/mappers/priceList'
+import { buildFeed, unreadCount } from '~/domain/feed'
+import { formatRelative } from '~/utils/time'
+import { canAcceptQuote, isQuoteAccepted } from '~/domain/fix'
+import { mapIFix } from '~/mappers/fix'
+import { mapINotification } from '~/mappers/notification'
+import type { NotificationType } from '~/types/notification'
+import { mapICar } from '~/mappers/car'
 
 const promo = (percent: number, services: string[], from: string, to: string, extra = {}) =>
   mapIPromotion({ title: `-${percent}`, percent, services, validFrom: new Date(from), validTo: new Date(to), ...extra })

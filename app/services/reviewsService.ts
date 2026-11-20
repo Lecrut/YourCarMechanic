@@ -11,10 +11,11 @@ import {
   writeBatch,
 } from 'firebase/firestore'
 import { auth, db } from './firebase'
-import { fromQuery } from './mappers'
-import { notDeleted } from '~/models/softDelete'
-import { type IReview, mapIReview } from '~/models/review'
-import type { IFix } from '~/models/fix'
+import { fromQuery } from './snapshot'
+import { notDeleted } from '~/domain/softDelete'
+import { mapIReview } from '~/mappers/review'
+import type { IReview } from '~/types/review'
+import type { IFix } from '~/types/fix'
 
 const reviews = () => collection(db(), 'reviews')
 

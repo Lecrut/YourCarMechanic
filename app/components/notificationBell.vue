@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { IFeedEvent } from '~/models/feed'
-import { formatRelative } from '~/models/feed'
+import type { IFeedEvent } from '~/types/feed'
+import { formatRelative, formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
-import { formatDateToString } from '~/utils/time'
 
 /** Bell with the notification feed (customers and workshops). */
 const { t, locale } = useI18n()

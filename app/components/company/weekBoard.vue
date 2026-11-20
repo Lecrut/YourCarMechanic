@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { type IFix, lastStatus, statusColor } from '~/models/fix'
-import type { IWorkshop } from '~/models/workshop'
-import { buildWeek, carsAtWorkshop } from '~/models/week'
-import { notificationLabel } from '~/composables/notifications'
+import { lastStatus, statusColor } from '~/domain/fix'
+import type { IFix } from '~/types/fix'
+import type { IWorkshop } from '~/types/workshop'
+import { buildWeek, carsAtWorkshop } from '~/domain/week'
+import { notificationLabel } from '~/utils/options'
 import { addDays, formatDateToString } from '~/utils/time'
-import { formatDuration } from '~/models/priceList'
+import { formatDuration } from '~/utils/format'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 
 /** Google-Calendar-like board: next 7 days × opening hours, plus cars currently at the workshop. */

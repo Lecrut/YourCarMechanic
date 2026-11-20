@@ -2,10 +2,15 @@
 import PageHeader from '~/components/pageHeader.vue'
 import WorkshopFinder from '~/components/workshopFinder.vue'
 import { pricingService, reviewsService, workshopsService } from '~/services'
-import { type IWorkshop, servicesBrand } from '~/models/workshop'
-import { CAR_SEGMENTS, formatDurationRange, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
-import { type IPromotion, isPromotionActive } from '~/models/promotion'
-import { type IRatingSummary, ratingSummary } from '~/models/review'
+import { servicesBrand } from '~/domain/workshop'
+import type { IWorkshop } from '~/types/workshop'
+import { CAR_SEGMENTS, itemEstimate } from '~/domain/priceList'
+import type { IPriceListItem } from '~/types/priceList'
+import { formatDurationRange, formatRange } from '~/utils/format'
+import { isPromotionActive } from '~/domain/promotion'
+import type { IPromotion } from '~/types/promotion'
+import { ratingSummary } from '~/domain/review'
+import type { IRatingSummary } from '~/types/review'
 
 const { t } = useI18n()
 

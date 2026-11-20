@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
-import { awaitsClientDecision, nextVisit as findNextVisit } from '~/models/fix'
-import { buildGarage } from '~/models/garage'
+import { awaitsClientDecision, nextVisit as findNextVisit } from '~/domain/fix'
+import { buildGarage } from '~/domain/garage'
 import NextVisit from '~/components/user/nextVisit.vue'
 import GarageCar from '~/components/user/garageCar.vue'
 import AddCarForm from '~/components/user/addCarForm.vue'

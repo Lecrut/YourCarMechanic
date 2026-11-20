@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { IFix } from '~/models/fix'
-import type { IWorkshop } from '~/models/workshop'
-import { formatRelative } from '~/models/feed'
-import { formatDateToString } from '~/utils/time'
+import type { IFix } from '~/types/fix'
+import type { IWorkshop } from '~/types/workshop'
+import { formatRelative, formatDateToString } from '~/utils/time'
+
 import { downloadIcs } from '~/utils/calendar'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 

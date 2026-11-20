@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { awaitsClientDecision, canBeReviewed, fixProgress, isFixFinished, latestQuote, mapIFix } from './fix'
-import { buildClients } from './client'
-import { computeStats, fixOutcome, repairHours, waitHours } from './stats'
-import { mapIReview, ratingSummary } from './review'
-import { notDeleted } from './softDelete'
-import { mapICar } from './car'
-import { mapINotification, type NotificationType } from './notification'
+import { awaitsClientDecision, canBeReviewed, fixProgress, isFixFinished, latestQuote } from '~/domain/fix'
+import { mapIFix } from '~/mappers/fix'
+import { buildClients } from '~/domain/client'
+import { computeStats, fixOutcome, repairHours, waitHours } from '~/domain/stats'
+import { ratingSummary } from '~/domain/review'
+import { mapIReview } from '~/mappers/review'
+import { notDeleted } from '~/domain/softDelete'
+import { mapICar } from '~/mappers/car'
+import { mapINotification } from '~/mappers/notification'
+import type { NotificationType } from '~/types/notification'
 
 const d = (iso: string) => new Date(iso)
 const status = (notificationType: NotificationType, date: string, cost?: number) =>

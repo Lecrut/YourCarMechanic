@@ -1,8 +1,9 @@
 import { fixesService, photosService } from '~/services'
 import { downscaleImage } from '~/utils/image'
 import { AppError } from '~/utils/errors'
-import { type IFix, type IFixPhoto, type IFixProposal, MAX_PHOTOS } from '~/models/fix'
-import type { INotification } from '~/models/notification'
+import { MAX_PHOTOS } from '~/domain/fix'
+import type { IFix, IFixPhoto, IFixProposal } from '~/types/fix'
+import type { INotification } from '~/types/notification'
 import { createSubscription } from '~/utils/subscription'
 
 export const useFixesStore = defineStore('fixes', () => {

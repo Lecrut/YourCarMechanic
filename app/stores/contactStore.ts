@@ -1,6 +1,7 @@
 import { contactService } from '~/services'
 import type { ContactInput } from '~/services/contactService'
-import { type ContactStatus, type IContactMessage, isOpen } from '~/models/contactMessage'
+import { isOpen } from '~/domain/contactMessage'
+import type { ContactStatus, IContactMessage } from '~/types/contactMessage'
 import { createSubscription } from '~/utils/subscription'
 
 /** Contact form (everyone) and the moderator's inbox. */

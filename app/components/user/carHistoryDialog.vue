@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { ICar } from '~/models/car'
-import { fixesForCar, type IFix, lastStatus, statusColor, totalCost } from '~/models/fix'
-import { fixOutcome } from '~/models/stats'
-import { notificationLabel } from '~/composables/notifications'
+import type { ICar } from '~/types/car'
+import { fixesForCar, lastStatus, statusColor, totalCost } from '~/domain/fix'
+import type { IFix } from '~/types/fix'
+import { fixOutcome } from '~/domain/stats'
+import { notificationLabel } from '~/utils/options'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 

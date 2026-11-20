@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { distanceKm, formatDistance, placeWorkshop, rankWorkshops } from './geo'
-import { mapIWorkshop, servicesBrand } from './workshop'
+import { distanceKm, placeWorkshop, rankWorkshops } from '~/domain/geo'
+import { formatDistance } from '~/utils/format'
+import { servicesBrand } from '~/domain/workshop'
+import { mapIWorkshop } from '~/mappers/workshop'
 
 const KRAKOW = { lat: 50.0614, lng: 19.9366 }
 const WARSAW = { lat: 52.2297, lng: 21.0122 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mapIWorkshop } from '~/models/workshop'
+import { mapIWorkshop } from '~/mappers/workshop'
 import WorkshopForm from '~/components/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
 import PageHeader from '~/components/pageHeader.vue'

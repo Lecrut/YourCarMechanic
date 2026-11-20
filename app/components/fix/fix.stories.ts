@@ -3,7 +3,7 @@ import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/te
 import RepairDetails from './repairDetails.vue'
 import RepairList from './repairList.vue'
 import { autofix, fixBookedByWorkshop, fixWithProposal, moderator, newFix, userAnna, workshopOwner } from '../../../.storybook/mocks/fixtures'
-import { mapIFix } from '~/models/fix'
+import { mapIFix } from '~/mappers/fix'
 import { fixesService, moderatorService, photosService } from '~/services'
 
 /** Opens a v-select inside the status form once its expand transition finished. */

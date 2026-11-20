@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IFix } from '~/models/fix'
-import { slotProblem } from '~/models/workshop'
-import { formatRange } from '~/models/priceList'
+import type { IFix } from '~/types/fix'
+import { slotProblem } from '~/domain/workshop'
+import { formatRange } from '~/utils/format'
 import { requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 import { fromLocalInput, toLocalInput } from '~/utils/time'

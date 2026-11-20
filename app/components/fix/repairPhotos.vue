@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { type IFix, MAX_PHOTOS, type ViewerMode } from '~/models/fix'
+import { MAX_PHOTOS } from '~/domain/fix'
+import type { IFix, ViewerMode } from '~/types/fix'
 import { formatDateToString } from '~/utils/time'
 
 /** Photos of a repair – the client shows the problem, the mechanic documents the work. */

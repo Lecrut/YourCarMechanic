@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { carSegment, estimateRepair, formatRange, isWithin, itemEstimate, mapIPriceListItem } from './priceList'
+import { carSegment, estimateRepair, isWithin, itemEstimate } from '~/domain/priceList'
+import { mapIPriceListItem } from '~/mappers/priceList'
+import { formatRange } from '~/utils/format'
 
 const oil = mapIPriceListItem({
   serviceKey: 'oil',

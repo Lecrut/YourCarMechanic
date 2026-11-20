@@ -44,3 +44,18 @@ export function toLocalInput(date: Date): string {
 
 /** Parses the value of <input type="datetime-local"> as local time. */
 export const fromLocalInput = (value: string) => new Date(value)
+
+/**
+ * Grammatical relative time in the UI language: "przed chwilą", "za 30 minut", "3 godziny temu",
+ * "jutro", "pojutrze", "za 5 dni". Within a day it counts minutes/hours, beyond that calendar days.
+ */
+export function formatRelative(at: Date, locale: string, now = new Date()): string {
+  const rtf = new Intl.RelativeTimeFormat(locale === 'pl' ? 'pl-PL' : 'en-GB', { numeric: 'auto' })
+  const minutes = Math.round((at.getTime() - now.getTime()) / 60_000)
+  const dayStart = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
+  const days = Math.round((dayStart(at) - dayStart(now)) / 86_400_000)
+  if (Math.abs(minutes) < 1) return rtf.format(0, 'second')
+  if (Math.abs(minutes) < 60) return rtf.format(minutes, 'minute')
+  if (days === 0 || Math.abs(minutes) < 6 * 60) return rtf.format(Math.trunc(minutes / 60), 'hour')
+  return rtf.format(days, 'day')
+}

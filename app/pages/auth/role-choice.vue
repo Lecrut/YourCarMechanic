@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { selectableRoles } from '~/composables/roles'
+import { selectableRoles } from '~/utils/options'
 import { phoneRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
-import { mapIUserProfile } from '~/models/userProfile'
-import { mapIWorkshop } from '~/models/workshop'
-import type { UserRole } from '~/models/user'
+import { mapIUserProfile } from '~/mappers/userProfile'
+import { mapIWorkshop } from '~/mappers/workshop'
+import type { UserRole } from '~/types/user'
 import WorkshopForm from '~/components/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
 

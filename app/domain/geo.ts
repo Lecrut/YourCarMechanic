@@ -1,10 +1,6 @@
-import type { IWorkshop } from '~/models/workshop'
-import type { IRatingSummary } from '~/models/review'
-
-export interface LatLng {
-  lat: number
-  lng: number
-}
+import type { LatLng, PlacedWorkshop, RankedWorkshop, WorkshopSort } from '~/types/geo'
+import type { IRatingSummary } from '~/types/review'
+import type { IWorkshop } from '~/types/workshop'
 
 /** Centre of Poland – the map's starting view before we know where the user is. */
 export const POLAND_CENTER: LatLng = { lat: 52.07, lng: 19.48 }
@@ -18,13 +14,6 @@ export function distanceKm(a: LatLng, b: LatLng): number {
   return 6371 * 2 * Math.asin(Math.sqrt(h))
 }
 
-/** "850 m", "4,2 km", "37 km". */
-export function formatDistance(km: number, locale = 'pl'): string {
-  if (km < 1) return `${Math.round(km * 10) * 100} m`
-  const value = km < 10 ? Math.round(km * 10) / 10 : Math.round(km)
-  return `${value.toLocaleString(locale === 'pl' ? 'pl-PL' : 'en-GB')} km`
-}
-
 /** Small stable offset (≈ up to 1 km) so workshops without a pin do not stack on the city centre. */
 function jitter(seed: string): LatLng {
   let h = 0
@@ -34,13 +23,6 @@ function jitter(seed: string): LatLng {
   return { lat: Math.sin(angle) * r, lng: Math.cos(angle) * r * 1.6 }
 }
 
-export interface PlacedWorkshop {
-  workshop: IWorkshop
-  position: LatLng
-  /** True when the workshop has not pinned itself – position is its city centre. */
-  approximate: boolean
-}
-
 /** Position on the map: the workshop's own pin, otherwise its city centre (marked approximate). */
 export function placeWorkshop(workshop: IWorkshop, cityCenter: (city: string) => LatLng | null): PlacedWorkshop | null {
   if (workshop.location) return { workshop, position: workshop.location, approximate: false }
@@ -48,13 +30,6 @@ export function placeWorkshop(workshop: IWorkshop, cityCenter: (city: string) =>
   if (!center) return null
   const j = jitter(workshop.reference || workshop.name)
   return { workshop, position: { lat: center.lat + j.lat, lng: center.lng + j.lng }, approximate: true }
-}
-
-export type WorkshopSort = 'distance' | 'rating' | 'reviews'
-
-export interface RankedWorkshop extends PlacedWorkshop {
-  distance: number | null
-  rating: IRatingSummary
 }
 
 /**

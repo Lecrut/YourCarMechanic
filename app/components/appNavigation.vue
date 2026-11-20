@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useDisplay, useTheme } from 'vuetify'
-import { awaitsClientDecision } from '~/models/fix'
+import { awaitsClientDecision } from '~/domain/fix'
 import NotificationBell from '~/components/notificationBell.vue'
-import { useLanguage } from '~/composables/language'
+import { useLanguage } from '~/composables/useLanguage'
 
 interface NavItem {
   title: string

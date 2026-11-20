@@ -1,15 +1,4 @@
-/** A repair type from the moderator-managed `services` collection. */
-import { type ISoftDeletable, toDeletedAt } from '~/models/softDelete'
-
-export type ServiceCategory
-  = | 'diagnostics'
-    | 'mechanics'
-    | 'brakesSuspension'
-    | 'electrics'
-    | 'bodyPaint'
-    | 'tires'
-    | 'glass'
-    | 'other'
+import type { IService, ServiceCategory } from '~/types/service'
 
 export const SERVICE_CATEGORIES: ServiceCategory[] = [
   'diagnostics',
@@ -21,28 +10,6 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
   'glass',
   'other',
 ]
-
-export interface IService extends ISoftDeletable {
-  key: string
-  namePl: string
-  nameEn: string
-  category: ServiceCategory
-  active: boolean
-  order: number
-}
-
-export function mapIService(data: Partial<Omit<IService, 'deletedAt'>> & { deletedAt?: unknown }): IService {
-  const category = SERVICE_CATEGORIES.includes(data.category as ServiceCategory) ? (data.category as ServiceCategory) : 'other'
-  return {
-    key: data.key || '',
-    namePl: data.namePl || data.key || '',
-    nameEn: data.nameEn || data.namePl || data.key || '',
-    category,
-    active: data.active ?? true,
-    order: Number(data.order ?? 0),
-    deletedAt: toDeletedAt(data.deletedAt),
-  }
-}
 
 /** Initial catalog – used when the collection is empty and for seeding by a moderator. */
 export const DEFAULT_SERVICES: IService[] = ([

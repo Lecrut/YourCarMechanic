@@ -1,6 +1,6 @@
 import { servicesCatalogService } from '~/services'
-import { DEFAULT_SERVICES, type IService } from '~/models/service'
-
+import { DEFAULT_SERVICES } from '~/domain/service'
+import type { IService } from '~/types/service'
 /** Repair types managed by moderators (Firestore `services`). Falls back to the defaults until seeded. */
 export const useServicesStore = defineStore('services', () => {
   const catalog = ref<IService[]>([])

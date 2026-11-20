@@ -1,7 +1,7 @@
 import { authService, fixesService, workshopsService } from '~/services'
-import type { IUser } from '~/models/user'
-import type { IUserProfile } from '~/models/userProfile'
-import type { IWorkshop } from '~/models/workshop'
+import type { IUser } from '~/types/user'
+import type { IUserProfile } from '~/types/userProfile'
+import type { IWorkshop } from '~/types/workshop'
 import { createSubscription } from '~/utils/subscription'
 import { AppError } from '~/utils/errors'
 

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ServiceList from '~/components/serviceList.vue'
-import { type IFix, statusColor } from '~/models/fix'
-import { notificationLabel } from '~/composables/notifications'
+import { statusColor } from '~/domain/fix'
+import type { IFix } from '~/types/fix'
+import { notificationLabel } from '~/utils/options'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 

@@ -1,5 +1,5 @@
 import { carsService, fixesService } from '~/services'
-import type { ICar } from '~/models/car'
+import type { ICar } from '~/types/car'
 
 export const useCarsStore = defineStore('cars', () => {
   const cars = ref<ICar[]>([])

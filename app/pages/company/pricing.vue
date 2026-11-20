@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { CAR_SEGMENTS, formatDurationRange, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
+import { CAR_SEGMENTS, itemEstimate } from '~/domain/priceList'
+import type { IPriceListItem } from '~/types/priceList'
+import { formatDurationRange, formatRange } from '~/utils/format'
 import { formatDate } from '~/utils/time'
-import { mapIWorkshop } from '~/models/workshop'
+import { mapIWorkshop } from '~/mappers/workshop'
 import PageHeader from '~/components/pageHeader.vue'
 import PriceItemDialog from '~/components/company/priceItemDialog.vue'
 import PromotionDialog from '~/components/company/promotionDialog.vue'
 import ConfirmDialog from '~/components/confirmDialog.vue'
-import { type IPromotion, isPromotionActive } from '~/models/promotion'
+import { isPromotionActive } from '~/domain/promotion'
+import type { IPromotion } from '~/types/promotion'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })
 

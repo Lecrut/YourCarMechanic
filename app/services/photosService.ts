@@ -1,7 +1,6 @@
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore'
 import { db, firebaseApp, usesEmulators } from './firebase'
-import type { IFix, IFixPhoto } from '~/models/fix'
-
+import type { IFix, IFixPhoto } from '~/types/fix'
 /** The Storage SDK is only needed when someone uploads a photo – load it on demand (smaller main bundle). */
 async function loadStorage() {
   const sdk = await import('firebase/storage')

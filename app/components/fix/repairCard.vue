@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { awaitsClientDecision, canBeReviewed, fixProgress, type IFix, lastStatus, statusColor, totalCost, type ViewerMode } from '~/models/fix'
-import { formatRange } from '~/models/priceList'
-import { notificationLabel } from '~/composables/notifications'
-import { mapINotification } from '~/models/notification'
+import { awaitsClientDecision, canBeReviewed, fixProgress, lastStatus, statusColor, totalCost } from '~/domain/fix'
+import type { IFix, ViewerMode } from '~/types/fix'
+import { formatRange } from '~/utils/format'
+import { notificationLabel } from '~/utils/options'
+import { mapINotification } from '~/mappers/notification'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 import ReviewDialog from '~/components/user/reviewDialog.vue'

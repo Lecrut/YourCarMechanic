@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { GeoJSONSource, GeoJSONSourceSpecification, Map as MapLibreMap, Marker, StyleSpecification } from 'maplibre-gl'
 import { useTheme } from 'vuetify'
-import { type LatLng, POLAND_CENTER } from '~/models/geo'
+import { POLAND_CENTER } from '~/domain/geo'
+import type { LatLng } from '~/types/geo'
 import { themedMapStyle } from '~/utils/mapStyle'
 
 type GeoJSONSourceData = Exclude<GeoJSONSourceSpecification['data'], string>

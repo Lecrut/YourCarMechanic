@@ -1,9 +1,9 @@
 import { fixesService, moderatorService, workshopsService } from '~/services'
-import type { IUser, UserRole } from '~/models/user'
-import type { IWorkshop, WorkshopStatus } from '~/models/workshop'
-import type { IFix } from '~/models/fix'
-import type { ICar } from '~/models/car'
-import type { INotification } from '~/models/notification'
+import type { IUser, UserRole } from '~/types/user'
+import type { IWorkshop, WorkshopStatus } from '~/types/workshop'
+import type { IFix } from '~/types/fix'
+import type { ICar } from '~/types/car'
+import type { INotification } from '~/types/notification'
 import { createSubscription } from '~/utils/subscription'
 
 export const useModeratorStore = defineStore('moderator', () => {

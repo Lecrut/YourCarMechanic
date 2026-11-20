@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/test'
 import RepairCard from './repairCard.vue'
 import { finishedFix, fixBookedByWorkshop, fixWithProposal, newFix, userAnna, workshopOwner, autofix } from '../../../.storybook/mocks/fixtures'
-import { mapIFix } from '~/models/fix'
+import { mapIFix } from '~/mappers/fix'
 import { fixesService, reviewsService } from '~/services'
 
 const meta = {

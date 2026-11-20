@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { IGarageCar } from '~/models/garage'
-import { awaitsClientDecision, type IFix, lastStatus, statusColor, totalCost } from '~/models/fix'
-import { formatRange } from '~/models/priceList'
-import { notificationLabel } from '~/composables/notifications'
+import type { IGarageCar } from '~/types/garage'
+import { awaitsClientDecision, lastStatus, statusColor, totalCost } from '~/domain/fix'
+import type { IFix } from '~/types/fix'
+import { formatRange } from '~/utils/format'
+import { notificationLabel } from '~/utils/options'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 import CarHistoryDialog from '~/components/user/carHistoryDialog.vue'

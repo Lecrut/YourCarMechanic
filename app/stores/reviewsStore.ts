@@ -1,6 +1,7 @@
 import { reviewsService } from '~/services'
-import type { IFix } from '~/models/fix'
-import { type IRatingSummary, type IReview, ratingSummary } from '~/models/review'
+import type { IFix } from '~/types/fix'
+import { ratingSummary } from '~/domain/review'
+import type { IRatingSummary, IReview } from '~/types/review'
 import { createSubscription } from '~/utils/subscription'
 
 export const useReviewsStore = defineStore('reviews', () => {

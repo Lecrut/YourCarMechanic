@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { isValidNip, isValidPhone, isValidVin, maxLengthRule, productionYearRule, requiredRule } from './rules'
 import { AppError, errorKey } from './errors'
-import { mapIWorkshop, slotProblem, upcomingWorkingDays } from '../models/workshop'
+import { slotProblem, upcomingWorkingDays } from '~/domain/workshop'
+import { mapIWorkshop } from '~/mappers/workshop'
 
 const t = (key: string) => key
 

@@ -1,10 +1,12 @@
 import { addDoc, collection, doc, getDocs, setDoc, Timestamp } from 'firebase/firestore'
 import { db } from './firebase'
-import { fromQuery } from './mappers'
+import { fromQuery } from './snapshot'
 import { softDelete } from './softDelete'
-import { notDeleted } from '~/models/softDelete'
-import { type IPriceListItem, mapIPriceListItem } from '~/models/priceList'
-import { type IPromotion, mapIPromotion } from '~/models/promotion'
+import { notDeleted } from '~/domain/softDelete'
+import { mapIPriceListItem } from '~/mappers/priceList'
+import type { IPriceListItem } from '~/types/priceList'
+import { mapIPromotion } from '~/mappers/promotion'
+import type { IPromotion } from '~/types/promotion'
 
 const priceList = (companyRef: string) => collection(db(), `${companyRef}/priceList`)
 

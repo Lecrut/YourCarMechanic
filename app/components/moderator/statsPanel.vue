@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import { computeStats, type IWorkshopStats } from '~/models/stats'
+import { computeStats } from '~/domain/stats'
+import type { IWorkshopStats } from '~/types/stats'
 import { formatDateToString } from '~/utils/time'
 
 const { t, locale } = useI18n()

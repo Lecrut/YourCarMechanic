@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IReview } from '~/models/review'
+import type { IReview } from '~/types/review'
 import { formatDateToString } from '~/utils/time'
 
 const { t } = useI18n()

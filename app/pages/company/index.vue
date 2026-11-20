@@ -3,7 +3,7 @@ import { useDisplay } from 'vuetify'
 import RepairList from '~/components/fix/repairList.vue'
 import PageHeader from '~/components/pageHeader.vue'
 import WeekBoard from '~/components/company/weekBoard.vue'
-import { isOnDay, matchesSearch } from '~/models/fix'
+import { isOnDay, matchesSearch } from '~/domain/fix'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })
 

@@ -1,18 +1,6 @@
-import type { ICar } from '~/models/car'
-import type { IFix } from '~/models/fix'
-
-/** A customer as seen from their repairs (workshop client list, moderator overview). */
-export interface IClient {
-  userRef: string
-  name: string
-  phone: string
-  cars: ICar[]
-  services: string[]
-  visits: number
-  lastVisit: Date
-  /** Consent from the client's most recent booking wins. */
-  marketingConsent: boolean
-}
+import type { ICar } from '~/types/car'
+import type { IClient } from '~/types/client'
+import type { IFix } from '~/types/fix'
 
 const carKey = (car: ICar) => `${car.manufacturer}|${car.model}|${car.productionYear}|${car.vin}`
 

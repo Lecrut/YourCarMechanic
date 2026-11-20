@@ -1,14 +1,5 @@
-import { type ISoftDeletable, toDeletedAt } from '~/models/softDelete'
-
-export interface ICar extends ISoftDeletable {
-  manufacturer: string
-  model: string
-  productionYear: number
-  vin: string
-  userRef: string
-
-  reference: string
-}
+import { toDeletedAt } from '~/mappers/softDelete'
+import type { ICar } from '~/types/car'
 
 export function mapICar(data: Partial<Omit<ICar, 'deletedAt'>> & { deletedAt?: unknown }): ICar {
   return {

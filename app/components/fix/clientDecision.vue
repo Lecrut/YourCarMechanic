@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IFix } from '~/models/fix'
-import { formatRange } from '~/models/priceList'
-import { mapINotification } from '~/models/notification'
+import type { IFix } from '~/types/fix'
+import { formatRange } from '~/utils/format'
+import { mapINotification } from '~/mappers/notification'
 import { formatDateToString } from '~/utils/time'
 
 /** What the workshop asks the client to approve: a visit booked for them, or a change of scope. */

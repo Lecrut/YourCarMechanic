@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import { CONTACT_CATEGORIES, CONTACT_STATUSES, type ContactStatus, type IContactMessage, isOpen, replyLink } from '~/models/contactMessage'
+import { CONTACT_CATEGORIES, CONTACT_STATUSES, isOpen, replyLink } from '~/domain/contactMessage'
+import type { ContactStatus, IContactMessage } from '~/types/contactMessage'
 import { formatDateToString } from '~/utils/time'
 
 /** Moderator inbox of contact-form messages (live). */

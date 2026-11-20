@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { isOpen, mapIContactMessage, replyLink } from './contactMessage'
+import { isOpen, replyLink } from '~/domain/contactMessage'
+import { mapIContactMessage } from '~/mappers/contactMessage'
 
 describe('contact messages', () => {
   it('normalises unknown category and status', () => {

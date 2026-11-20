@@ -1,7 +1,7 @@
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
 
-/** Marks a document as deleted – it stays in Firestore (see models/softDelete.ts). */
+/** Marks a document as deleted – it stays in Firestore (see types/softDelete.ts). */
 export const softDelete = (path: string) =>
   updateDoc(doc(db(), path), { deletedAt: serverTimestamp(), deletedBy: auth().currentUser?.uid ?? null })
 

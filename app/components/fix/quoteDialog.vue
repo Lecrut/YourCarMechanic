@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { IFix } from '~/models/fix'
-import { carSegment, formatDuration, formatRange, isWithin, quoteLineTotal, type Range, roundUpToQuarter } from '~/models/priceList'
-import { mapINotification } from '~/models/notification'
-
+import type { IFix } from '~/types/fix'
+import { carSegment, isWithin, quoteLineTotal, roundUpToQuarter } from '~/domain/priceList'
+import type { Range } from '~/types/priceList'
+import { formatDuration, formatRange } from '~/utils/format'
+import { mapINotification } from '~/mappers/notification'
 /**
  * Itemised quote: lines come from the workshop's price list for the repair's services
  * (pre-filled with mid-range values) plus optional custom lines. The total must fit the

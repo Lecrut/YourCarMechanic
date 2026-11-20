@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { IWorkshop } from '~/models/workshop'
-import type { IRatingSummary } from '~/models/review'
-import { formatDistance, placeWorkshop, rankWorkshops, type RankedWorkshop, type WorkshopSort } from '~/models/geo'
+import type { IWorkshop } from '~/types/workshop'
+import type { IRatingSummary } from '~/types/review'
+import { placeWorkshop, rankWorkshops } from '~/domain/geo'
+import type { RankedWorkshop, WorkshopSort } from '~/types/geo'
+import { formatDistance } from '~/utils/format'
 import { useDisplay } from 'vuetify'
 import WorkshopMap, { type MapMarker } from '~/components/map/workshopMap.vue'
 

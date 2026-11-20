@@ -1,7 +1,4 @@
-import { type ISoftDeletable, toDeletedAt } from '~/models/softDelete'
-
-/** Price segment of a car – parts for premium brands cost more than for economy ones. */
-export type CarSegment = 'economy' | 'standard' | 'premium'
+import type { CarSegment, IPriceListItem, Range } from '~/types/priceList'
 
 export const CAR_SEGMENTS: CarSegment[] = ['economy', 'standard', 'premium']
 
@@ -9,6 +6,7 @@ const PREMIUM_BRANDS = [
   'alfa romeo', 'aston martin', 'audi', 'bentley', 'bmw', 'cadillac', 'ferrari', 'genesis', 'infiniti', 'jaguar',
   'lamborghini', 'land rover', 'lexus', 'maserati', 'mercedes', 'mercedes-benz', 'mini', 'porsche', 'tesla', 'volvo',
 ]
+
 const ECONOMY_BRANDS = ['dacia', 'fiat', 'lada', 'chevrolet', 'daewoo', 'suzuki', 'mg', 'ssangyong']
 
 export function carSegment(brand: string): CarSegment {
@@ -16,42 +14,6 @@ export function carSegment(brand: string): CarSegment {
   if (PREMIUM_BRANDS.includes(b)) return 'premium'
   if (ECONOMY_BRANDS.includes(b)) return 'economy'
   return 'standard'
-}
-
-export interface Range {
-  min: number
-  max: number
-}
-
-/** One row of a workshop's price list (`companies/{id}/priceList/{id}`). */
-export interface IPriceListItem extends ISoftDeletable {
-  /** Service key from the catalog this item belongs to. */
-  serviceKey: string
-  name: string
-  laborHours: Range
-  partsCost: Record<CarSegment, Range>
-
-  reference: string
-}
-
-const toRange = (r?: Partial<Range>): Range => {
-  const min = Math.max(0, Number(r?.min) || 0)
-  return { min, max: Math.max(min, Number(r?.max) || 0) }
-}
-
-export function mapIPriceListItem(data: Partial<Omit<IPriceListItem, 'deletedAt'>> & { deletedAt?: unknown }): IPriceListItem {
-  return {
-    serviceKey: data.serviceKey || '',
-    name: data.name || '',
-    laborHours: toRange(data.laborHours),
-    partsCost: {
-      economy: toRange(data.partsCost?.economy),
-      standard: toRange(data.partsCost?.standard),
-      premium: toRange(data.partsCost?.premium),
-    },
-    deletedAt: toDeletedAt(data.deletedAt),
-    reference: data.reference || '',
-  }
 }
 
 /** Cost range of one item for a car segment: labor hours × hourly rate + parts. */
@@ -72,7 +34,7 @@ export function estimateRepair(
   hourlyRate: number,
   services: string[],
   brand: string,
-  /** Active promotions: service key → % off (see models/promotion.ts). */
+  /** Active promotions: service key → % off (see domain/promotion.ts). */
   discounts: Record<string, number> = {},
 ): Range | null {
   const segment = carSegment(brand)
@@ -92,8 +54,6 @@ export function estimateRepair(
 }
 
 export const isWithin = (value: number, range: Range) => value >= range.min && value <= range.max
-
-export const formatRange = (r: Range) => (r.min === r.max ? `${r.min} PLN` : `${r.min} – ${r.max} PLN`)
 
 /** Total of a quote line: labor hours × hourly rate + parts. */
 export const quoteLineTotal = (laborHours: number, partsCost: number, hourlyRate: number) =>
@@ -115,15 +75,3 @@ export function estimateDuration(items: IPriceListItem[], services: string[]): n
   }, 0)
   return Math.max(TIME_STEP_HOURS, roundUpToQuarter(total))
 }
-
-/** `1.25` → "1 h 15 min", `0.5` → "30 min", `2` → "2 h". */
-export function formatDuration(hours: number): string {
-  const totalMinutes = Math.round(hours * 60)
-  const h = Math.floor(totalMinutes / 60)
-  const m = totalMinutes % 60
-  return [h ? `${h} h` : '', m ? `${m} min` : ''].filter(Boolean).join(' ') || '0 min'
-}
-
-/** "30 min – 1 h", or a single value when both ends are equal. */
-export const formatDurationRange = (r: Range) =>
-  r.min === r.max ? formatDuration(r.min) : `${formatDuration(r.min)} – ${formatDuration(r.max)}`

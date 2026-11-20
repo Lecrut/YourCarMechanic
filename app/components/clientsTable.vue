@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ServiceList from '~/components/serviceList.vue'
-import type { IClient } from '~/models/client'
+import type { IClient } from '~/types/client'
 import { formatDateToString } from '~/utils/time'
 
 /** Client list shared by the workshop's "Clients" page and the moderator panel. */

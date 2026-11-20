@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ICar } from '~/models/car'
+import type { ICar } from '~/types/car'
 import AddCarForm from '~/components/user/addCarForm.vue'
 import CarHistoryDialog from '~/components/user/carHistoryDialog.vue'
 
