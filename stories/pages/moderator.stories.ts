@@ -6,6 +6,7 @@ import Services from '~/pages/moderator/services.vue'
 import ClientsPage from '~/pages/moderator/clients.vue'
 import Reviews from '~/pages/moderator/reviews.vue'
 import Messages from '~/pages/moderator/messages.vue'
+import Repairs from '~/pages/moderator/repairs.vue'
 import { moderator } from '../../.storybook/mocks/fixtures'
 import { contactService, moderatorService, reviewsService, servicesCatalogService } from '~/services'
 
@@ -176,5 +177,25 @@ export const MessagesOnPhone: Story = {
     await expect(detail).toHaveTextContent('Widoczna tylko dla moderatorów')
     const reply = within(detail).getByTestId('reply-message').getBoundingClientRect()
     await expect(reply.right).toBeLessThanOrEqual(window.innerWidth)
+  },
+}
+
+/** Tablet: filters wrap into rows, the switch label stays on whole words; the repair dialog is titled "Naprawa". */
+export const RepairsOnTablet: Story = {
+  render: page(Repairs),
+  globals: { viewport: { value: 'tabletLandscape' } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Rendered text lines of the label (it used to break after every few letters).
+    const range = document.createRange()
+    range.selectNodeContents(await canvas.findByText('Aktywne naprawy'))
+    const lines = new Set([...range.getClientRects()].map(r => Math.round(r.top)))
+    await expect(lines.size).toBeLessThanOrEqual(2)
+
+    const table = canvas.getByTestId('fixes-table')
+    await userEvent.click((await within(table).findAllByRole('row'))[1]!)
+    const title = await screen.findByText('Naprawa')
+    await expect(title.closest('.v-card-title')).not.toBeNull()
+    await expect(screen.getByTestId('repair-date')).toBeVisible()
   },
 }

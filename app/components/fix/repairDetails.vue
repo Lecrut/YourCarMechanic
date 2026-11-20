@@ -150,33 +150,14 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
     @update:model-value="close"
   >
     <v-card>
-      <v-card-item>
-        <v-card-title class="d-flex align-center">
+      <v-card-item :title="t('repairs.detailsTitle')">
+        <template #prepend>
           <v-icon
-            icon="mdi-calendar-blank"
+            icon="mdi-car-wrench"
             color="primary"
-            class="mr-2"
           />
-          {{ formatDateToString(fix.date) }}
-          <v-chip
-            v-if="fix.createdBy === 'workshop'"
-            class="ml-3"
-            color="info"
-            size="small"
-            prepend-icon="mdi-account-hard-hat"
-          >
-            {{ t('proposal.createdByWorkshop') }}
-          </v-chip>
-          <v-chip
-            v-if="mode === 'moderator'"
-            class="ml-3"
-            color="warning"
-            size="small"
-            prepend-icon="mdi-shield-account"
-          >
-            {{ t('moderator.moderation') }}
-          </v-chip>
-          <v-spacer />
+        </template>
+        <template #append>
           <v-btn
             v-if="mode === 'user' && workshop && canReschedule(fix)"
             v-tooltip:bottom="t('repairs.rescheduleHint')"
@@ -207,8 +188,37 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
             color="default"
             @click="close"
           />
-        </v-card-title>
+        </template>
       </v-card-item>
+
+      <!-- Visit time and badges below the title; wraps on narrow screens. -->
+      <div class="d-flex flex-wrap align-center ga-2 px-4 pb-3">
+        <v-chip
+          prepend-icon="mdi-calendar-blank"
+          color="primary"
+          variant="tonal"
+          size="small"
+          data-testid="repair-date"
+        >
+          {{ formatDateToString(fix.date) }}
+        </v-chip>
+        <v-chip
+          v-if="fix.createdBy === 'workshop'"
+          color="info"
+          size="small"
+          prepend-icon="mdi-account-hard-hat"
+        >
+          {{ t('proposal.createdByWorkshop') }}
+        </v-chip>
+        <v-chip
+          v-if="mode === 'moderator'"
+          color="warning"
+          size="small"
+          prepend-icon="mdi-shield-account"
+        >
+          {{ t('moderator.moderation') }}
+        </v-chip>
+      </div>
 
       <v-divider />
 

@@ -1,6 +1,7 @@
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { type Decorator, type Preview, setup } from '@storybook/vue3-vite'
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport'
 import { createVuetify } from 'vuetify'
 import { createPinia, setActivePinia } from 'pinia'
 import { createMemoryHistory, createRouter, RouterLink } from 'vue-router'
@@ -93,6 +94,13 @@ const preview: Preview = {
   initialGlobals: { locale: 'pl', theme: 'dark' },
   parameters: {
     layout: 'fullscreen',
+    // + a landscape tablet: Vuetify `md` (960–1279 px), where column layouts get the tightest.
+    viewport: {
+      options: {
+        ...MINIMAL_VIEWPORTS,
+        tabletLandscape: { name: 'Tablet landscape', styles: { width: '1180px', height: '820px' }, type: 'tablet' },
+      },
+    },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
   },
   tags: ['autodocs'],

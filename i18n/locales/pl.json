@@ -522,6 +522,7 @@
     "send": "Wyślij propozycję"
   },
   "repairs": {
+    "detailsTitle": "Naprawa",
     "empty": "Brak napraw do wyświetlenia",
     "costHint": "Wycena + dodatkowe koszty",
     "total": "Razem do zapłaty",

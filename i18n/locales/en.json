@@ -522,6 +522,7 @@
     "send": "Send proposal"
   },
   "repairs": {
+    "detailsTitle": "Repair",
     "empty": "No repairs to show",
     "costHint": "Quote + extra costs",
     "total": "Total to pay",

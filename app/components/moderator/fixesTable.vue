@@ -89,7 +89,8 @@ function open(_: unknown, row: { item: IFix }) {
   <v-row class="mb-4 align-center">
     <v-col
       cols="12"
-      md="4"
+      sm="6"
+      lg
     >
       <v-text-field
         v-model="search"
@@ -101,7 +102,8 @@ function open(_: unknown, row: { item: IFix }) {
     </v-col>
     <v-col
       cols="12"
-      md="3"
+      sm="6"
+      lg="3"
     >
       <v-autocomplete
         v-model="serviceFilter"
@@ -115,7 +117,8 @@ function open(_: unknown, row: { item: IFix }) {
     </v-col>
     <v-col
       cols="6"
-      md="2"
+      sm="4"
+      lg="2"
     >
       <v-text-field
         v-model="dateFrom"
@@ -128,7 +131,8 @@ function open(_: unknown, row: { item: IFix }) {
     </v-col>
     <v-col
       cols="6"
-      md="2"
+      sm="4"
+      lg="2"
     >
       <v-text-field
         v-model="dateTo"
@@ -141,8 +145,8 @@ function open(_: unknown, row: { item: IFix }) {
     </v-col>
     <v-col
       cols="12"
-      md="1"
-      class="d-flex justify-md-end"
+      sm="4"
+      lg="auto"
     >
       <v-switch
         v-model="onlyActive"
