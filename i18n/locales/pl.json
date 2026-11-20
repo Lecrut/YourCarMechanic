@@ -87,7 +87,9 @@
     "bookNow": "Umów wizytę",
     "reviewsCount": "{count} opinii",
     "noReviews": "Brak opinii",
-    "hourlyRate": "Stawka roboczogodziny: {rate} PLN"
+    "hourlyRate": "Stawka roboczogodziny: {rate} PLN",
+    "brand": "Marka samochodu",
+    "allBrands": "Wszystkie marki"
   },
   "navBar": {
     "title": "Twój mechanik",
@@ -175,7 +177,15 @@
     "workingDaysHint": "Klienci mogą rezerwować tylko w te dni",
     "stations": "Liczba stanowisk",
     "stationsHint": "Ile aut możecie naprawiać jednocześnie – tyle wizyt można umówić na tę samą godzinę",
-    "stationsRule": "Od 1 do {max}"
+    "stationsRule": "Od 1 do {max}",
+    "brands": "Obsługiwane marki",
+    "allBrands": "Wszystkie marki",
+    "brandsHint": "Zostaw puste, jeśli naprawiasz wszystkie marki",
+    "location": "Miejsce na mapie",
+    "locationHint": "Dzięki pinezce klienci widzą dokładną odległość do warsztatu. Bez niej pokazujemy środek miasta.",
+    "locationClear": "Usuń pinezkę",
+    "locationSet": "Pinezka ustawiona – możesz ją przeciągnąć",
+    "locationUnset": "Nie ustawiono – kliknij na mapie w miejscu warsztatu"
   },
   "company": {
     "title": "Lista napraw",
@@ -543,7 +553,9 @@
     "profileMissing": "Nie znaleziono profilu konta – skontaktuj się z obsługą",
     "notSignedIn": "Sesja wygasła – zaloguj się ponownie",
     "tooManyPhotos": "Naprawa może mieć maksymalnie 20 zdjęć",
-    "notAnImage": "To nie jest plik graficzny"
+    "notAnImage": "To nie jest plik graficzny",
+    "locationDenied": "Nie udzielono zgody na lokalizację – wybierz miasto z listy",
+    "locationUnavailable": "Nie udało się ustalić lokalizacji – wybierz miasto z listy"
   },
   "slots": {
     "inPast": "Termin musi być w przyszłości",
@@ -764,5 +776,32 @@
     "less": "Zwiń",
     "emptyTitle": "Twój garaż jest pusty",
     "emptyText": "Dodaj auto, żeby szybciej umawiać naprawy i mieć całą historię w jednym miejscu."
+  },
+  "map": {
+    "zoomIn": "Przybliż",
+    "zoomOut": "Oddal",
+    "fit": "Pokaż wszystko",
+    "pickHint": "Kliknij na mapie lub przeciągnij pinezkę"
+  },
+  "finder": {
+    "where": "Gdzie jesteś?",
+    "wherePlaceholder": "Wybierz miasto",
+    "myLocation": "Moja lokalizacja",
+    "useLocation": "Moja lokalizacja",
+    "useLocationHint": "Zapytamy przeglądarkę o zgodę na lokalizację – używamy jej tylko do pokazania najbliższych warsztatów",
+    "radiusLabel": "Promień",
+    "radius": "{km} km",
+    "anywhere": "Cała Polska",
+    "distanceNeedsLocation": "Wybierz miasto lub udostępnij lokalizację, by sortować po odległości",
+    "sort": {
+      "distance": "Najbliżej",
+      "rating": "Najlepiej oceniane",
+      "reviews": "Najwięcej opinii"
+    },
+    "found": "Warsztaty: {count}",
+    "none": "Brak warsztatów spełniających kryteria",
+    "noneInRadius": "Brak warsztatów w tym promieniu",
+    "noneInRadiusText": "Dalej jest jeszcze {count}. Zwiększ promień lub szukaj w całej Polsce.",
+    "approximate": "Przybliżona odległość – warsztat nie zaznaczył jeszcze dokładnego miejsca na mapie"
   }
 }

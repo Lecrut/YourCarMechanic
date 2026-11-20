@@ -22,5 +22,13 @@ export const useCitiesJsonStore = defineStore('cities-json', () => {
       ?? city.charAt(0).toUpperCase() + city.slice(1).replace(/_/g, ' ')
   }
 
-  return { citiesFromJson, getCitiesFromJson, getCityName }
+  /** City centre from the bundled list (null for unknown keys). */
+  function getCityLocation(city: string): { lat: number, lng: number } | null {
+    const entry = (cities as { value: string, lat?: string, lng?: string }[]).find(c => c.value === city)
+    const lat = Number(entry?.lat)
+    const lng = Number(entry?.lng)
+    return entry && Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null
+  }
+
+  return { citiesFromJson, getCitiesFromJson, getCityName, getCityLocation }
 })

@@ -2,6 +2,8 @@
 import { type IWorkshop, MAX_STATIONS } from '~/models/workshop'
 import { nipRule, phoneRule, requiredArrayRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
+import type { LatLng } from '~/models/geo'
+import WorkshopMap from '~/components/map/workshopMap.vue'
 
 /** Company data form shared by role choice, the company profile and the moderator panel. */
 const workshop = defineModel<IWorkshop>({ required: true })
@@ -18,6 +20,16 @@ const { form, valid, isValid } = formValidation()
 
 const citiesJsonStore = useCitiesJsonStore()
 const servicesStore = useServicesStore()
+const carsJsonStore = useCarsJsonStore()
+
+const brandOptions = computed(() => carsJsonStore.carsFromJson.map(c => c.brand))
+/** Where the map starts when the pin is not set yet – the chosen city. */
+const cityCenter = computed(() => citiesJsonStore.getCityLocation(workshop.value.city))
+
+function pick(position: LatLng) {
+  if (props.readonly) return
+  workshop.value.location = { lat: Number(position.lat.toFixed(6)), lng: Number(position.lng.toFixed(6)) }
+}
 
 const hours = Array.from({ length: 25 }, (_, h) => ({ title: `${h}:00`, value: h }))
 
@@ -29,7 +41,10 @@ const weekDays = computed(() => [1, 2, 3, 4, 5, 6, 0].map(value => ({
 const closingAfterOpening = () =>
   workshop.value.closingTime > workshop.value.openingTime || t('rules.closingAfterOpening')
 
-onMounted(() => citiesJsonStore.getCitiesFromJson())
+onMounted(() => {
+  citiesJsonStore.getCitiesFromJson()
+  carsJsonStore.getCarsFromJson()
+})
 
 /** Also requires at least one working day (chip groups are not part of v-form validation). */
 async function validate() {
@@ -216,6 +231,59 @@ defineExpose({ isValid: validate })
           :rules="[requiredArrayRule(t)]"
           data-testid="company-services"
         />
+      </v-col>
+
+      <v-col cols="12">
+        <v-autocomplete
+          v-model="workshop.brands"
+          :label="t('companyProfile.brands')"
+          :items="brandOptions"
+          :placeholder="t('companyProfile.allBrands')"
+          persistent-placeholder
+          :hint="t('companyProfile.brandsHint')"
+          persistent-hint
+          prepend-inner-icon="mdi-car-multiple"
+          chips
+          closable-chips
+          multiple
+          clearable
+          data-testid="company-brands"
+        />
+      </v-col>
+
+      <v-col cols="12">
+        <div class="text-body-medium text-medium-emphasis mb-2 d-flex align-center ga-1">
+          {{ t('companyProfile.location') }}
+          <v-icon
+            v-tooltip:top="t('companyProfile.locationHint')"
+            icon="mdi-information-outline"
+            size="small"
+          />
+          <v-spacer />
+          <v-btn
+            v-if="workshop.location && !props.readonly"
+            variant="text"
+            size="small"
+            prepend-icon="mdi-map-marker-remove-outline"
+            data-testid="company-location-clear"
+            @click="workshop.location = null"
+          >
+            {{ t('companyProfile.locationClear') }}
+          </v-btn>
+        </div>
+        <workshop-map
+          :pickable="!props.readonly"
+          :picked="workshop.location"
+          :origin="workshop.location ? null : cityCenter"
+          :height="320"
+          @pick="pick"
+        />
+        <div
+          class="text-body-small text-medium-emphasis mt-1"
+          data-testid="company-location-state"
+        >
+          {{ workshop.location ? t('companyProfile.locationSet') : t('companyProfile.locationUnset') }}
+        </div>
       </v-col>
     </v-row>
   </v-form>

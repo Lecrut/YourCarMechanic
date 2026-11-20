@@ -34,7 +34,7 @@ interface Db {
 const initial = (): Db => ({
   currentUser: null,
   users: [fx.userAnna, fx.workshopOwner, fx.moderator, fx.newUser],
-  workshops: [fx.autofix, fx.pendingWorkshop],
+  workshops: [fx.autofix, fx.pendingWorkshop, fx.bavariaService],
   cars: [fx.anniesCar, fx.anniesSecondCar],
   fixes: [fx.newFix, fx.fixWithProposal, fx.fixBookedByWorkshop, fx.finishedFix, fx.cancelledFix],
   services: [...fx.services],
@@ -195,8 +195,6 @@ export const workshopsService = {
   getWorkshop: fn(async (ref: string) => later(db.workshops.find(w => w.reference === ref) ?? null)).mockName('getWorkshop'),
   getApprovedWorkshops: fn(async () =>
     later(db.workshops.filter(w => w.status === 'approved' && !w.deletedAt))).mockName('getApprovedWorkshops'),
-  getWorkshopsInCity: fn(async (city: string) =>
-    later(db.workshops.filter(w => w.city === city && w.status === 'approved' && !w.deletedAt))).mockName('getWorkshopsInCity'),
   addWorkshop: fn(async (workshop: IWorkshop, ownerUid: string) => {
     const saved = { ...workshop, ownerUid, status: 'pending' as const, reference: newRef('companies') }
     db.workshops.push(saved)

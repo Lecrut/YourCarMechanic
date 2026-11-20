@@ -7,7 +7,8 @@ import type { IWorkshop } from '~/models/workshop'
 import { SERVICE_CATEGORIES, type ServiceCategory } from '~/models/service'
 import { formatDateToString } from '~/utils/time'
 import { carSegment, formatDuration, formatRange } from '~/models/priceList'
-import WorkshopCard from '~/components/user/workshopCard.vue'
+import WorkshopFinder from '~/components/workshopFinder.vue'
+import FreeDates from '~/components/user/freeDates.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'user' })
 
@@ -31,7 +32,6 @@ type Form = InstanceType<typeof VForm>
 const step = ref(1)
 const servicesForm = ref<Form | null>(null)
 const carForm = ref<Form | null>(null)
-const workshopForm = ref<Form | null>(null)
 
 const selectedServices = ref<string[]>([])
 const serviceSearch = ref('')
@@ -56,7 +56,8 @@ const carYear = ref<number | null>(null)
 const carMileage = ref<number | null>(null)
 const iKnowVin = ref(false)
 const carVin = ref('')
-const city = ref<string | null>(null)
+const datesFor = ref<IWorkshop | null>(null)
+const showDates = ref(false)
 const selectedWorkshop = ref<IWorkshop | null>(null)
 const selectedDate = ref<Date | null>(null)
 const stepError = ref('')
@@ -88,8 +89,13 @@ const durationFor = (workshop: IWorkshop) => workshopStore.durationFor(workshop,
 const selectedEstimate = computed(() => (selectedWorkshop.value ? estimateFor(selectedWorkshop.value) : null))
 const selectedPromotion = computed(() => (selectedWorkshop.value ? promotionFor(selectedWorkshop.value) : null))
 
-function bookTime(workshop: IWorkshop, date: Date) {
-  selectedWorkshop.value = workshop
+function openDates(workshop: IWorkshop) {
+  datesFor.value = workshop
+  showDates.value = true
+}
+
+function bookTime(date: Date) {
+  selectedWorkshop.value = datesFor.value
   selectedDate.value = date
 }
 
@@ -107,9 +113,9 @@ async function next() {
       break
     case 2:
       if (!(await validate(carForm.value))) return
+      workshopStore.getWorkshopsForBooking(selectedServices.value, bookedCar.value.manufacturer)
       break
     case 3:
-      if (!(await validate(workshopForm.value))) return
       if (!selectedWorkshop.value || !selectedDate.value) {
         stepError.value = t('userBookFix.stepper.third.chooseDate')
         return
@@ -170,11 +176,10 @@ onMounted(() => {
   workshopStore.deleteFindResult()
 })
 
-// Changing the city *or* the chosen services invalidates the workshop list and the picked time.
-watch([city, selectedServices], ([newCity, services]) => {
+// Other services or another car change which workshops fit – the picked time no longer applies.
+watch([selectedServices, () => bookedCar.value.manufacturer], () => {
   selectedWorkshop.value = null
   selectedDate.value = null
-  if (newCity) workshopStore.getWorkshopsByCityAndServices(newCity, services)
 }, { deep: true })
 </script>
 
@@ -185,7 +190,7 @@ watch([city, selectedServices], ([newCity, services]) => {
         v-model="step"
         alt-labels
         class="mx-auto"
-        max-width="1000"
+        :max-width="step === 3 ? 1400 : 1000"
         elevation="3"
         rounded="xl"
       >
@@ -427,56 +432,64 @@ watch([city, selectedServices], ([newCity, services]) => {
               {{ t('userBookFix.stepper.third.title') }}
             </h2>
 
-            <v-form ref="workshopForm">
-              <v-autocomplete
-                v-model="city"
-                :label="t('companyProfile.city')"
-                :items="citiesJsonStore.citiesFromJson"
-                prepend-inner-icon="mdi-city"
-                variant="outlined"
-                density="comfortable"
-                :rules="[requiredRule(t)]"
-                data-testid="city"
-              />
-            </v-form>
-
-            <div
-              v-if="loading && !workshops.length"
-              class="text-center my-5"
+            <workshop-finder
+              :workshops="workshops"
+              :ratings="ratings"
+              :loading="loading"
+              :selected-ref="selectedWorkshop?.reference ?? null"
+              :map-height="520"
+              @select="openDates"
             >
-              <v-progress-circular
-                :size="50"
-                color="primary"
-                indeterminate
-              />
-            </div>
+              <template #item="{ item }">
+                <v-card-text class="pt-0 d-flex flex-wrap align-center ga-2">
+                  <v-chip
+                    size="small"
+                    variant="tonal"
+                    prepend-icon="mdi-cash-multiple"
+                    data-testid="estimate"
+                  >
+                    {{ estimateFor(item.workshop) ? formatRange(estimateFor(item.workshop)!) : t('pricing.noEstimate') }}
+                  </v-chip>
+                  <v-chip
+                    v-if="durationFor(item.workshop)"
+                    size="small"
+                    variant="tonal"
+                    prepend-icon="mdi-timer-outline"
+                  >
+                    {{ formatDuration(durationFor(item.workshop)) }}
+                  </v-chip>
+                  <v-chip
+                    v-if="promotionFor(item.workshop)"
+                    size="small"
+                    color="error"
+                    variant="flat"
+                    prepend-icon="mdi-tag"
+                    data-testid="promotion-badge"
+                  >
+                    −{{ promotionFor(item.workshop)!.percent }}%
+                  </v-chip>
+                  <v-spacer />
+                  <v-btn
+                    size="small"
+                    :variant="selectedWorkshop?.reference === item.workshop.reference ? 'outlined' : 'flat'"
+                    color="primary"
+                    prepend-icon="mdi-calendar"
+                    data-testid="available-dates"
+                    @click.stop="openDates(item.workshop)"
+                  >
+                    {{ t('userBookFix.stepper.third.availableDates') }}
+                  </v-btn>
+                </v-card-text>
+              </template>
+            </workshop-finder>
 
-            <v-empty-state
-              v-else-if="city && !workshops.length"
-              icon="mdi-garage-alert"
-              :title="t('userBookFix.stepper.third.noWorkshops')"
+            <free-dates
+              v-if="datesFor"
+              v-model="showDates"
+              :workshop="datesFor"
+              :duration-hours="durationFor(datesFor)"
+              @select="bookTime"
             />
-
-            <v-row v-else>
-              <v-col
-                v-for="item in workshops"
-                :key="item.reference"
-                cols="12"
-                md="6"
-              >
-                <workshop-card
-                  :workshop="item"
-                  :is-presentation="false"
-                  :estimate="estimateFor(item)"
-                  :estimate-before="estimateFor(item, false)"
-                  :promotion="promotionFor(item)"
-                  :duration-hours="durationFor(item)"
-                  :rating="ratings[item.reference]"
-                  :selected="selectedWorkshop?.reference === item.reference"
-                  @book="bookTime"
-                />
-              </v-col>
-            </v-row>
 
             <v-expand-transition>
               <v-alert

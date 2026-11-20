@@ -6,7 +6,8 @@ export async function navigateTo(path: string) {
   navigatedTo.push(path)
 }
 
-export const useRuntimeConfig = () => ({ public: { firebase: {}, useEmulators: false } })
+// No map tiles in Storybook/tests – the map renders markers without hitting a tile server.
+export const useRuntimeConfig = () => ({ public: { firebase: {}, useEmulators: false, map: { lightTiles: '', darkTiles: '', attribution: '' } } })
 
 export const definePageMeta = (_meta: unknown) => {}
 

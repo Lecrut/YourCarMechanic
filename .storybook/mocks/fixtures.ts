@@ -49,7 +49,25 @@ export const autofix = mapIWorkshop({
   status: 'approved',
   hourlyRate: 150,
   contractSignedAt: daysAgo(30),
+  location: { lat: 50.0614, lng: 19.9366 },
   reference: 'companies/autofix',
+})
+
+/** Approved Warsaw workshop for German brands only, without its own map pin (city centre is used). */
+export const bavariaService = mapIWorkshop({
+  name: 'Bavaria Service',
+  nip: '7010001454',
+  city: 'warszawa',
+  address: 'ul. Grochowska 12',
+  phone: '501502503',
+  openingTime: 7,
+  closingTime: 18,
+  services: ['oil', 'engine'],
+  ownerUid: 'bavaria',
+  status: 'approved',
+  hourlyRate: 220,
+  brands: ['BMW', 'Audi', 'Mercedes-Benz'],
+  reference: 'companies/bavaria',
 })
 
 export const pendingWorkshop = mapIWorkshop({

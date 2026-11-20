@@ -31,11 +31,6 @@ export async function getApprovedWorkshops(): Promise<IWorkshop[]> {
   return notDeleted(fromQuery<IWorkshop>(snap).map(mapIWorkshop))
 }
 
-export async function getWorkshopsInCity(city: string): Promise<IWorkshop[]> {
-  const snap = await getDocs(query(companies(), where('city', '==', city), where('status', '==', 'approved')))
-  return notDeleted(fromQuery<IWorkshop>(snap).map(mapIWorkshop))
-}
-
 export async function addWorkshop(workshop: IWorkshop, ownerUid: string): Promise<IWorkshop> {
   const existing = await getDocs(query(companies(), where('nip', '==', workshop.nip)))
   if (!existing.empty) throw new AppError('errors.nipTaken')
@@ -47,8 +42,8 @@ export async function addWorkshop(workshop: IWorkshop, ownerUid: string): Promis
 
 /** NIP, owner and status are immutable for workshop owners (enforced by firestore.rules). */
 export async function updateWorkshop(workshop: IWorkshop): Promise<IWorkshop> {
-  const { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays, stations } = mapIWorkshop(workshop)
-  await updateDoc(doc(db(), workshop.reference), { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays, stations })
+  const { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays, stations, brands, location } = mapIWorkshop(workshop)
+  await updateDoc(doc(db(), workshop.reference), { name, openingTime, closingTime, city, services, phone, address, hourlyRate, workingDays, stations, brands, location })
   return mapIWorkshop(workshop)
 }
 

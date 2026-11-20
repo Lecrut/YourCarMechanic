@@ -87,7 +87,9 @@
     "bookNow": "Book appointment",
     "reviewsCount": "{count} reviews",
     "noReviews": "No reviews",
-    "hourlyRate": "Hourly labor rate: {rate} PLN"
+    "hourlyRate": "Hourly labor rate: {rate} PLN",
+    "brand": "Car brand",
+    "allBrands": "All brands"
   },
   "navBar": {
     "title": "Your mechanic",
@@ -175,7 +177,15 @@
     "workingDaysHint": "Customers can only book on these days",
     "stations": "Service bays",
     "stationsHint": "How many cars you can work on at once – that many visits can share an hour",
-    "stationsRule": "Between 1 and {max}"
+    "stationsRule": "Between 1 and {max}",
+    "brands": "Serviced brands",
+    "allBrands": "All brands",
+    "brandsHint": "Leave empty if you repair all brands",
+    "location": "Place on the map",
+    "locationHint": "With a pin customers see the exact distance to your workshop. Without it we use the city centre.",
+    "locationClear": "Remove pin",
+    "locationSet": "Pin set – you can drag it",
+    "locationUnset": "Not set – click the map where your workshop is"
   },
   "company": {
     "title": "Repair list",
@@ -543,7 +553,9 @@
     "profileMissing": "Account profile not found – please contact support",
     "notSignedIn": "Your session expired – please log in again",
     "tooManyPhotos": "A repair can have at most 20 photos",
-    "notAnImage": "This is not an image file"
+    "notAnImage": "This is not an image file",
+    "locationDenied": "Location permission denied – pick a city instead",
+    "locationUnavailable": "Could not get your location – pick a city instead"
   },
   "slots": {
     "inPast": "The time must be in the future",
@@ -764,5 +776,32 @@
     "less": "Show less",
     "emptyTitle": "Your garage is empty",
     "emptyText": "Add a car to book repairs faster and keep its history in one place."
+  },
+  "map": {
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "fit": "Show all",
+    "pickHint": "Click the map or drag the pin"
+  },
+  "finder": {
+    "where": "Where are you?",
+    "wherePlaceholder": "Choose a city",
+    "myLocation": "My location",
+    "useLocation": "My location",
+    "useLocationHint": "Your browser will ask for permission – we only use it to show the nearest workshops",
+    "radiusLabel": "Radius",
+    "radius": "{km} km",
+    "anywhere": "All of Poland",
+    "distanceNeedsLocation": "Choose a city or share your location to sort by distance",
+    "sort": {
+      "distance": "Nearest",
+      "rating": "Top rated",
+      "reviews": "Most reviews"
+    },
+    "found": "Workshops: {count}",
+    "none": "No workshops match the filters",
+    "noneInRadius": "No workshops within this radius",
+    "noneInRadiusText": "There are {count} more further away. Increase the radius or search all of Poland.",
+    "approximate": "Approximate distance – the workshop has not pinned its exact place yet"
   }
 }

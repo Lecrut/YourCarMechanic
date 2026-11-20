@@ -1,5 +1,5 @@
 import { pricingService, reviewsService, workshopsService } from '~/services'
-import { type IWorkshop, occupiedHours, upcomingWorkingDays } from '~/models/workshop'
+import { type IWorkshop, occupiedHours, servicesBrand, upcomingWorkingDays } from '~/models/workshop'
 import type { IFreeHours } from '~/models/workshopFreeHours'
 import { estimateDuration, estimateRepair, type IPriceListItem, type Range } from '~/models/priceList'
 import { bestPromotionFor, discountsAt, type IPromotion } from '~/models/promotion'
@@ -19,7 +19,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
 
   /** Per-session caches for one-off reads. */
   const workshopsByRef = new Map<string, IWorkshop>()
-  const workshopsByCity = new Map<string, IWorkshop[]>()
+  let approved: IWorkshop[] | null = null
 
   const sharedStore = useSharedStore()
   const slotsSubscription = createSubscription()
@@ -32,7 +32,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
     promotions.value = {}
     ratings.value = {}
     workshopsByRef.clear()
-    workshopsByCity.clear()
+    approved = null
   }
 
   function deleteFindResult() {
@@ -50,13 +50,14 @@ export const useWorkshopStore = defineStore('workshops', () => {
       return workshopsByRef.get(companyRef)!
     })
 
-  /** Approved workshops in a city offering *all* given services, with their price lists and ratings. */
-  const getWorkshopsByCityAndServices = (city: string, services: string[]) =>
+  /**
+   * Approved workshops offering *all* given services and servicing the car brand, with their
+   * price lists and ratings. The map/list does location filtering on the client.
+   */
+  const getWorkshopsForBooking = (services: string[], brand: string) =>
     sharedStore.run(async () => {
-      if (!workshopsByCity.has(city))
-        workshopsByCity.set(city, await workshopsService.getWorkshopsInCity(city))
-
-      workshops.value = workshopsByCity.get(city)!.filter(w => services.every(s => w.services.includes(s)))
+      approved ??= await workshopsService.getApprovedWorkshops()
+      workshops.value = approved.filter(w => services.every(s => w.services.includes(s)) && servicesBrand(w, brand))
 
       const missing = workshops.value.filter(w => !(w.reference in priceLists.value))
       const [lists, promos, reviews] = await Promise.all([
@@ -144,7 +145,7 @@ export const useWorkshopStore = defineStore('workshops', () => {
     resetState,
     deleteFindResult,
     getWorkshopByRef,
-    getWorkshopsByCityAndServices,
+    getWorkshopsForBooking,
     estimateFor,
     promotionFor,
     durationFor,

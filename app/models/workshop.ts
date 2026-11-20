@@ -30,6 +30,10 @@ export interface IWorkshop extends ISoftDeletable {
   workingDays: number[]
   /** Service bays – how many cars can be worked on at the same time. */
   stations: number
+  /** Car brands the workshop services; empty = all brands. */
+  brands: string[]
+  /** Pin on the map set by the workshop; null = not set (city centre is used). */
+  location: { lat: number, lng: number } | null
 
   reference: string
 }
@@ -48,6 +52,10 @@ export function mapIWorkshop(data: Partial<Omit<IWorkshop, 'contractSignedAt' | 
     status: data.status || 'pending',
     hourlyRate: Number(data.hourlyRate) || 0,
     contractSignedAt: data.contractSignedAt ? new Date(data.contractSignedAt) : null,
+    brands: [...(data.brands ?? [])],
+    location: data.location && Number.isFinite(Number(data.location.lat)) && Number.isFinite(Number(data.location.lng))
+      ? { lat: Number(data.location.lat), lng: Number(data.location.lng) }
+      : null,
     stations: Math.min(MAX_STATIONS, Math.max(1, Math.round(Number(data.stations) || 1))),
     workingDays: data.workingDays?.length ? [...new Set(data.workingDays.map(Number))].sort() : [...DEFAULT_WORKING_DAYS],
     deletedAt: toDeletedAt(data.deletedAt),
@@ -99,3 +107,7 @@ export function occupiedHours(workshop: IWorkshop, start: Date, durationHours: n
   }
   return hours
 }
+
+/** Whether the workshop services this car brand (no brands listed = all brands). */
+export const servicesBrand = (workshop: IWorkshop, brand: string) =>
+  !workshop.brands.length || !brand || workshop.brands.some(b => b.toLowerCase() === brand.toLowerCase())

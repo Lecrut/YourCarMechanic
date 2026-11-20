@@ -66,9 +66,19 @@ service cloud.firestore {
         && !('deletedAt' in request.resource.data)
       );
 
+      // Brands: list (empty = all). Location: null or a {lat, lng} pin.
+      function validMapFields(d) {
+        return (!('brands' in d) || (d.brands is list && d.brands.size() <= 100))
+          && (!('location' in d) || d.location == null || (
+            d.location is map && d.location.keys().hasOnly(['lat', 'lng'])
+            && d.location.lat is number && d.location.lat >= -90 && d.location.lat <= 90
+            && d.location.lng is number && d.location.lng >= -180 && d.location.lng <= 180));
+      }
+
       // Owners edit their profile & price settings; status, NIP, owner and deletion belong to moderators.
       allow update: if isModerator() || (
-        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate', 'workingDays', 'stations'])
+        isOwner() && onlyChanges(['name', 'openingTime', 'closingTime', 'city', 'services', 'phone', 'address', 'hourlyRate', 'workingDays', 'stations', 'brands', 'location'])
+        && validMapFields(request.resource.data)
       );
 
       allow delete: if false;

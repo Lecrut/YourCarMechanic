@@ -38,6 +38,30 @@ export const BookingStepTwo: Story = {
   },
 }
 
+/** Step 3 lists workshops on the map that do the service *and* the car's brand (Bavaria Service is BMW/Audi/Mercedes only). */
+export const BookingStepThreeMap: Story = {
+  beforeEach: () => {
+    localStorage.removeItem('user-location')
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(await canvas.findByTestId('service-oil'))
+    await userEvent.type(canvas.getByTestId('description').querySelector('textarea')!, 'Kontrolka oleju')
+    await userEvent.click(canvas.getByRole('button', { name: /Dalej/ }))
+    await userEvent.click(await canvas.findByLabelText('Wybierz samochód ze swojej listy'))
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Wybierz samochód' }), { pointerEventsCheck: 0 })
+    await userEvent.click(await screen.findByRole('option', { name: 'Skoda Octavia 2015' }), { pointerEventsCheck: 0 })
+    await userEvent.type(canvas.getByLabelText('Przebieg'), '180000')
+    await userEvent.click(canvas.getByRole('button', { name: /Dalej/ }))
+
+    await waitFor(() => expect(canvas.getAllByTestId('finder-item')).toHaveLength(1))
+    await expect(canvas.getByTestId('finder-item')).toHaveTextContent('AutoFix Kraków')
+    await expect(canvas.getByTestId('finder-item')).not.toHaveTextContent('Bavaria')
+    await userEvent.click(canvas.getByTestId('available-dates'))
+    await expect(await screen.findByRole('dialog')).toHaveTextContent('AutoFix Kraków')
+  },
+}
+
 /** Active repairs are watched live; decisions from the workshop are highlighted. */
 export const MyRepairs: Story = {
   render: () => ({ components: { Notifications }, template: '<notifications />' }),

@@ -54,6 +54,9 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
   (`class="justify-center"`), elevation 0–5, v3 breakpoints (see `utils/vuetifyOptions.ts`).
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
   of the primary action; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
+  Only exception: the map (`components/map/workshopMap.vue`) loads Leaflet + `leaflet/dist/leaflet.css` on demand;
+  markers/controls inside it still use Vuetify classes and components. Tile URLs live in `runtimeConfig.public.map`
+  (CARTO by default – check their terms for commercial use; Storybook uses no tiles).
 - **Never name a variable `ref`, `computed`, `reactive` or `watch`** – it hides the Nuxt auto-import for the whole
   file (`ref is not defined` at runtime). ESLint `id-denylist` enforces it.
 - **Errors:** throw `AppError('errors.someKey')` for domain errors; `sharedStore.run()` maps errors (incl. Firebase codes,
@@ -110,7 +113,8 @@ app/
   stores/                       Pinia setup stores (auto-imported); all async via sharedStore.run()
     authStore.ts                user + company (persisted in localStorage as a cache), session, homePath
     fixesStore.ts               live active repairs, history, proposals
-    workshopStore.ts            workshop search, price lists + ratings for estimates, live free hours
+    workshopStore.ts            workshops for booking (services + car brand), price lists + ratings, live free hours
+    locationStore.ts            where the user searches from (city or browser location, asked on click), radius
     pricingStore.ts             own price list + estimate()
     clientsStore.ts             workshop client list
     reviewsStore.ts             add review, own rating, moderation
@@ -128,7 +132,8 @@ app/
     feed.ts                     notification-bell events from repair history
     week.ts                     week board layout, cars at the workshop
     garage.ts                   customer garage: repairs grouped by car
-    review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem), service.ts, user.ts, car.ts, …
+    geo.ts                      distance, workshop position (pin or city centre), ranking by distance/rating/reviews
+    review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem, servicesBrand), service.ts, user.ts, car.ts, …
   composables/                  role & status option lists
   utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
                                 subscription, vuetifyOptions (auto-imported)
@@ -137,7 +142,9 @@ app/
   types/page-meta.d.ts          `definePageMeta({ role })`
   components/
     appNavigation.vue           app bar, rail drawer per role, account card, bottom nav
-    authCard, pageHeader, workshopForm, clientsTable, mySnackbar
+    authCard, pageHeader, workshopForm (incl. brands + map pin), clientsTable, mySnackbar
+    workshopFinder.vue          location bar + radius + sort, list next to the map (workshops page, booking step 3)
+    map/workshopMap.vue         Leaflet map with Vuetify-styled markers; `pickable` = location picker
     fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog,
                                 quoteDialog (itemised quote), repairNotes (public + internal), repairPhotos
     user/                       garageCar, carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit
@@ -145,9 +152,9 @@ app/
     moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable, messagesTable
     notificationBell, errorSnackbar, emailVerificationBanner, appFooter
   pages/
-    index, about, contact, workshops   public (contact form works for guests too)
+    index, about, contact, workshops   public (workshops = map finder; contact form works for guests too)
     auth/                       login, register, reset-password, role-choice
-    user/                       index (booking wizard, ?car= preselect), notifications = "My garage" (car tiles, live), history, profile
+    user/                       index (booking wizard: services → car → workshop on the map, ?car= preselect), notifications = "My garage" (car tiles, live), history, profile
     company/                    index (live repairs), clients, pricing, profile
     moderator/index             tabs: stats, companies, services, clients, repairs, reviews, messages (?tab=)
     moderator/profile           moderator's own profile
@@ -172,7 +179,7 @@ eslint.config.mjs               ESLint flat config
 | Collection | Doc id | Key fields | Access (see rules) |
 |---|---|---|---|
 | `users` | auth uid | `email`, `role`, `profile{name,surname,phone}`, `companyRef` | owner, moderator |
-| `companies` | auto | `name`, `nip`, `city`, `address`, `phone`, `openingTime`, `closingTime`, `services[]`, `ownerUid`, `status` (`pending`/`approved`/`suspended`), `contractSignedAt`, `hourlyRate`, `deletedAt` | read: signed in · owner edits profile fields · moderator all |
+| `companies` | auto | `name`, `nip`, `city`, `address`, `phone`, `openingTime`, `closingTime`, `services[]`, `ownerUid`, `status` (`pending`/`approved`/`suspended`), `contractSignedAt`, `hourlyRate`, `workingDays[]`, `stations`, `brands[]` (empty = all), `location{lat,lng}` (null = city centre), `deletedAt` | read: signed in · owner edits profile fields · moderator all |
 | `companies/{id}/priceList` | auto | `serviceKey`, `name`, `laborHours{min,max}`, `partsCost{economy,standard,premium}{min,max}`, `deletedAt` | read: signed in · write: owner, moderator |
 | `companies/{id}/promotions` | auto | `title`, `services[]`, `percent` (1–90), `validFrom`, `validTo`, `deletedAt` | read: signed in · write: owner, moderator |
 | `companies/{id}/slots` | ISO hour | `date`, `userUid`, `fixRef` | read: signed in · create once · delete: participant/moderator |

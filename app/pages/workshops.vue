@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
 import AppFooter from '~/components/appFooter.vue'
+import WorkshopFinder from '~/components/workshopFinder.vue'
 import { pricingService, reviewsService, workshopsService } from '~/services'
-import type { IWorkshop } from '~/models/workshop'
+import { type IWorkshop, servicesBrand } from '~/models/workshop'
 import { CAR_SEGMENTS, formatDuration, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
 import { type IPromotion, isPromotionActive } from '~/models/promotion'
 import { type IRatingSummary, ratingSummary } from '~/models/review'
@@ -11,16 +12,17 @@ const { t } = useI18n()
 
 const authStore = useAuthStore()
 const citiesJsonStore = useCitiesJsonStore()
+const carsJsonStore = useCarsJsonStore()
 const servicesStore = useServicesStore()
 const sharedStore = useSharedStore()
 const { loading } = storeToRefs(sharedStore)
 
 const workshops = ref<IWorkshop[]>([])
-const ratings = ref<Map<string, IRatingSummary>>(new Map())
+const ratings = ref<Record<string, IRatingSummary>>({})
 
-const cityFilter = ref<string | null>(null)
 const serviceFilter = ref<string | null>(null)
-const search = ref('')
+const brandFilter = ref<string | null>(null)
+const search = ref<string | null>('')
 
 const pricingDialog = ref(false)
 const selectedWorkshop = ref<IWorkshop | null>(null)
@@ -28,11 +30,13 @@ const priceItems = ref<IPriceListItem[]>([])
 const promotions = ref<IPromotion[]>([])
 const loadingPricing = ref(false)
 
+const brandOptions = computed(() => carsJsonStore.carsFromJson.map(c => c.brand))
+
 const filtered = computed(() => {
-  const q = search.value.trim().toLowerCase()
+  const q = search.value?.trim().toLowerCase() ?? ''
   return workshops.value.filter((w) => {
-    if (cityFilter.value && w.city !== cityFilter.value) return false
     if (serviceFilter.value && !w.services.includes(serviceFilter.value)) return false
+    if (brandFilter.value && !servicesBrand(w, brandFilter.value)) return false
     if (!q) return true
     const cityName = citiesJsonStore.getCityName(w.city).toLowerCase()
     return `${w.name} ${w.address} ${cityName}`.toLowerCase().includes(q)
@@ -40,6 +44,7 @@ const filtered = computed(() => {
 })
 
 const activePromotions = computed(() => promotions.value.filter(p => isPromotionActive(p)))
+const bookPath = computed(() => (authStore.user?.role === 'user' ? '/user' : '/auth/login'))
 
 const priceHeaders = computed(() => [
   { title: t('pricing.service'), key: 'serviceKey', value: (i: IPriceListItem) => servicesStore.label(i.serviceKey) },
@@ -55,10 +60,10 @@ async function loadWorkshops() {
   if (!list.length) return
   try {
     const allReviews = await reviewsService.getReviewsForWorkshops(list.map(w => w.reference))
-    const byCompany = new Map<string, IRatingSummary>()
+    const byCompany: Record<string, IRatingSummary> = {}
     for (const w of list) {
       const summary = ratingSummary(allReviews.filter(r => r.companyRef === w.reference))
-      if (summary) byCompany.set(w.reference, summary)
+      if (summary) byCompany[w.reference] = summary
     }
     ratings.value = byCompany
   }
@@ -90,7 +95,7 @@ async function openPricing(workshop: IWorkshop) {
 }
 
 onMounted(() => {
-  citiesJsonStore.getCitiesFromJson()
+  carsJsonStore.getCarsFromJson()
   loadWorkshops()
 })
 </script>
@@ -104,170 +109,131 @@ onMounted(() => {
         icon="mdi-garage"
       />
 
-      <v-row class="mb-6 align-center">
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-autocomplete
-            v-model="cityFilter"
-            :items="citiesJsonStore.citiesFromJson"
-            :label="t('workshopsPage.city')"
-            prepend-inner-icon="mdi-city"
-            clearable
-            hide-details
-            data-testid="public-city-filter"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-autocomplete
-            v-model="serviceFilter"
-            :items="servicesStore.options"
-            :label="t('workshopsPage.service')"
-            prepend-inner-icon="mdi-tools"
-            clearable
-            hide-details
-            data-testid="public-service-filter"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-text-field
-            v-model="search"
-            :label="t('workshopsPage.search')"
-            prepend-inner-icon="mdi-magnify"
-            clearable
-            hide-details
-            data-testid="public-workshop-search"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row v-if="loading && !workshops.length">
-        <v-col
-          v-for="n in 3"
-          :key="n"
-          cols="12"
-          md="6"
-          lg="4"
-        >
-          <v-skeleton-loader type="card" />
-        </v-col>
-      </v-row>
-
-      <v-empty-state
-        v-else-if="!filtered.length"
-        icon="mdi-garage-alert"
-        :title="t('workshopsPage.empty')"
-      />
-
-      <v-row v-else>
-        <v-col
-          v-for="workshop in filtered"
-          :key="workshop.reference"
-          cols="12"
-          md="6"
-          lg="4"
-        >
-          <v-card
-            class="h-100 d-flex flex-column pa-2"
-            elevation="2"
-            data-testid="public-workshop-card"
+      <workshop-finder
+        :workshops="filtered"
+        :ratings="ratings"
+        :loading="loading"
+      >
+        <template #filters>
+          <v-col
+            cols="12"
+            md="4"
           >
-            <v-card-item
-              :title="workshop.name"
-              :subtitle="`${citiesJsonStore.getCityName(workshop.city)} · ${workshop.address}`"
-              prepend-icon="mdi-garage"
-            >
-              <template #append>
-                <v-chip
-                  v-if="ratings.get(workshop.reference)"
-                  size="small"
-                  color="amber"
-                  variant="tonal"
-                  prepend-icon="mdi-star"
-                >
-                  {{ ratings.get(workshop.reference)!.average }} ({{ ratings.get(workshop.reference)!.count }})
-                </v-chip>
-                <span
-                  v-else
-                  class="text-caption text-medium-emphasis"
-                >
-                  {{ t('workshopsPage.noReviews') }}
-                </span>
-              </template>
-            </v-card-item>
+            <v-autocomplete
+              v-model="serviceFilter"
+              :items="servicesStore.options"
+              :label="t('workshopsPage.service')"
+              prepend-inner-icon="mdi-tools"
+              clearable
+              hide-details
+              data-testid="public-service-filter"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-autocomplete
+              v-model="brandFilter"
+              :items="brandOptions"
+              :label="t('workshopsPage.brand')"
+              prepend-inner-icon="mdi-car-info"
+              clearable
+              hide-details
+              data-testid="public-brand-filter"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              v-model="search"
+              :label="t('workshopsPage.search')"
+              prepend-inner-icon="mdi-magnify"
+              clearable
+              hide-details
+              data-testid="public-workshop-search"
+            />
+          </v-col>
+        </template>
 
-            <v-card-text class="flex-grow-1">
-              <div class="d-flex flex-column ga-2 mb-4 text-body-medium">
-                <div class="d-flex align-center ga-2">
-                  <v-icon
-                    icon="mdi-clock-outline"
-                    size="small"
-                    color="primary"
-                  />
-                  <span>{{ workshop.openingTime }}:00 – {{ workshop.closingTime }}:00</span>
-                </div>
-                <div
-                  v-if="workshop.phone"
-                  class="d-flex align-center ga-2"
-                >
-                  <v-icon
-                    icon="mdi-phone-outline"
-                    size="small"
-                    color="primary"
-                  />
-                  <a
-                    :href="`tel:${workshop.phone}`"
-                    class="text-primary text-decoration-none"
-                  >{{ workshop.phone }}</a>
-                </div>
-              </div>
-
-              <div class="d-flex flex-wrap ga-1">
-                <v-chip
-                  v-for="key in workshop.services.slice(0, 6)"
-                  :key="key"
+        <template #item="{ item }">
+          <v-card-text class="pt-0">
+            <div class="d-flex flex-wrap align-center ga-3 mb-2 text-body-medium">
+              <span class="d-flex align-center ga-1">
+                <v-icon
+                  icon="mdi-clock-outline"
                   size="small"
-                  variant="tonal"
-                >
-                  {{ servicesStore.label(key) }}
-                </v-chip>
-                <v-chip
-                  v-if="workshop.services.length > 6"
+                  color="primary"
+                />
+                {{ item.workshop.openingTime }}:00 – {{ item.workshop.closingTime }}:00
+              </span>
+              <a
+                v-if="item.workshop.phone"
+                :href="`tel:${item.workshop.phone}`"
+                class="d-flex align-center ga-1 text-primary text-decoration-none"
+                @click.stop
+              >
+                <v-icon
+                  icon="mdi-phone-outline"
                   size="small"
-                  variant="text"
-                >
-                  +{{ workshop.services.length - 6 }}
-                </v-chip>
-              </div>
-            </v-card-text>
-
-            <v-card-actions class="px-4 pb-4 ga-2 flex-wrap">
-              <v-btn
+                />
+                {{ item.workshop.phone }}
+              </a>
+            </div>
+            <div class="d-flex flex-wrap ga-1">
+              <v-chip
+                v-for="key in item.workshop.services.slice(0, 4)"
+                :key="key"
+                size="x-small"
                 variant="tonal"
-                prepend-icon="mdi-cash-multiple"
-                data-testid="open-workshop-pricing"
-                @click="openPricing(workshop)"
               >
-                {{ t('workshopsPage.viewPricing') }}
-              </v-btn>
-              <v-spacer />
-              <v-btn
-                :to="authStore.user?.role === 'user' ? '/user' : '/auth/login'"
-                prepend-icon="mdi-calendar-check"
+                {{ servicesStore.label(key) }}
+              </v-chip>
+              <v-chip
+                v-if="item.workshop.services.length > 4"
+                size="x-small"
+                variant="text"
               >
-                {{ authStore.user?.role === 'user' ? t('workshopsPage.bookNow') : t('workshopsPage.bookLogin') }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
+                +{{ item.workshop.services.length - 4 }}
+              </v-chip>
+            </div>
+            <div
+              class="d-flex align-center ga-1 text-body-small text-medium-emphasis mt-2"
+              data-testid="workshop-brands"
+            >
+              <v-icon
+                icon="mdi-car-multiple"
+                size="small"
+              />
+              {{ item.workshop.brands.length ? item.workshop.brands.join(', ') : t('workshopsPage.allBrands') }}
+            </div>
+          </v-card-text>
+          <v-card-actions class="px-4 pb-3 pt-0 ga-2">
+            <v-btn
+              variant="tonal"
+              size="small"
+              prepend-icon="mdi-cash-multiple"
+              data-testid="open-workshop-pricing"
+              @click.stop="openPricing(item.workshop)"
+            >
+              {{ t('workshopsPage.viewPricing') }}
+            </v-btn>
+            <v-spacer />
+            <v-btn
+              :to="bookPath"
+              size="small"
+              variant="flat"
+              color="primary"
+              prepend-icon="mdi-calendar-check"
+              @click.stop
+            >
+              {{ authStore.user?.role === 'user' ? t('workshopsPage.bookNow') : t('workshopsPage.bookLogin') }}
+            </v-btn>
+          </v-card-actions>
+        </template>
+      </workshop-finder>
     </v-container>
 
     <v-dialog
@@ -345,7 +311,7 @@ onMounted(() => {
             {{ t('universal.close') }}
           </v-btn>
           <v-btn
-            :to="authStore.user?.role === 'user' ? '/user' : '/auth/login'"
+            :to="bookPath"
             prepend-icon="mdi-calendar-check"
           >
             {{ authStore.user?.role === 'user' ? t('workshopsPage.bookNow') : t('workshopsPage.bookLogin') }}

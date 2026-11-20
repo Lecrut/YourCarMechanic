@@ -109,6 +109,35 @@ export const CompanyWorkingDays: Story = {
   },
 }
 
+/** Brands (empty = all) and the map pin are part of the company profile. */
+export const CompanyBrandsAndPin: Story = {
+  args: { title: '', icon: '' },
+  render: () => ({
+    components: { WorkshopForm },
+    setup: () => ({ workshop: ref(mapIWorkshop(autofix)) }),
+    template: `
+      <div>
+        <workshop-form v-model="workshop" />
+        <span data-testid="brands">{{ workshop.brands.join(',') }}</span>
+        <span data-testid="pin">{{ workshop.location ? 'set' : 'none' }}</span>
+      </div>`,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const brands = canvas.getByTestId('company-brands').querySelector('input')!
+    await expect(brands).toHaveAttribute('placeholder', 'Wszystkie marki')
+    await userEvent.click(brands)
+    await userEvent.type(brands, 'Toyo')
+    await userEvent.click(await screen.findByRole('option', { name: 'Toyota' }), { pointerEventsCheck: 0 })
+    await expect(canvas.getByTestId('brands')).toHaveTextContent('Toyota')
+
+    await expect(canvas.getByTestId('company-location-state')).toHaveTextContent('Pinezka ustawiona')
+    await userEvent.click(canvas.getByTestId('company-location-clear'))
+    await expect(canvas.getByTestId('pin')).toHaveTextContent('none')
+    await expect(canvas.getByTestId('company-location-state')).toHaveTextContent('Nie ustawiono')
+  },
+}
+
 export const CompanyFormReadonly: Story = {
   args: { title: '', icon: '' },
   render: () => ({
