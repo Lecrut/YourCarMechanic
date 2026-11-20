@@ -51,5 +51,7 @@ export const vuetifyOptions: VuetifyOptions = {
     VAutocomplete: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
     VTextarea: { variant: 'outlined', rounded: 'lg' },
     VChip: { rounded: 'lg' },
+    // Below `md` tables turn into stacked cards (label: value per row) instead of scrolling sideways.
+    VDataTable: { mobileBreakpoint: 'md' },
   },
 }

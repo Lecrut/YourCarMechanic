@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
     switch (role.value) {
       case 'user': return '/user'
       case 'workshop': return company.value ? '/company' : '/auth/role-choice'
-      case 'moderator': return '/moderator'
+      case 'moderator': return '/moderator/stats'
       default: return '/auth/role-choice'
     }
   })

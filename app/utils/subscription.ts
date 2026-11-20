@@ -11,5 +11,9 @@ export function createSubscription() {
       unsubscribe?.()
       unsubscribe = null
     },
+    /** True while a listener is running. */
+    get active() {
+      return unsubscribe !== null
+    },
   }
 }

@@ -416,7 +416,16 @@
     "suspendText": "Firma zniknie z wyszukiwarki i nie przyjmie nowych rezerwacji. Możesz ją później odblokować.",
     "visitsWillBeCancelled": "Zaplanowane wizyty zostaną odwołane: {count}. Klienci dostaną powiadomienie z powodem.",
     "cancelReasonSuspended": "Warsztat {name} został zawieszony – wizyta została odwołana. Zarezerwuj termin w innym warsztacie.",
-    "cancelReasonRemoved": "Warsztat {name} zakończył działalność w aplikacji – wizyta została odwołana. Zarezerwuj termin w innym warsztacie."
+    "cancelReasonRemoved": "Warsztat {name} zakończył działalność w aplikacji – wizyta została odwołana. Zarezerwuj termin w innym warsztacie.",
+    "pages": {
+      "stats": "Liczby napraw, czasy, najlepsze warsztaty",
+      "companies": "Odblokowanie po podpisaniu umowy, zawieszanie i dodawanie firm",
+      "services": "Katalog usług widoczny dla klientów i warsztatów",
+      "users": "Konta klientów i ich dane kontaktowe",
+      "fixes": "Wszystkie naprawy – podgląd i moderacja",
+      "reviews": "Ukrywanie i przywracanie opinii klientów",
+      "messages": "Zgłoszenia z formularza kontaktowego"
+    }
   },
   "stats": {
     "total": "Wszystkie naprawy",
@@ -757,7 +766,8 @@
       "new": "Nowe",
       "inProgress": "W toku",
       "resolved": "Zamknięte"
-    }
+    },
+    "noteHint": "Widoczna tylko dla moderatorów"
   },
   "garage": {
     "title": "Mój garaż",

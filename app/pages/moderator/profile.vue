@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import PageHeader from '~/components/pageHeader.vue'
 import AccountSettingsCard from '~/components/accountSettingsCard.vue'
+import { useModeratorLive } from '~/composables/moderator'
 import { mapIUserProfile } from '~/models/userProfile'
 import formValidation from '~/utils/formValidation'
 import { phoneRule, requiredRule } from '~/utils/rules'
 
 definePageMeta({ middleware: ['auth'], role: 'moderator' })
+// Keeps the panel's live data (and the badges in the navigation) running here too.
+useModeratorLive()
 
 const { t } = useI18n()
 

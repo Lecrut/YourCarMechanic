@@ -54,8 +54,11 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
 - **Service catalog** comes from Firestore `services` via `useServicesStore()` (`options`, `label(key)`).
 - **UI: Vuetify only.** No custom CSS. MD3 typography (`text-headline-small`…), grid alignment via classes
   (`class="justify-center"`), elevation 0–5, v3 breakpoints (see `utils/vuetifyOptions.ts`).
-  Navigation: the side rail (phone: bottom bar) lists only the role's pages; profile and log out live in the
-  avatar menu only – never both. Guests get centre links + footer.
+  Navigation: desktop = side rail with the role's pages, avatar menu = my profile, contact, log out only.
+  Small screens = no drawer; bottom bar with up to 4 pages (moderator: repairs, companies, messages, stats), the
+  remaining pages go to the avatar menu. Guests get centre links + footer.
+  Tables: below `md` they switch to stacked rows (`VDataTable` default `mobileBreakpoint: 'md'`) – keep cell
+  content wrapping (no `text-truncate`/`text-no-wrap` on long text, use `ServiceList` for service chips).
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
   of the primary action; destructive actions ask first via `ConfirmDialog`; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
   Only exception: the map (`components/map/workshopMap.vue`) loads MapLibre GL + its CSS on demand;
@@ -139,7 +142,8 @@ app/
     garage.ts                   customer garage: repairs grouped by car
     geo.ts                      distance, workshop position (pin or city centre), ranking by distance/rating/reviews
     review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem, servicesBrand), service.ts, user.ts, car.ts, …
-  composables/                  role & status option lists, useLanguage (flags, switching)
+  composables/                  role & status option lists, useLanguage (flags, switching),
+                                useModeratorLive (panel listeners: start once, stop when leaving /moderator)
   utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
                                 subscription, vuetifyOptions (auto-imported)
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
@@ -161,7 +165,8 @@ app/
     auth/                       login, register, reset-password, role-choice
     user/                       index (booking wizard: services → car → workshop on the map, ?car= preselect), notifications = "My garage" (car tiles, live), history, profile
     company/                    index (live repairs), clients, pricing, profile
-    moderator/index             tabs: stats, companies, services, clients, repairs, reviews, messages (?tab=)
+    moderator/                  one page per section: stats, companies, services, clients, repairs, reviews, messages
+                                (+ profile; `/moderator` redirects to stats); each uses components/moderator/moderatorPage
     moderator/profile           moderator's own profile
   assets/data/                  cars.json, cities.json
   **/*.stories.ts               Storybook stories + play tests

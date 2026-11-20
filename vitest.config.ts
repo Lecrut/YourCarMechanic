@@ -33,6 +33,8 @@ export default defineConfig({
             headless: true,
             provider: playwright(),
             instances: [{ browser: 'chromium' }],
+            // Desktop by default; phone stories set `globals.viewport` (Storybook resizes the frame).
+            viewport: { width: 1280, height: 800 },
           },
         },
       },

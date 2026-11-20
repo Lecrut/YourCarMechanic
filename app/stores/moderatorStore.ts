@@ -13,12 +13,17 @@ export const useModeratorStore = defineStore('moderator', () => {
   const cars = ref<ICar[]>([])
 
   const sharedStore = useSharedStore()
-  const { t } = useI18n()
+  // Not `useI18n()`: the store may be created outside a component (session reset in the auth middleware),
+  // where `useI18n` throws and the whole navigation fails.
+  const i18n = useNuxtApp().$i18n
+  const t = (key: string, params?: Record<string, unknown>) => i18n.t(key, params ?? {})
   const subscription = createSubscription()
 
   function stopWatching() {
     subscription.stop()
   }
+
+  const isWatching = () => subscription.active
 
   function resetState() {
     stopWatching()
@@ -117,6 +122,7 @@ export const useModeratorStore = defineStore('moderator', () => {
     users.value.find(u => u.reference === userRef)?.email || t('moderator.unknownUser')
 
   return {
+    isWatching,
     users,
     workshops,
     fixes,

@@ -27,6 +27,8 @@ export const useContactStore = defineStore('contact', () => {
     subscription.stop()
   }
 
+  const isWatching = () => subscription.active
+
   function resetState() {
     stopWatching()
     messages.value = []
@@ -40,5 +42,5 @@ export const useContactStore = defineStore('contact', () => {
   const remove = (m: IContactMessage) => sharedStore.run(() => contactService.deleteContactMessage(m.reference))
   const restore = (m: IContactMessage) => sharedStore.run(() => contactService.restoreContactMessage(m.reference))
 
-  return { messages, openCount, newCount, send, watchInbox, stopWatching, resetState, setStatus, saveNote, remove, restore }
+  return { messages, isWatching, openCount, newCount, send, watchInbox, stopWatching, resetState, setStatus, saveNote, remove, restore }
 })

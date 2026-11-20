@@ -69,6 +69,7 @@ onUnmounted(() => feedStore.stop())
         v-tooltip:bottom="t('feed.title')"
         v-bind="menuProps"
         icon
+        size="36"
         variant="text"
         color="default"
         :aria-label="t('feed.title')"
@@ -79,7 +80,10 @@ onUnmounted(() => feedStore.stop())
           :content="unread > 9 ? '9+' : unread"
           color="error"
         >
-          <v-icon :icon="unread ? 'mdi-bell-ring' : 'mdi-bell-outline'" />
+          <v-icon
+            :icon="unread ? 'mdi-bell-ring' : 'mdi-bell-outline'"
+            size="20"
+          />
         </v-badge>
       </v-btn>
     </template>

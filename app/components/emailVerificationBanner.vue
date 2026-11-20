@@ -31,45 +31,47 @@ watch(() => user.value?.reference, (userRef) => {
 </script>
 
 <template>
-  <v-expand-transition>
-    <v-alert
-      v-if="user && emailVerified === false"
-      type="warning"
-      variant="tonal"
-      density="comfortable"
-      rounded="xl"
-      class="mx-4 mt-4"
-      icon="mdi-email-alert-outline"
-      data-testid="verify-email-banner"
-    >
-      <div class="d-flex align-center flex-wrap ga-2">
-        <span>{{ t('account.verifyEmail', { email: user.email }) }}</span>
-        <v-spacer />
-        <v-btn
-          size="small"
-          variant="text"
-          :disabled="sent"
-          data-testid="resend-verification"
-          @click="resend"
-        >
-          {{ sent ? t('account.verificationSent') : t('account.resend') }}
-        </v-btn>
-        <v-btn
-          size="small"
-          variant="tonal"
-          :loading="checking"
-          data-testid="check-verification"
-          @click="verifyNow"
-        >
-          {{ t('account.alreadyVerified') }}
-        </v-btn>
-      </div>
-      <div
-        v-if="notYetVerified"
-        class="text-body-small mt-1"
+  <div class="flex-shrink-0">
+    <v-expand-transition>
+      <v-alert
+        v-if="user && emailVerified === false"
+        type="warning"
+        variant="tonal"
+        density="comfortable"
+        rounded="xl"
+        class="mx-4 mt-4"
+        icon="mdi-email-alert-outline"
+        data-testid="verify-email-banner"
       >
-        {{ t('account.notYetVerified') }}
-      </div>
-    </v-alert>
-  </v-expand-transition>
+        <div class="d-flex align-center flex-wrap ga-2">
+          <span>{{ t('account.verifyEmail', { email: user.email }) }}</span>
+          <v-spacer />
+          <v-btn
+            size="small"
+            variant="text"
+            :disabled="sent"
+            data-testid="resend-verification"
+            @click="resend"
+          >
+            {{ sent ? t('account.verificationSent') : t('account.resend') }}
+          </v-btn>
+          <v-btn
+            size="small"
+            variant="tonal"
+            :loading="checking"
+            data-testid="check-verification"
+            @click="verifyNow"
+          >
+            {{ t('account.alreadyVerified') }}
+          </v-btn>
+        </div>
+        <div
+          v-if="notYetVerified"
+          class="text-body-small mt-1"
+        >
+          {{ t('account.notYetVerified') }}
+        </div>
+      </v-alert>
+    </v-expand-transition>
+  </div>
 </template>

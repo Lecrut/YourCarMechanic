@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 import { CONTACT_CATEGORIES, CONTACT_STATUSES, type ContactStatus, type IContactMessage, isOpen, replyLink } from '~/models/contactMessage'
 import { formatDateToString } from '~/utils/time'
 
 /** Moderator inbox of contact-form messages (live). */
 const { t } = useI18n()
+/** Phones: the message opens full screen. */
+const { smAndDown } = useDisplay()
 const contactStore = useContactStore()
 const { messages } = storeToRefs(contactStore)
 const { loading } = storeToRefs(useSharedStore())
@@ -151,7 +154,7 @@ function open(m: IContactMessage) {
       <div :class="item.status === 'new' ? 'font-weight-bold' : ''">
         {{ item.subject || t('messages.noSubject') }}
       </div>
-      <div class="text-body-small text-medium-emphasis text-truncate">
+      <div class="text-body-small text-medium-emphasis">
         {{ item.message.slice(0, 90) }}{{ item.message.length > 90 ? '…' : '' }}
       </div>
     </template>
@@ -216,6 +219,7 @@ function open(m: IContactMessage) {
   <v-dialog
     :model-value="Boolean(selected)"
     max-width="720"
+    :fullscreen="smAndDown"
     scrollable
     @update:model-value="selectedRef = null"
   >
@@ -260,30 +264,31 @@ function open(m: IContactMessage) {
         <div class="text-title-small mb-2">
           {{ t('workshopStatus.label') }}
         </div>
-        <v-btn-toggle
+        <v-chip-group
           :model-value="selected.status"
           mandatory
-          variant="outlined"
-          density="comfortable"
+          column
           class="mb-4"
           data-testid="message-status-toggle"
           @update:model-value="(s: ContactStatus) => contactStore.setStatus(selected!, s)"
         >
-          <v-btn
+          <v-chip
             v-for="s in CONTACT_STATUSES"
             :key="s"
             :value="s"
             :color="statusMeta[s].color"
             :prepend-icon="statusMeta[s].icon"
+            variant="outlined"
+            filter
           >
             {{ t(`messages.status.${s}`) }}
-          </v-btn>
-        </v-btn-toggle>
+          </v-chip>
+        </v-chip-group>
 
         <v-textarea
           v-model="note"
           :label="t('messages.note')"
-          :hint="t('notes.internalHint')"
+          :hint="t('messages.noteHint')"
           persistent-hint
           prepend-inner-icon="mdi-lock-outline"
           rows="2"
@@ -291,7 +296,7 @@ function open(m: IContactMessage) {
           data-testid="message-note"
         />
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="flex-wrap ga-2">
         <v-btn
           variant="text"
           color="default"

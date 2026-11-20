@@ -1,20 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/test'
-import ModeratorIndex from './index.vue'
+import Stats from './stats.vue'
+import Companies from './companies.vue'
+import Services from './services.vue'
+import ClientsPage from './clients.vue'
+import Reviews from './reviews.vue'
+import Messages from './messages.vue'
 import { moderator } from '../../../.storybook/mocks/fixtures'
 import { contactService, moderatorService, reviewsService, servicesCatalogService } from '~/services'
 
 const meta = {
   title: 'Pages/Moderator',
-  component: ModeratorIndex,
+  component: Stats,
   parameters: { app: { user: moderator } },
-} satisfies Meta<typeof ModeratorIndex>
+} satisfies Meta<typeof Stats>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-const openTab = async (root: HTMLElement, name: RegExp) =>
-  userEvent.click(within(root).getByRole('tab', { name }))
+/** Every moderator section is a separate page. */
+const page = (component: object) => () => ({ components: { Page: component }, template: '<page />' })
 
 export const Statistics: Story = {
   play: async ({ canvasElement }) => {
@@ -29,8 +34,8 @@ export const Statistics: Story = {
 
 /** Blocked companies are unlocked after signing the contract. */
 export const UnlockCompany: Story = {
+  render: page(Companies),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Firmy/)
     const table = await within(canvasElement).findByTestId('companies-table')
     await expect(await within(table).findByText('Garage Nowy')).toBeVisible()
     await expect(within(table).getByText('Zablokowana')).toBeVisible()
@@ -41,8 +46,8 @@ export const UnlockCompany: Story = {
 }
 
 export const AddCompany: Story = {
+  render: page(Companies),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Firmy/)
     await userEvent.click(await within(canvasElement).findByTestId('add-company'))
     await expect(await screen.findByTestId('company-owner-email')).toBeVisible()
     await userEvent.click(screen.getByTestId('save-company'))
@@ -53,8 +58,8 @@ export const AddCompany: Story = {
 
 /** Deleting a company is a soft delete and can be undone. */
 export const SoftDeleteCompany: Story = {
+  render: page(Companies),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Firmy/)
     const table = await within(canvasElement).findByTestId('companies-table')
     await userEvent.click((await within(table).findAllByTestId('delete-company'))[0]!)
     await expect(await screen.findByText(/Dane i historia napraw zostaną w bazie/)).toBeVisible()
@@ -67,8 +72,8 @@ export const SoftDeleteCompany: Story = {
 }
 
 export const ServiceCatalog: Story = {
+  render: page(Services),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Usługi/)
     await userEvent.click(await within(canvasElement).findByTestId('add-service'))
     await userEvent.type((await screen.findByTestId('service-name-pl')).querySelector('input')!, 'Detailing')
     await userEvent.type(screen.getByTestId('service-name-en').querySelector('input')!, 'Detailing')
@@ -80,8 +85,8 @@ export const ServiceCatalog: Story = {
 }
 
 export const Clients: Story = {
+  render: page(ClientsPage),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Klienci/)
     const table = await within(canvasElement).findByTestId('users-table')
     await expect(await within(table).findByText('anna@example.com')).toBeVisible()
     await expect(within(table).queryByText('serwis@example.com')).toBeNull()
@@ -89,8 +94,8 @@ export const Clients: Story = {
 }
 
 export const ModerateReviews: Story = {
+  render: page(Reviews),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Opinie/)
     const table = await within(canvasElement).findByTestId('reviews-table')
     await expect(await within(table).findByText('Długo czekałem na auto.')).toBeVisible()
     await userEvent.click(within(table).getAllByTestId('toggle-review')[0]!)
@@ -101,8 +106,8 @@ export const ModerateReviews: Story = {
 
 /** Contact-form inbox: open messages, status change, internal note. */
 export const ContactInbox: Story = {
+  render: page(Messages),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Zgłoszenia/)
     const table = await within(canvasElement).findByTestId('messages-table')
     await expect(await within(table).findByText('Nie mogę odwołać wizyty')).toBeVisible()
     // resolved messages are not in the "open" view
@@ -121,8 +126,8 @@ export const ContactInbox: Story = {
 
 /** Suspending a company cancels its open visits; clients get the reason. */
 export const SuspendCancelsVisits: Story = {
+  render: page(Companies),
   play: async ({ canvasElement }) => {
-    await openTab(canvasElement, /Firmy/)
     const table = await within(canvasElement).findByTestId('companies-table')
     await userEvent.click((await within(table).findAllByTestId('suspend-company'))[0]!)
     const dialog = await screen.findByTestId('suspend-dialog')
@@ -130,5 +135,46 @@ export const SuspendCancelsVisits: Story = {
     await userEvent.click(within(dialog).getByTestId('confirm-suspend'))
     await waitFor(() => expect(moderatorService.cancelOpenFixes).toHaveBeenCalledWith('companies/autofix', expect.stringContaining('zawieszony')))
     await waitFor(() => expect(moderatorService.setWorkshopStatus).toHaveBeenCalledWith('companies/autofix', 'suspended'))
+  },
+}
+
+/** Phone: no big header, tight paddings, the table switches to stacked rows instead of scrolling sideways. */
+export const CompaniesOnPhone: Story = {
+  render: page(Companies),
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const table = await within(canvasElement).findByTestId('companies-table')
+    await waitFor(() => expect(table.querySelector('.v-data-table__tr--mobile')).not.toBeNull())
+    await expect(within(canvasElement).queryByRole('heading', { name: 'Firmy' })).toBeNull()
+    // Nothing sticks out to the right (long chips used to widen the table beyond the screen).
+    const inner = table.querySelector('table')!
+    const wrapper = table.querySelector('.v-table__wrapper')!
+    await expect(inner.getBoundingClientRect().width).toBeLessThanOrEqual(wrapper.clientWidth + 1)
+  },
+}
+
+/** Desktop: the page header is shown; statistics tiles open their own pages. */
+export const StatisticsTiles: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(await canvas.findByTestId('stat-pending')).toHaveAttribute('href', '/moderator/companies')
+    await expect(canvas.getByTestId('stat-reviews')).toHaveAttribute('href', '/moderator/reviews')
+  },
+}
+
+/** Phone: the inbox table fits the screen and a message opens full screen with everything reachable. */
+export const MessagesOnPhone: Story = {
+  render: page(Messages),
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const table = await within(canvasElement).findByTestId('messages-table')
+    await waitFor(() => expect(table.querySelector('.v-data-table__tr--mobile')).not.toBeNull())
+    const inner = table.querySelector('table')!
+    await expect(inner.getBoundingClientRect().width).toBeLessThanOrEqual(table.querySelector('.v-table__wrapper')!.clientWidth + 1)
+    await userEvent.click(within(table).getByText('Nie mogę odwołać wizyty'))
+    const detail = await screen.findByTestId('message-detail')
+    await expect(detail).toHaveTextContent('Widoczna tylko dla moderatorów')
+    const reply = within(detail).getByTestId('reply-message').getBoundingClientRect()
+    await expect(reply.right).toBeLessThanOrEqual(window.innerWidth)
   },
 }

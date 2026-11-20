@@ -1,4 +1,5 @@
 // Minimal stand-ins for Nuxt composables used by app code rendered in Storybook / Vitest.
+import { i18n } from './i18n'
 
 export const navigatedTo: string[] = []
 
@@ -16,3 +17,6 @@ export const defineNuxtRouteMiddleware = <T>(fn: T) => fn
 export const defineNuxtPlugin = <T>(plugin: T) => plugin
 
 export const useHead = (_input: unknown) => {}
+
+/** Only `$i18n` is used (stores translate outside components, e.g. during a middleware). */
+export const useNuxtApp = () => ({ $i18n: i18n.global })

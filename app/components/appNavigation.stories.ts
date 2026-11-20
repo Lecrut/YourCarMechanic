@@ -55,8 +55,8 @@ export const Moderator: Story = {
   parameters: { app: { user: moderator } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    await expect(canvas.getByTestId('nav-/moderator?tab=stats')).toBeInTheDocument()
-    await expect(canvas.getByTestId('nav-/moderator?tab=reviews')).toBeInTheDocument()
+    await expect(canvas.getByTestId('nav-/moderator/stats')).toBeInTheDocument()
+    await expect(canvas.getByTestId('nav-/moderator/reviews')).toBeInTheDocument()
   },
 }
 
@@ -96,21 +96,51 @@ export const WorkshopNotifications: Story = {
   },
 }
 
-/** `/moderator` without ?tab= shows statistics – only that entry is highlighted, not every tab. */
-export const ModeratorActiveTab: Story = {
+/** Each moderator section is its own page – only the current one is highlighted. */
+export const ModeratorActivePage: Story = {
   parameters: { app: { user: moderator } },
   render: () => ({
     components: { AppNavigation },
     setup() {
-      useRouter().replace('/moderator')
+      useRouter().replace('/moderator/companies')
     },
     template: '<app-navigation /><div class="pa-8" style="height: 400px" />',
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    await waitFor(() => expect(canvas.getByTestId('nav-/moderator?tab=stats')).toHaveClass('v-list-item--active'))
-    const active = canvasElement.querySelectorAll('[data-testid^="nav-"].v-list-item--active')
-    await expect(active).toHaveLength(1)
+    await waitFor(() => expect(canvas.getByTestId('nav-/moderator/companies')).toHaveClass('v-list-item--active'))
+    await expect(canvasElement.querySelectorAll('[data-testid^="nav-"].v-list-item--active')).toHaveLength(1)
+  },
+}
+
+/** Desktop avatar menu: my profile, contact, log out – nothing else (pages are in the side rail). */
+export const AccountMenuDesktop: Story = {
+  parameters: { app: { user: moderator } },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByTestId('account-menu'))
+    const card = await screen.findByTestId('account-card')
+    const entries = [...card.querySelectorAll('.v-list-item')].map(el => el.getAttribute('data-testid'))
+    await expect(entries).toEqual(['my-profile', 'menu-contact', 'logout'])
+  },
+}
+
+/** Moderator on a phone: no drawer; repairs, companies, messages, statistics at the bottom; the rest in the avatar menu. */
+export const ModeratorPhone: Story = {
+  parameters: { app: { user: moderator } },
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const bar = await waitFor(() => {
+      const el = canvasElement.querySelector('.v-bottom-navigation')
+      if (!el) throw new Error('no bottom bar yet')
+      return el as HTMLElement
+    })
+    await expect(canvasElement.querySelector('.v-navigation-drawer')).toBeNull()
+    const bottom = [...bar.querySelectorAll('a.v-btn')].map(el => el.getAttribute('href'))
+    await expect(bottom).toEqual(['/moderator/repairs', '/moderator/companies', '/moderator/messages', '/moderator/stats'])
+    await userEvent.click(within(canvasElement).getByTestId('account-menu'))
+    const card = await screen.findByTestId('account-card')
+    const entries = [...card.querySelectorAll('.v-list-item')].map(el => el.getAttribute('data-testid'))
+    await expect(entries).toEqual(['menu-/moderator/services', 'menu-/moderator/clients', 'menu-/moderator/reviews', 'my-profile', 'menu-contact', 'logout'])
   },
 }
 
@@ -147,9 +177,12 @@ export const CustomerBottomBar: Story = {
     template: '<app-navigation /><div class="pa-8" style="height: 400px" />',
   }),
   play: async ({ canvasElement }) => {
-    const bar = canvasElement.querySelector('.v-bottom-navigation')
-    // Only rendered on narrow screens; on a desktop-sized test browser the side rail covers it.
-    if (!bar) return
+    await expect(window.innerWidth).toBeLessThan(960)
+    const bar = await waitFor(() => {
+      const el = canvasElement.querySelector('.v-bottom-navigation')
+      if (!el) throw new Error('no bottom bar yet')
+      return el
+    })
     await waitFor(() => expect(bar.querySelector('.v-btn--selected')).toHaveAttribute('href', '/user/notifications'))
   },
 }
@@ -205,7 +238,7 @@ export const ModeratorInLayout: Story = {
   parameters: { app: { user: moderator } },
   render: () => inLayout,
   play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getByTestId('nav-/moderator?tab=messages')).toBeVisible()
+    await expect(within(canvasElement).getByTestId('nav-/moderator/messages')).toBeVisible()
     await expect(within(canvasElement).queryByTestId('nav-/moderator/profile')).toBeNull()
   },
 }

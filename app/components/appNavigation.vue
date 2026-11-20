@@ -11,6 +11,14 @@ interface NavItem {
   badge?: number
 }
 
+/**
+ * Navigation rules:
+ * - guests: centre links + language flags + log in (footer comes from the layout);
+ * - signed in, desktop: side rail with the role's pages; the avatar menu has only
+ *   my profile, contact and log out;
+ * - signed in, small screens: no side drawer – the bottom bar holds up to 4 pages, the rest of the
+ *   role's pages are listed in the avatar menu (above profile, contact, log out).
+ */
 const { t, locale } = useI18n()
 /** Guests pick the language in the bar; signed-in users in their account settings. */
 const { languages, current: currentLanguage, setLanguage } = useLanguage()
@@ -19,17 +27,16 @@ const { mdAndUp } = useDisplay()
 const route = useRoute()
 
 const authStore = useAuthStore()
-const { user, role, company } = storeToRefs(authStore)
+const { user, company, role } = storeToRefs(authStore)
 const fixesStore = useFixesStore()
 const moderatorStore = useModeratorStore()
 const contactStore = useContactStore()
-
-const drawer = ref(false)
 
 const decisionCount = computed(() => fixesStore.fixes.filter(awaitsClientDecision).length)
 /** New bookings the workshop has not reacted to yet. */
 const toAcceptCount = computed(() => fixesStore.fixes.filter(f => !f.notifications.length && f.confirmed).length)
 
+/** The role's pages (profile is not here – it lives in the avatar menu). */
 const items = computed<NavItem[]>(() => {
   switch (role.value) {
     case 'user':
@@ -37,32 +44,41 @@ const items = computed<NavItem[]>(() => {
         { title: t('navBar.user.bookedFix'), icon: 'mdi-calendar-plus', to: '/user' },
         { title: t('navBar.notifications'), icon: 'mdi-garage-variant', to: '/user/notifications', badge: decisionCount.value },
         { title: t('navBar.user.history'), icon: 'mdi-history', to: '/user/history' },
-        { title: t('navBar.user.profile'), icon: 'mdi-account-outline', to: '/user/profile' },
       ]
     case 'workshop':
       return [
         { title: t('navBar.company.repairs'), icon: 'mdi-car-wrench', to: '/company', badge: toAcceptCount.value },
         { title: t('navBar.company.clients'), icon: 'mdi-account-group-outline', to: '/company/clients' },
         { title: t('navBar.company.pricing'), icon: 'mdi-cash-multiple', to: '/company/pricing' },
-        { title: t('navBar.company.profile'), icon: 'mdi-domain', to: '/company/profile' },
       ]
     case 'moderator':
       return [
-        { title: t('moderator.tabs.stats'), icon: 'mdi-chart-box-outline', to: '/moderator?tab=stats' },
-        { title: t('moderator.tabs.companies'), icon: 'mdi-garage', to: '/moderator?tab=companies', badge: moderatorStore.pendingWorkshops.length },
-        { title: t('moderator.tabs.services'), icon: 'mdi-tools', to: '/moderator?tab=services' },
-        { title: t('moderator.tabs.users'), icon: 'mdi-account-group-outline', to: '/moderator?tab=users' },
-        { title: t('moderator.tabs.fixes'), icon: 'mdi-car-wrench', to: '/moderator?tab=fixes' },
-        { title: t('moderator.tabs.reviews'), icon: 'mdi-star-outline', to: '/moderator?tab=reviews' },
-        { title: t('moderator.tabs.messages'), icon: 'mdi-email-outline', to: '/moderator?tab=messages', badge: contactStore.newCount },
-        { title: t('navBar.user.profile'), icon: 'mdi-account-outline', to: '/moderator/profile' },
+        { title: t('moderator.tabs.stats'), icon: 'mdi-chart-box-outline', to: '/moderator/stats' },
+        { title: t('moderator.tabs.companies'), icon: 'mdi-garage', to: '/moderator/companies', badge: moderatorStore.pendingWorkshops.length },
+        { title: t('moderator.tabs.services'), icon: 'mdi-tools', to: '/moderator/services' },
+        { title: t('moderator.tabs.users'), icon: 'mdi-account-group-outline', to: '/moderator/clients' },
+        { title: t('moderator.tabs.fixes'), icon: 'mdi-car-wrench', to: '/moderator/repairs' },
+        { title: t('moderator.tabs.reviews'), icon: 'mdi-star-outline', to: '/moderator/reviews' },
+        { title: t('moderator.tabs.messages'), icon: 'mdi-email-outline', to: '/moderator/messages', badge: contactStore.newCount },
       ]
     default:
       return []
   }
 })
 
-/** Centre of the app bar for guests (signed-in users navigate with the side rail / bottom bar). */
+/** Small screens: pages in the bottom bar (max 4). Moderator: repairs, companies, messages, statistics. */
+const BOTTOM_ORDER: Record<string, string[]> = {
+  moderator: ['/moderator/repairs', '/moderator/companies', '/moderator/messages', '/moderator/stats'],
+}
+const bottomItems = computed(() => {
+  const order = BOTTOM_ORDER[role.value ?? '']
+  if (!order) return items.value.slice(0, 4)
+  return order.map(to => items.value.find(i => i.to === to)).filter((i): i is NavItem => Boolean(i))
+})
+/** Small screens: pages that did not fit the bottom bar – listed in the avatar menu. */
+const overflowItems = computed(() => items.value.filter(i => !bottomItems.value.includes(i)))
+
+/** Centre of the app bar for guests. */
 const guestLinks = computed<NavItem[]>(() => [
   { title: t('navBar.home'), icon: 'mdi-home-outline', to: '/' },
   { title: t('navBar.workshops'), icon: 'mdi-garage', to: '/workshops' },
@@ -70,45 +86,40 @@ const guestLinks = computed<NavItem[]>(() => [
   { title: t('navBar.contact'), icon: 'mdi-email-outline', to: '/contact' },
 ])
 
+const isActive = (item: NavItem) => route.path === item.to
 /** Tab matching the current page – drives the animated slider under the centre tabs. */
-const activeLink = computed(() => guestLinks.value.find(l => l.to === route.path)?.to ?? null)
+const activeLink = computed(() => guestLinks.value.find(isActive)?.to ?? null)
+/** Selected entry of the bottom bar (highlight + label in "shift" mode). */
+const bottomSelected = computed(() => bottomItems.value.find(isActive)?.to ?? null)
 
-/** Selected entry of the phone bottom bar (highlight + label in "shift" mode). */
-const bottomSelected = computed(() => railItems.value.slice(0, 4).find(isActive)?.to ?? null)
+/** Own profile page of every role – in the avatar menu. */
+const PROFILE_PATHS: Record<string, string> = { user: '/user/profile', workshop: '/company/profile', moderator: '/moderator/profile' }
+const profilePath = computed(() => (role.value ? PROFILE_PATHS[role.value] ?? null : null))
+
+const hasPages = computed(() => Boolean(user.value && items.value.length))
 
 const logoHover = ref(false)
 const isDark = computed(() => theme.global.current.value.dark)
 
-/** Own profile page of every role – always reachable from the account menu. */
-const PROFILE_PATHS: Record<string, string> = { user: '/user/profile', workshop: '/company/profile', moderator: '/moderator/profile' }
-const profilePath = computed(() => (role.value ? PROFILE_PATHS[role.value] ?? null : null))
-/** Side rail / bottom bar: the role's pages. Profile and log out live in the account menu only – no duplicates. */
-const railItems = computed(() => items.value.filter(i => i.to !== profilePath.value))
-/** Account-menu shortcuts: the role's main pages without the profile (it has its own entry). */
-const shortcuts = computed(() => railItems.value.slice(0, 4))
-
-const hasSidebar = computed(() => Boolean(user.value && items.value.length))
-
 const initials = computed(() => {
+  if (role.value === 'workshop' && company.value?.name) {
+    const words = company.value.name.trim().split(/\s+/)
+    return words.length >= 2
+      ? `${words[0]!.charAt(0)}${words[1]!.charAt(0)}`.toUpperCase()
+      : company.value.name.slice(0, 2).toUpperCase()
+  }
   const p = user.value?.profile
   if (p?.name) return `${p.name.charAt(0)}${p.surname.charAt(0)}`.toUpperCase()
   return (user.value?.email.charAt(0) ?? '?').toUpperCase()
 })
 
-const roleColor = computed(() => ({ user: 'primary', workshop: 'secondary', moderator: 'warning' })[role.value ?? 'user'] ?? 'primary')
+const displayName = computed(() => {
+  if (role.value === 'workshop' && company.value?.name) return company.value.name
+  const p = user.value?.profile
+  return p?.name ? `${p.name} ${p.surname}`.trim() : (user.value?.email ?? '')
+})
 
-/**
- * Router links match by path only, so every `/moderator?tab=…` entry would light up on `/moderator`.
- * Compare the tab ourselves; no tab in the URL means the page's first tab.
- */
-function isActive(item: NavItem) {
-  const [path, query = ''] = item.to.split('?')
-  if (route.path !== path) return false
-  const tab = new URLSearchParams(query).get('tab')
-  if (!tab) return !route.query.tab
-  const firstTab = new URLSearchParams(items.value.find(i => i.to.startsWith(`${path}?`))?.to.split('?')[1] ?? '').get('tab')
-  return (typeof route.query.tab === 'string' ? route.query.tab : firstTab) === tab
-}
+const roleColor = computed(() => ({ user: 'primary', workshop: 'secondary', moderator: 'warning' })[role.value ?? 'user'] ?? 'primary')
 
 function toggleTheme() {
   theme.change(theme.global.current.value.dark ? 'light' : 'dark')
@@ -133,14 +144,7 @@ async function logOut() {
     scroll-behavior="elevate"
     density="comfortable"
   >
-    <div class="d-flex align-center flex-1-1-0 ga-1 ps-2">
-      <v-app-bar-nav-icon
-        v-if="hasSidebar && !mdAndUp"
-        v-tooltip:bottom="t('navBar.menu')"
-        :aria-label="t('navBar.menu')"
-        @click="drawer = !drawer"
-      />
-
+    <div class="d-flex align-center flex-1-1-0 ga-1 ps-3">
       <nuxt-link
         :to="user ? authStore.homePath : '/'"
         class="d-inline-flex align-center ga-2 text-decoration-none text-high-emphasis"
@@ -171,7 +175,7 @@ async function logOut() {
 
     <v-sheet
       v-if="!user"
-      class="d-none d-md-flex flex-0-0 pa-1"
+      class="d-none d-md-flex flex-0-0 pa-1 px-2"
       rounded="pill"
       color="surface-light"
       border
@@ -380,44 +384,24 @@ async function logOut() {
         </template>
 
         <v-card
-          min-width="280"
+          min-width="260"
           rounded="xl"
+          data-testid="account-card"
         >
           <v-card-item>
             <template #prepend>
               <v-avatar
                 :color="roleColor"
-                size="48"
+                size="44"
               >
                 <span class="text-title-medium font-weight-bold">{{ initials }}</span>
               </v-avatar>
             </template>
             <v-card-title>
-              {{ user.profile?.name ? `${user.profile.name} ${user.profile.surname}` : user.email }}
+              {{ displayName }}
             </v-card-title>
             <v-card-subtitle>{{ user.email }}</v-card-subtitle>
           </v-card-item>
-
-          <v-card-text class="pt-0">
-            <v-chip
-              v-if="role"
-              :color="roleColor"
-              size="small"
-              variant="tonal"
-              prepend-icon="mdi-shield-check-outline"
-            >
-              {{ t(`roles.${role}`) }}
-            </v-chip>
-            <v-chip
-              v-if="company"
-              size="small"
-              variant="tonal"
-              class="ml-1"
-              prepend-icon="mdi-domain"
-            >
-              {{ company.name }}
-            </v-chip>
-          </v-card-text>
 
           <v-divider />
 
@@ -425,6 +409,20 @@ async function logOut() {
             density="compact"
             nav
           >
+            <template v-if="!mdAndUp && overflowItems.length">
+              <v-list-item
+                v-for="item in overflowItems"
+                :key="item.to"
+                :to="item.to"
+                :prepend-icon="item.icon"
+                :title="item.title"
+                :active="isActive(item)"
+                color="primary"
+                rounded="lg"
+                :data-testid="`menu-${item.to}`"
+              />
+              <v-divider class="my-1" />
+            </template>
             <v-list-item
               v-if="profilePath"
               :to="profilePath"
@@ -434,21 +432,11 @@ async function logOut() {
               data-testid="my-profile"
             />
             <v-list-item
-              v-for="item in shortcuts"
-              :key="item.to"
-              :to="item.to"
-              :active="isActive(item)"
-              color="primary"
-              :prepend-icon="item.icon"
-              :title="item.title"
-              rounded="lg"
-            />
-            <v-divider class="my-1" />
-            <v-list-item
               to="/contact"
               prepend-icon="mdi-lifebuoy"
               :title="t('navBar.contact')"
               rounded="lg"
+              data-testid="menu-contact"
             />
             <v-list-item
               prepend-icon="mdi-logout"
@@ -465,14 +453,12 @@ async function logOut() {
   </v-app-bar>
 
   <v-navigation-drawer
-    v-if="hasSidebar"
-    :model-value="mdAndUp || drawer"
-    :permanent="mdAndUp"
-    :rail="mdAndUp"
-    :expand-on-hover="mdAndUp"
+    v-if="hasPages && mdAndUp"
+    permanent
+    rail
+    expand-on-hover
     width="260"
     border="e"
-    @update:model-value="(open: boolean) => (drawer = open)"
   >
     <v-list
       nav
@@ -480,7 +466,7 @@ async function logOut() {
       class="mt-2"
     >
       <v-list-item
-        v-for="item in railItems"
+        v-for="item in items"
         :key="item.to"
         :to="item.to"
         :title="item.title"
@@ -508,7 +494,7 @@ async function logOut() {
   </v-navigation-drawer>
 
   <v-bottom-navigation
-    v-if="hasSidebar && !mdAndUp"
+    v-if="hasPages && !mdAndUp"
     :model-value="bottomSelected"
     mode="shift"
     color="primary"
@@ -516,11 +502,12 @@ async function logOut() {
     elevation="8"
   >
     <v-btn
-      v-for="item in railItems.slice(0, 4)"
+      v-for="item in bottomItems"
       :key="item.to"
       :to="item.to"
       :value="item.to"
       :active="isActive(item)"
+      :data-testid="`bottom-${item.to}`"
     >
       <v-badge
         v-if="item.badge"

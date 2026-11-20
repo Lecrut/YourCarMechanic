@@ -22,6 +22,8 @@ export const useReviewsStore = defineStore('reviews', () => {
     subscription.stop()
   }
 
+  const isWatching = () => subscription.active
+
   const addReview = (fix: IFix, rating: number, comment: string) =>
     sharedStore.run(async () => {
       const { user } = useAuthStore()
@@ -68,5 +70,5 @@ export const useReviewsStore = defineStore('reviews', () => {
       patch(review, { deletedAt: null })
     })
 
-  return { all, ownRating, addReview, loadOwnRating, loadAll, watchAll, stopWatching, setHidden, remove, restore }
+  return { all, isWatching, ownRating, addReview, loadOwnRating, loadAll, watchAll, stopWatching, setHidden, remove, restore }
 })

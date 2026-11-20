@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ServiceList from '~/components/serviceList.vue'
 import { type IFix, statusColor } from '~/models/fix'
 import { notificationLabel } from '~/composables/notifications'
 import { formatDateToString } from '~/utils/time'
@@ -186,15 +187,7 @@ function open(_: unknown, row: { item: IFix }) {
     </template>
 
     <template #[`item.services`]="{ item }">
-      <v-chip
-        v-for="key in item.services"
-        :key="key"
-        size="small"
-        variant="tonal"
-        class="ma-1"
-      >
-        {{ servicesStore.label(key) }}
-      </v-chip>
+      <service-list :services="item.services" />
     </template>
 
     <template #[`item.status`]="{ item }">

@@ -18,7 +18,7 @@ service cloud.firestore {
     function myCompanyRef() { return hasRole('workshop') ? me().companyRef : null; }
     function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
     function onlyChanges(keys) { return changed().hasOnly(keys); }
-    function companyDoc(path) { return get(/databases/$(database)/documents/$(path)).data; }
+    function companyDoc(p) { return get(path('/databases/' + database + '/documents/' + p)).data; }
     function softDeleteKeys() { return ['deletedAt', 'deletedBy']; }
 
     // ---------- users ----------
@@ -35,15 +35,16 @@ service cloud.firestore {
         && onlyChanges(['profile', 'role', 'companyRef'])
         && (
           // role unchanged, company link unchanged
-          (request.resource.data.role == resource.data.role
+          (request.resource.data.get('role', null) == resource.data.get('role', null)
             && request.resource.data.get('companyRef', null) == resource.data.get('companyRef', null))
           // first choice: user
-          || (resource.data.role == null && request.resource.data.role == 'user'
+          || (resource.data.get('role', null) == null && request.resource.data.role == 'user'
             && request.resource.data.get('companyRef', null) == null)
-          // first choice: workshop owning the company it just created
+          // workshop owning the company it just created
           || (resource.data.get('companyRef', null) == null
-            && (resource.data.role == null || resource.data.role == 'workshop')
+            && resource.data.get('role', null) != 'moderator'
             && request.resource.data.role == 'workshop'
+            && request.resource.data.get('companyRef', null) is string
             && companyDoc(request.resource.data.companyRef).ownerUid == uid)
         )
       );
@@ -53,7 +54,7 @@ service cloud.firestore {
 
     // ---------- companies ----------
     match /companies/{companyId} {
-      function companyPath() { return 'companies/' + companyId; }
+      function thisCompany() { return get(/databases/$(database)/documents/companies/$(companyId)).data; }
       function isOwner() { return signedIn() && resource.data.ownerUid == request.auth.uid; }
 
       allow read: if signedIn() || resource.data.status == 'approved';
@@ -84,14 +85,14 @@ service cloud.firestore {
       allow delete: if false;
 
       match /priceList/{itemId} {
-        function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
+        function ownsCompany() { return signedIn() && thisCompany().ownerUid == request.auth.uid; }
         allow read: if true;
         allow create, update: if isModerator() || ownsCompany();
         allow delete: if false;
       }
 
       match /promotions/{promotionId} {
-        function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
+        function ownsCompany() { return signedIn() && thisCompany().ownerUid == request.auth.uid; }
         allow read: if true;
         allow create, update: if (isModerator() || ownsCompany())
           && request.resource.data.percent is int
@@ -101,12 +102,13 @@ service cloud.firestore {
 
       // Booked hours: a technical index, not history (the fix keeps the history).
       match /slots/{slotId} {
-        function ownsCompany() { return signedIn() && companyDoc(companyPath()).ownerUid == request.auth.uid; }
-        allow read: if signedIn() || resource.data.status == 'approved';
+        function ownsCompany() { return signedIn() && thisCompany().ownerUid == request.auth.uid; }
+        allow read: if signedIn() || thisCompany().status == 'approved';
         // id = `{ISO hour}_{station}`; the station must exist in this workshop
         allow create: if signedIn() && (request.resource.data.userUid == request.auth.uid || ownsCompany() || isModerator())
           && slotId.split('_').size() == 2
-          && int(slotId.split('_')[1]) < companyDoc(companyPath()).get('stations', 1);
+          && int(slotId.split('_')[1]) >= 0
+          && int(slotId.split('_')[1]) < thisCompany().get('stations', 1);
         allow delete: if signedIn() && (resource.data.userUid == request.auth.uid || ownsCompany() || isModerator());
         allow update: if false;
       }
@@ -133,9 +135,10 @@ service cloud.firestore {
         || (signedIn() && request.resource.data.userRef == myPath()
           && request.resource.data.createdBy == 'user' && request.resource.data.confirmed == true
           && request.resource.data.isClosed == false && request.resource.data.proposal == null
+          && request.resource.data.companyRef is string
           && companyDoc(request.resource.data.companyRef).status == 'approved')
         // workshop booking on behalf of a client – waits for confirmation
-        || (signedIn() && myCompanyRef() != null && request.resource.data.companyRef == myCompanyRef()
+        || (signedIn() && myCompanyRef() is string && request.resource.data.companyRef == myCompanyRef()
           && request.resource.data.createdBy == 'workshop' && request.resource.data.confirmed == false
           && request.resource.data.isClosed == false && request.resource.data.proposal == null
           && companyDoc(myCompanyRef()).status == 'approved');

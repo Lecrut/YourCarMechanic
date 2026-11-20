@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ServiceList from '~/components/serviceList.vue'
 import { type IWorkshop, mapIWorkshop, type WorkshopStatus } from '~/models/workshop'
 import type { IUser } from '~/models/user'
 import { formatDateToString } from '~/utils/time'
@@ -11,7 +12,6 @@ const { t } = useI18n()
 const moderatorStore = useModeratorStore()
 const { workshops, users } = storeToRefs(moderatorStore)
 const citiesJsonStore = useCitiesJsonStore()
-const servicesStore = useServicesStore()
 const { loading, error } = storeToRefs(useSharedStore())
 
 const search = ref('')
@@ -200,15 +200,7 @@ async function confirmDelete() {
     </template>
 
     <template #[`item.services`]="{ item }">
-      <v-chip
-        v-for="key in item.services"
-        :key="key"
-        size="small"
-        variant="tonal"
-        class="ma-1"
-      >
-        {{ servicesStore.label(key) }}
-      </v-chip>
+      <service-list :services="item.services" />
     </template>
 
     <template #[`item.actions`]="{ item }">

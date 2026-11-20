@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ServiceList from '~/components/serviceList.vue'
 import type { IClient } from '~/models/client'
 import { formatDateToString } from '~/utils/time'
 
@@ -122,15 +123,7 @@ const headers = computed(() => [
     </template>
 
     <template #[`item.services`]="{ item }">
-      <v-chip
-        v-for="key in item.services"
-        :key="key"
-        size="small"
-        variant="tonal"
-        class="ma-1"
-      >
-        {{ servicesStore.label(key) }}
-      </v-chip>
+      <service-list :services="item.services" />
     </template>
 
     <template #[`item.lastVisit`]="{ item }">

@@ -44,6 +44,7 @@ export function sharedPlugins(withVue = true): PluginOption[] {
             'defineNuxtRouteMiddleware',
             'defineNuxtPlugin',
             'useHead',
+            'useNuxtApp',
           ],
         },
       ],

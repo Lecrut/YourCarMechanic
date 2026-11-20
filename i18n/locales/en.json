@@ -416,7 +416,16 @@
     "suspendText": "The company disappears from search and takes no new bookings. You can unlock it later.",
     "visitsWillBeCancelled": "Scheduled visits will be cancelled: {count}. Clients get a notification with the reason.",
     "cancelReasonSuspended": "{name} was suspended – the visit was cancelled. Please book another workshop.",
-    "cancelReasonRemoved": "{name} left the app – the visit was cancelled. Please book another workshop."
+    "cancelReasonRemoved": "{name} left the app – the visit was cancelled. Please book another workshop.",
+    "pages": {
+      "stats": "Repair numbers, times, top workshops",
+      "companies": "Unlock after the contract, suspend and add companies",
+      "services": "Service catalogue shown to customers and workshops",
+      "users": "Customer accounts and contact details",
+      "fixes": "All repairs – overview and moderation",
+      "reviews": "Hide and restore customer reviews",
+      "messages": "Messages from the contact form"
+    }
   },
   "stats": {
     "total": "All repairs",
@@ -757,7 +766,8 @@
       "new": "New",
       "inProgress": "In progress",
       "resolved": "Resolved"
-    }
+    },
+    "noteHint": "Visible to moderators only"
   },
   "garage": {
     "title": "My garage",

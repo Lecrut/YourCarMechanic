@@ -170,7 +170,7 @@ function renderOrigin() {
 }
 
 function renderPick() {
-  if (!ml || !map || !props.pickable) return
+  if (!ml || !map) return
   if (!props.picked) {
     pickMarker?.remove()
     pickMarker = null
@@ -178,19 +178,22 @@ function renderPick() {
   }
   if (!pickMarker) {
     const el = markerElement({ id: 'pick', position: props.picked, label: '' }, 'selected')
-    pickMarker = new ml.Marker({ element: el, draggable: true }).setLngLat([props.picked.lng, props.picked.lat]).addTo(map)
+    pickMarker = new ml.Marker({ element: el, draggable: props.pickable }).setLngLat([props.picked.lng, props.picked.lat]).addTo(map)
     pickMarker.on('dragend', () => {
       const p = pickMarker!.getLngLat()
       emit('pick', { lat: p.lat, lng: p.lng })
     })
   }
-  else pickMarker.setLngLat([props.picked.lng, props.picked.lat])
+  else {
+    pickMarker.setLngLat([props.picked.lng, props.picked.lat])
+    pickMarker.setDraggable(props.pickable)
+  }
 }
 
 /** Shows everything relevant: the radius (or the markers and the user). */
 function fitView() {
   if (!ml || !map) return
-  if (props.pickable && props.picked) return map.jumpTo({ center: [props.picked.lng, props.picked.lat], zoom: 15 })
+  if (props.picked) return map.jumpTo({ center: [props.picked.lng, props.picked.lat], zoom: 15 })
   const points: [number, number][] = props.origin && props.radiusKm
     ? circle(props.origin, props.radiusKm)
     : props.markers.map(m => [m.position.lng, m.position.lat])
@@ -226,7 +229,9 @@ onMounted(async () => {
     map.touchZoomRotate.disableRotation()
     // Re-add the radius layers after every style (theme) switch.
     map.on('style.load', renderRadius)
-    if (props.pickable) map.on('click', e => emit('pick', { lat: e.lngLat.lat, lng: e.lngLat.lng }))
+    map.on('click', (e) => {
+      if (props.pickable) emit('pick', { lat: e.lngLat.lat, lng: e.lngLat.lng })
+    })
     renderOrigin()
     renderMarkers()
     renderPick()
@@ -260,7 +265,11 @@ watch(() => [props.origin, props.radiusKm], () => {
   renderOrigin()
   fitView()
 }, { deep: true })
-watch(() => props.picked, renderPick, { deep: true })
+watch(() => props.picked, (next, prev) => {
+  renderPick()
+  if (next && !prev) fitView()
+}, { deep: true })
+watch(() => props.pickable, renderPick)
 watch(() => props.selectedId, (id) => {
   const m = props.markers.find(x => x.id === id)
   if (m && map) map.easeTo({ center: [m.position.lng, m.position.lat], duration: 500 })

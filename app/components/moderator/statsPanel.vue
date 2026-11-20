@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 import { computeStats, type IWorkshopStats } from '~/models/stats'
 import { formatDateToString } from '~/utils/time'
 
 const { t, locale } = useI18n()
+/** Phones: compact two-column tiles so the charts are reachable without scrolling past six big cards. */
+const { smAndDown } = useDisplay()
 
 const moderatorStore = useModeratorStore()
 const { fixes, workshops } = storeToRefs(moderatorStore)
@@ -57,22 +60,25 @@ const workshopHeaders = computed(() => [
 </script>
 
 <template>
-  <v-row>
+  <v-row :dense="smAndDown">
     <v-col
       v-for="kpi in kpis"
       :key="kpi.label"
-      cols="12"
-      sm="6"
+      cols="6"
       lg="4"
     >
       <v-card
         v-tooltip:top="kpi.hint"
         variant="tonal"
         :color="kpi.color"
+        :rounded="smAndDown ? 'lg' : 'xl'"
         hover
       >
-        <v-card-item>
-          <template #prepend>
+        <v-card-item :class="smAndDown ? 'pa-2' : ''">
+          <template
+            v-if="!smAndDown"
+            #prepend
+          >
             <v-avatar
               :color="kpi.color"
               size="48"
@@ -80,10 +86,12 @@ const workshopHeaders = computed(() => [
               <v-icon :icon="kpi.icon" />
             </v-avatar>
           </template>
-          <v-card-title class="text-headline-small font-weight-bold">
+          <v-card-title :class="smAndDown ? 'text-title-medium font-weight-bold' : 'text-headline-small font-weight-bold'">
             {{ kpi.value }}
           </v-card-title>
-          <v-card-subtitle>{{ kpi.label }}</v-card-subtitle>
+          <v-card-subtitle class="text-wrap">
+            {{ kpi.label }}
+          </v-card-subtitle>
         </v-card-item>
       </v-card>
     </v-col>

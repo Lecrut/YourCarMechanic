@@ -6,7 +6,8 @@ export const useServicesStore = defineStore('services', () => {
   const catalog = ref<IService[]>([])
   const loaded = ref(false)
 
-  const { locale } = useI18n()
+  // Not `useI18n()` – works also when the store is first used outside a component (middleware).
+  const locale = useNuxtApp().$i18n.locale
   const sharedStore = useSharedStore()
 
   const nameOf = (s: IService) => (locale.value === 'pl' ? s.namePl : s.nameEn)

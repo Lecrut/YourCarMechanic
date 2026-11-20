@@ -2,15 +2,13 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { type Decorator, type Preview, setup } from '@storybook/vue3-vite'
 import { createVuetify } from 'vuetify'
-import { createI18n } from 'vue-i18n'
 import { createPinia, setActivePinia } from 'pinia'
 import { createMemoryHistory, createRouter, RouterLink } from 'vue-router'
 import { h } from 'vue'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { vuetifyOptions } from '~/utils/vuetifyOptions'
-import pl from '../i18n/locales/pl.json'
-import en from '../i18n/locales/en.json'
+import { i18n } from './mocks/i18n'
 import MySnackbar from '~/components/mySnackbar.vue'
 import ErrorSnackbar from '~/components/errorSnackbar.vue'
 import { resetDb } from './mocks/services'
@@ -33,7 +31,6 @@ const vuetify = createVuetify({
     VSnackbar: noTransition,
   },
 })
-const i18n = createI18n({ legacy: false, locale: 'pl', fallbackLocale: 'en', messages: { pl, en } })
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [{ path: '/:pathMatch(.*)*', component: { render: () => null } }],
