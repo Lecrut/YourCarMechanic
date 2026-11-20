@@ -57,6 +57,20 @@ export const PriceItemValidation: Story = {
   },
 }
 
+/** The detail is optional – without it the row is shown under the service name only. */
+export const PriceItemWithoutDetail: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(await canvas.findByText('Naprawa i remont silnika'))
+    await userEvent.click(await screen.findByTestId('save-price'))
+    await waitFor(() => expect(pricingService.savePriceListItem).toHaveBeenCalled())
+    const [, saved] = mocked(pricingService.savePriceListItem).mock.calls.at(-1)!
+    await expect(saved).toMatchObject({ serviceKey: 'engine', name: '' })
+    const table = canvas.getByTestId('price-table')
+    await expect(await within(table).findByText('Naprawa i remont silnika')).toBeVisible()
+  },
+}
+
 /** Client list: consent filter is on by default (GDPR). */
 export const ClientList: Story = {
   render: () => ({ components: { Clients }, template: '<clients />' }),

@@ -79,7 +79,8 @@ async function save() {
                 v-model="draft.name"
                 :label="t('pricing.itemName')"
                 :placeholder="t('pricing.itemNamePlaceholder')"
-                :rules="[requiredRule(t)]"
+                :hint="t('pricing.itemNameHint')"
+                persistent-hint
                 data-testid="price-name"
               />
             </v-col>

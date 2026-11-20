@@ -58,7 +58,6 @@ function bookPath(workshop: IWorkshop) {
 
 const priceHeaders = computed(() => [
   { title: t('pricing.service'), key: 'serviceKey', value: (i: IPriceListItem) => servicesStore.label(i.serviceKey) },
-  { title: t('pricing.itemName'), key: 'name' },
   { title: t('pricing.laborHours'), key: 'laborHours', sortable: false },
   ...CAR_SEGMENTS.map(s => ({ title: t(`pricing.segments.${s}`), key: s, sortable: false })),
 ])
@@ -299,6 +298,15 @@ onMounted(() => {
             item-value="reference"
             density="comfortable"
           >
+            <template #[`item.serviceKey`]="{ item }">
+              <div>{{ servicesStore.label(item.serviceKey) }}</div>
+              <div
+                v-if="item.name"
+                class="text-body-small text-medium-emphasis"
+              >
+                {{ item.name }}
+              </div>
+            </template>
             <template #[`item.laborHours`]="{ item }">
               {{ formatDurationRange(item.laborHours) }}
             </template>

@@ -70,7 +70,6 @@ const servicesWithoutPrices = computed(() =>
 
 const headers = computed(() => [
   { title: t('pricing.service'), key: 'serviceKey', value: (i: IPriceListItem) => servicesStore.label(i.serviceKey) },
-  { title: t('pricing.itemName'), key: 'name' },
   { title: t('pricing.laborHours'), key: 'laborHours', sortable: false },
   ...CAR_SEGMENTS.map(s => ({ title: t(`pricing.segments.${s}`), key: s, sortable: false })),
   { title: '', key: 'actions', sortable: false, align: 'end' as const },
@@ -209,6 +208,15 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
           hover
           data-testid="price-table"
         >
+          <template #[`item.serviceKey`]="{ item }">
+            <div>{{ servicesStore.label(item.serviceKey) }}</div>
+            <div
+              v-if="item.name"
+              class="text-body-small text-medium-emphasis"
+            >
+              {{ item.name }}
+            </div>
+          </template>
           <template #[`item.laborHours`]="{ item }">
             {{ formatDurationRange(item.laborHours) }}
           </template>
@@ -343,7 +351,7 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
     <confirm-dialog
       v-model="confirmShown"
       :title="toDelete?.kind === 'promotion' ? t('promotions.deleteTitle') : t('pricing.deleteTitle')"
-      :text="toDelete?.kind === 'promotion' ? t('promotions.deleteText', { name: toDelete.item.title }) : t('pricing.deleteText', { name: toDelete?.item.name ?? '' })"
+      :text="toDelete?.kind === 'promotion' ? t('promotions.deleteText', { name: toDelete.item.title }) : t('pricing.deleteText', { name: toDelete ? (toDelete.item.name || servicesStore.label(toDelete.item.serviceKey)) : '' })"
       icon="mdi-delete-outline"
       @confirm="deleteConfirmed"
     />
