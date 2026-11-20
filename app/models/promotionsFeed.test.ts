@@ -88,3 +88,14 @@ describe('notification feed', () => {
     expect(relativeTime(at('2026-11-09T12:00:00'), now)).toEqual({ value: 3, unit: 'd' })
   })
 })
+
+describe('feed after a review', () => {
+  it('stops asking for a review once it was given', () => {
+    const base = {
+      reference: 'fixes/r',
+      notifications: [mapINotification({ notificationType: 'giveBackCar', sendDate: new Date('2026-11-12T10:00:00') })],
+    }
+    expect(buildFeed([mapIFix(base)], 'user')[0]!.type).toBe('giveBackCar')
+    expect(buildFeed([mapIFix({ ...base, reviewed: true })], 'user')[0]!.type).toBe('giveBackCarReviewed')
+  })
+})

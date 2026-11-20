@@ -27,6 +27,7 @@ const meta: Record<string, { icon: string, color: string }> = {
   addGiveBackTime: { icon: 'mdi-clock-outline', color: 'info' },
   addExpense: { icon: 'mdi-cash-plus', color: 'warning' },
   giveBackCar: { icon: 'mdi-car-key', color: 'success' },
+  giveBackCarReviewed: { icon: 'mdi-car-key', color: 'success' },
   changeProposed: { icon: 'mdi-swap-horizontal', color: 'warning' },
   changeAccepted: { icon: 'mdi-check-circle-outline', color: 'success' },
   changeRejected: { icon: 'mdi-close-circle-outline', color: 'error' },

@@ -189,6 +189,16 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
       <v-divider />
 
       <v-card-text>
+        <v-alert
+          v-if="mode !== 'workshop' && workshop && !fix.isClosed && (workshop.deletedAt || workshop.status !== 'approved')"
+          type="error"
+          variant="tonal"
+          icon="mdi-garage-alert"
+          class="mb-4"
+          :title="t('repairs.workshopUnavailable')"
+          :text="t('repairs.workshopUnavailableText')"
+          data-testid="workshop-unavailable"
+        />
         <client-decision
           v-if="mode === 'user'"
           :fix="fix"
@@ -275,6 +285,14 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
                 prepend-icon="mdi-cash-multiple"
                 :title="formatRange(fix.estimate)"
                 :subtitle="t('pricing.estimate')"
+              />
+              <v-list-item
+                v-if="fix.promotion"
+                prepend-icon="mdi-tag"
+                base-color="error"
+                :title="`${fix.promotion.title} · −${fix.promotion.percent}%`"
+                :subtitle="t('promotions.applied')"
+                data-testid="applied-promotion"
               />
               <v-list-item
                 v-if="quote"

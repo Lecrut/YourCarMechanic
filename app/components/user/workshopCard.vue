@@ -32,6 +32,13 @@ const servicesStore = useServicesStore()
 const showDialog = ref(false)
 
 const cityName = computed(() => citiesJsonStore.getCityName(props.workshop.city))
+
+const { locale } = useI18n()
+/** e.g. "pn, wt, śr, czw, pt" – days in the order Monday → Sunday. */
+const workingDaysLabel = computed(() => [1, 2, 3, 4, 5, 6, 0]
+  .filter(d => props.workshop.workingDays.includes(d))
+  .map(d => new Date(2024, 0, 7 + d).toLocaleDateString(locale.value === 'pl' ? 'pl-PL' : 'en-GB', { weekday: 'short' }))
+  .join(', '))
 </script>
 
 <template>
@@ -101,6 +108,8 @@ const cityName = computed(() => citiesJsonStore.getCityName(props.workshop.city)
         <v-list-item
           prepend-icon="mdi-clock-outline"
           :title="`${workshop.openingTime}:00 – ${workshop.closingTime}:00`"
+          :subtitle="workingDaysLabel"
+          data-testid="opening-hours"
         />
         <v-list-item
           v-if="durationHours"

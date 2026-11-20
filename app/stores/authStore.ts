@@ -1,4 +1,4 @@
-import { authService, workshopsService } from '~/services'
+import { authService, fixesService, workshopsService } from '~/services'
 import type { IUser } from '~/models/user'
 import type { IUserProfile } from '~/models/userProfile'
 import type { IWorkshop } from '~/models/workshop'
@@ -125,6 +125,9 @@ export const useAuthStore = defineStore('auth', () => {
     sharedStore.run(async () => {
       if (!user.value) throw new AppError('errors.notSignedIn')
       user.value = await authService.updateProfile(user.value.reference, profile, user.value.role)
+      // Workshops must see the current name/phone on upcoming visits.
+      if (user.value.role === 'user')
+        await fixesService.syncClientContact(user.value.reference, `${profile.name} ${profile.surname}`.trim(), profile.phone)
     })
 
   const createCompany = (workshop: IWorkshop) =>

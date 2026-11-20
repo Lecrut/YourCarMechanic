@@ -173,3 +173,19 @@ export const ClientAddsPhoto: Story = {
     await expect(image.type).toBe('image/jpeg')
   },
 }
+
+/** The client sees the promotion applied at booking. */
+export const AppliedPromotion: Story = {
+  args: { fix: mapIFix({ ...newFix, promotion: { title: 'Jesienna wymiana opon', percent: 20 } }), mode: 'user' },
+  play: async () => {
+    await expect(await screen.findByTestId('applied-promotion')).toHaveTextContent('Jesienna wymiana opon · −20%')
+  },
+}
+
+/** If the workshop gets suspended after booking, the client is told. */
+export const WorkshopSuspended: Story = {
+  args: { fix: mapIFix({ ...newFix, companyRef: 'companies/nowy' }), mode: 'user' },
+  play: async () => {
+    await expect(await screen.findByTestId('workshop-unavailable')).toHaveTextContent('Warsztat jest obecnie niedostępny')
+  },
+}

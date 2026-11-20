@@ -7,7 +7,7 @@ export interface IFeedEvent {
   id: string
   fixRef: string
   at: Date
-  type: NotificationType | 'newBooking' | 'bookedForYou' | 'reminder'
+  type: NotificationType | 'newBooking' | 'bookedForYou' | 'reminder' | 'giveBackCarReviewed'
   car: string
   client: string
   cost: number | null
@@ -50,8 +50,10 @@ export function buildFeed(fixes: IFix[], role: UserRole | null, limit = 30, now 
       events.push({ ...base, id: `${fix.reference}#booking`, at: fix.bookDate, type: 'bookedForYou', cost: null })
 
     fix.notifications.forEach((n, index) => {
-      if (relevant.includes(n.notificationType))
-        events.push({ ...base, id: `${fix.reference}#${index}`, at: n.sendDate, type: n.notificationType, cost: n.cost })
+      if (!relevant.includes(n.notificationType)) return
+      // After the review the hand-over event no longer asks for one.
+      const type = n.notificationType === 'giveBackCar' && fix.reviewed ? 'giveBackCarReviewed' : n.notificationType
+      events.push({ ...base, id: `${fix.reference}#${index}`, at: n.sendDate, type, cost: n.cost })
     })
   }
 

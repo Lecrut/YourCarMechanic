@@ -161,6 +161,17 @@ async function cancelRepair() {
       >
         {{ t('reviews.rate') }}
       </v-btn>
+      <v-chip
+        v-else-if="mode === 'user' && fix.reviewed"
+        v-tooltip:top="t('reviews.thanks')"
+        color="amber"
+        size="small"
+        variant="tonal"
+        prepend-icon="mdi-star-check"
+        data-testid="reviewed-chip"
+      >
+        {{ t('reviews.reviewed') }}
+      </v-chip>
       <v-btn
         v-if="canBeCanceled"
         variant="text"

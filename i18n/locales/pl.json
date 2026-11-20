@@ -496,7 +496,9 @@
     "cancelTitle": "Odwołać wizytę?",
     "cancelText": "Wizyta {date} zostanie odwołana, a termin zwolniony. Tej operacji nie można cofnąć.",
     "keep": "Zostaw",
-    "addToCalendar": "Dodaj do kalendarza"
+    "addToCalendar": "Dodaj do kalendarza",
+    "workshopUnavailable": "Warsztat jest obecnie niedostępny",
+    "workshopUnavailableText": "Warsztat został zawieszony lub usunięty. Skontaktuj się z nim telefonicznie albo napisz do nas przez formularz kontaktowy."
   },
   "reviews": {
     "title": "Oceń naprawę",
@@ -513,7 +515,9 @@
     "filterAll": "Wszystkie",
     "filterLow": "≤ 2 gwiazdki",
     "filterMid": "≤ 3 gwiazdki",
-    "ownRatingHint": "Średnia ocena z {count} opinii klientów"
+    "ownRatingHint": "Średnia ocena z {count} opinii klientów",
+    "reviewed": "Oceniono",
+    "thanks": "Dziękujemy za opinię!"
   },
   "errors": {
     "invalidCredentials": "Niepoprawne dane logowania",
@@ -625,7 +629,8 @@
       "planned": "Zaplanowana",
       "ended": "Zakończona"
     },
-    "badgeHint": "{title} – do {date}"
+    "badgeHint": "{title} – do {date}",
+    "applied": "Promocja naliczona przy rezerwacji"
   },
   "feed": {
     "title": "Powiadomienia",
@@ -645,7 +650,7 @@
       "quoteAccepted": "{client} zaakceptował(a) wycenę ({car})",
       "addGiveBackTime": "Znamy termin odbioru {car}",
       "addExpense": "Dodatkowy koszt dla {car}: {cost} PLN",
-      "giveBackCar": "{car} gotowy – wystaw opinię!",
+      "giveBackCar": "{car} gotowy do odbioru – oceń naprawę!",
       "changeProposed": "Warsztat proponuje zmianę dla {car}",
       "changeAccepted": "{client} zaakceptował(a) zmianę ({car})",
       "changeRejected": "{client} odrzucił(a) zmianę ({car})",
@@ -653,7 +658,8 @@
       "userCancel": "{client} odwołał(a) wizytę ({car})",
       "workshopCancel": "Warsztat odwołał wizytę ({car})",
       "moderatorCancel": "Moderator anulował naprawę ({car})",
-      "reminder": "Przypomnienie: wizyta {when} – {car}"
+      "reminder": "Przypomnienie: wizyta {when} – {car}",
+      "giveBackCarReviewed": "{car} odebrany – dziękujemy za opinię"
     }
   },
   "photos": {

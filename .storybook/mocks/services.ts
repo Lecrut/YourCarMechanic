@@ -173,6 +173,12 @@ export const fixesService = {
   setInternalNote: fn(async (fixRef: string, text: string) => {
     db.internalNotes[fixRef] = text
   }).mockName('setInternalNote'),
+  syncClientContact: fn(async (userRef: string, clientName: string, clientPhone: string) => {
+    db.fixes = db.fixes.map(f => (f.userRef === userRef && !f.isClosed ? mapIFix({ ...f, clientName, clientPhone }) : f))
+  }).mockName('syncClientContact'),
+  syncCarSnapshot: fn(async (userRef: string, car: ICar) => {
+    db.fixes = db.fixes.map(f => (f.userRef === userRef && !f.isClosed && f.carRef === car.reference && !f.notifications.length ? mapIFix({ ...f, car }) : f))
+  }).mockName('syncCarSnapshot'),
   confirmBooking: fn(async (fix: IFix) => {
     const updated = mapIFix({ ...fix, confirmed: true })
     db.fixes = replace(db.fixes, updated)

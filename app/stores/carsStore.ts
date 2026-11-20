@@ -1,4 +1,4 @@
-import { carsService } from '~/services'
+import { carsService, fixesService } from '~/services'
 import type { ICar } from '~/models/car'
 
 export const useCarsStore = defineStore('cars', () => {
@@ -23,6 +23,8 @@ export const useCarsStore = defineStore('cars', () => {
     sharedStore.run(async () => {
       const updated = await carsService.updateCar(car)
       cars.value = cars.value.map(c => (c.reference === updated.reference ? updated : c))
+      // Upcoming visits with this car show the corrected data to the workshop.
+      await fixesService.syncCarSnapshot(updated.userRef, updated)
     })
 
   /** Soft delete – the car disappears for the owner, repairs keep their snapshot. */

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/test'
 import RepairCard from './repairCard.vue'
 import { finishedFix, fixBookedByWorkshop, fixWithProposal, newFix, userAnna, workshopOwner, autofix } from '../../../.storybook/mocks/fixtures'
+import { mapIFix } from '~/models/fix'
 import { fixesService, reviewsService } from '~/services'
 
 const meta = {
@@ -83,5 +84,15 @@ export const WorkshopView: Story = {
     // Workshop sees the client's name; it cannot cancel before the visit (no-show only).
     await expect(canvas.getByText(/Anna Kowalska/)).toBeVisible()
     await expect(canvas.queryByTestId('cancel-repair')).toBeNull()
+  },
+}
+
+/** After the review the card says so instead of offering another one. */
+export const AlreadyReviewed: Story = {
+  args: { fix: mapIFix({ ...finishedFix, reviewed: true }) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByTestId('reviewed-chip')).toHaveTextContent('Oceniono')
+    await expect(canvas.queryByTestId('review-repair')).toBeNull()
   },
 }

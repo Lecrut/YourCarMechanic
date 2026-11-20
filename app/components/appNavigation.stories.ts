@@ -78,7 +78,7 @@ export const CustomerNotifications: Story = {
     await waitFor(() => expect(within(bell).getByText(/\d/)).toBeInTheDocument())
     await userEvent.click(bell)
     const menu = await screen.findByTestId('feed-menu')
-    await expect(within(menu).getByText('Skoda Octavia gotowy – wystaw opinię!')).toBeVisible()
+    await expect(within(menu).getByText('Skoda Octavia gotowy do odbioru – oceń naprawę!')).toBeVisible()
     await expect(within(menu).getByText(/Warsztat umówił wizytę dla BMW Seria 3/)).toBeVisible()
     await userEvent.click(within(menu).getByTestId('feed-mark-read'))
     await waitFor(() => expect(within(menu).queryByTestId('feed-mark-read')).toBeNull())

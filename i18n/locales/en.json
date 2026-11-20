@@ -496,7 +496,9 @@
     "cancelTitle": "Cancel the visit?",
     "cancelText": "The visit on {date} will be cancelled and the time released. This cannot be undone.",
     "keep": "Keep it",
-    "addToCalendar": "Add to calendar"
+    "addToCalendar": "Add to calendar",
+    "workshopUnavailable": "The workshop is currently unavailable",
+    "workshopUnavailableText": "The workshop was suspended or removed. Call them or write to us via the contact form."
   },
   "reviews": {
     "title": "Rate the repair",
@@ -513,7 +515,9 @@
     "filterAll": "All",
     "filterLow": "≤ 2 stars",
     "filterMid": "≤ 3 stars",
-    "ownRatingHint": "Average rating from {count} customer reviews"
+    "ownRatingHint": "Average rating from {count} customer reviews",
+    "reviewed": "Reviewed",
+    "thanks": "Thank you for your review!"
   },
   "errors": {
     "invalidCredentials": "Invalid e-mail or password",
@@ -625,7 +629,8 @@
       "planned": "Planned",
       "ended": "Ended"
     },
-    "badgeHint": "{title} – until {date}"
+    "badgeHint": "{title} – until {date}",
+    "applied": "Promotion applied when booking"
   },
   "feed": {
     "title": "Notifications",
@@ -645,7 +650,7 @@
       "quoteAccepted": "{client} accepted the quote ({car})",
       "addGiveBackTime": "Pick-up time set for {car}",
       "addExpense": "Extra cost for {car}: {cost} PLN",
-      "giveBackCar": "{car} is ready – leave a review!",
+      "giveBackCar": "{car} is ready – rate the repair!",
       "changeProposed": "The workshop proposes a change for {car}",
       "changeAccepted": "{client} accepted the change ({car})",
       "changeRejected": "{client} rejected the change ({car})",
@@ -653,7 +658,8 @@
       "userCancel": "{client} cancelled the visit ({car})",
       "workshopCancel": "The workshop cancelled the visit ({car})",
       "moderatorCancel": "A moderator cancelled the repair ({car})",
-      "reminder": "Reminder: visit {when} – {car}"
+      "reminder": "Reminder: visit {when} – {car}",
+      "giveBackCarReviewed": "{car} handed back – thanks for your review"
     }
   },
   "photos": {

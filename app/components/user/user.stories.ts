@@ -3,7 +3,7 @@ import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import CarCard from './carCard.vue'
 import WorkshopCard from './workshopCard.vue'
 import { anniesCar, autofix, promotions, userAnna } from '../../../.storybook/mocks/fixtures'
-import { carsService, workshopsService } from '~/services'
+import { carsService, fixesService, workshopsService } from '~/services'
 
 const meta = {
   title: 'User/Cards',
@@ -96,6 +96,34 @@ export const CarHistory: Story = {
     await userEvent.click(within(canvasElement).getByTestId('car-history-open'))
     const dialog = await screen.findByTestId('car-history')
     await waitFor(() => expect(within(dialog).getAllByTestId('car-history-item').length).toBe(4))
-    await expect(within(dialog).getByTestId('car-history-spent')).toHaveTextContent('480 PLN')
+    // the 480 PLN quote belongs to an unfinished repair – nothing was paid yet
+    await expect(within(dialog).getByTestId('car-history-spent')).toHaveTextContent('0 PLN')
+  },
+}
+
+/** Correcting a car updates upcoming visits where the car was not received yet. */
+export const EditCarSyncsVisits: Story = {
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByTestId('edit-car'))
+    const year = (await screen.findByTestId('car-year')).querySelector('input')!
+    await userEvent.clear(year)
+    await userEvent.type(year, '2019')
+    await userEvent.click(screen.getByTestId('save-car'))
+    await waitFor(() => expect(fixesService.syncCarSnapshot).toHaveBeenCalled())
+  },
+}
+
+/** Opening hours come with the working days. */
+export const WorkshopOpeningDays: Story = {
+  render: () => ({
+    components: { WorkshopCard },
+    setup: () => ({ autofix: { ...autofix, workingDays: [1, 2, 3, 4, 5] } }),
+    template: `<workshop-card :workshop="autofix" :is-presentation="true" />`,
+  }),
+  play: async ({ canvasElement }) => {
+    const hours = within(canvasElement).getByTestId('opening-hours')
+    await expect(hours).toHaveTextContent('8:00 – 16:00')
+    await expect(hours).toHaveTextContent(/pon|pn/)
+    await expect(hours).not.toHaveTextContent(/niedz|nd/)
   },
 }

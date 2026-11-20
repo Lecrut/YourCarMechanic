@@ -181,6 +181,12 @@ service cloud.firestore {
           && appendsOneStatus(['changeAccepted']))
         // either party: attach one photo (max 20); photos are never removed or edited
         || ((isClient() || isWorkshop()) && onlyChanges(['photos']) && appendsOnePhoto(isClient() ? 'user' : 'workshop'))
+        // client: keep contact details on open repairs up to date (profile change)
+        || (isClient() && !resource.data.isClosed && onlyChanges(['clientName', 'clientPhone'])
+          && request.resource.data.clientName is string && request.resource.data.clientName.size() <= 200
+          && request.resource.data.clientPhone is string && request.resource.data.clientPhone.size() <= 30)
+        // client: correct the car snapshot until the workshop received the car
+        || (isClient() && !resource.data.isClosed && resource.data.notifications.size() == 0 && onlyChanges(['car']))
         // client: mark as reviewed (together with creating the review)
         || (isClient() && onlyChanges(['reviewed']) && request.resource.data.reviewed == true);
 

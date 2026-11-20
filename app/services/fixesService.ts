@@ -13,12 +13,13 @@ import {
   type Transaction,
   updateDoc,
   where,
+  writeBatch,
 } from 'firebase/firestore'
 import { db } from './firebase'
 import { AppError } from '~/utils/errors'
 import { fromDoc, fromQuery } from './mappers'
 import { type IFix, type IFixProposal, mapIFix } from '~/models/fix'
-import { mapICarToFirebase } from '~/models/car'
+import { type ICar, mapICarToFirebase } from '~/models/car'
 import { mapIWorkshop, occupiedHours } from '~/models/workshop'
 import {
   CLOSING_NOTIFICATIONS,
@@ -276,4 +277,34 @@ export async function getInternalNote(fixRef: string): Promise<string> {
 
 export async function setInternalNote(fixRef: string, text: string): Promise<void> {
   await setDoc(internalNoteDoc(fixRef), { text, updatedAt: serverTimestamp() })
+}
+
+/** Open repairs of a client – the ones whose snapshots may still be corrected. */
+async function openFixesOf(userRef: string): Promise<IFix[]> {
+  const snap = await getDocs(query(fixes(), where('userRef', '==', userRef), where('isClosed', '==', false)))
+  return fromQuery<IFix>(snap).map(mapIFix)
+}
+
+/**
+ * The client changed name/phone in the profile – update it on open repairs so the workshop
+ * calls the right number. Closed repairs keep their history.
+ */
+export async function syncClientContact(userRef: string, clientName: string, clientPhone: string): Promise<void> {
+  const open = (await openFixesOf(userRef)).filter(f => f.clientName !== clientName || f.clientPhone !== clientPhone)
+  if (!open.length) return
+  const batch = writeBatch(db())
+  open.forEach(f => batch.update(doc(db(), f.reference), { clientName, clientPhone }))
+  await batch.commit()
+}
+
+/**
+ * The client corrected a saved car – update the snapshot on visits where the car was not
+ * received yet (afterwards the snapshot is what the workshop actually worked on).
+ */
+export async function syncCarSnapshot(userRef: string, car: ICar): Promise<void> {
+  const open = (await openFixesOf(userRef)).filter(f => f.carRef === car.reference && !f.notifications.length)
+  if (!open.length) return
+  const batch = writeBatch(db())
+  open.forEach(f => batch.update(doc(db(), f.reference), { car: mapICarToFirebase(car) }))
+  await batch.commit()
 }

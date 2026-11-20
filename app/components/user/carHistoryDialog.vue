@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ICar } from '~/models/car'
 import { fixesForCar, type IFix, lastStatus, statusColor, totalCost } from '~/models/fix'
+import { fixOutcome } from '~/models/stats'
 import { notificationLabel } from '~/composables/notifications'
 import { formatDateToString } from '~/utils/time'
 import RepairDetails from '~/components/fix/repairDetails.vue'
@@ -23,7 +24,9 @@ const selectedRef = ref<string | null>(null)
 const showDetails = ref(false)
 
 const selected = computed(() => repairs.value.find(r => r.reference === selectedRef.value) ?? null)
-const spent = computed(() => repairs.value.reduce((sum, r) => sum + (totalCost(r) ?? 0), 0))
+/** Money only for repairs actually done; cancelled visits are not visits. */
+const spent = computed(() => repairs.value.filter(r => fixOutcome(r) === 'finished').reduce((sum, r) => sum + (totalCost(r) ?? 0), 0))
+const visits = computed(() => repairs.value.filter(r => fixOutcome(r) !== 'cancelled').length)
 const lastMileage = computed(() => repairs.value.find(r => r.carMillage > 0)?.carMillage ?? null)
 
 const statusOf = (fix: IFix) => {
@@ -68,7 +71,7 @@ function open(fix: IFix) {
               class="pa-3 text-center"
             >
               <div class="text-headline-small font-weight-bold">
-                {{ repairs.length }}
+                {{ visits }}
               </div>
               <div class="text-body-small">
                 {{ t('carHistory.visits') }}

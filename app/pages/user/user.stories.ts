@@ -5,7 +5,7 @@ import Notifications from './notifications.vue'
 import History from './history.vue'
 import Profile from './profile.vue'
 import { userAnna } from '../../../.storybook/mocks/fixtures'
-import { carsService, fixesService } from '~/services'
+import { authService, carsService, fixesService } from '~/services'
 import { useSharedStore } from '~/stores/sharedStore'
 import { AppError } from '~/utils/errors'
 
@@ -81,5 +81,21 @@ export const SlotTakenMessage: Story = {
     const snackbars = await screen.findAllByTestId('error-snackbar')
     await expect(await screen.findByText('Ten termin został właśnie zajęty – wybierz inną godzinę')).toBeVisible()
     await expect(snackbars.length).toBe(1)
+  },
+}
+
+/** A new phone number reaches the workshop on upcoming visits. */
+export const ProfileUpdateSyncsVisits: Story = {
+  render: () => ({ components: { Profile }, template: '<profile />' }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(await canvas.findByRole('button', { name: /Edytuj/ }))
+    const inputs = canvasElement.querySelectorAll('form input')
+    const phone = inputs[2] as HTMLInputElement
+    await userEvent.clear(phone)
+    await userEvent.type(phone, '600999888')
+    await userEvent.click(canvas.getByRole('button', { name: /Zapisz/ }))
+    await waitFor(() => expect(authService.updateProfile).toHaveBeenCalled())
+    await waitFor(() => expect(fixesService.syncClientContact).toHaveBeenCalledWith('users/anna', 'Anna Kowalska', '600999888'))
   },
 }
