@@ -54,10 +54,10 @@ const money = (fix: IFix) => {
           />
         </v-avatar>
       </template>
-      <v-card-title class="font-weight-bold">
+      <v-card-title class="font-weight-bold text-wrap">
         {{ tile.car.manufacturer }} {{ tile.car.model }}
       </v-card-title>
-      <v-card-subtitle>
+      <v-card-subtitle class="text-wrap">
         {{ tile.car.productionYear }}<template v-if="tile.car.vin">
           · {{ tile.car.vin }}
         </template>

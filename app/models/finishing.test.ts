@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { fixesForCar, mapIFix, nextVisit } from './fix'
-import { buildFeed, timeUntil } from './feed'
+import { buildFeed, formatRelative } from './feed'
 import { mapICar } from './car'
 
 const bmw = mapICar({ manufacturer: 'BMW', model: 'X1', productionYear: 2020, vin: 'WBA0000000000001', reference: 'cars/bmw' })
@@ -40,9 +40,12 @@ describe('next visit and reminders', () => {
     }
   })
 
-  it('time until a visit', () => {
-    expect(timeUntil(new Date('2026-11-19T12:30:00'), now)).toEqual({ value: 30, unit: 'min' })
-    expect(timeUntil(new Date('2026-11-19T18:00:00'), now)).toEqual({ value: 6, unit: 'h' })
-    expect(timeUntil(new Date('2026-11-22T12:00:00'), now)).toEqual({ value: 3, unit: 'd' })
+  it('time until a visit – grammatical, calendar days', () => {
+    expect(formatRelative(new Date('2026-11-19T12:30:00'), 'pl', now)).toBe('za 30 minut')
+    expect(formatRelative(new Date('2026-11-19T18:00:00'), 'pl', now)).toBe('za 6 godzin')
+    expect(formatRelative(new Date('2026-11-20T10:00:00'), 'pl', now)).toBe('jutro')
+    expect(formatRelative(new Date('2026-11-21T10:00:00'), 'pl', now)).toBe('pojutrze')
+    expect(formatRelative(new Date('2026-11-22T12:00:00'), 'pl', now)).toBe('za 3 dni')
+    expect(formatRelative(new Date('2026-11-20T10:00:00'), 'en', now)).toBe('tomorrow')
   })
 })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IFix } from '~/models/fix'
 import type { IWorkshop } from '~/models/workshop'
-import { timeUntil } from '~/models/feed'
+import { formatRelative } from '~/models/feed'
 import { formatDateToString } from '~/utils/time'
 import { downloadIcs } from '~/utils/calendar'
 import RepairDetails from '~/components/fix/repairDetails.vue'
@@ -9,7 +9,7 @@ import RepairDetails from '~/components/fix/repairDetails.vue'
 /** Hero card with the customer's nearest visit. */
 const props = defineProps<{ fix: IFix }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const workshopStore = useWorkshopStore()
 const citiesJsonStore = useCitiesJsonStore()
 const servicesStore = useServicesStore()
@@ -17,10 +17,7 @@ const servicesStore = useServicesStore()
 const workshop = ref<IWorkshop | null>(null)
 const showDetails = ref(false)
 
-const countdown = computed(() => {
-  const left = timeUntil(props.fix.date)
-  return t(`nextVisit.in.${left.unit}`, { value: left.value })
-})
+const countdown = computed(() => formatRelative(props.fix.date, locale.value))
 const address = computed(() => (workshop.value
   ? `${citiesJsonStore.getCityName(workshop.value.city)}, ${workshop.value.address}`
   : ''))

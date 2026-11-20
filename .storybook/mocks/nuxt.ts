@@ -6,8 +6,8 @@ export async function navigateTo(path: string) {
   navigatedTo.push(path)
 }
 
-// No map tiles in Storybook/tests – the map renders markers without hitting a tile server.
-export const useRuntimeConfig = () => ({ public: { firebase: {}, useEmulators: false, map: { lightTiles: '', darkTiles: '', attribution: '' } } })
+// No map style in Storybook/tests – the map renders markers on a plain background, no network.
+export const useRuntimeConfig = () => ({ public: { firebase: {}, useEmulators: false, map: { lightStyle: '', darkStyle: '' } } })
 
 export const definePageMeta = (_meta: unknown) => {}
 

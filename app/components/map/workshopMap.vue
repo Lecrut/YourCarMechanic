@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { LayerGroup, Map as LeafletMap, Marker, TileLayer } from 'leaflet'
+import type { GeoJSONSource, GeoJSONSourceSpecification, Map as MapLibreMap, Marker, StyleSpecification } from 'maplibre-gl'
 import { useTheme } from 'vuetify'
 import { type LatLng, POLAND_CENTER } from '~/models/geo'
+
+type GeoJSONSourceData = Exclude<GeoJSONSourceSpecification['data'], string>
 
 export interface MapMarker {
   id: string
@@ -13,9 +15,9 @@ export interface MapMarker {
 }
 
 /**
- * Leaflet map styled with Vuetify: round markers with rating badges, the user's position with
- * the search radius, theme-aware tiles and Vuetify map controls. Leaflet is loaded on demand.
- * `pickable` turns it into a location picker (click / drag a single pin).
+ * Vector map (MapLibre + OpenFreeMap styles, free incl. commercial use) with Vuetify-styled
+ * markers and controls, the user's position with the search radius and theme-aware styles.
+ * MapLibre is loaded on demand. `pickable` turns it into a location picker (click / drag a pin).
  */
 const props = withDefaults(defineProps<{
   markers?: MapMarker[]
@@ -35,139 +37,202 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const theme = useTheme()
-const config = useRuntimeConfig().public.map as { lightTiles: string, darkTiles: string, attribution: string }
+const config = useRuntimeConfig().public.map as { lightStyle: string, darkStyle: string }
 
 const container = ref<HTMLElement | null>(null)
 const ready = ref(false)
+/** WebGL unavailable or the library failed to load – the list next to the map still works. */
+const failed = ref(false)
 
-let L: typeof import('leaflet') | null = null
-let map: LeafletMap | null = null
-let tiles: TileLayer | null = null
-let markerLayer: LayerGroup | null = null
-let originLayer: LayerGroup | null = null
+type MapLibre = typeof import('maplibre-gl')
+let ml: MapLibre | null = null
+let map: MapLibreMap | null = null
+let markerObjects: Marker[] = []
+let originMarker: Marker | null = null
 let pickMarker: Marker | null = null
 
-const tileUrl = computed(() => (theme.global.current.value.dark ? config.darkTiles : config.lightTiles))
+const RADIUS_SOURCE = 'search-radius'
 
-/** Marker markup – Vuetify utility classes + the theme's surface colour as a ring. */
-function markerHtml(m: MapMarker, state: 'normal' | 'highlighted' | 'selected') {
-  const size = state === 'selected' ? 48 : state === 'highlighted' ? 44 : 38
+/** No style URL (Storybook/tests) = plain background, no network. */
+const EMPTY_STYLE: StyleSpecification = {
+  version: 8,
+  sources: {},
+  layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#e8eaed' } }],
+}
+
+const styleUrl = computed(() => (theme.global.current.value.dark ? config.darkStyle : config.lightStyle))
+
+function themeColor(name: string, fallback: string) {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(`--v-theme-${name}`).trim()
+  return value ? `rgb(${value})` : fallback
+}
+
+type MarkerState = 'normal' | 'highlighted' | 'selected'
+const markerSize = (state: MarkerState) => (state === 'selected' ? 48 : state === 'highlighted' ? 44 : 38)
+
+/** Marker: Vuetify utility classes, theme surface as a ring, the name as a chip when active. */
+function markerElement(m: MapMarker, state: MarkerState) {
+  const size = markerSize(state)
   const color = state === 'normal' ? (m.approximate ? 'bg-blue-grey' : 'bg-primary') : 'bg-secondary'
-  const badge = m.badge
-    ? `<span class="position-absolute bg-amber text-black rounded-pill elevation-2 px-1 text-label-small font-weight-bold" style="top:-6px;right:-10px;line-height:16px"><i class="mdi mdi-star"></i>${m.badge}</span>`
-    : ''
-  return `<div class="position-relative d-flex align-center justify-center rounded-circle elevation-${state === 'normal' ? 3 : 5} ${color} text-white"
-    style="width:${size}px;height:${size}px;border:3px solid rgb(var(--v-theme-surface));transition:all .15s">
-    <i class="mdi mdi-garage" style="font-size:${size / 2}px"></i>${badge}</div>`
+  const el = document.createElement('div')
+  el.className = 'd-flex flex-column align-center'
+  el.style.cursor = 'pointer'
+  el.dataset.testid = 'map-marker'
+  el.title = m.label
+  el.innerHTML = `
+    <div class="position-relative d-flex align-center justify-center rounded-circle elevation-${state === 'normal' ? 3 : 5} ${color} text-white"
+      style="width:${size}px;height:${size}px;border:3px solid rgb(var(--v-theme-surface));transition:all .15s">
+      <i class="mdi mdi-garage" style="font-size:${size / 2}px"></i>
+      ${m.badge ? `<span class="position-absolute bg-amber text-black rounded-pill elevation-2 px-1 text-label-small font-weight-bold" style="top:-6px;right:-12px;line-height:16px"><i class="mdi mdi-star"></i>${m.badge}</span>` : ''}
+    </div>`
+  if (state !== 'normal' && m.label) {
+    const label = document.createElement('span')
+    label.className = 'mt-1 px-2 rounded-pill bg-surface elevation-2 text-label-medium font-weight-bold text-no-wrap'
+    label.textContent = m.label
+    el.appendChild(label)
+  }
+  return el
 }
 
 function renderMarkers() {
-  if (!L || !map || !markerLayer) return
-  markerLayer.clearLayers()
-  for (const m of props.markers) {
-    const state = m.id === props.selectedId ? 'selected' : m.id === props.highlightedId ? 'highlighted' : 'normal'
-    const size = state === 'selected' ? 48 : state === 'highlighted' ? 44 : 38
-    const marker = L.marker([m.position.lat, m.position.lng], {
-      icon: L.divIcon({ className: '', html: markerHtml(m, state), iconSize: [size, size], iconAnchor: [size / 2, size / 2] }),
-      title: m.label,
-      riseOnHover: true,
-      zIndexOffset: state === 'normal' ? 0 : 1000,
+  if (!ml || !map) return
+  markerObjects.forEach(m => m.remove())
+  markerObjects = props.markers.map((m) => {
+    const state: MarkerState = m.id === props.selectedId ? 'selected' : m.id === props.highlightedId ? 'highlighted' : 'normal'
+    const el = markerElement(m, state)
+    el.addEventListener('click', (e) => {
+      e.stopPropagation()
+      emit('select', m.id)
     })
-    marker.bindTooltip(m.label, { direction: 'top', offset: [0, -size / 2], permanent: state === 'selected' })
-    marker.on('click', () => emit('select', m.id))
-    markerLayer.addLayer(marker)
+    // Workshops above the user's position dot; the active one above the rest.
+    el.style.zIndex = state === 'normal' ? '1' : '2'
+    // Anchor at the top, shifted up by half the circle – the circle's centre sits on the point.
+    return new ml!.Marker({ element: el, anchor: 'top', offset: [0, -markerSize(state) / 2] })
+      .setLngLat([m.position.lng, m.position.lat])
+      .addTo(map!)
+  })
+}
+
+/** Circle polygon (64 points) – good enough for a search radius. */
+function circle(center: LatLng, km: number): [number, number][] {
+  const coords: [number, number][] = []
+  for (let i = 0; i <= 64; i++) {
+    const a = (i / 64) * 2 * Math.PI
+    coords.push([
+      center.lng + (km / (111.32 * Math.cos((center.lat * Math.PI) / 180))) * Math.cos(a),
+      center.lat + (km / 110.57) * Math.sin(a),
+    ])
   }
+  return coords
+}
+
+function renderRadius() {
+  if (!map || !map.isStyleLoaded()) return
+  const data: GeoJSONSourceData = {
+    type: 'FeatureCollection',
+    features: props.origin && props.radiusKm
+      ? [{ type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [circle(props.origin, props.radiusKm)] } }]
+      : [],
+  }
+  const source = map.getSource(RADIUS_SOURCE) as GeoJSONSource | undefined
+  if (source) return source.setData(data)
+  const color = themeColor('primary', '#0054db')
+  map.addSource(RADIUS_SOURCE, { type: 'geojson', data })
+  map.addLayer({ id: 'radius-fill', type: 'fill', source: RADIUS_SOURCE, paint: { 'fill-color': color, 'fill-opacity': 0.07 } })
+  map.addLayer({ id: 'radius-line', type: 'line', source: RADIUS_SOURCE, paint: { 'line-color': color, 'line-opacity': 0.6, 'line-width': 1.5, 'line-dasharray': [3, 2] } })
 }
 
 function renderOrigin() {
-  if (!L || !map || !originLayer) return
-  originLayer.clearLayers()
+  if (!ml || !map) return
+  originMarker?.remove()
+  originMarker = null
+  renderRadius()
   if (!props.origin) return
-  const primary = getComputedStyle(document.documentElement).getPropertyValue('--v-theme-primary').trim()
-  const color = primary ? `rgb(${primary})` : '#0054db'
-  if (props.radiusKm) {
-    L.circle([props.origin.lat, props.origin.lng], {
-      radius: props.radiusKm * 1000, color, weight: 1, opacity: 0.5, fillOpacity: 0.06, interactive: false,
-    }).addTo(originLayer)
-  }
-  L.marker([props.origin.lat, props.origin.lng], {
-    icon: L.divIcon({
-      className: '',
-      html: '<div class="rounded-circle elevation-4 bg-blue" style="width:18px;height:18px;border:3px solid white;box-shadow:0 0 0 8px rgba(33,150,243,.25)"></div>',
-      iconSize: [18, 18],
-      iconAnchor: [9, 9],
-    }),
-    interactive: false,
-    keyboard: false,
-  }).addTo(originLayer)
+  const el = document.createElement('div')
+  el.className = 'rounded-circle elevation-4 bg-blue'
+  el.dataset.testid = 'map-origin'
+  el.style.cssText = 'width:18px;height:18px;border:3px solid white;box-shadow:0 0 0 8px rgba(33,150,243,.25);z-index:0'
+  originMarker = new ml.Marker({ element: el }).setLngLat([props.origin.lng, props.origin.lat]).addTo(map)
 }
 
 function renderPick() {
-  if (!L || !map) return
-  if (!props.pickable) return
+  if (!ml || !map || !props.pickable) return
   if (!props.picked) {
     pickMarker?.remove()
     pickMarker = null
     return
   }
-  const latLng: [number, number] = [props.picked.lat, props.picked.lng]
   if (!pickMarker) {
-    pickMarker = L.marker(latLng, {
-      draggable: true,
-      icon: L.divIcon({ className: '', html: markerHtml({ id: 'pick', position: props.picked, label: '' }, 'selected'), iconSize: [48, 48], iconAnchor: [24, 24] }),
-    }).addTo(map)
+    const el = markerElement({ id: 'pick', position: props.picked, label: '' }, 'selected')
+    pickMarker = new ml.Marker({ element: el, draggable: true }).setLngLat([props.picked.lng, props.picked.lat]).addTo(map)
     pickMarker.on('dragend', () => {
-      const p = pickMarker!.getLatLng()
+      const p = pickMarker!.getLngLat()
       emit('pick', { lat: p.lat, lng: p.lng })
     })
   }
-  else pickMarker.setLatLng(latLng)
+  else pickMarker.setLngLat([props.picked.lng, props.picked.lat])
 }
 
-/** Shows everything relevant: the markers, the user and the radius. */
+/** Shows everything relevant: the radius (or the markers and the user). */
 function fitView() {
-  if (!L || !map) return
-  if (props.pickable && props.picked) return map.setView([props.picked.lat, props.picked.lng], 15)
-  const points: [number, number][] = props.markers.map(m => [m.position.lat, m.position.lng])
-  if (props.origin) points.push([props.origin.lat, props.origin.lng])
-  // Bounds from the origin, not the circle layer – the circle needs a map view to measure itself.
-  if (props.origin && props.radiusKm)
-    return map.fitBounds(L.latLng(props.origin.lat, props.origin.lng).toBounds(props.radiusKm * 2000), { padding: [24, 24] })
-  if (points.length > 1) return map.fitBounds(L.latLngBounds(points), { padding: [48, 48], maxZoom: 14 })
-  if (points.length === 1) return map.setView(points[0]!, 13)
-  map.setView([POLAND_CENTER.lat, POLAND_CENTER.lng], 6)
+  if (!ml || !map) return
+  if (props.pickable && props.picked) return map.jumpTo({ center: [props.picked.lng, props.picked.lat], zoom: 15 })
+  const points: [number, number][] = props.origin && props.radiusKm
+    ? circle(props.origin, props.radiusKm)
+    : props.markers.map(m => [m.position.lng, m.position.lat])
+  if (props.origin && !props.radiusKm) points.push([props.origin.lng, props.origin.lat])
+  if (points.length > 1) {
+    const bounds = points.reduce((b, p) => b.extend(p), new ml.LngLatBounds(points[0]!, points[0]!))
+    return map.fitBounds(bounds, { padding: 56, maxZoom: 14, duration: 600 })
+  }
+  if (points.length === 1) return map.jumpTo({ center: points[0]!, zoom: 13 })
+  map.jumpTo({ center: [POLAND_CENTER.lng, POLAND_CENTER.lat], zoom: 5.3 })
 }
 
 onMounted(async () => {
-  const mod = await import('leaflet')
-  // Leaflet is CommonJS – the namespace lives on `default` after Vite's interop.
-  L = ((mod as unknown as { default?: typeof import('leaflet') }).default ?? mod) as typeof import('leaflet')
-  await import('leaflet/dist/leaflet.css')
-  if (!container.value) return
-  map = L.map(container.value, { zoomControl: false, attributionControl: true, scrollWheelZoom: true })
-  if (tileUrl.value)
-    tiles = L.tileLayer(tileUrl.value, { attribution: config.attribution, maxZoom: 19, subdomains: 'abcd', detectRetina: true }).addTo(map)
-  markerLayer = L.layerGroup().addTo(map)
-  originLayer = L.layerGroup().addTo(map)
-  if (props.pickable) map.on('click', e => emit('pick', { lat: e.latlng.lat, lng: e.latlng.lng }))
-  renderOrigin()
-  renderMarkers()
-  renderPick()
-  fitView()
-  ready.value = true
+  try {
+    const [lib, worker] = await Promise.all([
+      import('maplibre-gl'),
+      // Bundle the worker as an asset – MapLibre's own lookup next to the chunk does not survive bundling.
+      import('maplibre-gl/dist/maplibre-gl-worker.mjs?url'),
+      import('maplibre-gl/dist/maplibre-gl.css'),
+    ])
+    ml = lib
+    ml.setWorkerUrl(worker.default)
+    if (!container.value) return
+    map = new ml.Map({
+      container: container.value,
+      style: styleUrl.value || EMPTY_STYLE,
+      center: [POLAND_CENTER.lng, POLAND_CENTER.lat],
+      zoom: 5.3,
+      attributionControl: { compact: true },
+      dragRotate: false,
+      pitchWithRotate: false,
+    })
+    map.touchZoomRotate.disableRotation()
+    // Re-add the radius layers after every style (theme) switch.
+    map.on('style.load', renderRadius)
+    if (props.pickable) map.on('click', e => emit('pick', { lat: e.lngLat.lat, lng: e.lngLat.lng }))
+    renderOrigin()
+    renderMarkers()
+    renderPick()
+    fitView()
+    map.once('load', () => (ready.value = true))
+  }
+  catch (e) {
+    console.error(e)
+    failed.value = true
+    ready.value = true
+  }
 })
 
 onBeforeUnmount(() => {
-  if (map) {
-    // A pending zoom-animation timer would touch the removed panes (Leaflet 1.9) – it bails out when this is false.
-    (map as unknown as { _animatingZoom: boolean })._animatingZoom = false
-    map.remove()
-  }
+  map?.remove()
   map = null
 })
 
-watch(tileUrl, (url) => {
-  if (url) tiles?.setUrl(url)
+watch(styleUrl, (url) => {
+  map?.setStyle(url || EMPTY_STYLE)
 })
 watch(() => [props.selectedId, props.highlightedId], renderMarkers)
 watch(() => props.markers, () => {
@@ -181,7 +246,7 @@ watch(() => [props.origin, props.radiusKm], () => {
 watch(() => props.picked, renderPick, { deep: true })
 watch(() => props.selectedId, (id) => {
   const m = props.markers.find(x => x.id === id)
-  if (m && map) map.panTo([m.position.lat, m.position.lng], { animate: true })
+  if (m && map) map.easeTo({ center: [m.position.lng, m.position.lat], duration: 500 })
 })
 
 const zoomIn = () => map?.zoomIn()
@@ -202,8 +267,9 @@ const zoomOut = () => map?.zoomOut()
     />
 
     <div
+      v-if="!failed"
       class="position-absolute d-flex flex-column ga-2 ma-3"
-      style="top:0;right:0;z-index:500"
+      style="top:0;right:0;z-index:2"
     >
       <v-btn
         v-tooltip:left="t('map.zoomIn')"
@@ -225,7 +291,7 @@ const zoomOut = () => map?.zoomOut()
       />
       <v-btn
         v-tooltip:left="t('map.fit')"
-        icon="mdi-crosshairs-gps"
+        icon="mdi-fit-to-screen-outline"
         size="small"
         color="surface"
         elevation="3"
@@ -235,11 +301,20 @@ const zoomOut = () => map?.zoomOut()
       />
     </div>
 
+    <v-empty-state
+      v-if="failed"
+      class="position-absolute w-100 h-100 bg-surface-light"
+      style="top:0;left:0;z-index:3"
+      icon="mdi-map-marker-off-outline"
+      :title="t('map.unavailable')"
+      :text="t('map.unavailableText')"
+    />
+
     <v-fade-transition>
       <div
         v-if="!ready"
         class="position-absolute d-flex align-center justify-center w-100 h-100 bg-surface-light"
-        style="top:0;left:0;z-index:600"
+        style="top:0;left:0;z-index:3"
       >
         <v-progress-circular
           indeterminate
@@ -249,9 +324,9 @@ const zoomOut = () => map?.zoomOut()
     </v-fade-transition>
 
     <v-chip
-      v-if="pickable"
+      v-if="pickable && !failed"
       class="position-absolute ma-3"
-      style="bottom:0;left:50%;transform:translateX(-50%);z-index:500"
+      style="bottom:0;left:50%;transform:translateX(-50%);z-index:2"
       color="surface"
       variant="flat"
       elevation="3"

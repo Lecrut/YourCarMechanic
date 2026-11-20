@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 import RepairList from '~/components/fix/repairList.vue'
 import PageHeader from '~/components/pageHeader.vue'
 import WeekBoard from '~/components/company/weekBoard.vue'
@@ -22,12 +23,16 @@ const tab = ref<'active' | 'history'>('active')
 /** Week board or card list – remembered per browser. */
 const VIEW_KEY = 'company-view'
 const view = ref<'week' | 'list'>('week')
+const { smAndDown } = useDisplay()
 onMounted(() => {
   try {
-    if (localStorage.getItem(VIEW_KEY) === 'list') view.value = 'list'
+    const saved = localStorage.getItem(VIEW_KEY)
+    // Phones default to the list – a 7-day grid does not fit a narrow screen.
+    if (saved === 'list' || saved === 'week') view.value = saved
+    else if (smAndDown.value) view.value = 'list'
   }
   catch {
-    // storage unavailable – default view
+    if (smAndDown.value) view.value = 'list'
   }
 })
 watch(view, (value) => {

@@ -104,7 +104,7 @@
     "notifications": "My garage",
     "user": {
       "profile": "Profile",
-      "bookedFix": "Order repair",
+      "bookedFix": "Book a repair",
       "history": "History"
     },
     "account": "Account",
@@ -234,7 +234,8 @@
         "dateSelected": "Selected date",
         "availableDates": "Available dates",
         "noAvailableDates": "No available dates",
-        "chooseDate": "Choose a workshop and a time"
+        "chooseDate": "Choose a workshop and a time",
+        "preferredUnavailable": "The workshop you picked earlier does not offer these services or this brand – choose another one on the map."
       },
       "fourth": {
         "title": "Summary",
@@ -242,7 +243,7 @@
         "repair": "Repair",
         "description": "Repair description",
         "workshop": "Workshop",
-        "book": "Book repair"
+        "book": "Book a repair"
       }
     }
   },
@@ -485,7 +486,9 @@
     "noEstimate": "Quote after inspection",
     "quote": "Quote amount",
     "allowedRange": "Allowed range: {range}",
-    "quoteOutOfRange": "The quote must be within {range} – propose a scope change if more is needed"
+    "quoteOutOfRange": "The quote must be within {range} – propose a scope change if more is needed",
+    "deleteTitle": "Delete price item?",
+    "deleteText": "\"{name}\" disappears from the price list and from estimates for new bookings. Existing visits keep their estimates."
   },
   "proposal": {
     "bookedByWorkshop": "Visit booked by the workshop",
@@ -650,18 +653,14 @@
       "ended": "Ended"
     },
     "badgeHint": "{title} – until {date}",
-    "applied": "Promotion applied when booking"
+    "applied": "Promotion applied when booking",
+    "deleteTitle": "Delete promotion?",
+    "deleteText": "\"{name}\" stops applying to new bookings. Booked visits keep their discount."
   },
   "feed": {
     "title": "Notifications",
     "markRead": "Mark all as read",
     "empty": "Nothing new",
-    "now": "just now",
-    "ago": {
-      "min": "{value} min ago",
-      "h": "{value} h ago",
-      "d": "{value} d ago"
-    },
     "events": {
       "newBooking": "New booking: {car} ({client})",
       "bookedForYou": "The workshop booked a visit for {car} – please confirm",
@@ -702,12 +701,7 @@
     "empty": "No repairs for this car yet"
   },
   "nextVisit": {
-    "title": "Next visit",
-    "in": {
-      "min": "in {value} min",
-      "h": "in {value} h",
-      "d": "in {value} days"
-    }
+    "title": "Next visit"
   },
   "duration": {
     "expected": "Expected time",
@@ -781,7 +775,9 @@
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "fit": "Show all",
-    "pickHint": "Click the map or drag the pin"
+    "pickHint": "Click the map or drag the pin",
+    "unavailable": "Map unavailable",
+    "unavailableText": "Your browser cannot show the map – the workshop list works as usual."
   },
   "finder": {
     "where": "Where are you?",
@@ -802,6 +798,11 @@
     "none": "No workshops match the filters",
     "noneInRadius": "No workshops within this radius",
     "noneInRadiusText": "There are {count} more further away. Increase the radius or search all of Poland.",
-    "approximate": "Approximate distance – the workshop has not pinned its exact place yet"
+    "approximate": "Approximate distance – the workshop has not pinned its exact place yet",
+    "sortLabel": "Sort:"
+  },
+  "freeDates": {
+    "subtitle": "The visit takes about {duration} – pick a start time",
+    "more": "Show more days"
   }
 }

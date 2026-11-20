@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IWorkshop } from '~/models/workshop'
 import { atHour, formatDayLabel } from '~/utils/time'
+import { formatDuration } from '~/models/priceList'
 
 const isDialogShown = defineModel<boolean>({ default: false })
 
@@ -33,10 +34,11 @@ function selectDate(day: Date, hour: number) {
 }
 
 // Slots are watched live while the dialog is open, so hours booked by others disappear immediately.
+// `immediate`: the dialog may be mounted already open (booking step 3 mounts it on first click).
 watch(isDialogShown, (shown) => {
   if (shown) workshopStore.watchFreeHours(props.workshop, undefined, props.durationHours)
   else workshopStore.stopWatchingFreeHours()
-})
+}, { immediate: true })
 
 onUnmounted(() => workshopStore.stopWatchingFreeHours())
 </script>
@@ -48,11 +50,11 @@ onUnmounted(() => workshopStore.stopWatchingFreeHours())
     scrollable
     @update:model-value="close"
   >
-    <v-card>
-      <v-card-title>
-        {{ workshop.name }}
-      </v-card-title>
-
+    <v-card
+      :title="workshop.name"
+      :subtitle="t('freeDates.subtitle', { duration: formatDuration(durationHours) })"
+      prepend-icon="mdi-calendar-clock"
+    >
       <v-card-text>
         <div
           v-for="day in freeHoursTable"
@@ -85,6 +87,8 @@ onUnmounted(() => workshopStore.stopWatchingFreeHours())
               v-for="slot in day.hours"
               :key="slot.hour"
               :disabled="slot.isBooked"
+              :variant="slot.isBooked ? 'text' : 'tonal'"
+              :color="slot.isBooked ? undefined : 'primary'"
               class="ma-1"
               data-testid="free-hour"
               @click="selectDate(day.day, slot.hour)"
@@ -103,15 +107,20 @@ onUnmounted(() => workshopStore.stopWatchingFreeHours())
           />
           <v-btn
             v-else
-            icon="mdi-arrow-down-thin"
+            variant="tonal"
+            prepend-icon="mdi-calendar-arrow-right"
             data-testid="more-days"
             @click="workshopStore.showMoreDays(workshop)"
-          />
+          >
+            {{ t('freeDates.more') }}
+          </v-btn>
         </div>
       </v-card-text>
 
       <v-card-actions>
+        <v-spacer />
         <v-btn
+          variant="text"
           color="default"
           @click="close"
         >

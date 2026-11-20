@@ -9,7 +9,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (!(await authService.isSignedIn())) {
     authStore.clearSession()
-    return navigateTo('/auth/login')
+    // Come back here after signing in (e.g. "book at this workshop" as a guest).
+    return navigateTo(`/auth/login?redirect=${encodeURIComponent(to.fullPath)}`)
   }
   // Signed in, but the local cache is gone (cleared storage, new tab) – restore it instead of logging out.
   if (!authStore.user && !(await authStore.restoreSession())) {

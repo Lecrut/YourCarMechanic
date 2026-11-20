@@ -49,7 +49,7 @@ onUnmounted(() => fixesStore.stopWatching())
       >
         <v-btn
           variant="tonal"
-          prepend-icon="mdi-car-plus"
+          prepend-icon="mdi-plus"
           data-testid="garage-add-car"
           @click="showAddCar = true"
         >
@@ -99,7 +99,7 @@ onUnmounted(() => fixesStore.stopWatching())
       >
         <template #actions>
           <v-btn
-            prepend-icon="mdi-car-plus"
+            prepend-icon="mdi-plus"
             @click="showAddCar = true"
           >
             {{ t('userProfile.addCar') }}

@@ -14,7 +14,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const names = (root: HTMLElement) => within(root).queryAllByTestId('finder-item').map(el => el.querySelector('.v-card-title')?.textContent?.trim())
-const markers = (root: HTMLElement) => within(root).getByTestId('workshop-map').querySelectorAll('.leaflet-marker-icon')
+const markers = (root: HTMLElement) => within(root).getByTestId('workshop-map').querySelectorAll('[data-testid="map-marker"]')
 
 async function choose(root: HTMLElement, testId: string, text: string, option: RegExp) {
   const input = within(root).getByTestId(testId).querySelector('input')!
@@ -28,8 +28,9 @@ export const MapAndList: Story = {
   play: async ({ canvasElement }) => {
     await waitFor(() => expect(names(canvasElement)).toHaveLength(2))
     await expect(names(canvasElement)).not.toContain('Garage Nowy')
-    await waitFor(() => expect(markers(canvasElement)).toHaveLength(2))
-    await expect(within(canvasElement).getByTestId('finder-sort').querySelector('[value="distance"]')).toBeDisabled()
+    // MapLibre is loaded lazily – the first story pays for loading the library.
+    await waitFor(() => expect(markers(canvasElement)).toHaveLength(2), { timeout: 8000 })
+    await expect(within(canvasElement).getByTestId('finder-sort').querySelector('.v-chip')).toHaveClass('v-chip--disabled')
   },
 }
 

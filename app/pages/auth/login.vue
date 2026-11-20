@@ -9,6 +9,7 @@ const { t } = useI18n()
 const { form, valid, isValid } = formValidation()
 
 const authStore = useAuthStore()
+const route = useRoute()
 const sharedStore = useSharedStore()
 const { loading } = storeToRefs(sharedStore)
 
@@ -19,7 +20,11 @@ const showPassword = ref(false)
 async function logIn() {
   if (!(await isValid())) return
   await authStore.logIn(email.value, password.value)
-  if (authStore.user) await navigateTo(authStore.homePath)
+  if (!authStore.user) return
+  // Only same-site paths; users without a role finish registration first (homePath = role choice).
+  const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
+  const safe = redirect.startsWith('/') && !redirect.startsWith('//') && !redirect.startsWith('/auth')
+  await navigateTo(safe && authStore.role ? redirect : authStore.homePath)
 }
 
 onMounted(() => sharedStore.resetState())

@@ -24,6 +24,9 @@ export function formatDateToString(date: Date | string): string {
   return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
+/** `dd.mm.yyyy` */
+export const formatDate = (date: Date | string) => formatDateToString(date).slice(0, 10)
+
 /** e.g. "Poniedziałek, 24.11" – localised weekday label used in the availability table. */
 export function formatDayLabel(date: Date, locale: string): string {
   const label = date.toLocaleDateString(locale === 'pl' ? 'pl-PL' : 'en-GB', {

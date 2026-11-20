@@ -37,12 +37,11 @@ export default defineNuxtConfig({
         appId: '',
         measurementId: '',
       },
-      // Map tiles (light/dark follow the app theme). CARTO basemaps: free for non-commercial use –
-      // for a commercial launch switch to a paid provider (e.g. MapTiler) via NUXT_PUBLIC_MAP_*.
+      // Vector map styles (light/dark follow the app theme). OpenFreeMap: free, no API key, commercial
+      // use allowed; the map shows the required OpenStreetMap attribution itself.
       map: {
-        lightTiles: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-        darkTiles: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        lightStyle: 'https://tiles.openfreemap.org/styles/positron',
+        darkStyle: 'https://tiles.openfreemap.org/styles/dark',
       },
       // Set NUXT_PUBLIC_USE_EMULATORS=true to talk to `firebase emulators:start`.
       useEmulators: false,

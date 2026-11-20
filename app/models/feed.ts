@@ -66,19 +66,17 @@ export function buildFeed(fixes: IFix[], role: UserRole | null, limit = 30, now 
 export const unreadCount = (events: IFeedEvent[], lastSeen: Date | null) =>
   events.filter(e => !lastSeen || e.at > lastSeen).length
 
-/** "5 min", "3 h", "2 d" – compact relative time for the feed. */
-export function relativeTime(at: Date, now = new Date()): { value: number, unit: 'now' | 'min' | 'h' | 'd' } {
-  const minutes = Math.floor((now.getTime() - at.getTime()) / 60_000)
-  if (minutes < 1) return { value: 0, unit: 'now' }
-  if (minutes < 60) return { value: minutes, unit: 'min' }
-  if (minutes < 60 * 24) return { value: Math.floor(minutes / 60), unit: 'h' }
-  return { value: Math.floor(minutes / (60 * 24)), unit: 'd' }
-}
-
-/** Time until a future moment, rounded down: minutes, hours or days. */
-export function timeUntil(at: Date, now = new Date()): { value: number, unit: 'min' | 'h' | 'd' } {
-  const minutes = Math.max(0, Math.floor((at.getTime() - now.getTime()) / 60_000))
-  if (minutes < 60) return { value: minutes, unit: 'min' }
-  if (minutes < 60 * 24) return { value: Math.floor(minutes / 60), unit: 'h' }
-  return { value: Math.floor(minutes / (60 * 24)), unit: 'd' }
+/**
+ * Grammatical relative time in the UI language: "przed chwilą", "za 30 minut", "3 godziny temu",
+ * "jutro", "pojutrze", "za 5 dni". Within a day it counts minutes/hours, beyond that calendar days.
+ */
+export function formatRelative(at: Date, locale: string, now = new Date()): string {
+  const rtf = new Intl.RelativeTimeFormat(locale === 'pl' ? 'pl-PL' : 'en-GB', { numeric: 'auto' })
+  const minutes = Math.round((at.getTime() - now.getTime()) / 60_000)
+  const dayStart = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
+  const days = Math.round((dayStart(at) - dayStart(now)) / 86_400_000)
+  if (Math.abs(minutes) < 1) return rtf.format(0, 'second')
+  if (Math.abs(minutes) < 60) return rtf.format(minutes, 'minute')
+  if (days === 0 || Math.abs(minutes) < 6 * 60) return rtf.format(Math.trunc(minutes / 60), 'hour')
+  return rtf.format(days, 'day')
 }

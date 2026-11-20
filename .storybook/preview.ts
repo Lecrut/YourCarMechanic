@@ -67,6 +67,7 @@ const withApp: Decorator = (story, context) => {
   return {
     setup() {
       i18n.global.locale.value = locale
+      vuetify.locale.current.value = locale
       vuetify.theme.change(theme)
       resetDb()
       navigatedTo.length = 0

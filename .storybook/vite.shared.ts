@@ -22,7 +22,7 @@ export const sharedAlias = [
  * auto-imported per component – one pre-bundled module keeps Vite from reloading mid-test.
  */
 export const sharedOptimizeDeps = {
-  include: ['vuetify', 'vuetify/components', 'vuetify/directives', 'vue-i18n', 'pinia', 'vue-router', 'firebase/firestore'],
+  include: ['vuetify', 'vuetify/components', 'vuetify/directives', 'vuetify/locale', 'maplibre-gl', 'vue-i18n', 'pinia', 'vue-router', 'firebase/firestore'],
 }
 
 export function sharedPlugins(withVue = true): PluginOption[] {

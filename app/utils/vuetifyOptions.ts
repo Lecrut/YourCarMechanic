@@ -1,4 +1,5 @@
 import type { VuetifyOptions } from 'vuetify'
+import { en, pl } from 'vuetify/locale'
 
 /** Shared by the Nuxt plugin and Storybook so stories look exactly like the app. */
 export const vuetifyOptions: VuetifyOptions = {
@@ -6,6 +7,8 @@ export const vuetifyOptions: VuetifyOptions = {
   display: {
     thresholds: { md: 960, lg: 1280, xl: 1920, xxl: 2560 },
   },
+  // Built-in component texts (tables, pagination, pickers) – kept in sync with the i18n locale.
+  locale: { locale: 'pl', fallback: 'en', messages: { pl, en } },
   theme: {
     defaultTheme: 'dark',
     themes: {

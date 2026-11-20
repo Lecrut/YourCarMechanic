@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { IFeedEvent } from '~/models/feed'
-import { relativeTime } from '~/models/feed'
+import { formatRelative } from '~/models/feed'
 import RepairDetails from '~/components/fix/repairDetails.vue'
 import { formatDateToString } from '~/utils/time'
 
 /** Bell with the notification feed (customers and workshops). */
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const feedStore = useFeedStore()
 const { events, unread } = storeToRefs(feedStore)
@@ -40,10 +40,7 @@ const meta: Record<string, { icon: string, color: string }> = {
 
 const isUnread = (e: IFeedEvent) => !feedStore.lastSeen || e.at > feedStore.lastSeen
 
-function ago(e: IFeedEvent) {
-  const r = relativeTime(e.at)
-  return r.unit === 'now' ? t('feed.now') : t(`feed.ago.${r.unit}`, { value: r.value })
-}
+const ago = (e: IFeedEvent) => formatRelative(e.at, locale.value)
 
 function openEvent(e: IFeedEvent) {
   selectedRef.value = e.fixRef

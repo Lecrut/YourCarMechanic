@@ -4,7 +4,7 @@ import AppFooter from '~/components/appFooter.vue'
 import WorkshopFinder from '~/components/workshopFinder.vue'
 import { pricingService, reviewsService, workshopsService } from '~/services'
 import { type IWorkshop, servicesBrand } from '~/models/workshop'
-import { CAR_SEGMENTS, formatDuration, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
+import { CAR_SEGMENTS, formatDurationRange, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
 import { type IPromotion, isPromotionActive } from '~/models/promotion'
 import { type IRatingSummary, ratingSummary } from '~/models/review'
 
@@ -44,7 +44,13 @@ const filtered = computed(() => {
 })
 
 const activePromotions = computed(() => promotions.value.filter(p => isPromotionActive(p)))
-const bookPath = computed(() => (authStore.user?.role === 'user' ? '/user' : '/auth/login'))
+/** Customers book straight away (the workshop is preselected); guests sign in first and come back. */
+const isGuest = computed(() => !authStore.user)
+const canBook = computed(() => isGuest.value || authStore.user?.role === 'user')
+function bookPath(workshop: IWorkshop) {
+  const target = `/user?workshop=${encodeURIComponent(workshop.reference)}`
+  return isGuest.value ? `/auth/login?redirect=${encodeURIComponent(target)}` : target
+}
 
 const priceHeaders = computed(() => [
   { title: t('pricing.service'), key: 'serviceKey', value: (i: IPriceListItem) => servicesStore.label(i.serviceKey) },
@@ -210,7 +216,7 @@ onMounted(() => {
               {{ item.workshop.brands.length ? item.workshop.brands.join(', ') : t('workshopsPage.allBrands') }}
             </div>
           </v-card-text>
-          <v-card-actions class="px-4 pb-3 pt-0 ga-2">
+          <v-card-actions class="px-4 pb-3 pt-0 ga-2 flex-wrap">
             <v-btn
               variant="tonal"
               size="small"
@@ -222,14 +228,15 @@ onMounted(() => {
             </v-btn>
             <v-spacer />
             <v-btn
-              :to="bookPath"
+              v-if="canBook"
+              :to="bookPath(item.workshop)"
               size="small"
               variant="flat"
               color="primary"
               prepend-icon="mdi-calendar-check"
               @click.stop
             >
-              {{ authStore.user?.role === 'user' ? t('workshopsPage.bookNow') : t('workshopsPage.bookLogin') }}
+              {{ isGuest ? t('workshopsPage.bookLogin') : t('workshopsPage.bookNow') }}
             </v-btn>
           </v-card-actions>
         </template>
@@ -289,7 +296,7 @@ onMounted(() => {
             density="comfortable"
           >
             <template #[`item.laborHours`]="{ item }">
-              {{ formatDuration(item.laborHours.min) }} – {{ formatDuration(item.laborHours.max) }}
+              {{ formatDurationRange(item.laborHours) }}
             </template>
             <template
               v-for="seg in CAR_SEGMENTS"
@@ -311,10 +318,11 @@ onMounted(() => {
             {{ t('universal.close') }}
           </v-btn>
           <v-btn
-            :to="bookPath"
+            v-if="canBook"
+            :to="bookPath(selectedWorkshop)"
             prepend-icon="mdi-calendar-check"
           >
-            {{ authStore.user?.role === 'user' ? t('workshopsPage.bookNow') : t('workshopsPage.bookLogin') }}
+            {{ isGuest ? t('workshopsPage.bookLogin') : t('workshopsPage.bookNow') }}
           </v-btn>
         </v-card-actions>
       </v-card>

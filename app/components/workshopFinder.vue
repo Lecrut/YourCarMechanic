@@ -2,6 +2,7 @@
 import type { IWorkshop } from '~/models/workshop'
 import type { IRatingSummary } from '~/models/review'
 import { formatDistance, placeWorkshop, rankWorkshops, type RankedWorkshop, type WorkshopSort } from '~/models/geo'
+import { useDisplay } from 'vuetify'
 import WorkshopMap, { type MapMarker } from '~/components/map/workshopMap.vue'
 
 /**
@@ -25,6 +26,15 @@ defineSlots<{
 }>()
 
 const { t, locale } = useI18n()
+const { smAndDown } = useDisplay()
+/** Phones get a shorter map so the list is reachable without endless scrolling. */
+const height = computed(() => (smAndDown.value ? 340 : props.mapHeight))
+
+const sortOptions = computed(() => [
+  { value: 'distance' as const, icon: 'mdi-map-marker-distance', title: t('finder.sort.distance') },
+  { value: 'rating' as const, icon: 'mdi-star', title: t('finder.sort.rating') },
+  { value: 'reviews' as const, icon: 'mdi-comment-text-multiple-outline', title: t('finder.sort.reviews') },
+])
 const locationStore = useLocationStore()
 const { origin, city, radiusKm, locating, source } = storeToRefs(locationStore)
 const citiesJsonStore = useCitiesJsonStore()
@@ -103,36 +113,41 @@ watch(origin, (value) => {
     >
       <v-col
         cols="12"
-        md="5"
+        md="8"
       >
-        <v-autocomplete
-          :model-value="source === 'city' ? city : null"
-          :items="citiesJsonStore.citiesFromJson"
-          :label="source === 'gps' ? t('finder.myLocation') : t('finder.where')"
-          :placeholder="source === 'gps' ? t('finder.myLocation') : t('finder.wherePlaceholder')"
-          :prepend-inner-icon="source === 'gps' ? 'mdi-crosshairs-gps' : 'mdi-map-marker-outline'"
-          clearable
-          hide-details
-          data-testid="finder-city"
-          @update:model-value="chooseCity"
-        >
-          <template #append>
-            <v-btn
-              v-tooltip:bottom="t('finder.useLocationHint')"
-              :variant="source === 'gps' ? 'flat' : 'tonal'"
-              :loading="locating"
-              prepend-icon="mdi-crosshairs-gps"
-              data-testid="finder-gps"
-              @click="useMyLocation"
-            >
-              <span class="d-none d-sm-inline">{{ t('finder.useLocation') }}</span>
-            </v-btn>
-          </template>
-        </v-autocomplete>
+        <div class="d-flex align-center ga-2">
+          <v-autocomplete
+            :model-value="source === 'city' ? city : null"
+            :items="citiesJsonStore.citiesFromJson"
+            :label="t('finder.where')"
+            :placeholder="source === 'gps' ? t('finder.myLocation') : t('finder.wherePlaceholder')"
+            persistent-placeholder
+            :prepend-inner-icon="source === 'gps' ? 'mdi-crosshairs-gps' : 'mdi-map-marker-outline'"
+            clearable
+            hide-details
+            class="flex-grow-1"
+            data-testid="finder-city"
+            @update:model-value="chooseCity"
+          />
+          <v-btn
+            v-tooltip:bottom="t('finder.useLocationHint')"
+            :variant="source === 'gps' ? 'flat' : 'tonal'"
+            color="primary"
+            size="large"
+            height="56"
+            :loading="locating"
+            :aria-label="t('finder.useLocation')"
+            data-testid="finder-gps"
+            @click="useMyLocation"
+          >
+            <v-icon icon="mdi-crosshairs-gps" />
+            <span class="d-none d-md-inline ml-2">{{ t('finder.useLocation') }}</span>
+          </v-btn>
+        </div>
       </v-col>
       <v-col
-        cols="6"
-        md="2"
+        cols="12"
+        md="4"
       >
         <v-select
           :model-value="radiusKm"
@@ -145,44 +160,38 @@ watch(origin, (value) => {
           @update:model-value="locationStore.setRadius"
         />
       </v-col>
+      <slot name="filters" />
       <v-col
-        cols="6"
-        md="5"
-        class="d-flex justify-md-end"
+        cols="12"
+        class="d-flex flex-wrap align-center ga-2"
       >
-        <v-btn-toggle
+        <span class="text-label-large text-medium-emphasis">{{ t('finder.sortLabel') }}</span>
+        <v-chip-group
           v-model="sort"
           mandatory
-          variant="outlined"
-          density="comfortable"
-          rounded="pill"
-          color="primary"
-          divided
+          column
+          selected-class="text-primary"
           data-testid="finder-sort"
         >
-          <v-btn
-            v-tooltip:bottom="origin ? null : t('finder.distanceNeedsLocation')"
-            value="distance"
-            :disabled="!origin"
-            prepend-icon="mdi-map-marker-distance"
+          <v-chip
+            v-for="option in sortOptions"
+            :key="option.value"
+            v-tooltip:bottom="option.value === 'distance' && !origin ? t('finder.distanceNeedsLocation') : null"
+            :value="option.value"
+            :disabled="option.value === 'distance' && !origin"
+            :prepend-icon="option.icon"
+            variant="tonal"
+            filter
           >
-            <span class="d-none d-lg-inline">{{ t('finder.sort.distance') }}</span>
-          </v-btn>
-          <v-btn
-            value="rating"
-            prepend-icon="mdi-star"
-          >
-            <span class="d-none d-lg-inline">{{ t('finder.sort.rating') }}</span>
-          </v-btn>
-          <v-btn
-            value="reviews"
-            prepend-icon="mdi-comment-text-multiple-outline"
-          >
-            <span class="d-none d-lg-inline">{{ t('finder.sort.reviews') }}</span>
-          </v-btn>
-        </v-btn-toggle>
+            {{ option.title }}
+          </v-chip>
+        </v-chip-group>
+        <v-spacer />
+        <span
+          class="text-title-small text-medium-emphasis"
+          data-testid="finder-count"
+        >{{ t('finder.found', { count: ranked.length }) }}</span>
       </v-col>
-      <slot name="filters" />
     </v-row>
   </v-card>
 
@@ -192,16 +201,9 @@ watch(origin, (value) => {
       md="5"
       class="order-2 order-md-1"
     >
-      <div class="d-flex align-center mb-2 px-1">
-        <span
-          class="text-title-small text-medium-emphasis"
-          data-testid="finder-count"
-        >{{ t('finder.found', { count: ranked.length }) }}</span>
-      </div>
-
       <v-sheet
         color="transparent"
-        :max-height="mapHeight"
+        :max-height="smAndDown ? undefined : height"
         class="overflow-y-auto pr-1"
       >
         <div
@@ -312,7 +314,7 @@ watch(origin, (value) => {
         :highlighted-id="highlighted"
         :origin="origin"
         :radius-km="origin ? radiusKm : null"
-        :height="mapHeight"
+        :height="height"
         @select="focus"
       />
     </v-col>

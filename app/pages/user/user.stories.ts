@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
+import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/test'
 import BookRepair from './index.vue'
 import Notifications from './notifications.vue'
 import History from './history.vue'
@@ -59,6 +59,14 @@ export const BookingStepThreeMap: Story = {
     await expect(canvas.getByTestId('finder-item')).not.toHaveTextContent('Bavaria')
     await userEvent.click(canvas.getByTestId('available-dates'))
     await expect(await screen.findByRole('dialog')).toHaveTextContent('AutoFix Kraków')
+    // Free hours load right away (the dialog mounts already open) – pick the first one and book.
+    const free = (await screen.findAllByTestId('free-hour')).find(el => !el.classList.contains('v-chip--disabled'))!
+    await userEvent.click(free)
+    await userEvent.click(canvas.getByRole('button', { name: /Dalej/ }))
+    await userEvent.click(await canvas.findByTestId('book'))
+    await waitFor(() => expect(fixesService.addFix).toHaveBeenCalled())
+    const [fix] = mocked(fixesService.addFix).mock.calls.at(-1)!
+    await expect(fix).toMatchObject({ companyRef: 'companies/autofix', services: ['oil'], car: { manufacturer: 'Skoda' } })
   },
 }
 
@@ -78,7 +86,7 @@ export const MyRepairs: Story = {
     await expect(within(tiles[0]!).getByTestId('garage-book')).toHaveAttribute('href', '/user?car=cars%2Fbmw')
     // nearest confirmed visit is highlighted on top
     await expect(canvas.getByTestId('next-visit')).toHaveTextContent('BMW Seria 3')
-    await expect(canvas.getByTestId('next-visit')).toHaveTextContent(/za \d+ (dni|godz\.)/)
+    await expect(canvas.getByTestId('next-visit')).toHaveTextContent(/jutro|pojutrze|za \d+ (dni|godzin)/)
   },
 }
 

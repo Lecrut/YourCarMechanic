@@ -25,6 +25,7 @@ const { workshops, ratings } = storeToRefs(workshopStore)
 const servicesStore = useServicesStore()
 const sharedStore = useSharedStore()
 const { error, loading } = storeToRefs(sharedStore)
+const route = useRoute()
 const fixStore = useFixesStore()
 
 type Form = InstanceType<typeof VForm>
@@ -89,6 +90,10 @@ const durationFor = (workshop: IWorkshop) => workshopStore.durationFor(workshop,
 const selectedEstimate = computed(() => (selectedWorkshop.value ? estimateFor(selectedWorkshop.value) : null))
 const selectedPromotion = computed(() => (selectedWorkshop.value ? promotionFor(selectedWorkshop.value) : null))
 
+/** "Book here" from the workshops page: /user?workshop=companies/abc – offered first in step 3. */
+const preferredRef = computed(() => (typeof route.query.workshop === 'string' ? route.query.workshop : null))
+const preferredUnavailable = ref(false)
+
 function openDates(workshop: IWorkshop) {
   datesFor.value = workshop
   showDates.value = true
@@ -113,7 +118,12 @@ async function next() {
       break
     case 2:
       if (!(await validate(carForm.value))) return
-      workshopStore.getWorkshopsForBooking(selectedServices.value, bookedCar.value.manufacturer)
+      await workshopStore.getWorkshopsForBooking(selectedServices.value, bookedCar.value.manufacturer)
+      if (preferredRef.value && !selectedWorkshop.value) {
+        const preferred = workshops.value.find(w => w.reference === preferredRef.value)
+        preferredUnavailable.value = !preferred
+        if (preferred) openDates(preferred)
+      }
       break
     case 3:
       if (!selectedWorkshop.value || !selectedDate.value) {
@@ -159,7 +169,6 @@ async function bookFix() {
 }
 
 // "Book a repair" from a garage tile: /user?car=cars/abc pre-selects that car.
-const route = useRoute()
 watch(cars, (list) => {
   const wanted = typeof route.query.car === 'string' ? route.query.car : null
   const car = wanted ? list.find(c => c.reference === wanted) : undefined
@@ -431,6 +440,17 @@ watch([selectedServices, () => bookedCar.value.manufacturer], () => {
             <h2 class="text-headline-small font-weight-bold text-center mb-6">
               {{ t('userBookFix.stepper.third.title') }}
             </h2>
+
+            <v-alert
+              v-if="preferredUnavailable"
+              type="info"
+              variant="tonal"
+              class="mb-4"
+              closable
+              :text="t('userBookFix.stepper.third.preferredUnavailable')"
+              data-testid="preferred-unavailable"
+              @click:close="preferredUnavailable = false"
+            />
 
             <workshop-finder
               :workshops="workshops"

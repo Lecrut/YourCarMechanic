@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { applyDiscount, bestPromotionFor, discountsAt, isPromotionActive, mapIPromotion } from './promotion'
 import { estimateRepair, mapIPriceListItem, quoteLineTotal } from './priceList'
-import { buildFeed, relativeTime, unreadCount } from './feed'
+import { buildFeed, formatRelative, unreadCount } from './feed'
 import { canAcceptQuote, isQuoteAccepted, mapIFix } from './fix'
 import { mapINotification, type NotificationType } from './notification'
 import { mapICar } from './car'
@@ -82,10 +82,12 @@ describe('notification feed', () => {
     expect(unreadCount(feed, null)).toBe(2)
     expect(unreadCount(feed, at('2026-11-12T11:00:00'))).toBe(1)
     const now = at('2026-11-12T12:00:00')
-    expect(relativeTime(at('2026-11-12T11:59:30'), now)).toEqual({ value: 0, unit: 'now' })
-    expect(relativeTime(at('2026-11-12T11:15:00'), now)).toEqual({ value: 45, unit: 'min' })
-    expect(relativeTime(at('2026-11-12T07:00:00'), now)).toEqual({ value: 5, unit: 'h' })
-    expect(relativeTime(at('2026-11-09T12:00:00'), now)).toEqual({ value: 3, unit: 'd' })
+    expect(formatRelative(at('2026-11-12T11:59:50'), 'pl', now)).toBe('teraz')
+    expect(formatRelative(at('2026-11-12T11:15:00'), 'pl', now)).toBe('45 minut temu')
+    expect(formatRelative(at('2026-11-12T07:00:00'), 'pl', now)).toBe('5 godzin temu')
+    expect(formatRelative(at('2026-11-11T09:00:00'), 'pl', now)).toBe('wczoraj')
+    expect(formatRelative(at('2026-11-09T12:00:00'), 'pl', now)).toBe('3 dni temu')
+    expect(formatRelative(at('2026-11-12T11:59:00'), 'en', now)).toBe('1 minute ago')
   })
 })
 

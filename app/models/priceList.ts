@@ -123,3 +123,7 @@ export function formatDuration(hours: number): string {
   const m = totalMinutes % 60
   return [h ? `${h} h` : '', m ? `${m} min` : ''].filter(Boolean).join(' ') || '0 min'
 }
+
+/** "30 min – 1 h", or a single value when both ends are equal. */
+export const formatDurationRange = (r: Range) =>
+  r.min === r.max ? formatDuration(r.min) : `${formatDuration(r.min)} – ${formatDuration(r.max)}`

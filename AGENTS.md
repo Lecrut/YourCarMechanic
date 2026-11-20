@@ -49,14 +49,16 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
 - **Domain logic is pure and tested:** pricing (`models/priceList.ts`), stats (`models/stats.ts`), client lists
   (`models/client.ts`), repair rules (`models/fix.ts`). Put new rules there with a `*.test.ts`, not in components.
 - **i18n:** no hard-coded UI strings; add keys to **both** `i18n/locales/pl.json` and `en.json`.
+  Dates as `formatDate`/`formatDateToString` (`dd.mm.yyyy`), relative times via `formatRelative` (Intl – correct
+  Polish grammar: "jutro", "za 3 dni"); never build "za {n} dni" strings. Vuetify's own texts follow the i18n locale.
 - **Service catalog** comes from Firestore `services` via `useServicesStore()` (`options`, `label(key)`).
 - **UI: Vuetify only.** No custom CSS. MD3 typography (`text-headline-small`…), grid alignment via classes
   (`class="justify-center"`), elevation 0–5, v3 breakpoints (see `utils/vuetifyOptions.ts`).
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
-  of the primary action; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
-  Only exception: the map (`components/map/workshopMap.vue`) loads Leaflet + `leaflet/dist/leaflet.css` on demand;
-  markers/controls inside it still use Vuetify classes and components. Tile URLs live in `runtimeConfig.public.map`
-  (CARTO by default – check their terms for commercial use; Storybook uses no tiles).
+  of the primary action; destructive actions ask first via `ConfirmDialog`; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
+  Only exception: the map (`components/map/workshopMap.vue`) loads MapLibre GL + its CSS on demand;
+  markers/controls inside it still use Vuetify classes and components. Style URLs live in `runtimeConfig.public.map`
+  (OpenFreeMap – free incl. commercial use, keep the OSM attribution; Storybook uses an empty style).
 - **Never name a variable `ref`, `computed`, `reactive` or `watch`** – it hides the Nuxt auto-import for the whole
   file (`ref is not defined` at runtime). ESLint `id-denylist` enforces it.
 - **Errors:** throw `AppError('errors.someKey')` for domain errors; `sharedStore.run()` maps errors (incl. Firebase codes,
@@ -142,9 +144,9 @@ app/
   types/page-meta.d.ts          `definePageMeta({ role })`
   components/
     appNavigation.vue           app bar, rail drawer per role, account card, bottom nav
-    authCard, pageHeader, workshopForm (incl. brands + map pin), clientsTable, mySnackbar
+    authCard, pageHeader, confirmDialog, workshopForm (incl. brands + map pin), clientsTable, mySnackbar
     workshopFinder.vue          location bar + radius + sort, list next to the map (workshops page, booking step 3)
-    map/workshopMap.vue         Leaflet map with Vuetify-styled markers; `pickable` = location picker
+    map/workshopMap.vue         MapLibre map with Vuetify-styled markers; `pickable` = location picker
     fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog,
                                 quoteDialog (itemised quote), repairNotes (public + internal), repairPhotos
     user/                       garageCar, carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit

@@ -104,7 +104,7 @@
     "notifications": "Mój garaż",
     "user": {
       "profile": "Profil",
-      "bookedFix": "Zamów naprawę",
+      "bookedFix": "Umów naprawę",
       "history": "Historia"
     },
     "account": "Konto",
@@ -234,7 +234,8 @@
         "dateSelected": "Data naprawy",
         "availableDates": "Dostępne terminy",
         "noAvailableDates": "Brak dostępnych terminów",
-        "chooseDate": "Wybierz warsztat i termin"
+        "chooseDate": "Wybierz warsztat i termin",
+        "preferredUnavailable": "Wybrany wcześniej warsztat nie wykonuje tych usług lub nie obsługuje tej marki – wybierz inny z mapy."
       },
       "fourth": {
         "title": "Podsumowanie",
@@ -242,7 +243,7 @@
         "repair": "Naprawa",
         "description": "Opis naprawy",
         "workshop": "Warsztat",
-        "book": "Zamów naprawę"
+        "book": "Umów naprawę"
       }
     }
   },
@@ -485,7 +486,9 @@
     "noEstimate": "Wycena po oględzinach",
     "quote": "Kwota wyceny",
     "allowedRange": "Dozwolone widełki: {range}",
-    "quoteOutOfRange": "Wycena musi mieścić się w widełkach {range} – zaproponuj zmianę zakresu, jeśli potrzeba więcej"
+    "quoteOutOfRange": "Wycena musi mieścić się w widełkach {range} – zaproponuj zmianę zakresu, jeśli potrzeba więcej",
+    "deleteTitle": "Usunąć pozycję cennika?",
+    "deleteText": "„{name}” zniknie z cennika i z wycen dla nowych rezerwacji. Istniejące wizyty zachowają swoje wyceny."
   },
   "proposal": {
     "bookedByWorkshop": "Wizyta umówiona przez warsztat",
@@ -650,18 +653,14 @@
       "ended": "Zakończona"
     },
     "badgeHint": "{title} – do {date}",
-    "applied": "Promocja naliczona przy rezerwacji"
+    "applied": "Promocja naliczona przy rezerwacji",
+    "deleteTitle": "Usunąć promocję?",
+    "deleteText": "„{name}” przestanie obowiązywać dla nowych rezerwacji. Umówione wizyty zachowają rabat."
   },
   "feed": {
     "title": "Powiadomienia",
     "markRead": "Oznacz jako przeczytane",
     "empty": "Nic nowego",
-    "now": "przed chwilą",
-    "ago": {
-      "min": "{value} min temu",
-      "h": "{value} godz. temu",
-      "d": "{value} dni temu"
-    },
     "events": {
       "newBooking": "Nowa rezerwacja: {car} ({client})",
       "bookedForYou": "Warsztat umówił wizytę dla {car} – potwierdź ją",
@@ -702,12 +701,7 @@
     "empty": "To auto nie było jeszcze naprawiane"
   },
   "nextVisit": {
-    "title": "Najbliższa wizyta",
-    "in": {
-      "min": "za {value} min",
-      "h": "za {value} godz.",
-      "d": "za {value} dni"
-    }
+    "title": "Najbliższa wizyta"
   },
   "duration": {
     "expected": "Szacowany czas",
@@ -781,7 +775,9 @@
     "zoomIn": "Przybliż",
     "zoomOut": "Oddal",
     "fit": "Pokaż wszystko",
-    "pickHint": "Kliknij na mapie lub przeciągnij pinezkę"
+    "pickHint": "Kliknij na mapie lub przeciągnij pinezkę",
+    "unavailable": "Mapa niedostępna",
+    "unavailableText": "Twoja przeglądarka nie obsługuje mapy – lista warsztatów działa normalnie."
   },
   "finder": {
     "where": "Gdzie jesteś?",
@@ -802,6 +798,11 @@
     "none": "Brak warsztatów spełniających kryteria",
     "noneInRadius": "Brak warsztatów w tym promieniu",
     "noneInRadiusText": "Dalej jest jeszcze {count}. Zwiększ promień lub szukaj w całej Polsce.",
-    "approximate": "Przybliżona odległość – warsztat nie zaznaczył jeszcze dokładnego miejsca na mapie"
+    "approximate": "Przybliżona odległość – warsztat nie zaznaczył jeszcze dokładnego miejsca na mapie",
+    "sortLabel": "Sortuj:"
+  },
+  "freeDates": {
+    "subtitle": "Wizyta potrwa ok. {duration} – wybierz godzinę rozpoczęcia",
+    "more": "Pokaż kolejne dni"
   }
 }

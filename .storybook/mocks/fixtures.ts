@@ -49,7 +49,7 @@ export const autofix = mapIWorkshop({
   status: 'approved',
   hourlyRate: 150,
   contractSignedAt: daysAgo(30),
-  location: { lat: 50.0614, lng: 19.9366 },
+  location: { lat: 50.0647, lng: 19.9341 },
   reference: 'companies/autofix',
 })
 

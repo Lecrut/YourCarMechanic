@@ -176,11 +176,13 @@ function open(fix: IFix) {
         class="h-100"
         data-testid="at-workshop"
       >
-        <v-card-item
-          :title="t('board.atWorkshop')"
-          :subtitle="t('board.atWorkshopHint')"
-          prepend-icon="mdi-garage-open-variant"
-        >
+        <v-card-item prepend-icon="mdi-garage-open-variant">
+          <template #title>
+            <span class="text-wrap">{{ t('board.atWorkshop') }}</span>
+          </template>
+          <template #subtitle>
+            <span class="text-wrap">{{ t('board.atWorkshopHint') }}</span>
+          </template>
           <template #append>
             <v-chip
               size="small"

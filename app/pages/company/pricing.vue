@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { CAR_SEGMENTS, formatDuration, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
+import { CAR_SEGMENTS, formatDurationRange, formatRange, type IPriceListItem, itemEstimate } from '~/models/priceList'
+import { formatDate } from '~/utils/time'
 import { mapIWorkshop } from '~/models/workshop'
 import PageHeader from '~/components/pageHeader.vue'
 import PriceItemDialog from '~/components/company/priceItemDialog.vue'
 import PromotionDialog from '~/components/company/promotionDialog.vue'
+import ConfirmDialog from '~/components/confirmDialog.vue'
 import { type IPromotion, isPromotionActive } from '~/models/promotion'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })
@@ -24,6 +26,21 @@ const showDialog = ref(false)
 const saved = ref(false)
 const editingPromotion = ref<IPromotion | null>(null)
 const showPromotion = ref(false)
+/** Pending deletion – asked for confirmation first. */
+const toDelete = ref<{ kind: 'item', item: IPriceListItem } | { kind: 'promotion', item: IPromotion } | null>(null)
+const confirmShown = computed({
+  get: () => toDelete.value !== null,
+  set: (v) => {
+    if (!v) toDelete.value = null
+  },
+})
+
+function deleteConfirmed() {
+  const pending = toDelete.value
+  if (!pending) return
+  if (pending.kind === 'item') pricingStore.remove(pending.item)
+  else pricingStore.removePromotion(pending.item)
+}
 
 type PromotionState = 'running' | 'planned' | 'ended'
 function promotionState(p: IPromotion): PromotionState {
@@ -31,7 +48,7 @@ function promotionState(p: IPromotion): PromotionState {
   return p.validFrom > new Date() ? 'planned' : 'ended'
 }
 const stateColor: Record<PromotionState, string> = { running: 'success', planned: 'info', ended: 'default' }
-const dateOnly = (d: Date) => d.toLocaleDateString()
+const dateOnly = (d: Date) => formatDate(d)
 
 function openPromotion(p: IPromotion | null) {
   editingPromotion.value = p
@@ -151,8 +168,10 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
               type="warning"
               variant="tonal"
               density="compact"
-              :title="t('pricing.missingPrices')"
             >
+              <div class="text-title-small font-weight-bold mb-2">
+                {{ t('pricing.missingPrices') }}
+              </div>
               <v-chip
                 v-for="key in servicesWithoutPrices"
                 :key="key"
@@ -188,7 +207,7 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
           data-testid="price-table"
         >
           <template #[`item.laborHours`]="{ item }">
-            {{ formatDuration(item.laborHours.min) }} – {{ formatDuration(item.laborHours.max) }}
+            {{ formatDurationRange(item.laborHours) }}
           </template>
 
           <template
@@ -205,24 +224,26 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
           </template>
 
           <template #[`item.actions`]="{ item }">
-            <v-btn
-              v-tooltip="t('universal.edit')"
-              icon="mdi-pencil"
-              variant="text"
-              size="small"
-              color="primary"
-              :aria-label="t('universal.edit')"
-              @click="openDialog(item)"
-            />
-            <v-btn
-              v-tooltip="t('moderator.delete')"
-              icon="mdi-delete"
-              variant="text"
-              size="small"
-              color="error"
-              :aria-label="t('moderator.delete')"
-              @click="pricingStore.remove(item)"
-            />
+            <div class="d-flex justify-end flex-nowrap">
+              <v-btn
+                v-tooltip="t('universal.edit')"
+                icon="mdi-pencil"
+                variant="text"
+                size="small"
+                color="primary"
+                :aria-label="t('universal.edit')"
+                @click="openDialog(item)"
+              />
+              <v-btn
+                v-tooltip="t('moderator.delete')"
+                icon="mdi-delete"
+                variant="text"
+                size="small"
+                color="error"
+                :aria-label="t('moderator.delete')"
+                @click="toDelete = { kind: 'item', item }"
+              />
+            </div>
           </template>
 
           <template #no-data>
@@ -248,7 +269,7 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
           <template #append>
             <v-btn
               prepend-icon="mdi-plus"
-              color="error"
+              variant="tonal"
               :disabled="!company?.services.length"
               data-testid="add-promotion"
               @click="openPromotion(null)"
@@ -301,7 +322,7 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
                 size="small"
                 color="error"
                 :aria-label="t('moderator.delete')"
-                @click="pricingStore.removePromotion(p)"
+                @click="toDelete = { kind: 'promotion', item: p }"
               />
             </template>
           </v-list-item>
@@ -315,6 +336,14 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
         />
       </v-card>
     </v-container>
+
+    <confirm-dialog
+      v-model="confirmShown"
+      :title="toDelete?.kind === 'promotion' ? t('promotions.deleteTitle') : t('pricing.deleteTitle')"
+      :text="toDelete?.kind === 'promotion' ? t('promotions.deleteText', { name: toDelete.item.title }) : t('pricing.deleteText', { name: toDelete?.item.name ?? '' })"
+      icon="mdi-delete-outline"
+      @confirm="deleteConfirmed"
+    />
 
     <promotion-dialog
       v-model="showPromotion"
