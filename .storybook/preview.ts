@@ -24,7 +24,7 @@ const vuetify = createVuetify({
   directives,
   defaults: {
     ...vuetifyOptions.defaults,
-    VDialog: noTransition,
+    VDialog: { ...vuetifyOptions.defaults?.VDialog, ...noTransition },
     VMenu: noTransition,
     VTooltip: noTransition,
     VSnackbar: noTransition,

@@ -51,6 +51,9 @@ export const vuetifyOptions: VuetifyOptions = {
     VAutocomplete: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
     VTextarea: { variant: 'outlined', rounded: 'lg' },
     VChip: { rounded: 'lg' },
+    // Below a card title the content has no top padding; in a (scrollable) dialog that clips the
+    // floating label of the first outlined field.
+    VDialog: { VCardText: { class: 'pt-4' } },
     // Below `md` tables turn into stacked cards (label: value per row) instead of scrolling sideways.
     VDataTable: { mobileBreakpoint: 'md' },
   },

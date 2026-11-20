@@ -71,6 +71,17 @@ export const PriceItemWithoutDetail: Story = {
   },
 }
 
+/** The floating label of the first field is not cut off under the dialog title. */
+export const DialogLabelNotClipped: Story = {
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByTestId('add-price'))
+    const field = await screen.findByTestId('price-service')
+    const label = field.querySelector('.v-field-label--floating')!
+    const content = field.closest('.v-card-text')!
+    await waitFor(() => expect(label.getBoundingClientRect().top).toBeGreaterThanOrEqual(content.getBoundingClientRect().top))
+  },
+}
+
 /** Client list: consent filter is on by default (GDPR). */
 export const ClientList: Story = {
   render: () => ({ components: { Clients }, template: '<clients />' }),
