@@ -1,0 +1,208 @@
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, mocked, screen, userEvent, waitFor, within } from 'storybook/test'
+import RepairDetails from '~/components/fix/repairDetails.vue'
+import RepairList from '~/components/fix/repairList.vue'
+import { autofix, fixBookedByWorkshop, fixWithProposal, moderator, newFix, userAnna, workshopOwner } from '../../../.storybook/mocks/fixtures'
+import { mapIFix } from '~/mappers/fix'
+import { fixesService, moderatorService, photosService } from '~/services'
+
+/** Opens a v-select inside the status form once its expand transition finished. */
+async function pickStatus(label: string) {
+  const combobox = within(await screen.findByTestId('status-type')).getAllByRole('combobox')[0]!
+  await waitFor(() => expect(getComputedStyle(combobox).pointerEvents).not.toBe('none'))
+  await waitFor(() => expect(combobox.closest('.v-expand-transition-enter-active')).toBeNull())
+  await userEvent.click(combobox)
+  const option = (await screen.findByText(label, { selector: '.v-list-item-title' })).closest('.v-list-item')!
+  // Vuetify's overlay container is `pointer-events: none` with `auto` on the menu content –
+  // real clicks work, user-event's ancestor heuristic does not see that.
+  await userEvent.click(option, { pointerEventsCheck: 0 })
+}
+
+const meta = {
+  title: 'Fix/RepairDetails',
+  component: RepairDetails,
+  args: { fix: fixWithProposal, mode: 'user', modelValue: true },
+  parameters: { app: { user: userAnna } },
+} satisfies Meta<typeof RepairDetails>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+/** The client compares current vs proposed scope and accepts. */
+export const ClientAcceptsProposal: Story = {
+  play: async () => {
+    // The workshop's note for the client is shown; the internal one is not.
+    await expect(await screen.findByTestId('public-note')).toHaveTextContent('zalecamy wymianę przed zimą')
+    await expect(screen.queryByTestId('internal-note-input')).toBeNull()
+    const panel = await screen.findByTestId('proposal-decision')
+    await expect(within(panel).getByText('Obecnie')).toBeVisible()
+    await expect(within(panel).getByText('525 – 800 PLN')).toBeVisible()
+    await userEvent.click(within(panel).getByTestId('accept-proposal'))
+    await waitFor(() => expect(fixesService.acceptProposal).toHaveBeenCalled())
+  },
+}
+
+export const ClientRejectsProposal: Story = {
+  play: async () => {
+    await userEvent.click(await screen.findByTestId('reject-proposal'))
+    await waitFor(() => expect(fixesService.rejectProposal).toHaveBeenCalled())
+  },
+}
+
+/** A workshop quote outside the booking estimate is rejected by the form. */
+/** Itemised quote from the price list; the total must fit the estimate the client saw. */
+export const WorkshopQuoteMustFitEstimate: Story = {
+  args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await userEvent.click(await screen.findByTestId('give-quote'))
+    // BMW = premium: 0.8 h × 150 PLN + 375 PLN parts (mid-range) = 495 PLN
+    await waitFor(() => expect(screen.getByTestId('quote-total')).toHaveTextContent('495 PLN'))
+
+    const parts = screen.getByTestId('quote-parts-0').querySelector('input')!
+    await userEvent.clear(parts)
+    await userEvent.type(parts, '2000')
+    await expect(await screen.findByTestId('quote-out-of-range')).toBeVisible()
+    await expect(screen.getByTestId('send-quote')).toBeDisabled()
+
+    await userEvent.clear(parts)
+    await userEvent.type(parts, '400')
+    await userEvent.click(screen.getByTestId('send-quote'))
+    await waitFor(() => expect(fixesService.addNotification).toHaveBeenCalled())
+    const [, notification] = mocked(fixesService.addNotification).mock.calls.at(-1)!
+    await expect(notification.notificationType).toBe('addQuote')
+    await expect(notification.cost).toBe(520)
+    await expect(notification.items).toHaveLength(1)
+  },
+}
+
+/** The client accepts the mechanic's quote. */
+export const ClientAcceptsQuote: Story = {
+  args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'user' },
+  play: async () => {
+    await expect(await screen.findByTestId('quote-state')).toHaveTextContent('Czeka na klienta')
+    await userEvent.click(screen.getByTestId('accept-quote'))
+    await waitFor(() => expect(fixesService.addNotification).toHaveBeenCalled())
+    const [, notification] = mocked(fixesService.addNotification).mock.calls.at(-1)!
+    await expect(notification.notificationType).toBe('quoteAccepted')
+  },
+}
+
+export const WorkshopCanProposeChange: Story = {
+  args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await userEvent.click(await screen.findByTestId('propose-change'))
+    await expect(await screen.findByText('Zmiana terminu lub zakresu wymaga zgody klienta – do tego czasu obowiązują obecne ustalenia')).toBeVisible()
+    await userEvent.click(screen.getByTestId('send-proposal'))
+    await waitFor(() => expect(fixesService.proposeChange).toHaveBeenCalled())
+  },
+}
+
+/** Moderators may cancel any repair – a reason is required. */
+export const ModeratorCancels: Story = {
+  args: { fix: newFix, mode: 'moderator' },
+  parameters: { app: { user: moderator } },
+  play: async () => {
+    await expect(await screen.findByText('Moderacja')).toBeVisible()
+    await userEvent.click(screen.getByTestId('add-status'))
+    await pickStatus('Anulowane przez moderatora')
+    await userEvent.click(screen.getByTestId('save-status'))
+    await expect((await screen.findAllByText('Pole jest wymagane')).length).toBeGreaterThan(0)
+    await expect(fixesService.addNotification).not.toHaveBeenCalled()
+    await expect(moderatorService.getAllFixes).not.toHaveBeenCalled()
+  },
+}
+
+export const EmptyList: Story = {
+  render: () => ({
+    components: { RepairList },
+    template: `<repair-list :fixes="[]" mode="user" />`,
+  }),
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByTestId('repairs-empty')).toBeVisible()
+  },
+}
+
+/** Until the client confirms a visit booked by the workshop, the workshop can only cancel it. */
+export const UnconfirmedBookingOnlyCancel: Story = {
+  args: { fix: fixBookedByWorkshop, mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await expect(await screen.findByText('Czeka na decyzję klienta')).toBeVisible()
+    await userEvent.click(screen.getByTestId('add-status'))
+    const combobox = within(await screen.findByTestId('status-type')).getAllByRole('combobox')[0]!
+    await waitFor(() => expect(combobox.closest('.v-expand-transition-enter-active')).toBeNull())
+    await userEvent.click(combobox)
+    const options = await screen.findAllByRole('option')
+    await expect(options.map(o => o.textContent?.trim())).toEqual(['Odwołane przez warsztat'])
+  },
+}
+
+/** A proposed date must be a real slot: future, full hour, working day, opening hours. */
+export const ProposalDateValidated: Story = {
+  args: { fix: mapIFix({ ...fixWithProposal, proposal: null }), mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await userEvent.click(await screen.findByTestId('propose-change'))
+    const input = (await screen.findByTestId('proposal-date')).querySelector('input')!
+    await userEvent.clear(input)
+    await userEvent.type(input, '2020-01-01T10:00')
+    await userEvent.click(screen.getByTestId('send-proposal'))
+    await expect(await screen.findByText('Termin musi być w przyszłości')).toBeInTheDocument()
+    await expect(fixesService.proposeChange).not.toHaveBeenCalled()
+  },
+}
+
+/** The client attaches a photo – it is downscaled in the browser and uploaded. */
+export const ClientAddsPhoto: Story = {
+  args: { fix: newFix, mode: 'user' },
+  play: async () => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 3200
+    canvas.height = 2400
+    canvas.getContext('2d')!.fillRect(0, 0, 10, 10)
+    const blob = await new Promise<Blob>(resolve => canvas.toBlob(b => resolve(b!), 'image/png'))
+    const file = new File([blob], 'usterka.png', { type: 'image/png' })
+
+    await expect(await screen.findByTestId('repair-photos')).toHaveTextContent('Dodaj zdjęcia usterki')
+    await userEvent.upload(screen.getByTestId('photo-input') as HTMLInputElement, file)
+    await waitFor(() => expect(photosService.uploadPhoto).toHaveBeenCalled())
+    const [, image, by] = mocked(photosService.uploadPhoto).mock.calls.at(-1)!
+    await expect(by).toBe('user')
+    await expect(image.type).toBe('image/jpeg')
+  },
+}
+
+/** The client sees the promotion applied at booking. */
+export const AppliedPromotion: Story = {
+  args: { fix: mapIFix({ ...newFix, promotion: { title: 'Jesienna wymiana opon', percent: 20 } }), mode: 'user' },
+  play: async () => {
+    await expect(await screen.findByTestId('applied-promotion')).toHaveTextContent('Jesienna wymiana opon · −20%')
+  },
+}
+
+/** The client moves a confirmed visit to another free time; the workshop is notified by the new status. */
+export const ClientReschedules: Story = {
+  args: { fix: newFix, mode: 'user' },
+  play: async () => {
+    await userEvent.click(await screen.findByTestId('reschedule'))
+    const hours = await screen.findAllByTestId('free-hour')
+    const free = hours.find(h => !h.classList.contains('v-chip--disabled'))!
+    await userEvent.click(free)
+    await waitFor(() => expect(fixesService.rescheduleByClient).toHaveBeenCalled())
+    const [fix, date] = mocked(fixesService.rescheduleByClient).mock.calls.at(-1)!
+    await expect(fix.reference).toBe(newFix.reference)
+    await expect(date.getMinutes()).toBe(0)
+  },
+}
+
+/** The workshop cannot move a visit itself – it only proposes (no "Change date" button). */
+export const WorkshopCannotReschedule: Story = {
+  args: { fix: newFix, mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await screen.findByText('Notatki')
+    await expect(screen.queryByTestId('reschedule')).toBeNull()
+  },
+}

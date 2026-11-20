@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import RepairList from '~/components/fix/repairList.vue'
-import PageHeader from '~/components/pageHeader.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'user' })
 

@@ -5,7 +5,7 @@ import formValidation from '~/utils/formValidation'
 import { mapIUserProfile } from '~/mappers/userProfile'
 import { mapIWorkshop } from '~/mappers/workshop'
 import type { UserRole } from '~/types/user'
-import WorkshopForm from '~/components/workshopForm.vue'
+import WorkshopForm from '~/components/workshop/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
 
 definePageMeta({ middleware: ['auth'] })

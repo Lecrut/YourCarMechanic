@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import ServiceList from '~/components/serviceList.vue'
+import ServiceList from '~/components/common/serviceList.vue'
 import { mapIWorkshop } from '~/mappers/workshop'
 import type { IWorkshop, WorkshopStatus } from '~/types/workshop'
 import type { IUser } from '~/types/user'
 import { formatDateToString } from '~/utils/time'
-import WorkshopForm from '~/components/workshopForm.vue'
+import WorkshopForm from '~/components/workshop/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
 import { emailRule } from '~/utils/rules'
 

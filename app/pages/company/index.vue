@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import RepairList from '~/components/fix/repairList.vue'
-import PageHeader from '~/components/pageHeader.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
 import WeekBoard from '~/components/company/weekBoard.vue'
 import { isOnDay, matchesSearch } from '~/domain/fix'
 

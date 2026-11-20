@@ -3,7 +3,7 @@ import { mergeConfig } from 'vite'
 import { sharedAlias, sharedOptimizeDeps, sharedPlugins } from './vite.shared.ts'
 
 const config: StorybookConfig = {
-  stories: ['../app/**/*.stories.@(ts|mdx)'],
+  stories: ['../stories/**/*.stories.@(ts|mdx)'],
   addons: ['@storybook/addon-docs', '@storybook/addon-vitest'],
   framework: {
     name: '@storybook/vue3-vite',

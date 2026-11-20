@@ -59,6 +59,13 @@ export default defineNuxtConfig({
     },
   },
 
+  // Stories and unit tests live outside app/ but import app code – typecheck them with it.
+  typescript: {
+    tsConfig: {
+      include: ['../stories/**/*', '../tests/**/*'],
+    },
+  },
+
   eslint: {
     config: {
       stylistic: true,

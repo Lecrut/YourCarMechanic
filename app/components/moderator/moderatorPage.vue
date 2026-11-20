@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import PageHeader from '~/components/pageHeader.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
 import { useModeratorLive } from '~/composables/useModeratorLive'
 
 /**

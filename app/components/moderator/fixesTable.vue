@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ServiceList from '~/components/serviceList.vue'
+import ServiceList from '~/components/common/serviceList.vue'
 import { statusColor } from '~/domain/fix'
 import type { IFix } from '~/types/fix'
 import { notificationLabel } from '~/utils/options'

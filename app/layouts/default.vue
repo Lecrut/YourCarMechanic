@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AppNavigation from '~/components/appNavigation.vue'
-import AppFooter from '~/components/appFooter.vue'
-import ErrorSnackbar from '~/components/errorSnackbar.vue'
-import EmailVerificationBanner from '~/components/emailVerificationBanner.vue'
+import AppNavigation from '~/components/layout/appNavigation.vue'
+import AppFooter from '~/components/layout/appFooter.vue'
+import ErrorSnackbar from '~/components/layout/errorSnackbar.vue'
+import EmailVerificationBanner from '~/components/layout/emailVerificationBanner.vue'
 
 const authStore = useAuthStore()
 /** Every page a guest sees has the footer, always at the bottom of the screen even when the page is short. */

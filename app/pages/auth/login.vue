@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import formValidation from '~/utils/formValidation'
 import { emailRule, requiredRule } from '~/utils/rules'
-import AuthCard from '~/components/authCard.vue'
+import AuthCard from '~/components/account/authCard.vue'
 
 definePageMeta({ middleware: ['guest'] })
 

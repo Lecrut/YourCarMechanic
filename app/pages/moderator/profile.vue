@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PageHeader from '~/components/pageHeader.vue'
-import AccountSettingsCard from '~/components/accountSettingsCard.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
+import AccountSettingsCard from '~/components/account/accountSettingsCard.vue'
 import { useModeratorLive } from '~/composables/useModeratorLive'
 import { mapIUserProfile } from '~/mappers/userProfile'
 import formValidation from '~/utils/formValidation'

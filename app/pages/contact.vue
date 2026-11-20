@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageHeader from '~/components/pageHeader.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
 import { CONTACT_CATEGORIES, CONTACT_LIMITS } from '~/domain/contactMessage'
 import type { ContactCategory } from '~/types/contactMessage'
 import formValidation from '~/utils/formValidation'

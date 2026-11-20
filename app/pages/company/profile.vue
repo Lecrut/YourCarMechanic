@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { mapIWorkshop } from '~/mappers/workshop'
-import WorkshopForm from '~/components/workshopForm.vue'
+import WorkshopForm from '~/components/workshop/workshopForm.vue'
 import type { ValidatableForm } from '~/utils/formValidation'
-import PageHeader from '~/components/pageHeader.vue'
-import AccountSettingsCard from '~/components/accountSettingsCard.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
+import AccountSettingsCard from '~/components/account/accountSettingsCard.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })
 

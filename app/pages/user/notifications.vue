@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageHeader from '~/components/pageHeader.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
 import { awaitsClientDecision, nextVisit as findNextVisit } from '~/domain/fix'
 import { buildGarage } from '~/domain/garage'
 import NextVisit from '~/components/user/nextVisit.vue'

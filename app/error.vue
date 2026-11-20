@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
-import AppNavigation from '~/components/appNavigation.vue'
+import AppNavigation from '~/components/layout/appNavigation.vue'
 
 const props = defineProps<{ error: NuxtError }>()
 

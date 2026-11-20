@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PageHeader from '~/components/pageHeader.vue'
-import WorkshopFinder from '~/components/workshopFinder.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
+import WorkshopFinder from '~/components/workshop/workshopFinder.vue'
 import { pricingService, reviewsService, workshopsService } from '~/services'
 import { servicesBrand } from '~/domain/workshop'
 import type { IWorkshop } from '~/types/workshop'

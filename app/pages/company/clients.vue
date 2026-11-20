@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IClient } from '~/types/client'
-import PageHeader from '~/components/pageHeader.vue'
-import ClientsTable from '~/components/clientsTable.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
+import ClientsTable from '~/components/company/clientsTable.vue'
 import BookForClientDialog from '~/components/company/bookForClientDialog.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'workshop' })

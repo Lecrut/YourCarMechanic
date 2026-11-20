@@ -10,7 +10,7 @@ import type { ServiceCategory } from '~/types/service'
 import { formatDateToString } from '~/utils/time'
 import { carSegment } from '~/domain/priceList'
 import { formatDuration, formatRange } from '~/utils/format'
-import WorkshopFinder from '~/components/workshopFinder.vue'
+import WorkshopFinder from '~/components/workshop/workshopFinder.vue'
 import FreeDates from '~/components/user/freeDates.vue'
 
 definePageMeta({ middleware: ['auth'], role: 'user' })

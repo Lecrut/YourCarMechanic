@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AddCarForm from '~/components/user/addCarForm.vue'
 import CarCard from '~/components/user/carCard.vue'
-import PageHeader from '~/components/pageHeader.vue'
-import AccountSettingsCard from '~/components/accountSettingsCard.vue'
+import PageHeader from '~/components/common/pageHeader.vue'
+import AccountSettingsCard from '~/components/account/accountSettingsCard.vue'
 import { phoneRule, requiredRule } from '~/utils/rules'
 import formValidation from '~/utils/formValidation'
 import { mapIUserProfile } from '~/mappers/userProfile'
