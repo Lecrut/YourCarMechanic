@@ -54,6 +54,8 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
 - **Service catalog** comes from Firestore `services` via `useServicesStore()` (`options`, `label(key)`).
 - **UI: Vuetify only.** No custom CSS. MD3 typography (`text-headline-small`…), grid alignment via classes
   (`class="justify-center"`), elevation 0–5, v3 breakpoints (see `utils/vuetifyOptions.ts`).
+  Navigation: the side rail (phone: bottom bar) lists only the role's pages; profile and log out live in the
+  avatar menu only – never both. Guests get centre links + footer.
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
   of the primary action; destructive actions ask first via `ConfirmDialog`; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
   Only exception: the map (`components/map/workshopMap.vue`) loads MapLibre GL + its CSS on demand;

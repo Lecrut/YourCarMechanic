@@ -74,7 +74,7 @@ const guestLinks = computed<NavItem[]>(() => [
 const activeLink = computed(() => guestLinks.value.find(l => l.to === route.path)?.to ?? null)
 
 /** Selected entry of the phone bottom bar (highlight + label in "shift" mode). */
-const bottomSelected = computed(() => items.value.slice(0, 4).find(isActive)?.to ?? null)
+const bottomSelected = computed(() => railItems.value.slice(0, 4).find(isActive)?.to ?? null)
 
 const logoHover = ref(false)
 const isDark = computed(() => theme.global.current.value.dark)
@@ -82,8 +82,10 @@ const isDark = computed(() => theme.global.current.value.dark)
 /** Own profile page of every role – always reachable from the account menu. */
 const PROFILE_PATHS: Record<string, string> = { user: '/user/profile', workshop: '/company/profile', moderator: '/moderator/profile' }
 const profilePath = computed(() => (role.value ? PROFILE_PATHS[role.value] ?? null : null))
+/** Side rail / bottom bar: the role's pages. Profile and log out live in the account menu only – no duplicates. */
+const railItems = computed(() => items.value.filter(i => i.to !== profilePath.value))
 /** Account-menu shortcuts: the role's main pages without the profile (it has its own entry). */
-const shortcuts = computed(() => items.value.filter(i => i.to !== profilePath.value).slice(0, 4))
+const shortcuts = computed(() => railItems.value.slice(0, 4))
 
 const hasSidebar = computed(() => Boolean(user.value && items.value.length))
 
@@ -464,12 +466,13 @@ async function logOut() {
 
   <v-navigation-drawer
     v-if="hasSidebar"
-    v-model="drawer"
+    :model-value="mdAndUp || drawer"
     :permanent="mdAndUp"
     :rail="mdAndUp"
     :expand-on-hover="mdAndUp"
     width="260"
     border="e"
+    @update:model-value="(open: boolean) => (drawer = open)"
   >
     <v-list
       nav
@@ -477,7 +480,7 @@ async function logOut() {
       class="mt-2"
     >
       <v-list-item
-        v-for="item in items"
+        v-for="item in railItems"
         :key="item.to"
         :to="item.to"
         :title="item.title"
@@ -502,21 +505,6 @@ async function logOut() {
         </template>
       </v-list-item>
     </v-list>
-
-    <template #append>
-      <v-list
-        nav
-        density="comfortable"
-      >
-        <v-list-item
-          prepend-icon="mdi-logout"
-          :title="t('navBar.logOut')"
-          base-color="error"
-          rounded="xl"
-          @click="logOut"
-        />
-      </v-list>
-    </template>
   </v-navigation-drawer>
 
   <v-bottom-navigation
@@ -528,7 +516,7 @@ async function logOut() {
     elevation="8"
   >
     <v-btn
-      v-for="item in items.slice(0, 4)"
+      v-for="item in railItems.slice(0, 4)"
       :key="item.to"
       :to="item.to"
       :value="item.to"

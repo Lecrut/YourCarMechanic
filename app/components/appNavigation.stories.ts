@@ -168,3 +168,44 @@ export const GuestOnLoginPage: Story = {
     await waitFor(() => expect(nav.querySelectorAll('.v-tab--selected')).toHaveLength(0))
   },
 }
+
+/** The side rail holds only the role's pages – profile and log out are in the account menu, never twice. */
+export const RailWithoutAccountItems: Story = {
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector('.v-navigation-drawer') as HTMLElement
+    await expect(within(rail).getByTestId('nav-/company/pricing')).toBeInTheDocument()
+    await expect(within(rail).queryByTestId('nav-/company/profile')).toBeNull()
+    await expect(within(rail).queryByText(/Wyloguj/)).toBeNull()
+    await userEvent.click(within(canvasElement).getByTestId('account-menu'))
+    await expect(await screen.findByTestId('my-profile')).toHaveAttribute('href', '/company/profile')
+    await expect(screen.getByTestId('logout')).toBeVisible()
+  },
+}
+
+/** Navigation inside the real app frame (v-layout + v-main) – shows the rail as on a desktop. */
+const inLayout = {
+  components: { AppNavigation },
+  template: '<v-layout style="height: 560px"><app-navigation /><v-main><div class="pa-8 text-medium-emphasis">…</div></v-main></v-layout>',
+}
+
+export const CustomerInLayout: Story = {
+  parameters: { app: { user: userAnna } },
+  render: () => inLayout,
+  play: async ({ canvasElement }) => {
+    // The rail must be on screen (not just in the DOM, translated off-screen).
+    const rail = canvasElement.querySelector('.v-navigation-drawer') as HTMLElement
+    await waitFor(() => expect(rail.getBoundingClientRect().left).toBeGreaterThanOrEqual(0))
+    await expect(within(canvasElement).getByTestId('nav-/user/history')).toBeVisible()
+    await expect(within(canvasElement).queryByTestId('nav-/user/profile')).toBeNull()
+  },
+}
+
+export const ModeratorInLayout: Story = {
+  parameters: { app: { user: moderator } },
+  render: () => inLayout,
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByTestId('nav-/moderator?tab=messages')).toBeVisible()
+    await expect(within(canvasElement).queryByTestId('nav-/moderator/profile')).toBeNull()
+  },
+}
