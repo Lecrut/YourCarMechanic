@@ -99,7 +99,7 @@
     "polish": "Polish",
     "changeTheme": "Change theme",
     "logOut": "Log out",
-    "notifications": "Notifications",
+    "notifications": "My garage",
     "user": {
       "profile": "Profile",
       "bookedFix": "Order repair",
@@ -274,7 +274,8 @@
       "addGiveBackTime": "Give back time added: ",
       "giveBackCar": "Car given back.",
       "addQuote": "Repair quote: ",
-      "moderatorCancel": "Repair cancelled by a moderator."
+      "moderatorCancel": "Repair cancelled by a moderator.",
+      "rescheduled": "New visit time: "
     },
     "date": "Date"
   },
@@ -295,7 +296,8 @@
     "changeAccepted": "Client accepted the change",
     "changeRejected": "Client rejected the change",
     "bookingConfirmed": "Client confirmed the visit",
-    "quoteAccepted": "Quote accepted"
+    "quoteAccepted": "Quote accepted",
+    "rescheduled": "Client changed the date"
   },
   "universal": {
     "save": "Save",
@@ -396,7 +398,12 @@
     "seedServices": "Load defaults",
     "seedMissing": "Add missing defaults ({count})",
     "unknownCompany": "Unknown company",
-    "unknownUser": "Unknown user"
+    "unknownUser": "Unknown user",
+    "suspendTitle": "Suspend {name}?",
+    "suspendText": "The company disappears from search and takes no new bookings. You can unlock it later.",
+    "visitsWillBeCancelled": "Scheduled visits will be cancelled: {count}. Clients get a notification with the reason.",
+    "cancelReasonSuspended": "{name} was suspended – the visit was cancelled. Please book another workshop.",
+    "cancelReasonRemoved": "{name} left the app – the visit was cancelled. Please book another workshop."
   },
   "stats": {
     "total": "All repairs",
@@ -485,7 +492,7 @@
     "yourDecision": "Needs your decision",
     "decisionsWaiting": "Items from the workshop to approve: {count}",
     "proposeTitle": "Propose a change",
-    "proposeHint": "The client must accept – until then the current scope applies",
+    "proposeHint": "A new date or scope needs the client's approval – until then the current agreement applies",
     "note": "Message for the client (e.g. what you found)",
     "send": "Send proposal"
   },
@@ -497,8 +504,9 @@
     "cancelText": "The visit on {date} will be cancelled and the time released. This cannot be undone.",
     "keep": "Keep it",
     "addToCalendar": "Add to calendar",
-    "workshopUnavailable": "The workshop is currently unavailable",
-    "workshopUnavailableText": "The workshop was suspended or removed. Call them or write to us via the contact form."
+    "reschedule": "Change date",
+    "rescheduleHint": "Pick another free time – the workshop gets notified",
+    "rescheduled": "Moved to {date}"
   },
   "reviews": {
     "title": "Rate the repair",
@@ -657,9 +665,10 @@
       "bookingConfirmed": "{client} confirmed the visit ({car})",
       "userCancel": "{client} cancelled the visit ({car})",
       "workshopCancel": "The workshop cancelled the visit ({car})",
-      "moderatorCancel": "A moderator cancelled the repair ({car})",
+      "moderatorCancel": "Visit cancelled ({car})",
       "reminder": "Reminder: visit {when} – {car}",
-      "giveBackCarReviewed": "{car} handed back – thanks for your review"
+      "giveBackCarReviewed": "{car} handed back – thanks for your review",
+      "rescheduled": "{client} moved the visit ({car}) to {when}"
     }
   },
   "photos": {
@@ -741,5 +750,19 @@
       "inProgress": "In progress",
       "resolved": "Resolved"
     }
+  },
+  "garage": {
+    "title": "My garage",
+    "subtitle": "Your cars and their repairs in one place",
+    "active": "In progress",
+    "history": "History",
+    "atWorkshop": "At the workshop",
+    "oneOff": "not in your garage",
+    "noRepairs": "No repairs for this car yet",
+    "book": "Book a repair",
+    "more": "Show older ({count})",
+    "less": "Show less",
+    "emptyTitle": "Your garage is empty",
+    "emptyText": "Add a car to book repairs faster and keep its history in one place."
   }
 }

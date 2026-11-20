@@ -1,6 +1,6 @@
 import { deleteApp, initializeApp } from 'firebase/app'
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signOut } from 'firebase/auth'
-import { collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, Timestamp, updateDoc, writeBatch } from 'firebase/firestore'
+import { arrayUnion, collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, Timestamp, updateDoc, where, writeBatch } from 'firebase/firestore'
 import { db, firebaseApp } from './firebase'
 import { fromQuery } from './mappers'
 import { restore, softDelete } from './softDelete'
@@ -8,6 +8,7 @@ import { type IUser, mapIUser, type UserRole } from '~/models/user'
 import { type IWorkshop, mapIWorkshop, type WorkshopStatus } from '~/models/workshop'
 import { type IFix, mapIFix } from '~/models/fix'
 import { type ICar, mapICar } from '~/models/car'
+import { mapINotification, mapINotificationToFirebase } from '~/models/notification'
 
 // Everything here only succeeds for users with role `moderator` (enforced by firestore.rules).
 
@@ -109,4 +110,27 @@ export async function createWorkshop(
   await batch.commit()
 
   return mapIWorkshop({ ...data, contractSignedAt: approved ? new Date() : null, reference: docRef.path })
+}
+
+/**
+ * Cancels every open repair of a workshop (suspension / removal): adds a `moderatorCancel`
+ * status with the reason – clients see it in their notification bell – and frees the slots.
+ * Returns how many visits were cancelled.
+ */
+export async function cancelOpenFixes(companyRef: string, reason: string): Promise<number> {
+  const snap = await getDocs(query(collection(db(), 'fixes'), where('companyRef', '==', companyRef), where('isClosed', '==', false)))
+  const open = fromQuery<IFix>(snap).map(mapIFix)
+  if (!open.length) return 0
+
+  const batch = writeBatch(db())
+  for (const fix of open) {
+    batch.update(doc(db(), fix.reference), {
+      isClosed: true,
+      notifications: arrayUnion(mapINotificationToFirebase(mapINotification({ notificationType: 'moderatorCancel', description: reason }))),
+    })
+    const slotIds = fix.slotIds.length ? fix.slotIds : [fix.date.toISOString()]
+    for (const id of slotIds) batch.delete(doc(db(), `${companyRef}/slots/${id}`))
+  }
+  await batch.commit()
+  return open.length
 }

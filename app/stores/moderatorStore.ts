@@ -56,6 +56,7 @@ export const useModeratorStore = defineStore('moderator', () => {
 
   const deleteWorkshop = (workshop: IWorkshop) =>
     sharedStore.run(async () => {
+      await moderatorService.cancelOpenFixes(workshop.reference, t('moderator.cancelReasonRemoved', { name: workshop.name }))
       await moderatorService.deleteWorkshop(workshop.reference)
       workshops.value = workshops.value.map(w => (w.reference === workshop.reference ? { ...w, deletedAt: new Date() } : w))
     })
@@ -68,6 +69,9 @@ export const useModeratorStore = defineStore('moderator', () => {
 
   const setWorkshopStatus = (workshop: IWorkshop, status: WorkshopStatus) =>
     sharedStore.run(async () => {
+      // Visits at a suspended workshop cannot happen – cancel them and tell the clients why.
+      if (status === 'suspended')
+        await moderatorService.cancelOpenFixes(workshop.reference, t('moderator.cancelReasonSuspended', { name: workshop.name }))
       await moderatorService.setWorkshopStatus(workshop.reference, status)
       const contractSignedAt = status === 'approved' ? new Date() : workshop.contractSignedAt
       workshops.value = workshops.value.map(w => (w.reference === workshop.reference ? { ...w, status, contractSignedAt } : w))
@@ -94,6 +98,9 @@ export const useModeratorStore = defineStore('moderator', () => {
       fixes.value = fixes.value.map(f => (f.reference === updated.reference ? updated : f))
       return updated
     })
+
+  /** Open (not closed) visits of a workshop – shown before suspending or removing it. */
+  const openVisitsOf = (workshop: IWorkshop) => fixes.value.filter(f => f.companyRef === workshop.reference && !f.isClosed).length
 
   const pendingWorkshops = computed(() => workshops.value.filter(w => !w.deletedAt && w.status === 'pending'))
 
@@ -124,6 +131,7 @@ export const useModeratorStore = defineStore('moderator', () => {
     setWorkshopStatus,
     createWorkshop,
     pendingWorkshops,
+    openVisitsOf,
     addNotification,
     setUserRole,
     workshopName,

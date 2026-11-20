@@ -308,3 +308,18 @@ export async function syncCarSnapshot(userRef: string, car: ICar): Promise<void>
   open.forEach(f => batch.update(doc(db(), f.reference), { car: mapICarToFirebase(car) }))
   await batch.commit()
 }
+
+/** The client moves the visit to another free time (see `canReschedule`); the workshop gets notified. */
+export async function rescheduleByClient(fix: IFix, newDate: Date): Promise<IFix> {
+  await runTransaction(db(), async (tx) => {
+    const slotIds = await findFreeSlots(tx, fix.companyRef, newDate, fix.durationHours, fix.slotIds)
+    releaseSlots(tx, { ...fix, slotIds: fix.slotIds.filter(id => !slotIds.includes(id)) })
+    reserveSlots(tx, fix.companyRef, slotIds.filter(id => !fix.slotIds.includes(id)), fix.reference, fix.userRef)
+    tx.update(doc(db(), fix.reference), {
+      date: Timestamp.fromDate(newDate),
+      slotIds,
+      notifications: arrayUnion(mapINotificationToFirebase(mapINotification({ notificationType: 'rescheduled', date: newDate }))),
+    })
+  })
+  return readFix(fix.reference, fix)
+}

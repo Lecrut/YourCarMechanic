@@ -32,6 +32,7 @@ const meta: Record<string, { icon: string, color: string }> = {
   changeAccepted: { icon: 'mdi-check-circle-outline', color: 'success' },
   changeRejected: { icon: 'mdi-close-circle-outline', color: 'error' },
   bookingConfirmed: { icon: 'mdi-calendar-check', color: 'success' },
+  rescheduled: { icon: 'mdi-calendar-edit', color: 'warning' },
   userCancel: { icon: 'mdi-calendar-remove', color: 'error' },
   workshopCancel: { icon: 'mdi-calendar-remove', color: 'error' },
   moderatorCancel: { icon: 'mdi-shield-alert-outline', color: 'error' },
@@ -138,6 +139,12 @@ onUnmounted(() => feedStore.stop())
           <v-list-item-title class="text-wrap">
             {{ t(`feed.events.${event.type}`, { car: event.car, client: event.client, cost: event.cost ?? 0, when: formatDateToString(event.visit) }) }}
           </v-list-item-title>
+          <v-list-item-subtitle
+            v-if="event.note"
+            class="text-wrap"
+          >
+            {{ event.note }}
+          </v-list-item-subtitle>
           <v-list-item-subtitle>{{ ago(event) }}</v-list-item-subtitle>
           <template #append>
             <v-badge

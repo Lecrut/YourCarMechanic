@@ -32,7 +32,7 @@ const items = computed<NavItem[]>(() => {
     case 'user':
       return [
         { title: t('navBar.user.bookedFix'), icon: 'mdi-calendar-plus', to: '/user' },
-        { title: t('navBar.notifications'), icon: 'mdi-bell-outline', to: '/user/notifications', badge: decisionCount.value },
+        { title: t('navBar.notifications'), icon: 'mdi-garage-variant', to: '/user/notifications', badge: decisionCount.value },
         { title: t('navBar.user.history'), icon: 'mdi-history', to: '/user/history' },
         { title: t('navBar.user.profile'), icon: 'mdi-account-outline', to: '/user/profile' },
       ]

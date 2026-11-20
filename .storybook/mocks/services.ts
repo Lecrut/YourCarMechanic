@@ -179,6 +179,11 @@ export const fixesService = {
   syncCarSnapshot: fn(async (userRef: string, car: ICar) => {
     db.fixes = db.fixes.map(f => (f.userRef === userRef && !f.isClosed && f.carRef === car.reference && !f.notifications.length ? mapIFix({ ...f, car }) : f))
   }).mockName('syncCarSnapshot'),
+  rescheduleByClient: fn(async (fix: IFix, date: Date) => {
+    const updated = mapIFix({ ...fix, date, notifications: [...fix.notifications, { notificationType: 'rescheduled', date, sendDate: new Date() }] })
+    db.fixes = replace(db.fixes, updated)
+    return later(updated)
+  }).mockName('rescheduleByClient'),
   confirmBooking: fn(async (fix: IFix) => {
     const updated = mapIFix({ ...fix, confirmed: true })
     db.fixes = replace(db.fixes, updated)
@@ -243,6 +248,13 @@ export const moderatorService = {
   setUserRole: fn(async (_ref: string, _role: IUser['role']) => {}).mockName('setUserRole'),
   deleteWorkshop: fn(async (_ref: string) => {}).mockName('deleteWorkshop'),
   restoreWorkshop: fn(async (_ref: string) => {}).mockName('restoreWorkshop'),
+  cancelOpenFixes: fn(async (companyRef: string, reason: string) => {
+    const open = db.fixes.filter(f => f.companyRef === companyRef && !f.isClosed)
+    db.fixes = db.fixes.map(f => (open.includes(f)
+      ? mapIFix({ ...f, isClosed: true, notifications: [...f.notifications, { notificationType: 'moderatorCancel', description: reason, sendDate: new Date(), date: new Date() }] })
+      : f))
+    return open.length
+  }).mockName('cancelOpenFixes'),
   setWorkshopStatus: fn(async (_ref: string, _status: IWorkshop['status']) => {}).mockName('setWorkshopStatus'),
   createWorkshop: fn(async (workshop: IWorkshop, _owner: IUser | null, _ownerEmail?: string | null) => {
     const saved = { ...workshop, reference: newRef('companies') }

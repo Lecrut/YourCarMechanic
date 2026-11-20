@@ -118,3 +118,17 @@ export const ContactInbox: Story = {
     await expect(within(detail).getByTestId('reply-message')).toHaveAttribute('href', expect.stringContaining('mailto:jan@example.com'))
   },
 }
+
+/** Suspending a company cancels its open visits; clients get the reason. */
+export const SuspendCancelsVisits: Story = {
+  play: async ({ canvasElement }) => {
+    await openTab(canvasElement, /Firmy/)
+    const table = await within(canvasElement).findByTestId('companies-table')
+    await userEvent.click((await within(table).findAllByTestId('suspend-company'))[0]!)
+    const dialog = await screen.findByTestId('suspend-dialog')
+    await expect(dialog).toHaveTextContent('Zaplanowane wizyty zostaną odwołane: 3')
+    await userEvent.click(within(dialog).getByTestId('confirm-suspend'))
+    await waitFor(() => expect(moderatorService.cancelOpenFixes).toHaveBeenCalledWith('companies/autofix', expect.stringContaining('zawieszony')))
+    await waitFor(() => expect(moderatorService.setWorkshopStatus).toHaveBeenCalledWith('companies/autofix', 'suspended'))
+  },
+}

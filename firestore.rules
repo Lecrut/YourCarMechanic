@@ -181,6 +181,11 @@ service cloud.firestore {
           && appendsOneStatus(['changeAccepted']))
         // either party: attach one photo (max 20); photos are never removed or edited
         || ((isClient() || isWorkshop()) && onlyChanges(['photos']) && appendsOnePhoto(isClient() ? 'user' : 'workshop'))
+        // client: move a confirmed visit to another future time (the workshop must propose instead)
+        || (isClient() && resource.data.confirmed == true && resource.data.proposal == null
+          && onlyChanges(['date', 'slotIds', 'notifications'])
+          && request.resource.data.date > request.time
+          && appendsOneStatus(['rescheduled']))
         // client: keep contact details on open repairs up to date (profile change)
         || (isClient() && !resource.data.isClosed && onlyChanges(['clientName', 'clientPhone'])
           && request.resource.data.clientName is string && request.resource.data.clientName.size() <= 200

@@ -152,6 +152,17 @@ async function bookFix() {
   }
 }
 
+// "Book a repair" from a garage tile: /user?car=cars/abc pre-selects that car.
+const route = useRoute()
+watch(cars, (list) => {
+  const wanted = typeof route.query.car === 'string' ? route.query.car : null
+  const car = wanted ? list.find(c => c.reference === wanted) : undefined
+  if (car && !selectedCar.value) {
+    carSource.value = 'my'
+    selectedCar.value = car
+  }
+}, { immediate: true })
+
 onMounted(() => {
   if (user.value) carsStore.getUserCars(user.value.reference)
   carsJsonStore.getCarsFromJson()

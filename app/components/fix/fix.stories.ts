@@ -93,7 +93,7 @@ export const WorkshopCanProposeChange: Story = {
   parameters: { app: { user: workshopOwner, company: autofix } },
   play: async () => {
     await userEvent.click(await screen.findByTestId('propose-change'))
-    await expect(await screen.findByText('Klient musi zaakceptować zmianę – do tego czasu obowiązuje obecny zakres')).toBeVisible()
+    await expect(await screen.findByText('Zmiana terminu lub zakresu wymaga zgody klienta – do tego czasu obowiązują obecne ustalenia')).toBeVisible()
     await userEvent.click(screen.getByTestId('send-proposal'))
     await waitFor(() => expect(fixesService.proposeChange).toHaveBeenCalled())
   },
@@ -182,10 +182,27 @@ export const AppliedPromotion: Story = {
   },
 }
 
-/** If the workshop gets suspended after booking, the client is told. */
-export const WorkshopSuspended: Story = {
-  args: { fix: mapIFix({ ...newFix, companyRef: 'companies/nowy' }), mode: 'user' },
+/** The client moves a confirmed visit to another free time; the workshop is notified by the new status. */
+export const ClientReschedules: Story = {
+  args: { fix: newFix, mode: 'user' },
   play: async () => {
-    await expect(await screen.findByTestId('workshop-unavailable')).toHaveTextContent('Warsztat jest obecnie niedostępny')
+    await userEvent.click(await screen.findByTestId('reschedule'))
+    const hours = await screen.findAllByTestId('free-hour')
+    const free = hours.find(h => !h.classList.contains('v-chip--disabled'))!
+    await userEvent.click(free)
+    await waitFor(() => expect(fixesService.rescheduleByClient).toHaveBeenCalled())
+    const [fix, date] = mocked(fixesService.rescheduleByClient).mock.calls.at(-1)!
+    await expect(fix.reference).toBe(newFix.reference)
+    await expect(date.getMinutes()).toBe(0)
+  },
+}
+
+/** The workshop cannot move a visit itself – it only proposes (no "Change date" button). */
+export const WorkshopCannotReschedule: Story = {
+  args: { fix: newFix, mode: 'workshop' },
+  parameters: { app: { user: workshopOwner, company: autofix } },
+  play: async () => {
+    await screen.findByText('Notatki')
+    await expect(screen.queryByTestId('reschedule')).toBeNull()
   },
 }

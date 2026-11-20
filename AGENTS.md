@@ -127,6 +127,7 @@ app/
     promotion.ts                time-limited discounts
     feed.ts                     notification-bell events from repair history
     week.ts                     week board layout, cars at the workshop
+    garage.ts                   customer garage: repairs grouped by car
     review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem), service.ts, user.ts, car.ts, …
   composables/                  role & status option lists
   utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
@@ -139,14 +140,14 @@ app/
     authCard, pageHeader, workshopForm, clientsTable, mySnackbar
     fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog,
                                 quoteDialog (itemised quote), repairNotes (public + internal), repairPhotos
-    user/                       carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit
+    user/                       garageCar, carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit
     company/                    priceItemDialog, bookForClientDialog, promotionDialog, weekBoard (7-day calendar)
     moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable, messagesTable
     notificationBell, errorSnackbar, emailVerificationBanner, appFooter
   pages/
     index, about, contact, workshops   public (contact form works for guests too)
     auth/                       login, register, reset-password, role-choice
-    user/                       index (booking wizard), notifications (live), history, profile
+    user/                       index (booking wizard, ?car= preselect), notifications = "My garage" (car tiles, live), history, profile
     company/                    index (live repairs), clients, pricing, profile
     moderator/index             tabs: stats, companies, services, clients, repairs, reviews, messages (?tab=)
     moderator/profile           moderator's own profile
@@ -186,4 +187,8 @@ References between documents are stored as document **paths** (`users/abc`, `com
 
 Repair statuses (`notifications[].notificationType`): `getCar`, `addQuote` (optional `items[]` – itemised quote), `quoteAccepted`, `addGiveBackTime`, `addExpense`,
 `giveBackCar`, `userCancel`, `workshopCancel`, `moderatorCancel`, `changeProposed`, `changeAccepted`,
-`changeRejected`, `bookingConfirmed`. Closing ones: `giveBackCar` and the three cancellations.
+`changeRejected`, `bookingConfirmed`, `rescheduled` (client moved the visit). Closing ones: `giveBackCar` and the three cancellations.
+
+Rules of thumb: the **client** may move a confirmed visit to another free time until the car is received
+(`canReschedule`); the **workshop** never moves it directly – it sends a proposal the client accepts.
+Suspending or removing a company cancels all its open visits (`moderatorCancel` with the reason → client's bell).

@@ -206,3 +206,11 @@ export function fixesForCar(fixes: IFix[], car: ICar): IFix[] {
     .filter(f => f.carRef === car.reference || (car.vin && f.car.vin === car.vin) || sameModel(f))
     .sort((a, b) => b.date.getTime() - a.date.getTime())
 }
+
+/**
+ * The client may move the visit to another free time on their own – until the workshop
+ * received the car. (The workshop has to ask: it sends a proposal the client accepts.)
+ */
+export const canReschedule = (fix: IFix, now = new Date()) =>
+  !fix.isClosed && fix.confirmed && !fix.proposal && fix.date > now
+  && !fix.notifications.some(n => n.notificationType === 'getCar')

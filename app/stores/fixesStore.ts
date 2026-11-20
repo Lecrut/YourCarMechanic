@@ -68,6 +68,8 @@ export const useFixesStore = defineStore('fixes', () => {
   const acceptProposal = (fix: IFix) => sharedStore.run(() => fixesService.acceptProposal(fix))
   const rejectProposal = (fix: IFix) => sharedStore.run(() => fixesService.rejectProposal(fix))
   const confirmBooking = (fix: IFix) => sharedStore.run(() => fixesService.confirmBooking(fix))
+  /** Client moves the visit; the live listener shows the new time. */
+  const reschedule = (fix: IFix, date: Date) => sharedStore.run(() => fixesService.rescheduleByClient(fix, date))
 
   /** Downscales and uploads photos one by one; the live listener shows them on the fix. */
   const addPhotos = (fix: IFix, files: File[], by: IFixPhoto['by']) =>
@@ -106,6 +108,7 @@ export const useFixesStore = defineStore('fixes', () => {
     acceptProposal,
     rejectProposal,
     confirmBooking,
+    reschedule,
     setPublicNote,
     addPhotos,
     getAllUserFixes,

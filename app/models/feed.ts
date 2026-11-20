@@ -13,6 +13,8 @@ export interface IFeedEvent {
   cost: number | null
   /** Visit time (for reminders). */
   visit: Date
+  /** Comment of the status, e.g. why a moderator cancelled the visit. */
+  note: string
 }
 
 /** Statuses the *other* party adds – those are the news for each role. */
@@ -20,7 +22,7 @@ const FOR_CLIENT: NotificationType[] = [
   'getCar', 'addQuote', 'addGiveBackTime', 'addExpense', 'giveBackCar', 'workshopCancel', 'moderatorCancel', 'changeProposed',
 ]
 const FOR_WORKSHOP: NotificationType[] = [
-  'userCancel', 'quoteAccepted', 'changeAccepted', 'changeRejected', 'bookingConfirmed', 'moderatorCancel',
+  'userCancel', 'quoteAccepted', 'changeAccepted', 'changeRejected', 'bookingConfirmed', 'rescheduled', 'moderatorCancel',
 ]
 
 /** How long before a visit the reminder shows up. */
@@ -37,6 +39,7 @@ export function buildFeed(fixes: IFix[], role: UserRole | null, limit = 30, now 
       car: `${fix.car.manufacturer} ${fix.car.model}`.trim(),
       client: fix.clientName || fix.clientPhone,
       visit: fix.date,
+      note: '',
     }
 
     // Reminder for confirmed, still open visits starting within the next 24 h.
@@ -53,7 +56,7 @@ export function buildFeed(fixes: IFix[], role: UserRole | null, limit = 30, now 
       if (!relevant.includes(n.notificationType)) return
       // After the review the hand-over event no longer asks for one.
       const type = n.notificationType === 'giveBackCar' && fix.reviewed ? 'giveBackCarReviewed' : n.notificationType
-      events.push({ ...base, id: `${fix.reference}#${index}`, at: n.sendDate, type, cost: n.cost })
+      events.push({ ...base, id: `${fix.reference}#${index}`, at: n.sendDate, type, cost: n.cost, note: n.description })
     })
   }
 

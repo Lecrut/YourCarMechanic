@@ -20,6 +20,7 @@ const showDeleted = ref(false)
 const editDialog = ref(false)
 const isNew = ref(false)
 const deleteDialog = ref(false)
+const toSuspend = ref<IWorkshop | null>(null)
 const draft = ref<IWorkshop>(mapIWorkshop({}))
 const ownerMode = ref<'email' | 'existing'>('email')
 const ownerEmail = ref('')
@@ -95,6 +96,11 @@ async function save() {
 function askDelete(workshop: IWorkshop) {
   toDelete.value = workshop
   deleteDialog.value = true
+}
+
+async function confirmSuspend() {
+  if (toSuspend.value) await moderatorStore.setWorkshopStatus(toSuspend.value, 'suspended')
+  toSuspend.value = null
 }
 
 async function confirmDelete() {
@@ -244,7 +250,7 @@ async function confirmDelete() {
           color="warning"
           :aria-label="t('moderator.suspend')"
           data-testid="suspend-company"
-          @click="moderatorStore.setWorkshopStatus(item, 'suspended')"
+          @click="toSuspend = item"
         />
         <v-btn
           v-tooltip="t('universal.edit')"
@@ -384,6 +390,17 @@ async function confirmDelete() {
       :text="t('moderator.deleteCompanyText', { name: toDelete?.name ?? '' })"
       prepend-icon="mdi-alert"
     >
+      <v-card-text
+        v-if="toDelete && moderatorStore.openVisitsOf(toDelete)"
+        class="pt-0"
+      >
+        <v-alert
+          type="warning"
+          variant="tonal"
+          density="compact"
+          :text="t('moderator.visitsWillBeCancelled', { count: moderatorStore.openVisitsOf(toDelete) })"
+        />
+      </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
@@ -400,6 +417,49 @@ async function confirmDelete() {
           @click="confirmDelete"
         >
           {{ t('moderator.delete') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog
+    :model-value="Boolean(toSuspend)"
+    max-width="480"
+    @update:model-value="toSuspend = null"
+  >
+    <v-card
+      :title="t('moderator.suspendTitle', { name: toSuspend?.name ?? '' })"
+      :text="t('moderator.suspendText')"
+      prepend-icon="mdi-lock"
+      data-testid="suspend-dialog"
+    >
+      <v-card-text
+        v-if="toSuspend && moderatorStore.openVisitsOf(toSuspend)"
+        class="pt-0"
+      >
+        <v-alert
+          type="warning"
+          variant="tonal"
+          density="compact"
+          :text="t('moderator.visitsWillBeCancelled', { count: moderatorStore.openVisitsOf(toSuspend) })"
+        />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          color="default"
+          @click="toSuspend = null"
+        >
+          {{ t('universal.cancel') }}
+        </v-btn>
+        <v-btn
+          color="warning"
+          :loading="loading"
+          data-testid="confirm-suspend"
+          @click="confirmSuspend"
+        >
+          {{ t('moderator.suspend') }}
         </v-btn>
       </v-card-actions>
     </v-card>

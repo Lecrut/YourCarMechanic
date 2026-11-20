@@ -99,7 +99,7 @@
     "polish": "Polski",
     "changeTheme": "Zmień motyw",
     "logOut": "Wyloguj się",
-    "notifications": "Powiadomienia",
+    "notifications": "Mój garaż",
     "user": {
       "profile": "Profil",
       "bookedFix": "Zamów naprawę",
@@ -274,7 +274,8 @@
       "addGiveBackTime": "Dodano przewidywany termin odbioru samochodu na: ",
       "giveBackCar": "Wydano samochód.",
       "addQuote": "Wycena naprawy: ",
-      "moderatorCancel": "Naprawa anulowana przez moderatora."
+      "moderatorCancel": "Naprawa anulowana przez moderatora.",
+      "rescheduled": "Nowy termin wizyty: "
     },
     "date": "Data"
   },
@@ -295,7 +296,8 @@
     "changeAccepted": "Klient zaakceptował zmianę",
     "changeRejected": "Klient odrzucił zmianę",
     "bookingConfirmed": "Klient potwierdził wizytę",
-    "quoteAccepted": "Wycena zaakceptowana"
+    "quoteAccepted": "Wycena zaakceptowana",
+    "rescheduled": "Klient zmienił termin"
   },
   "universal": {
     "save": "Zapisz",
@@ -396,7 +398,12 @@
     "seedServices": "Wczytaj domyślne",
     "seedMissing": "Uzupełnij domyślne ({count})",
     "unknownCompany": "Nieznana firma",
-    "unknownUser": "Nieznany użytkownik"
+    "unknownUser": "Nieznany użytkownik",
+    "suspendTitle": "Zawiesić {name}?",
+    "suspendText": "Firma zniknie z wyszukiwarki i nie przyjmie nowych rezerwacji. Możesz ją później odblokować.",
+    "visitsWillBeCancelled": "Zaplanowane wizyty zostaną odwołane: {count}. Klienci dostaną powiadomienie z powodem.",
+    "cancelReasonSuspended": "Warsztat {name} został zawieszony – wizyta została odwołana. Zarezerwuj termin w innym warsztacie.",
+    "cancelReasonRemoved": "Warsztat {name} zakończył działalność w aplikacji – wizyta została odwołana. Zarezerwuj termin w innym warsztacie."
   },
   "stats": {
     "total": "Wszystkie naprawy",
@@ -485,7 +492,7 @@
     "yourDecision": "Wymaga decyzji",
     "decisionsWaiting": "Sprawy od warsztatu do zatwierdzenia: {count}",
     "proposeTitle": "Zaproponuj zmianę",
-    "proposeHint": "Klient musi zaakceptować zmianę – do tego czasu obowiązuje obecny zakres",
+    "proposeHint": "Zmiana terminu lub zakresu wymaga zgody klienta – do tego czasu obowiązują obecne ustalenia",
     "note": "Wiadomość dla klienta (np. co znaleźliście)",
     "send": "Wyślij propozycję"
   },
@@ -497,8 +504,9 @@
     "cancelText": "Wizyta {date} zostanie odwołana, a termin zwolniony. Tej operacji nie można cofnąć.",
     "keep": "Zostaw",
     "addToCalendar": "Dodaj do kalendarza",
-    "workshopUnavailable": "Warsztat jest obecnie niedostępny",
-    "workshopUnavailableText": "Warsztat został zawieszony lub usunięty. Skontaktuj się z nim telefonicznie albo napisz do nas przez formularz kontaktowy."
+    "reschedule": "Zmień termin",
+    "rescheduleHint": "Wybierz inny wolny termin – warsztat dostanie powiadomienie",
+    "rescheduled": "Termin zmieniony na {date}"
   },
   "reviews": {
     "title": "Oceń naprawę",
@@ -657,9 +665,10 @@
       "bookingConfirmed": "{client} potwierdził(a) wizytę ({car})",
       "userCancel": "{client} odwołał(a) wizytę ({car})",
       "workshopCancel": "Warsztat odwołał wizytę ({car})",
-      "moderatorCancel": "Moderator anulował naprawę ({car})",
+      "moderatorCancel": "Wizyta odwołana ({car})",
       "reminder": "Przypomnienie: wizyta {when} – {car}",
-      "giveBackCarReviewed": "{car} odebrany – dziękujemy za opinię"
+      "giveBackCarReviewed": "{car} odebrany – dziękujemy za opinię",
+      "rescheduled": "{client} przesunął(a) wizytę ({car}) na {when}"
     }
   },
   "photos": {
@@ -741,5 +750,19 @@
       "inProgress": "W toku",
       "resolved": "Zamknięte"
     }
+  },
+  "garage": {
+    "title": "Mój garaż",
+    "subtitle": "Twoje auta i ich naprawy w jednym miejscu",
+    "active": "W trakcie",
+    "history": "Historia",
+    "atWorkshop": "W warsztacie",
+    "oneOff": "auto spoza garażu",
+    "noRepairs": "To auto nie było jeszcze naprawiane",
+    "book": "Umów naprawę",
+    "more": "Pokaż starsze ({count})",
+    "less": "Zwiń",
+    "emptyTitle": "Twój garaż jest pusty",
+    "emptyText": "Dodaj auto, żeby szybciej umawiać naprawy i mieć całą historię w jednym miejscu."
   }
 }

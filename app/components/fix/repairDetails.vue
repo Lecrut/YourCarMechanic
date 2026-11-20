@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { canAcceptQuote, type IFix, isFixFinished, isQuoteAccepted, latestQuote, totalCost, type ViewerMode } from '~/models/fix'
+import { canAcceptQuote, canReschedule, type IFix, isFixFinished, isQuoteAccepted, latestQuote, totalCost, type ViewerMode } from '~/models/fix'
+import FreeDates from '~/components/user/freeDates.vue'
 import { downloadIcs } from '~/utils/calendar'
 import type { IWorkshop } from '~/models/workshop'
 import { type INotification, mapINotification, type NotificationType } from '~/models/notification'
@@ -36,6 +37,8 @@ const { form, valid, isValid } = formValidation()
 const workshop = ref<IWorkshop | null>(null)
 const showPropose = ref(false)
 const showQuote = ref(false)
+const showReschedule = ref(false)
+const rescheduled = ref(false)
 const isAddStatus = ref(false)
 const newStatus = ref<NotificationType | null>(null)
 const newStatusDate = ref(toLocalInput(new Date()))
@@ -50,6 +53,11 @@ const cost = computed(() => totalCost(props.fix))
 const quoteAccepted = computed(() => isQuoteAccepted(props.fix))
 const canQuote = computed(() => props.mode === 'workshop' && props.fix.confirmed && !props.fix.isClosed
   && !isFixFinished(props.fix) && props.fix.notifications.some(n => n.notificationType === 'getCar'))
+
+async function reschedule(date: Date) {
+  await fixesStore.reschedule(props.fix, date)
+  if (!error.value) rescheduled.value = true
+}
 
 async function acceptQuote() {
   await fixesStore.addNotification(props.fix, mapINotification({ notificationType: 'quoteAccepted' }))
@@ -88,6 +96,7 @@ function statusComment(item: INotification): string {
     case 'addGiveBackTime': return t('notifications.comments.addGiveBackTime') + formatDateToString(item.date)
     case 'giveBackCar': return t('notifications.comments.giveBackCar')
     case 'moderatorCancel': return t('notifications.comments.moderatorCancel')
+    case 'rescheduled': return t('notifications.comments.rescheduled') + formatDateToString(item.date)
     default: return ''
   }
 }
@@ -166,6 +175,18 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
           </v-chip>
           <v-spacer />
           <v-btn
+            v-if="mode === 'user' && workshop && canReschedule(fix)"
+            v-tooltip:bottom="t('repairs.rescheduleHint')"
+            prepend-icon="mdi-calendar-edit"
+            variant="tonal"
+            size="small"
+            class="mr-1"
+            data-testid="reschedule"
+            @click="showReschedule = true"
+          >
+            {{ t('repairs.reschedule') }}
+          </v-btn>
+          <v-btn
             v-if="canAddToCalendar"
             v-tooltip:bottom="t('repairs.addToCalendar')"
             icon="mdi-calendar-export"
@@ -189,16 +210,6 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
       <v-divider />
 
       <v-card-text>
-        <v-alert
-          v-if="mode !== 'workshop' && workshop && !fix.isClosed && (workshop.deletedAt || workshop.status !== 'approved')"
-          type="error"
-          variant="tonal"
-          icon="mdi-garage-alert"
-          class="mb-4"
-          :title="t('repairs.workshopUnavailable')"
-          :text="t('repairs.workshopUnavailableText')"
-          data-testid="workshop-unavailable"
-        />
         <client-decision
           v-if="mode === 'user'"
           :fix="fix"
@@ -603,6 +614,19 @@ watch([isDialogShown, () => props.fix.companyRef], async ([shown, companyRef]) =
       </v-card-text>
     </v-card>
   </v-dialog>
+
+  <free-dates
+    v-if="mode === 'user' && workshop"
+    v-model="showReschedule"
+    :workshop="workshop"
+    :duration-hours="fix.durationHours"
+    @select="reschedule"
+  />
+  <my-snackbar
+    v-model="rescheduled"
+    :is-error="false"
+    :text="t('repairs.rescheduled', { date: formatDateToString(fix.date) })"
+  />
 
   <quote-dialog
     v-if="mode === 'workshop'"
