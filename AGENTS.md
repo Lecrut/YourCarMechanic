@@ -30,6 +30,11 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
 
 - **Git:** work on `develop`; `main` is release-only. Small, focused commits.
 - **Package manager:** `bun` only (lockfile `bun.lock`). Node ≥ 22. TypeScript stays on 6.x until typescript-eslint supports 7.
+- **One kind of file per directory.** `components/` only `.vue` components, `pages/` only pages, `types/` only
+  interfaces/type aliases, `mappers/` only raw data → model functions, `domain/` only pure business rules,
+  `utils/` generic helpers (formatting, validation rules, dates, option lists), `composables/` only `use*` functions,
+  `stores/` only Pinia stores, `services/` only Firebase access. Stories live in `stories/`, unit tests in `tests/`
+  (both mirror `app/`) – never next to the code.
 - **Firebase only through `app/services/`.** Components, pages and stores never import `firebase/*`.
   Storybook/Vitest alias `~/services` to [`.storybook/mocks/services.ts`](.storybook/mocks/services.ts) –
   **every new service function needs a mock with the same signature.**
@@ -41,13 +46,13 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
 - **Soft delete only:** never `deleteDoc` business data. Use `softDelete()`/`restore()` from
   `app/services/softDelete.ts` (`deletedAt`, `deletedBy`). Owners filter with `notDeleted()`, moderators see
   everything. Exception: `companies/{id}/slots` (technical booking index). Repairs keep their own car snapshot.
-- **Data-model change ⇒** update `app/models/*`, `firestore.rules`, `firestore.indexes.json` (if a query needs it),
+- **Data-model change ⇒** update `app/types/*` + `app/mappers/*`, `firestore.rules`, `firestore.indexes.json` (if a query needs it),
   the mock in `.storybook/mocks/`, and the table in section 6.
 - **Roles:** `user`, `workshop`, `moderator`. `moderator` is never self-assigned – set `users/{uid}.role` in the
   Firebase console. Self-registered companies start `pending` (blocked) until a moderator unlocks them after the
   contract is signed (`contractSignedAt`).
-- **Domain logic is pure and tested:** pricing (`models/priceList.ts`), stats (`models/stats.ts`), client lists
-  (`models/client.ts`), repair rules (`models/fix.ts`). Put new rules there with a `*.test.ts`, not in components.
+- **Domain logic is pure and tested:** pricing (`domain/priceList.ts`), stats (`domain/stats.ts`), client lists
+  (`domain/client.ts`), repair rules (`domain/fix.ts`). Put new rules there with a test in `tests/domain/`, not in components.
 - **i18n:** no hard-coded UI strings; add keys to **both** `i18n/locales/pl.json` and `en.json`.
   Dates as `formatDate`/`formatDateToString` (`dd.mm.yyyy`), relative times via `formatRelative` (Intl – correct
   Polish grammar: "jutro", "za 3 dni"); never build "za {n} dni" strings. Vuetify's own texts follow the i18n locale.
@@ -61,7 +66,7 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
   content wrapping (no `text-truncate`/`text-no-wrap` on long text, use `ServiceList` for service chips).
   Consistency: pages start with `PageHeader`; lists of repairs use `RepairList`; dialogs put "cancel" (text) left
   of the primary action; destructive actions ask first via `ConfirmDialog`; empty states use `v-empty-state`; every icon-only button has `v-tooltip` + `aria-label`.
-  Only exception: the map (`components/map/workshopMap.vue`) loads MapLibre GL + its CSS on demand;
+  Only exception: the map (`components/workshop/workshopMap.vue`) loads MapLibre GL + its CSS on demand;
   markers/controls inside it still use Vuetify classes and components. Style URLs live in `runtimeConfig.public.map`
   (OpenFreeMap – free incl. commercial use, keep the OSM attribution; Storybook uses an empty style).
   Light/dark palettes and label language (Polish names) are applied in `utils/mapStyle.ts`.
@@ -72,7 +77,7 @@ and its `play` test passes. Don't report "done" otherwise – report what failed
 - **Components:** `<script setup lang="ts">`, typed `defineProps`, `defineModel`; import child components explicitly
   (Storybook has no Nuxt auto-registration). Don't name a ref like a component used in the template
   (`workshopForm` ref + `<workshop-form>` resolves to the ref!) – use `…Ref`.
-- **Stories:** every new component/page gets a `*.stories.ts` with `play` tests. Set the signed-in user with
+- **Stories:** every new component/page gets a `*.stories.ts` in `stories/` (mirrors `app/components` / `app/pages`) with `play` tests. Set the signed-in user with
   `parameters: { app: { user, company } }`; assert service calls with `mocked(service.fn)`; dialogs render in
   `document.body` (use `screen`).
 - **No `@ts-ignore`.** **Secrets:** Firebase web config via `.env` (`NUXT_PUBLIC_FIREBASE_*`, see `.env.example`).
@@ -105,7 +110,7 @@ app/
   services/                     ★ the ONLY code talking to Firebase
     index.ts                    re-exports (aliased to the mock in Storybook/Vitest)
     firebase.ts                 initFirebase() (local persistence, emulators), auth(), db()
-    mappers.ts                  snapshot → model (Timestamps → Date, recursive; `reference` = doc path)
+    snapshot.ts                 Firestore snapshot → plain data (Timestamps → Date, recursive; `reference` = doc path)
     softDelete.ts               softDelete()/restore()
     authService.ts              sign up/in/out, reset password, watchUser, profile/role writes
     carsService.ts              user cars (soft delete)
@@ -131,9 +136,13 @@ app/
     servicesStore.ts            service catalog (options/label/CRUD)
     moderatorStore.ts           moderator panel data and actions
     carsStore.ts, sharedStore.ts, carsJsonStore.ts, citiesJsonStore.ts
-  models/                       interfaces + mappers + pure domain logic (*.test.ts next to them)
-    fix.ts                      repair, proposal, progress, ViewerMode, decision/review rules
-    priceList.ts                car segments, estimates, ranges
+  types/                        interfaces and type aliases only (one file per entity) + page-meta.d.ts
+    fix.ts                      repair, proposal, photo, ViewerMode
+    workshop.ts, user.ts, car.ts, notification.ts, priceList.ts, promotion.ts, review.ts, service.ts, …
+  mappers/                      raw document data → typed model with defaults (mapIFix, mapIWorkshop, …, toDeletedAt)
+  domain/                       pure business rules + domain constants (no Vue, no Firebase)
+    fix.ts                      progress, decision/review/reschedule rules, totals, search
+    priceList.ts                car segments, estimates, durations
     stats.ts                    moderator statistics
     client.ts                   client list from repairs
     promotion.ts                time-limited discounts
@@ -141,25 +150,27 @@ app/
     week.ts                     week board layout, cars at the workshop
     garage.ts                   customer garage: repairs grouped by car
     geo.ts                      distance, workshop position (pin or city centre), ranking by distance/rating/reviews
-    review.ts, softDelete.ts, notification.ts, workshop.ts (working days, slotProblem, servicesBrand), service.ts, user.ts, car.ts, …
-  composables/                  role & status option lists, useLanguage (flags, switching),
+    workshop.ts                 working days, slotProblem, occupiedHours, servicesBrand
+    review.ts, softDelete.ts, notification.ts, service.ts (catalog seed), contactMessage.ts
+  composables/                  `use*` only: useLanguage (flags, switching),
                                 useModeratorLive (panel listeners: start once, stop when leaving /moderator)
-  utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
-                                subscription, vuetifyOptions (auto-imported)
+  utils/                        generic helpers (auto-imported): rules, errors, formValidation, time (+ formatRelative),
+                                format (distance, PLN ranges, durations), options (status & role select lists),
+                                calendar (.ics), image (downscale), mapStyle, subscription, vuetifyOptions
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
   layouts/default.vue           single layout: AppNavigation + footer pinned to the bottom on every page for guests
-  types/page-meta.d.ts          `definePageMeta({ role })`
-  components/
-    appNavigation.vue           app bar (centred animated tabs, language flags, theme), rail drawer per role, account card, bottom nav
-    authCard, pageHeader, confirmDialog, workshopForm (incl. brands + map pin), clientsTable, mySnackbar
-    workshopFinder.vue          location bar + radius + sort, list next to the map (workshops page, booking step 3)
-    map/workshopMap.vue         MapLibre map with Vuetify-styled markers; `pickable` = location picker
+  components/                   .vue components only, grouped by area
+    layout/                     appNavigation (app bar, rail drawer per role, bottom nav), appFooter, notificationBell,
+                                errorSnackbar, emailVerificationBanner
+    common/                     pageHeader, confirmDialog, serviceList, mySnackbar
+    account/                    authCard, accountSettingsCard
+    workshop/                   workshopForm (incl. brands + map pin), workshopFinder (location bar + radius + sort,
+                                list next to the map), workshopMap (MapLibre, Vuetify-styled markers; `pickable` = picker)
     fix/                        repairCard, repairList, repairDetails, clientDecision, proposeChangeDialog,
                                 quoteDialog (itemised quote), repairNotes (public + internal), repairPhotos
     user/                       garageCar, carCard, carHistoryDialog, addCarForm, workshopCard, freeDates, reviewDialog, nextVisit
-    company/                    priceItemDialog, bookForClientDialog, promotionDialog, weekBoard (7-day calendar)
-    moderator/                  statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable, messagesTable
-    notificationBell, errorSnackbar, emailVerificationBanner, appFooter
+    company/                    priceItemDialog, bookForClientDialog, promotionDialog, weekBoard (7-day calendar), clientsTable
+    moderator/                  moderatorPage, statsPanel, companiesTable, servicesTable, usersTable, fixesTable, reviewsTable, messagesTable
   pages/
     index, about, contact, workshops   public (workshops = map finder; contact form works for guests too)
     auth/                       login, register, reset-password, role-choice
@@ -168,8 +179,9 @@ app/
     moderator/                  one page per section: stats, companies, services, clients, repairs, reviews, messages
                                 (+ profile; `/moderator` redirects to stats); each uses components/moderator/moderatorPage
     moderator/profile           moderator's own profile
-  assets/data/                  cars.json, cities.json
-  **/*.stories.ts               Storybook stories + play tests
+  assets/                       data/ (cars.json, cities.json), flags/
+stories/                        Storybook stories + play tests (components/…, pages/…)
+tests/                          unit tests (node), mirror app/: domain/, mappers/, utils/
 i18n/                           i18n.config.ts, locales/pl.json, locales/en.json
 .storybook/
   main.ts, preview.ts           config, decorator (fresh fake DB + Pinia per story, user via parameters.app)
@@ -181,7 +193,7 @@ firestore.indexes.json          composite indexes (fixes: userRef/companyRef + d
 firebase.json, .firebaserc      hosting (SPA) + firestore + emulators
 vitest.config.ts                projects: unit (node) + storybook (Chromium)
 eslint.config.mjs               ESLint flat config
-*.drawio                        old diagrams (predate the Firebase-direct rewrite)
+docs/diagrams/                  old .drawio diagrams (predate the Firebase-direct rewrite)
 ```
 
 ## 6. Firestore data model

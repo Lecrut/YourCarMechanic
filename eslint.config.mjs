@@ -4,7 +4,7 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt(
   {
-    ignores: ['storybook-static/**', '*.drawio', 'public/**'],
+    ignores: ['storybook-static/**', 'docs/**', 'public/**'],
   },
   ...storybook.configs['flat/recommended'],
   {
