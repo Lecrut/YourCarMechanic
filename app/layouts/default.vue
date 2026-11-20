@@ -4,10 +4,9 @@ import AppFooter from '~/components/appFooter.vue'
 import ErrorSnackbar from '~/components/errorSnackbar.vue'
 import EmailVerificationBanner from '~/components/emailVerificationBanner.vue'
 
-const route = useRoute()
 const authStore = useAuthStore()
-/** One footer for public pages, always at the bottom of the screen even when the page is short. */
-const showFooter = computed(() => Boolean(route.meta.footer) && !authStore.user)
+/** Every page a guest sees has the footer, always at the bottom of the screen even when the page is short. */
+const showFooter = computed(() => !authStore.user)
 </script>
 
 <template>

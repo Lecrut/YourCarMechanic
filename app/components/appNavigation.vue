@@ -177,6 +177,7 @@ async function logOut() {
     >
       <v-tabs
         :model-value="activeLink"
+        :mandatory="false"
         density="compact"
         color="primary"
         slider-color="primary"

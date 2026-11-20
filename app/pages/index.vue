@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ middleware: ['guest'], footer: true })
+definePageMeta({ middleware: ['guest'] })
 
 const { t } = useI18n()
 

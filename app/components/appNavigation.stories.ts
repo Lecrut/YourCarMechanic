@@ -153,3 +153,18 @@ export const CustomerBottomBar: Story = {
     await waitFor(() => expect(bar.querySelector('.v-btn--selected')).toHaveAttribute('href', '/user/notifications'))
   },
 }
+
+/** Pages outside the centre links (e.g. login) highlight nothing – not "Home". */
+export const GuestOnLoginPage: Story = {
+  render: () => ({
+    components: { AppNavigation },
+    setup() {
+      useRouter().replace('/auth/login')
+    },
+    template: '<app-navigation /><div class="pa-8" style="height: 400px" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const nav = within(canvasElement).getByTestId('center-nav')
+    await waitFor(() => expect(nav.querySelectorAll('.v-tab--selected')).toHaveLength(0))
+  },
+}

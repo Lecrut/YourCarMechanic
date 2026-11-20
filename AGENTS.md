@@ -141,7 +141,7 @@ app/
   utils/                        rules, errors, form validation, time, calendar (.ics), image (downscale),
                                 subscription, vuetifyOptions (auto-imported)
   middleware/                   auth.ts (meta.role guard, waits for Firebase), guest.ts
-  layouts/default.vue           single layout: AppNavigation + footer pinned to the bottom on public pages (`meta.footer`, guests)
+  layouts/default.vue           single layout: AppNavigation + footer pinned to the bottom on every page for guests
   types/page-meta.d.ts          `definePageMeta({ role })`
   components/
     appNavigation.vue           app bar (centred animated tabs, language flags, theme), rail drawer per role, account card, bottom nav

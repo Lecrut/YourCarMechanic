@@ -48,7 +48,6 @@ function another() {
   message.value = ''
   sent.value = false
 }
-definePageMeta({ footer: true })
 </script>
 
 <template>

@@ -103,7 +103,6 @@ onMounted(() => {
   carsJsonStore.getCarsFromJson()
   loadWorkshops()
 })
-definePageMeta({ footer: true })
 </script>
 
 <template>
