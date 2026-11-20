@@ -104,7 +104,7 @@ const headers = computed(() => [
         >
           <span class="text-label-medium">{{ (item.profile?.name || item.email).charAt(0).toUpperCase() }}</span>
         </v-avatar>
-        {{ item.email }}
+        <span class="text-break">{{ item.email }}</span>
       </div>
     </template>
 

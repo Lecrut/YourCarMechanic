@@ -23,7 +23,9 @@ const { t, locale } = useI18n()
 /** Guests pick the language in the bar; signed-in users in their account settings. */
 const { languages, current: currentLanguage, setLanguage } = useLanguage()
 const theme = useTheme()
-const { mdAndUp } = useDisplay()
+const { smAndUp, mdAndUp, lgAndUp } = useDisplay()
+/** Guest bar between md and lg: the centre tabs need the room, so the rest goes icon-only. */
+const compactGuestBar = computed(() => mdAndUp.value && !lgAndUp.value)
 const route = useRoute()
 
 const authStore = useAuthStore()
@@ -169,13 +171,13 @@ async function logOut() {
             />
           </v-scale-transition>
         </v-avatar>
-        <span class="text-title-medium font-weight-bold d-none d-sm-inline">{{ t('navBar.title') }}</span>
+        <span class="text-title-medium font-weight-bold text-no-wrap d-none d-sm-inline">{{ t('navBar.title') }}</span>
       </nuxt-link>
     </div>
 
     <v-sheet
-      v-if="!user"
-      class="d-none d-md-flex flex-0-0 pa-1 px-2"
+      v-if="!user && mdAndUp"
+      class="d-flex flex-0-0 pa-1 px-2"
       rounded="pill"
       color="surface-light"
       border
@@ -194,7 +196,7 @@ async function logOut() {
           :key="link.to"
           :value="link.to"
           :to="link.to"
-          :prepend-icon="link.icon"
+          :prepend-icon="compactGuestBar ? undefined : link.icon"
           rounded="pill"
           class="text-none"
           exact
@@ -233,7 +235,10 @@ async function logOut() {
                 size="22"
                 class="elevation-1"
               />
-              <span class="ms-2 text-label-large font-weight-bold d-none d-sm-inline">{{ currentLanguage.code.toUpperCase() }}</span>
+              <span
+                v-if="smAndUp && !compactGuestBar"
+                class="ms-2 text-label-large font-weight-bold"
+              >{{ currentLanguage.code.toUpperCase() }}</span>
               <v-icon
                 icon="mdi-chevron-down"
                 size="16"
@@ -304,7 +309,10 @@ async function logOut() {
       </v-sheet>
 
       <template v-if="!user">
-        <v-menu location="bottom end">
+        <v-menu
+          v-if="!mdAndUp"
+          location="bottom end"
+        >
           <template #activator="{ props: menuProps }">
             <v-btn
               v-tooltip:bottom="t('navBar.menu')"
@@ -312,7 +320,6 @@ async function logOut() {
               icon="mdi-menu"
               variant="tonal"
               size="40"
-              class="d-md-none"
               :aria-label="t('navBar.menu')"
               data-testid="guest-menu"
             />
@@ -342,10 +349,18 @@ async function logOut() {
           </v-list>
         </v-menu>
         <v-btn
+          v-if="compactGuestBar"
+          v-tooltip:bottom="t('navBar.login')"
+          to="/auth/login"
+          variant="text"
+          icon="mdi-login"
+          :aria-label="t('navBar.login')"
+        />
+        <v-btn
+          v-else-if="smAndUp"
           to="/auth/login"
           variant="text"
           prepend-icon="mdi-login"
-          class="d-none d-sm-flex"
         >
           {{ t('navBar.login') }}
         </v-btn>

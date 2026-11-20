@@ -41,7 +41,8 @@ const headers = computed(() => [
   <v-row class="mb-4">
     <v-col
       cols="12"
-      md="5"
+      sm="6"
+      lg
     >
       <v-text-field
         v-model="search"
@@ -53,7 +54,8 @@ const headers = computed(() => [
     </v-col>
     <v-col
       cols="12"
-      md="5"
+      sm="6"
+      lg
     >
       <v-autocomplete
         v-model="serviceFilter"
@@ -69,9 +71,10 @@ const headers = computed(() => [
         data-testid="clients-service-filter"
       />
     </v-col>
+    <!-- Sized to its label: a fixed 2/12 column broke "Tylko ze zgodą" after every few letters. -->
     <v-col
       cols="12"
-      md="2"
+      lg="auto"
       class="d-flex align-center"
     >
       <v-switch
@@ -116,7 +119,6 @@ const headers = computed(() => [
       <div
         v-for="car in item.cars"
         :key="`${car.manufacturer}${car.model}${car.productionYear}`"
-        class="text-no-wrap"
       >
         {{ car.manufacturer }} {{ car.model }} ({{ car.productionYear }})
       </div>

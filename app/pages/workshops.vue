@@ -219,7 +219,7 @@ onMounted(() => {
               {{ item.workshop.brands.length ? item.workshop.brands.join(', ') : t('workshopsPage.allBrands') }}
             </div>
           </v-card-text>
-          <v-card-actions class="px-4 pb-3 pt-0 ga-2 flex-wrap">
+          <v-card-actions class="pt-0 ga-2 flex-wrap">
             <v-btn
               variant="tonal"
               size="small"

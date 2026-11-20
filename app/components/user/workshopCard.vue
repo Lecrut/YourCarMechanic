@@ -58,8 +58,8 @@ const workingDaysLabel = computed(() => [1, 2, 3, 4, 5, 6, 0]
           <v-icon icon="mdi-garage" />
         </v-avatar>
       </template>
-      <v-card-title class="font-weight-bold d-flex align-center ga-2">
-        <span class="text-truncate">{{ workshop.name }}</span>
+      <v-card-title class="font-weight-bold d-flex flex-wrap align-center ga-2">
+        <span>{{ workshop.name }}</span>
         <v-chip
           v-if="promotion"
           v-tooltip:top="t('promotions.badgeHint', { title: promotion.title, date: formatDateToString(promotion.validTo).slice(0, 10) })"

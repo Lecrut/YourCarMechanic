@@ -55,19 +55,23 @@ function open(m: IContactMessage) {
 
 <template>
   <v-row class="mb-2 align-center">
+    <!-- Filter chips wrap to the next line instead of scrolling sideways. -->
     <v-col
       cols="12"
-      md="4"
+      lg="auto"
     >
-      <v-btn-toggle
+      <v-chip-group
         v-model="view"
         mandatory
-        variant="outlined"
-        density="comfortable"
-        color="primary"
+        column
+        selected-class="text-primary"
         data-testid="messages-view"
       >
-        <v-btn value="open">
+        <v-chip
+          value="open"
+          variant="outlined"
+          filter
+        >
           {{ t('messages.open') }}
           <v-badge
             v-if="contactStore.openCount"
@@ -75,18 +79,27 @@ function open(m: IContactMessage) {
             color="error"
             inline
           />
-        </v-btn>
-        <v-btn value="all">
+        </v-chip>
+        <v-chip
+          value="all"
+          variant="outlined"
+          filter
+        >
           {{ t('messages.all') }}
-        </v-btn>
-        <v-btn value="deleted">
+        </v-chip>
+        <v-chip
+          value="deleted"
+          variant="outlined"
+          filter
+        >
           {{ t('moderator.deleted') }}
-        </v-btn>
-      </v-btn-toggle>
+        </v-chip>
+      </v-chip-group>
     </v-col>
     <v-col
       cols="12"
-      md="3"
+      sm="5"
+      lg="3"
     >
       <v-select
         v-model="category"
@@ -99,7 +112,8 @@ function open(m: IContactMessage) {
     </v-col>
     <v-col
       cols="12"
-      md="5"
+      sm="7"
+      lg
     >
       <v-text-field
         v-model="search"
@@ -123,14 +137,14 @@ function open(m: IContactMessage) {
     @click:row="(_: unknown, row: { item: IContactMessage }) => open(row.item)"
   >
     <template #[`item.createdAt`]="{ item }">
-      <span class="text-no-wrap">{{ formatDateToString(item.createdAt) }}</span>
+      {{ formatDateToString(item.createdAt) }}
     </template>
 
     <template #[`item.from`]="{ item }">
       <div class="font-weight-medium">
         {{ item.name }}
       </div>
-      <div class="text-body-small text-medium-emphasis">
+      <div class="text-body-small text-medium-emphasis text-break">
         {{ item.email }}
         <v-icon
           v-if="item.userRef"

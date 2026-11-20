@@ -119,7 +119,8 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
       <v-row>
         <v-col
           cols="12"
-          md="4"
+          md="5"
+          lg="4"
         >
           <v-card
             class="pa-6 h-100"
@@ -153,7 +154,8 @@ watch(company, value => (hourlyRate.value = value?.hourlyRate ?? 0))
 
         <v-col
           cols="12"
-          md="8"
+          md="7"
+          lg="8"
         >
           <v-card
             class="pa-6 h-100"

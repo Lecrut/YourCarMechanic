@@ -66,28 +66,30 @@ const money = (fix: IFix) => {
           · {{ t('garage.oneOff') }}
         </template>
       </v-card-subtitle>
-      <template #append>
-        <div class="d-flex flex-column align-end ga-1">
-          <v-chip
-            v-if="atWorkshop"
-            color="primary"
-            size="small"
-            variant="flat"
-            prepend-icon="mdi-garage-open-variant"
-          >
-            {{ t('garage.atWorkshop') }}
-          </v-chip>
-          <v-chip
-            v-if="decisions"
-            color="warning"
-            size="small"
-            variant="flat"
-            prepend-icon="mdi-bell-alert"
-          >
-            {{ t('proposal.yourDecision') }}
-          </v-chip>
-        </div>
-      </template>
+      <!-- Below the name (not beside it), so a narrow tile keeps the name and VIN readable. -->
+      <div
+        v-if="atWorkshop || decisions"
+        class="d-flex flex-wrap ga-1 mt-2"
+      >
+        <v-chip
+          v-if="atWorkshop"
+          color="primary"
+          size="small"
+          variant="flat"
+          prepend-icon="mdi-garage-open-variant"
+        >
+          {{ t('garage.atWorkshop') }}
+        </v-chip>
+        <v-chip
+          v-if="decisions"
+          color="warning"
+          size="small"
+          variant="flat"
+          prepend-icon="mdi-bell-alert"
+        >
+          {{ t('proposal.yourDecision') }}
+        </v-chip>
+      </div>
     </v-card-item>
 
     <v-divider />

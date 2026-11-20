@@ -19,6 +19,16 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** No element inside `root` scrolls sideways and nothing sticks out of the screen. */
+async function expectNoSidewaysScroll(root: Element) {
+  for (const el of [root, ...root.querySelectorAll('*')]) {
+    const ox = getComputedStyle(el).overflowX
+    if (ox === 'auto' || ox === 'scroll') await expect(el.scrollWidth, el.className).toBeLessThanOrEqual(el.clientWidth + 1)
+    const r = el.getBoundingClientRect()
+    if (r.width > 0) await expect(r.right, el.className).toBeLessThanOrEqual(window.innerWidth + 1)
+  }
+}
+
 /** Every moderator section is a separate page. */
 const page = (component: object) => () => ({ components: { Page: component }, template: '<page />' })
 
@@ -199,3 +209,12 @@ export const RepairsOnTablet: Story = {
     await expect(screen.getByTestId('repair-date')).toBeVisible()
   },
 }
+
+/** Phone and landscape tablet: the open/all/deleted filters wrap instead of scrolling sideways. */
+const messageFilters: Story['play'] = async ({ canvasElement }) => {
+  const filters = await within(canvasElement).findByTestId('messages-view')
+  await expect(within(filters).getByText('Usunięte')).toBeVisible()
+  await expectNoSidewaysScroll(filters.closest('.v-row')!)
+}
+export const MessageFiltersOnPhone: Story = { render: page(Messages), globals: { viewport: { value: 'mobile1' } }, play: messageFilters }
+export const MessageFiltersOnTablet: Story = { render: page(Messages), globals: { viewport: { value: 'tabletLandscape' } }, play: messageFilters }
