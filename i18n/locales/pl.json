@@ -55,6 +55,10 @@
     "maxLength": "Tekst jest za długi",
     "requiredArrayRule": "Wybierz co najmniej jedną opcję"
   },
+  "update": {
+    "available": "Dostępna nowa wersja strony",
+    "reload": "Odśwież"
+  },
   "register": {
     "title": "Rejestracja",
     "email": "Adres Email",

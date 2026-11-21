@@ -3,6 +3,7 @@ import AppNavigation from '~/components/layout/appNavigation.vue'
 import AppFooter from '~/components/layout/appFooter.vue'
 import ErrorSnackbar from '~/components/layout/errorSnackbar.vue'
 import EmailVerificationBanner from '~/components/layout/emailVerificationBanner.vue'
+import UpdateBanner from '~/components/layout/updateBanner.vue'
 
 const authStore = useAuthStore()
 /** Every page a guest sees has the footer, always at the bottom of the screen even when the page is short. */
@@ -20,5 +21,6 @@ const showFooter = computed(() => !authStore.user)
       <app-footer v-if="showFooter" />
     </v-main>
     <error-snackbar />
+    <update-banner />
   </v-app>
 </template>

@@ -55,6 +55,10 @@
     "maxLength": "Text is too long",
     "requiredArrayRule": "Select at least one option"
   },
+  "update": {
+    "available": "A new version of the site is available",
+    "reload": "Refresh"
+  },
   "register": {
     "title": "Registration",
     "email": "Email Address",

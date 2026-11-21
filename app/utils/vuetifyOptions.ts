@@ -54,8 +54,8 @@ export const vuetifyOptions: VuetifyOptions = {
     // Titles wrap instead of being cut with "…" on narrow screens.
     VCardTitle: { class: 'text-wrap' },
     VCardSubtitle: { class: 'text-wrap' },
-    VListItemTitle: { class: 'text-wrap' },
-    VToolbarTitle: { class: 'text-wrap' },
+    // VListItemTitle: { class: 'text-wrap' },
+    // VToolbarTitle: { class: 'text-wrap' },
     // Below a card title the content has no top padding; in a (scrollable) dialog that clips the
     // floating label of the first outlined field.
     VDialog: { VCardText: { class: 'pt-4' } },

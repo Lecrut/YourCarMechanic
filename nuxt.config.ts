@@ -53,6 +53,11 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2026-11-01',
 
+  // Look for a newer deployed build every 5 minutes (default 1 h) – the page then offers a reload.
+  experimental: {
+    checkOutdatedBuildInterval: 5 * 60 * 1000,
+  },
+
   vite: {
     vue: {
       template: { transformAssetUrls },

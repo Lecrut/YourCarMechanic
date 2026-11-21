@@ -9,6 +9,8 @@ export const useSharedStore = defineStore('shared', () => {
   const error = ref(false)
   /** i18n key of the last error message. */
   const errorMessage = ref('universal.error')
+  /** A newer build was deployed – the page offers a reload (set by plugins/appUpdate.client.ts). */
+  const updateAvailable = ref(false)
 
   function fail(e: unknown) {
     console.error(e)
@@ -41,5 +43,5 @@ export const useSharedStore = defineStore('shared', () => {
     loading.value = false
   }
 
-  return { loading, error, errorMessage, run, fail, resetState }
+  return { loading, error, errorMessage, updateAvailable, run, fail, resetState }
 })

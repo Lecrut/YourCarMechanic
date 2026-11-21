@@ -107,6 +107,7 @@ app/
   plugins/
     firebase.client.ts          init Firebase; Auth is the session source of truth (starts/clears session)
     vuetify.ts                  createVuetify(vuetifyOptions)
+    appUpdate.client.ts         newer build deployed (Nuxt checks every 5 min) → sharedStore.updateAvailable
   services/                     ★ the ONLY code talking to Firebase
     index.ts                    re-exports (aliased to the mock in Storybook/Vitest)
     firebase.ts                 initFirebase() (local persistence, emulators), auth(), db()
@@ -161,7 +162,7 @@ app/
   layouts/default.vue           single layout: AppNavigation + footer pinned to the bottom on every page for guests
   components/                   .vue components only, grouped by area
     layout/                     appNavigation (app bar, rail drawer per role, bottom nav), appFooter, notificationBell,
-                                errorSnackbar, emailVerificationBanner
+                                errorSnackbar, emailVerificationBanner, updateBanner (new version → reload)
     common/                     pageHeader, confirmDialog, serviceList, mySnackbar, markdownCard (renders a .md document)
     account/                    authCard, accountSettingsCard
     workshop/                   workshopForm (incl. brands + map pin), workshopFinder (location bar + radius + sort,
