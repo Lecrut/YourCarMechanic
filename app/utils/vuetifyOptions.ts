@@ -10,7 +10,7 @@ export const vuetifyOptions: VuetifyOptions = {
   // Built-in component texts (tables, pagination, pickers) – kept in sync with the i18n locale.
   locale: { locale: 'pl', fallback: 'en', messages: { pl, en } },
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: 'light',
     themes: {
       light: {
         dark: false,
@@ -51,6 +51,11 @@ export const vuetifyOptions: VuetifyOptions = {
     VAutocomplete: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
     VTextarea: { variant: 'outlined', rounded: 'lg' },
     VChip: { rounded: 'lg' },
+    // Titles wrap instead of being cut with "…" on narrow screens.
+    VCardTitle: { class: 'text-wrap' },
+    VCardSubtitle: { class: 'text-wrap' },
+    VListItemTitle: { class: 'text-wrap' },
+    VToolbarTitle: { class: 'text-wrap' },
     // Below a card title the content has no top padding; in a (scrollable) dialog that clips the
     // floating label of the first outlined field.
     VDialog: { VCardText: { class: 'pt-4' } },

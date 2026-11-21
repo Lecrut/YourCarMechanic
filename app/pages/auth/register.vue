@@ -93,6 +93,17 @@ onMounted(() => sharedStore.resetState())
           >
             {{ t('register.statute') }}
           </a>
+          &nbsp;
+          {{ t('register.and') }}
+          &nbsp;
+          <a
+            href="/privacy"
+            target="_blank"
+            class="text-primary font-weight-bold text-decoration-none"
+            @click.stop
+          >
+            {{ t('register.privacy') }}
+          </a>
         </template>
       </v-checkbox>
 

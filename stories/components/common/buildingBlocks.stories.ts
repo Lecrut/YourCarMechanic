@@ -3,6 +3,7 @@ import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import PageHeader from '~/components/common/pageHeader.vue'
 import MySnackbar from '~/components/common/mySnackbar.vue'
+import ServiceList from '~/components/common/serviceList.vue'
 import AuthCard from '~/components/account/authCard.vue'
 import WorkshopForm from '~/components/workshop/workshopForm.vue'
 import { mapIWorkshop } from '~/mappers/workshop'
@@ -149,5 +150,20 @@ export const CompanyFormReadonly: Story = {
     const name = within(canvasElement).getByTestId('company-name').querySelector('input')!
     await expect(name).toHaveValue('AutoFix Kraków')
     await expect(name).toHaveAttribute('readonly')
+  },
+}
+
+/** Table cells list the first 3 services, the rest is collapsed into "+N". */
+export const ServicesInTable: Story = {
+  args: { title: '', icon: '' },
+  render: () => ({
+    components: { ServiceList },
+    template: `<service-list :services="['oil', 'tires', 'engine', 'electrician', 'engineFlush']" />`,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByText(/Wymiana oleju silnikowego i filtra/)).toBeVisible()
+    await expect(canvas.queryByText(/Płukanka silnika/)).toBeNull()
+    await expect(canvas.getByTestId('services-more')).toHaveTextContent('+2')
   },
 }

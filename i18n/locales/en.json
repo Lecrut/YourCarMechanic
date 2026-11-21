@@ -63,6 +63,8 @@
     "repeatPassword": "Repeat Password",
     "acceptStatute": "I accept",
     "statute": "the regulations",
+    "and": "and",
+    "privacy": "the privacy policy",
     "button": "Register",
     "error": "Invalid register data",
     "haveAccount": "Already have an account? Log in"
